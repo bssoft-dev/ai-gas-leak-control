@@ -1,0 +1,209 @@
+# SagoHub Service: AI 가스 누출 자동제어 시스템
+# - LSTM-Autoencoder 기반 시계열 이상 탐지, Edge AI + Rule-base 하이브리드 제어
+# - Zone 1~3 구역별 센서/밸브 상태, 실시간 차트, 비상 차단(Emergency STOP)
+
+service:
+  id: "com.SagoHub.ai-gas-leak-control"
+  version: "1.0.0"
+  name: "AI 가스 누출 자동제어"
+  description: "가스 누출 실시간 감지 및 밸브 자동 차단, 디지털 트윈 관제 대시보드"
+  author: "SagoHub Team"
+  icon: "icon.png"
+  category: "safety"
+  domain: "gas-leak.bs-soft.co.kr"
+
+  ui_server:
+    host: "0.0.0.0"
+    port: 8080
+    external_port: 26025
+    event_bus_url: "http://event-bus:8000"
+
+interface:
+  - type: "react-ui"
+    id: "main_dashboard"
+    label: "가스 누출 관제 대시보드"
+    description: "구역별 상태, 실시간 압력/유량 차트, 비상 차단"
+    component: "GasLeakControlDashboard"
+    binding: "./services/ai-gas-leak-control/frontend"
+    props: {}
+    events:
+      onEmergencyStop: "GAS_LEAK_EMERGENCY_STOP"
+      onValveReset: "GAS_LEAK_VALVE_RESET"
+      onStatusQuery: "GAS_LEAK_STATUS_QUERY"
+      onDrawingUpload: "GAS_LEAK_DRAWING_UPLOAD"
+      onDrawingList: "GAS_LEAK_DRAWING_LIST"
+      onDrawingGet: "GAS_LEAK_DRAWING_GET"
+      onDrawingDelete: "GAS_LEAK_DRAWING_DELETE"
+      onSensorsSave: "GAS_LEAK_SENSORS_SAVE"
+      onAlarmControl: "GAS_LEAK_ALARM_CONTROL"
+      onCallManager: "GAS_LEAK_CALL_MANAGER"
+      subscribe:
+        - "GAS_LEAK_EMERGENCY_STOP_RESULT"
+        - "GAS_LEAK_VALVE_RESET_RESULT"
+        - "GAS_LEAK_ALARM"
+        - "GAS_LEAK_STATUS_RESULT"
+        - "GAS_LEAK_DRAWING_UPLOADED"
+        - "GAS_LEAK_DRAWING_LIST_RESULT"
+        - "GAS_LEAK_DRAWING_GET_RESULT"
+        - "GAS_LEAK_DRAWING_DELETED"
+        - "GAS_LEAK_SENSORS_SAVED"
+        - "GAS_LEAK_MES_STATUS_RESULT"
+        - "GAS_LEAK_ALARM_CONTROL_RESULT"
+        - "GAS_LEAK_CALL_MANAGER_RESULT"
+
+config:
+  rule_threshold_percent:
+    type: "number"
+    label: "Rule 기준 농도 임계값 (%)"
+    default: 3.0
+    description: "이 값 이상이면 즉시 밸브 차단"
+  ai_error_threshold_sec:
+    type: "number"
+    label: "AI 오차 초과 유지 시간 (초)"
+    default: 3
+    description: "오차율 임계 초과가 이 시간 이상 지속 시 누출 확정"
+
+# Pipelines: 이벤트 → 모듈 브로드캐스트
+pipelines:
+  - id: "flow_gas_leak_emergency_stop"
+    name: "비상 밸브 차단"
+    trigger:
+      event: "GAS_LEAK_EMERGENCY_STOP"
+      debounce: 0
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    broadcast:
+      - module: "gas_leak_control.GasLeakControlModule"
+        id: "action_emergency_stop"
+        args: {}
+
+  - id: "flow_gas_leak_valve_reset"
+    name: "밸브 수동 해제"
+    trigger:
+      event: "GAS_LEAK_VALVE_RESET"
+      debounce: 0
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    broadcast:
+      - module: "gas_leak_control.GasLeakControlModule"
+        id: "action_valve_reset"
+        args: {}
+
+  - id: "flow_gas_leak_status_query"
+    name: "상태 조회"
+    trigger:
+      event: "GAS_LEAK_STATUS_QUERY"
+      debounce: 0
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    broadcast:
+      - module: "gas_leak_control.GasLeakControlModule"
+        id: "action_status_query"
+        args: {}
+
+  - id: "flow_gas_leak_drawing_upload"
+    name: "공장 도면 업로드"
+    trigger:
+      event: "GAS_LEAK_DRAWING_UPLOAD"
+      debounce: 0
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    broadcast:
+      - module: "gas_leak_plant.GasLeakPlantModule"
+        id: "action_upload"
+        args: {}
+
+  - id: "flow_gas_leak_drawing_list"
+    name: "도면 목록"
+    trigger:
+      event: "GAS_LEAK_DRAWING_LIST"
+      debounce: 0
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    broadcast:
+      - module: "gas_leak_plant.GasLeakPlantModule"
+        id: "action_list"
+        args: {}
+
+  - id: "flow_gas_leak_drawing_get"
+    name: "도면 상세(센서 포함)"
+    trigger:
+      event: "GAS_LEAK_DRAWING_GET"
+      debounce: 0
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    broadcast:
+      - module: "gas_leak_plant.GasLeakPlantModule"
+        id: "action_get"
+        args: {}
+
+  - id: "flow_gas_leak_drawing_delete"
+    name: "도면 삭제"
+    trigger:
+      event: "GAS_LEAK_DRAWING_DELETE"
+      debounce: 0
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    broadcast:
+      - module: "gas_leak_plant.GasLeakPlantModule"
+        id: "action_delete"
+        args: {}
+
+  - id: "flow_gas_leak_sensors_save"
+    name: "센서 위치 저장"
+    trigger:
+      event: "GAS_LEAK_SENSORS_SAVE"
+      debounce: 0
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    broadcast:
+      - module: "gas_leak_plant.GasLeakPlantModule"
+        id: "action_sensors_save"
+        args: {}
+
+  - id: "flow_gas_leak_mes_status"
+    name: "MES 설비 가동/작업 지시 수신"
+    trigger:
+      event: "GAS_LEAK_MES_STATUS"
+      debounce: 0
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    broadcast:
+      - module: "gas_leak_control.GasLeakControlModule"
+        id: "action_mes_status"
+        args: {}
+
+  - id: "flow_gas_leak_alarm_control"
+    name: "경광등/사이렌 제어"
+    trigger:
+      event: "GAS_LEAK_ALARM_CONTROL"
+      debounce: 0
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    broadcast:
+      - module: "gas_leak_control.GasLeakControlModule"
+        id: "action_alarm_control"
+        args: {}
+
+  - id: "flow_gas_leak_call_manager"
+    name: "관리자 호출"
+    trigger:
+      event: "GAS_LEAK_CALL_MANAGER"
+      debounce: 0
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    broadcast:
+      - module: "gas_leak_control.GasLeakControlModule"
+        id: "action_call_manager"
+        args: {}

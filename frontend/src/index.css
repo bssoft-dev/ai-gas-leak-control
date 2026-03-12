@@ -1,0 +1,44 @@
+/* AI 가스 누출 자동제어 - 안전/산업 테마 */
+:root {
+  --gl-bg-page: #0f1419;
+  --gl-bg-card: #1a2332;
+  --gl-bg-panel: #243044;
+  --gl-border: #2d3a4f;
+  --gl-text: #e6edf3;
+  --gl-text-muted: #8b949e;
+  --gl-primary: #58a6ff;
+  --gl-success: #3fb950;
+  --gl-warning: #d29922;
+  --gl-danger: #f85149;
+  --gl-emergency: #ff4444;
+  --gl-radius: 8px;
+  --gl-font: 'JetBrains Mono', 'Noto Sans KR', monospace, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--gl-font);
+  font-size: 14px;
+  line-height: 1.5;
+  background: var(--gl-bg-page);
+  color: var(--gl-text);
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 2px solid var(--gl-primary);
+  outline-offset: 2px;
+}

@@ -1,0 +1,40 @@
+{
+  "valve_closed": false,
+  "emergency_at": "2026-03-12T04:31:11.719352Z",
+  "last_control": "valve_reset",
+  "zones": [
+    {
+      "id": "zone1",
+      "name": "Zone 1",
+      "status": "normal",
+      "sensors": [
+        "S1",
+        "S2"
+      ],
+      "x": 20,
+      "y": 30
+    },
+    {
+      "id": "zone2",
+      "name": "Zone 2",
+      "status": "normal",
+      "sensors": [
+        "S3",
+        "S4"
+      ],
+      "x": 50,
+      "y": 30
+    },
+    {
+      "id": "zone3",
+      "name": "Zone 3",
+      "status": "normal",
+      "sensors": [
+        "S5",
+        "S6"
+      ],
+      "x": 80,
+      "y": 30
+    }
+  ]
+}
