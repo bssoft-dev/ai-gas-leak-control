@@ -1,6 +1,6 @@
 # AI 가스 누출 자동제어 시스템
 
-이 저장소에는 **Frontend**(React 대시보드), **Backend 모듈**(`gas_leak_control`, `gas_leak_plant`), **샘플 데이터**(`data/ai_gas_leak/`)가 포함되어 있습니다. SagoHub 프로젝트에 복사해 사용하거나, 프론트엔드는 `frontend/`에서 `npm install && npm run dev`로 단독 실행할 수 있습니다.
+이 저장소에는 **Frontend**(React 대시보드), **Backend 모듈**(`gas_leak_control`, `gas_leak_plant`), **샘플 데이터**(`data/ai_gas_leak/`)가 포함되어 있습니다. 프론트엔드는 `frontend/`에서 `npm install && npm run dev`로 단독 실행할 수 있습니다.
 
 ---
 
