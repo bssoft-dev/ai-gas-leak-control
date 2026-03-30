@@ -29,3 +29,6 @@ env/
 # Logs
 *.log
 npm-debug.log*
+
+# .gitignore
+config.json  # 만약 토큰을 직접 적었다면 이 파일도 제외해야 함
