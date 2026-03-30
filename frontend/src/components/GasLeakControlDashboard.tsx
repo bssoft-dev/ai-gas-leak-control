@@ -1,170 +1,290 @@
-import React, { useState, useEffect, useRef } from 'react'
-import './GasLeakControlDashboard.css'
+import React, { useState, useEffect, useRef } from 'react';
+import './GasLeakControlDashboard.css';
+import { DefaultService } from '../api';
 
-const ZONE_STATUS_COLOR = { normal: '#3fb950', warning: '#d29922', critical: '#f85149' }
-const SENSOR_UNITS = { pressure: 'MPa', flow: 'L/min', concentration: '%' }
+// --- Type Definitions ---
+const ZONE_STATUS_COLOR: Record<string, string> = { normal: '#3fb950', warning: '#d29922', critical: '#f85149' };
+const SENSOR_UNITS: Record<string, string> = { pressure: 'MPa', flow: 'L/min', concentration: '%' };
 
-function GasLeakControlDashboard({ onAction, events }) {
-  const [state, setState] = useState({ valve_closed: false, zones: [], emergency_at: null, alarm_beacon_on: false, alarm_siren_on: false, mes_equipment_running: true, mes_updated_at: null, mes_work_order_id: null })
-  const [sensors, setSensors] = useState([])
-  const [timeseries, setTimeseries] = useState({ pressure: [], flow: [] })
-  const [loading, setLoading] = useState(true)
-  const [message, setMessage] = useState(null)
-  const [activeTab, setActiveTab] = useState('monitor') // 'monitor' | 'drawing'
-  const [drawings, setDrawings] = useState([])
-  const [selectedDrawingId, setSelectedDrawingId] = useState(() => localStorage.getItem('gl_selected_drawing_id') || null)
-  const [drawingDetail, setDrawingDetail] = useState(null) // { drawing, sensors }
-  const [sensorForm, setSensorForm] = useState({ label: '', sensor_type: 'pressure' })
-  const [pendingSensorPos, setPendingSensorPos] = useState(null) // { x, y } 0-1
-  const [uploading, setUploading] = useState(false)
-  const [savingSensors, setSavingSensors] = useState(false)
-  const [aiHistory, setAiHistory] = useState([])
-  const fileInputRef = useRef(null)
-  const pollRef = useRef(null)
+type ZoneStatus = 'normal' | 'warning' | 'critical';
+type SensorType = 'pressure' | 'flow' | 'concentration';
+type ActiveTab = 'monitor' | 'drawing' | 'history';
+
+interface Zone {
+  id: string;
+  name: string;
+  status: ZoneStatus;
+  x?: number;
+  y?: number;
+}
+
+interface Sensor {
+  id: string;
+  zone_id: string;
+  label: string;
+  value?: number | string;
+  unit: string;
+  status?: ZoneStatus;
+  sensor_type?: SensorType;
+  x?: number;
+  y?: number;
+}
+
+interface TimeSeriesPoint {
+  t: string;
+  v: number;
+}
+
+interface TimeSeries {
+  pressure: TimeSeriesPoint[];
+  flow: TimeSeriesPoint[];
+  sensors?: Record<string, TimeSeriesPoint[]>;
+}
+
+interface DashboardState {
+  valve_closed: boolean;
+  zones: Zone[];
+  emergency_at: string | null;
+  alarm_beacon_on: boolean;
+  alarm_siren_on: boolean;
+  mes_equipment_running: boolean;
+  mes_updated_at: string | null;
+  mes_work_order_id: string | null;
+}
+
+interface Drawing {
+  id: string;
+  name: string;
+  filename: string;
+  file_type: string;
+  file_path: string;
+  created_at: string;
+  updated_at: string;
+}
+
+interface DrawingDetail {
+  drawing: Drawing;
+  sensors: Sensor[];
+}
+
+interface AiHistoryEntry {
+  at: string;
+  type: string;
+  message: string;
+  sensor_id?: string;
+  sensor_label?: string;
+  value?: number;
+  unit?: string;
+}
+
+interface DashboardProps {
+  onAction: (eventName: string, payload: any) => void;
+  events: Record<string, string>;
+}
+
+function GasLeakControlDashboard({ onAction, events }: DashboardProps) {
+  const [state, setState] = useState<DashboardState>({ valve_closed: false, zones: [], emergency_at: null, alarm_beacon_on: false, alarm_siren_on: false, mes_equipment_running: true, mes_updated_at: null, mes_work_order_id: null });
+  const [sensors, setSensors] = useState<Sensor[]>([]);
+  const [timeseries, setTimeseries] = useState<TimeSeries>({ pressure: [], flow: [] });
+  const [loading, setLoading] = useState<boolean>(true);
+  const [message, setMessage] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<ActiveTab>('monitor');
+  const [drawings, setDrawings] = useState<Drawing[]>([]);
+  const [selectedDrawingId, setSelectedDrawingId] = useState<string | null>(() => localStorage.getItem('gl_selected_drawing_id') || null);
+  const [drawingDetail, setDrawingDetail] = useState<DrawingDetail | null>(null);
+  const [sensorForm, setSensorForm] = useState({ label: '', sensor_type: 'pressure' });
+  const [pendingSensorPos, setPendingSensorPos] = useState<{ x: number, y: number } | null>(null);
+  const [uploading, setUploading] = useState<boolean>(false);
+  const [savingSensors, setSavingSensors] = useState<boolean>(false);
+  const [aiHistory, setAiHistory] = useState<AiHistoryEntry[]>([]);
+  const [localSensors, setLocalSensors] = useState<Sensor[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const pollRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    if (selectedDrawingId) localStorage.setItem('gl_selected_drawing_id', selectedDrawingId)
-    else localStorage.removeItem('gl_selected_drawing_id')
-  }, [selectedDrawingId])
+    if (selectedDrawingId) localStorage.setItem('gl_selected_drawing_id', selectedDrawingId);
+    else localStorage.removeItem('gl_selected_drawing_id');
+  }, [selectedDrawingId]);
 
   const fetchState = async () => {
     try {
-      const [stateRes, sensorsRes, tsRes] = await Promise.all([
-        fetch('/api/gas-leak/state'),
-        fetch('/api/gas-leak/sensors'),
-        fetch('/api/gas-leak/timeseries'),
-      ])
-      if (stateRes.ok) {
-        const data = await stateRes.json()
-        setState(s => ({ ...s, ...data }))
-      }
-      if (sensorsRes.ok) setSensors(await sensorsRes.json())
-      if (tsRes.ok) setTimeseries(await tsRes.json())
-    } catch (_) {}
-    setLoading(false)
-  }
+      const [stateData, sensorsData, tsData] = await Promise.all([
+        DefaultService.getGasLeakStateApiGasLeakStateGet(),
+        DefaultService.getGasLeakSensorsApiGasLeakSensorsGet(),
+        DefaultService.getGasLeakTimeseriesApiGasLeakTimeseriesGet(),
+      ]);
+      setState(s => ({ ...s, ...stateData }));
+      setSensors(sensorsData);
+      setTimeseries(tsData);
+    } catch (err) {
+      console.error('Failed to fetch state:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const fetchDrawings = async () => {
     try {
-      const res = await fetch('/api/gas-leak/drawings')
-      if (res.ok) setDrawings(await res.json())
-    } catch (_) {}
-  }
-
-  const fetchDrawingDetail = async (id) => {
-    if (!id) return
-    try {
-      const res = await fetch(`/api/gas-leak/drawings/${id}`)
-      if (res.ok) setDrawingDetail(await res.json())
-    } catch (_) {
-      setDrawingDetail(null)
+      const drawingsData = await DefaultService.getGasLeakDrawingsApiGasLeakDrawingsGet();
+      setDrawings(drawingsData);
+    } catch (err) {
+      console.error('Failed to fetch drawings:', err);
     }
-  }
+  };
+
+  const fetchDrawingDetail = async (id: string) => {
+    if (!id) return;
+    try {
+      const detailData = await DefaultService.getGasLeakDrawingApiGasLeakDrawingsDrawingIdGet(id);
+      setDrawingDetail(detailData);
+    } catch (err) {
+      console.error('Failed to fetch drawing detail:', err);
+      setDrawingDetail(null);
+    }
+  };
+  
+  const fetchAiHistory = async () => {
+    try {
+      const historyData = await DefaultService.getGasLeakAiHistoryApiGasLeakAiHistoryGet();
+      setAiHistory(Array.isArray(historyData) ? historyData.reverse() : []);
+    } catch (err) {
+      console.error('Failed to fetch AI history:', err);
+    }
+  };
 
   useEffect(() => {
-    fetchState()
-    fetchDrawings()
-    pollRef.current = setInterval(fetchState, 2000)
-    return () => clearInterval(pollRef.current)
-  }, [])
+    fetchState();
+    fetchDrawings();
+    fetchAiHistory();
+    pollRef.current = setInterval(fetchState, 2000);
+    return () => {
+      if (pollRef.current) clearInterval(pollRef.current);
+    };
+  }, []);
 
   useEffect(() => {
-    if (selectedDrawingId) fetchDrawingDetail(selectedDrawingId)
-    else setDrawingDetail(null)
-  }, [selectedDrawingId])
+    fetch('/sensors.json')
+      .then(res => res.json())
+      .then(data => setLocalSensors(data))
+      .catch(err => console.error("Failed to load local sensors", err));
+  }, []);
 
   useEffect(() => {
-    if (!events?.subscribe?.length) return
-    const es = new EventSource('/api/events/stream')
+    if (selectedDrawingId) {
+      fetchDrawingDetail(selectedDrawingId);
+    } else if (localSensors.length > 0) {
+      setDrawingDetail({
+        drawing: {
+          id: 'local-drawing',
+          name: 'example.jpg',
+          filename: 'example.jpg',
+          file_type: 'image/jpeg',
+          file_path: '/example.jpg',
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        },
+        sensors: localSensors,
+      });
+    } else {
+      setDrawingDetail(null);
+    }
+  }, [selectedDrawingId, localSensors]);
+
+  useEffect(() => {
+    if (!events?.subscribe?.length) return;
+    const es = new EventSource('/api/events/stream');
     es.onmessage = (e) => {
       try {
-        const ev = JSON.parse(e.data)
-        if (!events.subscribe.includes(ev.type)) return
+        const ev = JSON.parse(e.data);
+        if (!events.subscribe.includes(ev.type)) return;
         if (ev.type === 'GAS_LEAK_EMERGENCY_STOP_RESULT' || ev.type === 'GAS_LEAK_VALVE_RESET_RESULT') {
-          fetchState()
-          setMessage(ev.type === 'GAS_LEAK_EMERGENCY_STOP_RESULT' ? '비상 밸브 차단 완료' : '밸브 해제 완료')
-          setTimeout(() => setMessage(null), 3000)
+          fetchState();
+          setMessage(ev.type === 'GAS_LEAK_EMERGENCY_STOP_RESULT' ? '비상 밸브 차단 완료' : '밸브 해제 완료');
+          setTimeout(() => setMessage(null), 3000);
         }
         if (ev.type === 'GAS_LEAK_DRAWING_UPLOADED' && ev.payload?.success) {
-          setUploading(false)
-          setMessage('도면이 업로드되었습니다.')
-          fetchDrawings()
-          setTimeout(() => setMessage(null), 3000)
+          setUploading(false);
+          setMessage('도면이 업로드되었습니다.');
+          fetchDrawings();
+          setTimeout(() => setMessage(null), 3000);
         }
         if (ev.type === 'GAS_LEAK_DRAWING_DELETED' && ev.payload?.success) {
-          if (ev.payload.drawing_id === selectedDrawingId) setSelectedDrawingId(null)
-          setDrawingDetail(null)
-          fetchDrawings()
-          setMessage('도면이 삭제되었습니다.')
-          setTimeout(() => setMessage(null), 3000)
+          if (ev.payload.drawing_id === selectedDrawingId) setSelectedDrawingId(null);
+          setDrawingDetail(null);
+          fetchDrawings();
+          setMessage('도면이 삭제되었습니다.');
+          setTimeout(() => setMessage(null), 3000);
         }
         if (ev.type === 'GAS_LEAK_SENSORS_SAVED' && ev.payload?.success) {
-          setSavingSensors(false)
-          setMessage('센서 위치가 저장되었습니다.')
-          fetchDrawingDetail(selectedDrawingId)
-          fetchState()
-          setTimeout(() => setMessage(null), 3000)
+          setSavingSensors(false);
+          setMessage('센서 위치가 저장되었습니다.');
+          if (selectedDrawingId) fetchDrawingDetail(selectedDrawingId);
+          fetchState();
+          setTimeout(() => setMessage(null), 3000);
         }
         if (ev.type === 'GAS_LEAK_CALL_MANAGER_RESULT' && ev.payload?.success) {
-          setMessage('관리자 호출 요청이 기록되었습니다.')
-          fetchAiHistory()
-          setTimeout(() => setMessage(null), 3000)
+          setMessage('관리자 호출 요청이 기록되었습니다.');
+          fetchAiHistory();
+          setTimeout(() => setMessage(null), 3000);
         }
       } catch (_) {}
-    }
-    return () => es.close()
-  }, [events?.subscribe, selectedDrawingId])
+    };
+    return () => es.close();
+  }, [events?.subscribe, selectedDrawingId]);
 
   const handleEmergencyStop = () => {
-    if (!window.confirm('전체 가스 밸브를 비상 차단하시겠습니까?')) return
-    onAction?.('onEmergencyStop', { reason: 'manual' })
-  }
+    if (!window.confirm('전체 가스 밸브를 비상 차단하시겠습니까?')) return;
+    onAction?.('onEmergencyStop', { reason: 'manual' });
+  };
 
   const handleValveReset = () => {
-    if (!window.confirm('밸브를 수동 해제하시겠습니까?')) return
-    onAction?.('onValveReset', {})
-  }
+    if (!window.confirm('밸브를 수동 해제하시겠습니까?')) return;
+    onAction?.('onValveReset', {});
+  };
 
   const handleCallManager = () => {
-    onAction?.('onCallManager', {})
-  }
+    onAction?.('onCallManager', {});
+  };
 
   const handleAlarmOff = () => {
-    onAction?.('onAlarmControl', { beacon_on: false, siren_on: false })
-  }
+    onAction?.('onAlarmControl', { beacon_on: false, siren_on: false });
+  };
 
-  const handleFileChange = (e) => {
-    const file = e.target?.files?.[0]
-    if (!file) return
-    const reader = new FileReader()
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target?.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
     reader.onload = () => {
-      const base64 = (reader.result || '').split(',')[1]
-      if (!base64) return
-      setUploading(true)
-      onAction?.('onDrawingUpload', { name: file.name, filename: file.name, file_base64: base64 })
-    }
-    reader.readAsDataURL(file)
-    e.target.value = ''
-  }
+      const base64 = (reader.result as string || '').split(',')[1];
+      if (!base64) return;
+      setUploading(true);
+      onAction?.('onDrawingUpload', { name: file.name, filename: file.name, file_base64: base64 });
+    };
+    reader.readAsDataURL(file);
+    e.target.value = '';
+  };
 
-  const handleDeleteDrawing = (id) => {
-    if (!window.confirm('이 도면을 삭제하시겠습니까?')) return
-    onAction?.('onDrawingDelete', { drawing_id: id })
-  }
+  const handleDeleteDrawing = (id: string) => {
+    if (!window.confirm('이 도면을 삭제하시겠습니까?')) return;
+    onAction?.('onDrawingDelete', { drawing_id: id });
+  };
 
-  const handleMapClick = (e) => {
-    if (activeTab !== 'drawing' || !drawingDetail?.drawing) return
-    const rect = e.currentTarget.getBoundingClientRect()
-    const x = (e.clientX - rect.left) / rect.width
-    const y = (e.clientY - rect.top) / rect.height
-    setPendingSensorPos({ x, y })
-  }
+  const handleMapClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (activeTab !== 'drawing' || !drawingDetail?.drawing) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width;
+    const y = (e.clientY - rect.top) / rect.height;
+    setPendingSensorPos({ x, y });
+  };
 
   const handleAddSensor = () => {
-    if (!pendingSensorPos || !selectedDrawingId || !drawingDetail) return
-    const list = [...(drawingDetail.sensors || [])]
-    const newId = `S${Date.now()}`
-    const st = sensorForm.sensor_type || 'pressure'
+    if (!pendingSensorPos || !drawingDetail) return;
+    // For local drawing, selectedDrawingId is null, but we should be able to add sensors.
+    if (!selectedDrawingId && drawingDetail.drawing.id !== 'local-drawing') return;
+
+    const list = [...(drawingDetail.sensors || [])];
+    const newId = `S${Date.now()}`;
+    const st = (sensorForm.sensor_type || 'pressure') as SensorType;
     list.push({
       id: newId,
       label: sensorForm.label || newId,
@@ -173,44 +293,49 @@ function GasLeakControlDashboard({ onAction, events }) {
       y: pendingSensorPos.y,
       unit: SENSOR_UNITS[st] || 'MPa',
       sensor_type: st,
-    })
-    setDrawingDetail({ ...drawingDetail, sensors: list })
-    setPendingSensorPos(null)
-    setSensorForm({ label: '', sensor_type: 'pressure' })
-  }
+    });
+    setDrawingDetail({ ...drawingDetail, sensors: list });
+    setPendingSensorPos(null);
+    setSensorForm({ label: '', sensor_type: 'pressure' });
+  };
 
-  const handleRemoveSensor = (index) => {
-    if (!drawingDetail) return
-    const list = drawingDetail.sensors.filter((_, i) => i !== index)
-    setDrawingDetail({ ...drawingDetail, sensors: list })
-  }
+  const handleRemoveSensor = (index: number) => {
+    if (!drawingDetail) return;
+    const list = drawingDetail.sensors.filter((_, i) => i !== index);
+    setDrawingDetail({ ...drawingDetail, sensors: list });
+  };
 
   const handleSaveSensors = () => {
-    if (!selectedDrawingId || !drawingDetail?.sensors) return
-    setSavingSensors(true)
-    onAction?.('onSensorsSave', { drawing_id: selectedDrawingId, sensors: drawingDetail.sensors })
-  }
+    if (!selectedDrawingId || !drawingDetail?.sensors) return;
+    setSavingSensors(true);
+    onAction?.('onSensorsSave', { drawing_id: selectedDrawingId, sensors: drawingDetail.sensors });
+  };
 
-  const sensorsById = sensors.reduce((acc, s) => { acc[s.id] = s; return acc }, {})
+  const sensorsById = sensors.reduce((acc, s) => {
+    acc[s.id] = s;
+    return acc;
+  }, {} as Record<string, Sensor>);
 
   if (loading && !state.zones?.length && !drawings.length) {
-    return <div className="gl-loading">상태 로딩 중...</div>
+    return <div className="gl-loading">상태 로딩 중...</div>;
   }
 
   const zones = state.zones?.length ? state.zones : [
-    { id: 'zone1', name: 'Zone 1', status: 'normal', x: 20, y: 30 },
-    { id: 'zone2', name: 'Zone 2', status: 'normal', x: 50, y: 30 },
-    { id: 'zone3', name: 'Zone 3', status: 'normal', x: 80, y: 30 },
-  ]
+    { id: 'zone1', name: 'Zone 1', status: 'normal' as ZoneStatus, x: 20, y: 30 },
+    { id: 'zone2', name: 'Zone 2', status: 'normal' as ZoneStatus, x: 50, y: 30 },
+    { id: 'zone3', name: 'Zone 3', status: 'normal' as ZoneStatus, x: 80, y: 30 },
+  ];
 
-  const mapSensors = drawingDetail?.sensors || []
-  const mapSensorValues = sensorsById
-  // 실시간 센서: 도면에 등록된 센서만 표시, API에서 받은 현재값(value/status) 병합
+  const mapSensors = drawingDetail?.sensors || [];
+  const mapSensorValues = sensorsById;
   const displaySensors = mapSensors.map((s) => ({
     ...s,
     value: sensorsById[s.id]?.value ?? '-',
     status: sensorsById[s.id]?.status ?? 'normal',
-  }))
+  }));
+
+  const drawingUrl = selectedDrawingId ? `/api/gas-leak/drawings/${selectedDrawingId}/file` : '/example.jpg';
+  const isLocalDrawing = !selectedDrawingId;
 
   return (
     <div className="gl-dashboard">
@@ -219,27 +344,28 @@ function GasLeakControlDashboard({ onAction, events }) {
       <div className="gl-tabs">
         <button type="button" className={activeTab === 'monitor' ? 'active' : ''} onClick={() => setActiveTab('monitor')}>관제</button>
         <button type="button" className={activeTab === 'drawing' ? 'active' : ''} onClick={() => setActiveTab('drawing')}>도면 / 센서 등록</button>
+        <button type="button" className={activeTab === 'history' ? 'active' : ''} onClick={() => setActiveTab('history')}>AI 판단 이력</button>
       </div>
 
       {activeTab === 'monitor' && (
         <>
           <section className="gl-section gl-twin">
             <h2>디지털 트윈 (구역 현황)</h2>
-            {selectedDrawingId ? (
+            {drawingDetail ? (
               <div className="gl-map gl-map-with-image">
                 <div
                   className="gl-map-image-wrap"
-                  style={{ backgroundImage: `url(/api/gas-leak/drawings/${selectedDrawingId}/file)` }}
+                  style={{ backgroundImage: `url(${drawingUrl})` }}
                   title="공장 도면"
                 >
                   {mapSensors.map((s) => (
                     <div
                       key={s.id}
                       className="gl-map-sensor-marker"
-                      style={{ left: `${s.x * 100}%`, top: `${s.y * 100}%` }}
+                      style={{ left: `${(s.x ?? 0) * 100}%`, top: `${(s.y ?? 0) * 100}%` }}
                       title={`${s.label}: ${(mapSensorValues[s.id]?.value ?? '-')} ${s.unit}`}
                     >
-                      <span className="gl-marker-dot" style={{ background: ZONE_STATUS_COLOR[mapSensorValues[s.id]?.status] || ZONE_STATUS_COLOR.normal }} />
+                      <span className="gl-marker-dot" style={{ background: ZONE_STATUS_COLOR[mapSensorValues[s.id]?.status ?? 'normal'] || ZONE_STATUS_COLOR.normal }} />
                       <span className="gl-marker-label">{s.label}</span>
                     </div>
                   ))}
@@ -278,8 +404,8 @@ function GasLeakControlDashboard({ onAction, events }) {
             <h2>실시간 센서 (압력 / 유량)</h2>
             {displaySensors.length === 0 ? (
               <p className="gl-sensors-empty">
-                {selectedDrawingId
-                  ? '도면에 등록된 센서가 없습니다. 「도면 / 센서 등록」 탭에서 센서를 등록하면 여기에 그래프가 표시됩니다.'
+                {isLocalDrawing
+                  ? '「도면 / 센서 등록」 탭에서 센서를 등록하면 여기에 그래프가 표시됩니다.'
                   : '표시할 도면을 선택해 주세요. 「도면 / 센서 등록」 탭에서 도면을 업로드·선택한 뒤 센서를 등록하면 센서별 그래프가 표시됩니다.'}
               </p>
             ) : (
@@ -295,8 +421,8 @@ function GasLeakControlDashboard({ onAction, events }) {
             <div className="gl-sensors-grid">
               {displaySensors.length === 0 ? (
                 <p className="gl-sensors-empty">
-                  {selectedDrawingId
-                    ? '도면에 등록된 센서가 없습니다. 「도면 / 센서 등록」 탭에서 센서를 등록해 주세요.'
+                  {isLocalDrawing
+                    ? '「도면 / 센서 등록」 탭에서 센서를 등록해 주세요.'
                     : '표시할 도면을 선택해 주세요. 「도면 / 센서 등록」 탭에서 도면을 업로드·선택한 뒤 센서를 등록하면 여기에 실시간 수치가 표시됩니다.'}
                 </p>
               ) : (
@@ -363,6 +489,7 @@ function GasLeakControlDashboard({ onAction, events }) {
           </div>
           <div className="gl-drawing-list">
             <span className="gl-drawing-list-title">도면 목록</span>
+            {isLocalDrawing && <p className="gl-drawing-empty">현재 로컬 도면을 사용중입니다. 실제 도면을 사용하려면 아래에서 선택하세요.</p>}
             {drawings.length === 0 ? (
               <p className="gl-drawing-empty">등록된 도면이 없습니다. 위에서 이미지를 업로드하세요.</p>
             ) : (
@@ -371,7 +498,7 @@ function GasLeakControlDashboard({ onAction, events }) {
                   <li key={d.id}>
                     <span>{d.name || d.filename || d.id}</span>
                     <span className="gl-drawing-actions">
-                      <button type="button" className="gl-btn-sm" onClick={() => { setSelectedDrawingId(d.id); fetchDrawingDetail(d.id) }}>선택</button>
+                      <button type="button" className="gl-btn-sm" onClick={() => { if (d.id) { setSelectedDrawingId(d.id); } }}>선택</button>
                       <button type="button" className="gl-btn-sm gl-btn-danger-sm" onClick={() => handleDeleteDrawing(d.id)}>삭제</button>
                     </span>
                   </li>
@@ -379,16 +506,16 @@ function GasLeakControlDashboard({ onAction, events }) {
               </ul>
             )}
           </div>
-          {selectedDrawingId && drawingDetail?.drawing && (
+          {drawingDetail?.drawing && (
             <>
               <div className="gl-drawing-map-label">도면 내 설치 위치 등록 (도면을 클릭하여 센서 추가)</div>
               <div
                 className="gl-map gl-map-editable"
-                style={{ backgroundImage: `url(/api/gas-leak/drawings/${selectedDrawingId}/file)` }}
+                style={{ backgroundImage: `url(${drawingUrl})` }}
                 onClick={handleMapClick}
               >
                 {mapSensors.map((s) => (
-                  <div key={s.id} className="gl-map-sensor-marker editable" style={{ left: `${s.x * 100}%`, top: `${s.y * 100}%` }}>
+                  <div key={s.id} className="gl-map-sensor-marker editable" style={{ left: `${(s.x ?? 0) * 100}%`, top: `${(s.y ?? 0) * 100}%` }}>
                     <span className="gl-marker-dot" />
                     <span className="gl-marker-label">{s.label}</span>
                   </div>
@@ -417,16 +544,17 @@ function GasLeakControlDashboard({ onAction, events }) {
                 <ul>
                   {mapSensors.map((s, i) => (
                     <li key={s.id}>
-                      {s.label} — {s.sensor_type === 'pressure' ? '압력' : s.sensor_type === 'concentration' ? '가스 농도' : '유량'} ({s.unit}), ({(s.x * 100).toFixed(0)}%, {(s.y * 100).toFixed(0)}%)
+                      {s.label} — {s.sensor_type === 'pressure' ? '압력' : s.sensor_type === 'concentration' ? '가스 농도' : '유량'} ({s.unit}), ({(s.x ?? 0) * 100}%, {(s.y ?? 0) * 100}%)
                       <button type="button" className="gl-btn-sm gl-btn-danger-sm" onClick={() => handleRemoveSensor(i)}>삭제</button>
                     </li>
                   ))}
                 </ul>
-                {mapSensors.length > 0 && (
+                {mapSensors.length > 0 && !isLocalDrawing && (
                   <button type="button" className="gl-btn gl-btn-primary" onClick={handleSaveSensors} disabled={savingSensors}>
                     {savingSensors ? '저장 중…' : '센서 위치 저장'}
                   </button>
                 )}
+                {isLocalDrawing && <p>로컬 도면의 센서는 저장되지 않습니다.</p>}
               </div>
             </>
           )}
@@ -470,29 +598,34 @@ function GasLeakControlDashboard({ onAction, events }) {
         </section>
       )}
     </div>
-  )
+  );
 }
 
-function TimeSeriesChart({ data, color }) {
+interface TimeSeriesChartProps {
+    data: TimeSeriesPoint[];
+    color: string;
+}
+
+function TimeSeriesChart({ data, color }: TimeSeriesChartProps) {
   if (!Array.isArray(data) || data.length === 0) {
-    return <div className="gl-chart-empty">데이터 수집 중...</div>
+    return <div className="gl-chart-empty">데이터 수집 중...</div>;
   }
-  const values = data.map((d) => (typeof d === 'object' && d !== null && 'v' in d ? d.v : d))
-  const min = Math.min(...values)
-  const max = Math.max(...values) || 1
-  const range = max - min || 1
-  const h = 80
-  const w = 400
+  const values = data.map((d) => (typeof d === 'object' && d !== null && 'v' in d ? d.v : d));
+  const min = Math.min(...values);
+  const max = Math.max(...values) || 1;
+  const range = max - min || 1;
+  const h = 80;
+  const w = 400;
   const points = values.map((v, i) => {
-    const x = values.length > 1 ? (i / (values.length - 1)) * w : 0
-    const y = h - ((v - min) / range) * h
-    return `${x},${y}`
-  }).join(' ')
+    const x = values.length > 1 ? (i / (values.length - 1)) * w : 0;
+    const y = h - ((v - min) / range) * h;
+    return `${x},${y}`;
+  }).join(' ');
   return (
     <svg viewBox={`0 0 ${w} ${h}`} className="gl-chart-svg" preserveAspectRatio="none">
       <polyline fill="none" stroke={color} strokeWidth="2" points={points} />
     </svg>
-  )
+  );
 }
 
-export default GasLeakControlDashboard
+export default GasLeakControlDashboard;
