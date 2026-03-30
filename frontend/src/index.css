@@ -1,18 +1,19 @@
-/* AI 가스 누출 자동제어 - 안전/산업 테마 */
+@import "tailwindcss";
+
 :root {
-  --gl-bg-page: #0f1419;
-  --gl-bg-card: #1a2332;
-  --gl-bg-panel: #243044;
-  --gl-border: #2d3a4f;
-  --gl-text: #e6edf3;
-  --gl-text-muted: #8b949e;
-  --gl-primary: #58a6ff;
-  --gl-success: #3fb950;
+  --gl-bg-page: #ffffff;
+  --gl-bg-card: #ffffff;
+  --gl-bg-panel: #f8fafc;
+  --gl-border: #e2e8f0;
+  --gl-text: #0b1828;
+  --gl-text-muted: #7a89a1;
+  --gl-primary: #61a0e1;
+  --gl-success: #22c55e;
   --gl-warning: #d29922;
-  --gl-danger: #f85149;
-  --gl-emergency: #ff4444;
+  --gl-danger: #ef4444;
+  --gl-emergency: #ef4444;
   --gl-radius: 8px;
-  --gl-font: 'JetBrains Mono', 'Noto Sans KR', monospace, sans-serif;
+  --gl-font: 'Pretendard', 'Noto Sans KR', system-ui, -apple-system, 'Segoe UI', sans-serif;
 }
 
 * {
