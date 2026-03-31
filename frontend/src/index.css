@@ -43,3 +43,28 @@ button {
   outline: 2px solid var(--gl-primary);
   outline-offset: 2px;
 }
+
+/* Notion-like scrollbar (scoped opt-in) */
+.notion-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(55, 53, 47, 0.35) transparent;
+}
+
+.notion-scrollbar::-webkit-scrollbar {
+  width: 10px;
+}
+
+.notion-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.notion-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(55, 53, 47, 0.28);
+  border-radius: 9999px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+
+.notion-scrollbar:hover::-webkit-scrollbar-thumb {
+  background-color: rgba(55, 53, 47, 0.4);
+}

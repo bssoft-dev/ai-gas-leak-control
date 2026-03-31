@@ -190,7 +190,7 @@ export default function AppShellLayout() {
               </div>
             </div>
           ) : (
-            <div className="px-[16px] pt-[16px] pb-[24px] flex flex-col gap-[16px] overflow-y-auto scrollbar-thin">
+            <div className="px-[16px] pt-[16px] pb-[24px] flex flex-col gap-[16px] min-h-0 flex-1">
               <div className="flex items-center justify-between px-[24px]">
                 <div className="font-['Pretendard',sans-serif] font-semibold text-[16px] leading-[1.2] text-[color:var(--black_300,#7a89a1)] uppercase">
                   메뉴
@@ -279,7 +279,7 @@ export default function AppShellLayout() {
               )}
 
               {/* Active drawings (only in expanded sidebar) */}
-              <div className="border-t border-[#c0ccde] pt-[16px] flex flex-col gap-[16px]">
+              <div className="border-t border-[#c0ccde] pt-[16px] flex flex-col gap-[16px] min-h-0 flex-1">
                 <div className="flex items-center justify-between px-[24px]">
                   <div className="font-['Pretendard',sans-serif] font-semibold text-[16px] leading-[1.2] text-[color:var(--black_300,#7a89a1)] uppercase">
                     활성화 도면
@@ -299,7 +299,9 @@ export default function AppShellLayout() {
                 </div>
 
                 {isDrawingsExpanded && (
-                  <ActiveDrawingsList />
+                  <div className="min-h-0 flex-1 overflow-y-auto notion-scrollbar pr-[4px]">
+                    <ActiveDrawingsList />
+                  </div>
                 )}
               </div>
             </div>
