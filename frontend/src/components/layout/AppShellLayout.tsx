@@ -104,7 +104,7 @@ export default function AppShellLayout() {
         <div className="relative w-full min-h-screen">
           {/* Sidebar */}
           <aside
-            className="fixed left-0 top-0 h-screen bg-[var(--gray_sidebar,#fafafa)] border-r border-[var(--gray_sidebar_stroke,#e2e8f0)] z-20 transition-[width] duration-200"
+            className="fixed left-0 top-0 h-screen bg-[var(--gray_sidebar,#fafafa)] border-r border-[var(--gray_sidebar_stroke,#e2e8f0)] z-20 transition-[width] duration-200 flex flex-col"
             style={{ width: sidebarWidth }}
           >
           {/* Logo section */}
@@ -150,7 +150,7 @@ export default function AppShellLayout() {
 
           {/* Menu / Nav */}
           {isSidebarCollapsed ? (
-            <div className="h-[153px] w-[69px]">
+            <div className="h-[153px] w-[69px] shrink-0">
               <div className="h-full flex flex-col items-center overflow-hidden pb-[24px] pt-[16px] px-[16px]">
                 <nav className="flex flex-col items-start">
                   <div className="flex flex-col gap-[4px] items-start">
@@ -190,7 +190,7 @@ export default function AppShellLayout() {
               </div>
             </div>
           ) : (
-            <div className="px-[16px] pt-[16px] pb-[24px] flex flex-col gap-[16px]">
+            <div className="px-[16px] pt-[16px] pb-[24px] flex flex-col gap-[16px] overflow-y-auto scrollbar-thin">
               <div className="flex items-center justify-between px-[24px]">
                 <div className="font-['Pretendard',sans-serif] font-semibold text-[16px] leading-[1.2] text-[color:var(--black_300,#7a89a1)] uppercase">
                   메뉴
