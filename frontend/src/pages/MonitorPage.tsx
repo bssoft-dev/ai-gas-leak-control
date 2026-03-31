@@ -1,5 +1,7 @@
 import { monitorAssets } from '../assets/monitor/monitorAssets'
 import { useActiveDrawing } from '../state/activeDrawing'
+import { DefaultService } from '../api/services/DefaultService'
+import { useEffect, useState } from 'react'
 
 type ChartCard = {
   id: string
@@ -16,6 +18,26 @@ export default function MonitorPage() {
   const drawingName = drawings.find((d) => d.id === activeDrawingId)?.name ?? '도면'
   const page = total <= 0 ? 0 : activeIndex + 1
   const totalPages = total
+
+  const [indexHtml, setIndexHtml] = useState<string | null>(null)
+  const [indexError, setIndexError] = useState<string | null>(null)
+
+  useEffect(() => {
+    let mounted = true
+    DefaultService.indexGet()
+      .then((res) => {
+        if (!mounted) return
+        setIndexHtml(res)
+        setIndexError(null)
+      })
+      .catch((e) => {
+        if (!mounted) return
+        setIndexError(e?.message ?? String(e))
+      })
+    return () => {
+      mounted = false
+    }
+  }, [])
 
   const cards: ChartCard[] = [
     { id: 'c1', title: '압력 센서 1', valueText: '11.92 MPa', headerBg: '#f1f7ea', variant: 'green' },
@@ -65,6 +87,17 @@ export default function MonitorPage() {
         <section className="min-w-0">
           <div className="font-['Pretendard',sans-serif] font-semibold text-[16px] leading-[1.2] text-[#4370ac] uppercase">
             도면 명
+          </div>
+
+          {/* API 연동 확인 (GET /) */}
+          <div className="mt-[6px] font-['Pretendard',sans-serif] text-[12px] leading-[16px] text-[#7a89a1]">
+            {indexError ? (
+              <span className="text-[#ef4444]">API(GET /) 오류: {indexError}</span>
+            ) : indexHtml ? (
+              <span>API(GET /) 응답 수신: {indexHtml.length.toLocaleString()} chars</span>
+            ) : (
+              <span>API(GET /) 호출 중...</span>
+            )}
           </div>
 
           <div className="mt-[12px] relative bg-white rounded-[8px] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.3),0px_1px_3px_1px_rgba(0,0,0,0.15)] overflow-hidden">
