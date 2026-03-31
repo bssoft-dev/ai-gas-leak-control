@@ -1,7 +1,8 @@
-import { NavLink, Outlet } from 'react-router-dom'
+import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { useMemo, useState } from 'react'
 
 import { appShellAssets } from '../../assets/app-shell/appShellAssets'
+import { ActiveDrawingProvider, useActiveDrawing } from '../../state/activeDrawing'
 
 export default function AppShellLayout() {
   const BLUE_PRIMARY_800 = '#4370ac'
@@ -53,14 +54,59 @@ export default function AppShellLayout() {
     )
   }
 
+  const ActiveDrawingsList = () => {
+    const { drawings, activeDrawingId, setActiveDrawingId } = useActiveDrawing()
+    const navigate = useNavigate()
+    const location = useLocation()
+
+    return (
+      <div className="flex flex-col gap-[4px]">
+        {drawings.map((d) => {
+          const isActive = d.id === activeDrawingId
+
+          return (
+            <button
+              key={d.id}
+              type="button"
+              className={
+                isActive
+                  ? 'w-full rounded-[4px] border border-[var(--blue_primary_500,#61a0e1)] bg-[var(--blue_primary_50,#e6f3fb)] px-[13px] py-[9px] flex items-center justify-between'
+                  : 'w-full rounded-[8px] px-[12px] py-[8px] flex items-center justify-between'
+              }
+              onClick={() => {
+                setActiveDrawingId(d.id)
+                if (location.pathname !== '/') navigate('/')
+              }}
+            >
+              <span
+                className={`font-['Pretendard',sans-serif] text-[16px] leading-[20px] ${
+                  isActive ? 'font-semibold text-[color:var(--blue_primary_800,#4370ac)]' : 'font-medium text-[color:var(--black_title,#0b1828)]'
+                }`}
+              >
+                {d.name}
+              </span>
+
+              {isActive && (
+                <span className="relative w-[8px] h-[8px] rounded-[9999px] bg-[var(--green,#22c55e)]">
+                  <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[8px] h-[8px] rounded-[9999px] shadow-[0px_0px_0px_4px_rgba(34,197,94,0.2)]" />
+                </span>
+              )}
+            </button>
+          )
+        })}
+      </div>
+    )
+  }
+
   return (
-    <div className="bg-white min-h-screen w-full">
-      <div className="relative w-full min-h-screen">
-        {/* Sidebar */}
-        <aside
-          className="fixed left-0 top-0 h-screen bg-[var(--gray_sidebar,#fafafa)] border-r border-[var(--gray_sidebar_stroke,#e2e8f0)] z-20 transition-[width] duration-200"
-          style={{ width: sidebarWidth }}
-        >
+    <ActiveDrawingProvider>
+      <div className="bg-white min-h-screen w-full">
+        <div className="relative w-full min-h-screen">
+          {/* Sidebar */}
+          <aside
+            className="fixed left-0 top-0 h-screen bg-[var(--gray_sidebar,#fafafa)] border-r border-[var(--gray_sidebar_stroke,#e2e8f0)] z-20 transition-[width] duration-200"
+            style={{ width: sidebarWidth }}
+          >
           {/* Logo section */}
           {isSidebarCollapsed ? (
             <div className="h-[64px] bg-white border-b border-r border-[var(--gray_sidebar_stroke,#e2e8f0)] w-[69px]">
@@ -77,20 +123,20 @@ export default function AppShellLayout() {
             </div>
           ) : (
             <div className="h-[64px] bg-white border-b border-[var(--gray_sidebar_stroke,#e2e8f0)]">
-              <div className="h-full px-[24px] flex items-center justify-between">
-                <div className="h-[15px] w-[36px] overflow-hidden relative">
-                  <img alt="" className="absolute h-[160.8%] left-0 max-w-none top-[-0.4%] w-full" src={imgLogo1} />
-                </div>
-                <div className="flex items-center">
-                  <div className="pr-[3.2px]">
-                    <div className="font-['Pretendard',sans-serif] font-semibold text-[16px] leading-[20px] tracking-[-0.35px] text-[color:var(--black_title,#0b1828)] whitespace-nowrap">
+              <div className="relative h-full px-[24px] pr-[84px] flex items-center">
+                <div className="flex items-center gap-[12px] min-w-0">
+                  <div className="h-[15px] w-[36px] overflow-hidden relative shrink-0">
+                    <img alt="" className="absolute h-[160.8%] left-0 max-w-none top-[-0.4%] w-full" src={imgLogo1} />
+                  </div>
+                  <div className="pr-[3.2px] min-w-0">
+                    <div className="font-['Pretendard',sans-serif] font-semibold text-[16px] leading-[20px] tracking-[-0.35px] text-[color:var(--black_title,#0b1828)] truncate">
                       AI 가스 누출 감지 시스템
                     </div>
                   </div>
                 </div>
                 <button
                   type="button"
-                  className="w-[46px] h-[38px] flex items-center justify-center"
+                  className="absolute right-[24px] top-1/2 -translate-y-1/2 w-[46px] h-[38px] flex items-center justify-center"
                   aria-label="사이드바 접기"
                   onClick={() => setIsSidebarCollapsed(true)}
                 >
@@ -145,7 +191,7 @@ export default function AppShellLayout() {
             </div>
           ) : (
             <div className="px-[16px] pt-[16px] pb-[24px] flex flex-col gap-[16px]">
-              <div className="flex items-center justify-between px-[8px]">
+              <div className="flex items-center justify-between px-[24px]">
                 <div className="font-['Pretendard',sans-serif] font-semibold text-[16px] leading-[1.2] text-[color:var(--black_300,#7a89a1)] uppercase">
                   메뉴
                 </div>
@@ -234,7 +280,7 @@ export default function AppShellLayout() {
 
               {/* Active drawings (only in expanded sidebar) */}
               <div className="border-t border-[#c0ccde] pt-[16px] flex flex-col gap-[16px]">
-                <div className="flex items-center justify-between px-[8px]">
+                <div className="flex items-center justify-between px-[24px]">
                   <div className="font-['Pretendard',sans-serif] font-semibold text-[16px] leading-[1.2] text-[color:var(--black_300,#7a89a1)] uppercase">
                     활성화 도면
                   </div>
@@ -253,29 +299,7 @@ export default function AppShellLayout() {
                 </div>
 
                 {isDrawingsExpanded && (
-                  <div className="flex flex-col gap-[4px]">
-                    <a
-                      className="w-full rounded-[4px] border border-[var(--blue_primary_500,#61a0e1)] bg-[var(--blue_primary_50,#e6f3fb)] px-[13px] py-[9px] flex items-center justify-between"
-                      href="#"
-                    >
-                      <span className="font-['Pretendard',sans-serif] font-semibold text-[16px] leading-[20px] text-[color:var(--blue_primary_800,#4370ac)]">
-                        도면 1
-                      </span>
-                      <span className="relative w-[8px] h-[8px] rounded-[9999px] bg-[var(--green,#22c55e)]">
-                        <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[8px] h-[8px] rounded-[9999px] shadow-[0px_0px_0px_4px_rgba(34,197,94,0.2)]" />
-                      </span>
-                    </a>
-                    <a className="w-full rounded-[8px] px-[12px] py-[8px] flex items-center" href="#">
-                      <span className="font-['Pretendard',sans-serif] font-medium text-[16px] leading-[20px] text-[color:var(--black_title,#0b1828)]">
-                        도면 2
-                      </span>
-                    </a>
-                    <a className="w-full rounded-[8px] px-[12px] py-[8px] flex items-center gap-[12px]" href="#">
-                      <span className="font-['Pretendard',sans-serif] font-medium text-[16px] leading-[20px] text-[color:var(--black_title,#0b1828)]">
-                        도면 3
-                      </span>
-                    </a>
-                  </div>
+                  <ActiveDrawingsList />
                 )}
               </div>
             </div>
@@ -326,6 +350,7 @@ export default function AppShellLayout() {
         </main>
       </div>
     </div>
+    </ActiveDrawingProvider>
   )
 }
 
