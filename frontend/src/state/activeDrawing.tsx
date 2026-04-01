@@ -5,6 +5,7 @@ export type DrawingItem = {
   id: string
   name: string
   status?: 'ok' | 'warn' | 'danger'
+  isActive?: boolean
 }
 
 export type DrawingSensor = {
@@ -61,6 +62,7 @@ export function ActiveDrawingProvider({ children }: { children: React.ReactNode 
               id: String(d.id),
               name: String(d.name ?? d.filename ?? d.id),
               status: 'ok' as const,
+              isActive: Boolean(d?.is_active ?? d?.isActive ?? false),
             }))
           : []
 
