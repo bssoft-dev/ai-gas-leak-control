@@ -11,5 +11,7 @@ export const appShellAssets = {
   imgAnalyticsCollapsed: 'https://www.figma.com/api/mcp/asset/fd55887c-2c83-4376-b524-853b080b9dcb',
   imgContentPasteCollapsed: 'https://www.figma.com/api/mcp/asset/fe8abd38-7f0b-4089-a91d-3df639bcec1d',
   imgHistory2Collapsed: 'https://www.figma.com/api/mcp/asset/f19592c6-269b-4596-a8c0-7eeda2959b2a',
+  /** 도면 목록 행 삭제 (Figma sidebar drawing row) */
+  imgDrawingDelete: 'https://www.figma.com/api/mcp/asset/6dad48c3-69c3-45c8-89a3-05f1d24b908e',
 } as const
 

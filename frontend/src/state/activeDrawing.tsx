@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useMemo, useState } from 'react'
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { DefaultService } from '../api/services/DefaultService'
 
 export type DrawingItem = {
@@ -26,6 +26,7 @@ type ActiveDrawingContextValue = {
   drawings: DrawingItem[]
   activeDrawingId: string
   setActiveDrawingId: (id: string) => void
+  removeDrawing: (id: string) => void
   activeDrawing: DrawingDetail | null
   isLoadingDrawings: boolean
   isLoadingActiveDrawing: boolean
@@ -86,7 +87,12 @@ export function ActiveDrawingProvider({ children }: { children: React.ReactNode 
   }, [])
 
   useEffect(() => {
-    if (!activeDrawingId) return
+    if (!activeDrawingId) {
+      setActiveDrawing(null)
+      setErrorActiveDrawing(null)
+      setIsLoadingActiveDrawing(false)
+      return
+    }
     let mounted = true
     setIsLoadingActiveDrawing(true)
     setErrorActiveDrawing(null)
@@ -115,6 +121,14 @@ export function ActiveDrawingProvider({ children }: { children: React.ReactNode 
   const activeIndex = useMemo(() => Math.max(0, drawings.findIndex((d) => d.id === activeDrawingId)), [activeDrawingId, drawings])
   const total = drawings.length
 
+  const removeDrawing = useCallback((id: string) => {
+    setDrawings((prev) => {
+      const next = prev.filter((d) => d.id !== id)
+      setActiveDrawingId((cur) => (cur === id ? next[0]?.id ?? '' : cur))
+      return next
+    })
+  }, [])
+
   const value = useMemo<ActiveDrawingContextValue>(() => {
     const goPrev = () => {
       if (total <= 0) return
@@ -132,6 +146,7 @@ export function ActiveDrawingProvider({ children }: { children: React.ReactNode 
       drawings,
       activeDrawingId,
       setActiveDrawingId,
+      removeDrawing,
       activeDrawing,
       isLoadingDrawings,
       isLoadingActiveDrawing,
@@ -142,7 +157,18 @@ export function ActiveDrawingProvider({ children }: { children: React.ReactNode 
       goPrev,
       goNext,
     }
-  }, [activeDrawing, activeDrawingId, activeIndex, drawings, errorActiveDrawing, errorDrawings, isLoadingActiveDrawing, isLoadingDrawings, total])
+  }, [
+    activeDrawing,
+    activeDrawingId,
+    activeIndex,
+    drawings,
+    errorActiveDrawing,
+    errorDrawings,
+    isLoadingActiveDrawing,
+    isLoadingDrawings,
+    removeDrawing,
+    total,
+  ])
 
   return <ActiveDrawingContext.Provider value={value}>{children}</ActiveDrawingContext.Provider>
 }

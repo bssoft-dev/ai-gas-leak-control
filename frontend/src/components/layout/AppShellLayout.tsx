@@ -44,6 +44,7 @@ export default function AppShellLayout() {
     imgContentPasteCollapsed,
     imgHistory2Collapsed,
     imgDrawingsChevron,
+    imgDrawingDelete,
   } = appShellAssets
 
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
@@ -100,46 +101,129 @@ export default function AppShellLayout() {
     showGreenDot?: (id: string) => boolean
     allowIds?: Set<string>
   }) => {
-    const { drawings, activeDrawingId, setActiveDrawingId } = useActiveDrawing()
+    const { drawings, activeDrawingId, setActiveDrawingId, removeDrawing } = useActiveDrawing()
+    const [pendingDeleteDrawingId, setPendingDeleteDrawingId] = useState<string | null>(null)
+
+    const pendingDeleteName = useMemo(
+      () => drawings.find((d) => d.id === pendingDeleteDrawingId)?.name ?? '',
+      [drawings, pendingDeleteDrawingId],
+    )
+
+    const confirmRemoveDrawing = () => {
+      if (!pendingDeleteDrawingId) return
+      removeDrawing(pendingDeleteDrawingId)
+      setPendingDeleteDrawingId(null)
+    }
 
     return (
-      <div className="flex flex-col gap-[4px]">
-        {drawings
-          .filter((d) => filter(d.id) && (allowIds ? allowIds.has(d.id) : true))
-          .map((d) => {
-          const isActive = d.id === activeDrawingId
-          const shouldShowGreenDot = showGreenDot?.(d.id) ?? false
+      <>
+        <div className="flex flex-col gap-[4px]">
+          {drawings
+            .filter((d) => filter(d.id) && (allowIds ? allowIds.has(d.id) : true))
+            .map((d) => {
+              const isActive = d.id === activeDrawingId
+              const shouldShowGreenDot = showGreenDot?.(d.id) ?? false
 
-          return (
-            <button
-              key={d.id}
-              type="button"
-              className={
-                isActive
-                  ? 'w-full rounded-[4px] border border-[var(--blue_primary_500,#61a0e1)] bg-[var(--blue_primary_50,#e6f3fb)] px-[13px] py-[9px] flex items-center justify-between'
-                  : 'w-full rounded-[8px] px-[12px] py-[8px] flex items-center justify-between hover:bg-[#f1f5f9]'
-              }
-              onClick={() => {
-                setActiveDrawingId(d.id)
-              }}
+              return (
+                <div
+                  key={d.id}
+                  className={
+                    isActive
+                      ? 'w-full rounded-[4px] border border-[var(--blue_primary_500,#61a0e1)] bg-[var(--blue_primary_50,#e6f3fb)] px-[13px] py-[9px] flex items-center justify-between gap-[8px]'
+                      : 'w-full rounded-[8px] px-[12px] py-[8px] flex items-center justify-between gap-[8px] hover:bg-[#f1f5f9]'
+                  }
+                >
+                  <button
+                    type="button"
+                    className={`min-w-0 flex-1 truncate text-left font-['Pretendard',sans-serif] text-[16px] leading-[20px] ${
+                      isActive ? 'font-semibold text-[color:var(--blue_primary_800,#4370ac)]' : 'font-medium text-[color:var(--black_title,#0b1828)]'
+                    }`}
+                    onClick={() => setActiveDrawingId(d.id)}
+                  >
+                    {d.name}
+                  </button>
+
+                  <div className="flex shrink-0 items-center gap-[12px]">
+                    {shouldShowGreenDot && (
+                      <span className="relative h-[8px] w-[8px] shrink-0 rounded-[9999px] bg-[var(--green,#22c55e)]">
+                        <span className="absolute left-0 top-1/2 h-[8px] w-[8px] -translate-y-1/2 rounded-[9999px] shadow-[0px_0px_0px_4px_rgba(34,197,94,0.2)]" />
+                      </span>
+                    )}
+                    <button
+                      type="button"
+                      className="group flex h-[28px] w-[28px] shrink-0 items-center justify-center rounded-[4px] hover:bg-[#fef2f2]"
+                      aria-label={`${d.name} 삭제`}
+                      onClick={(e) => {
+                        e.preventDefault()
+                        e.stopPropagation()
+                        setPendingDeleteDrawingId(d.id)
+                      }}
+                    >
+                      <img
+                        alt=""
+                        className="block h-[20px] w-[20px] transition-[filter] group-hover:[filter:invert(32%)_sepia(95%)_saturate(2582%)_hue-rotate(331deg)_brightness(99%)_contrast(96%)]"
+                        src={imgDrawingDelete}
+                      />
+                    </button>
+                  </div>
+                </div>
+              )
+            })}
+        </div>
+
+        {pendingDeleteDrawingId && (
+          <div
+            className="fixed inset-0 z-[210] flex items-center justify-center bg-black/40 px-[24px]"
+            role="alertdialog"
+            aria-modal="true"
+            aria-labelledby="drawing-delete-title"
+            onClick={() => setPendingDeleteDrawingId(null)}
+          >
+            <div
+              className="w-full max-w-[500px] rounded-[12px] bg-white p-[40px] shadow-[0px_12px_40px_rgba(0,0,0,0.18)]"
+              onClick={(e) => e.stopPropagation()}
             >
-              <span
-                className={`font-['Pretendard',sans-serif] text-[16px] leading-[20px] ${
-                  isActive ? 'font-semibold text-[color:var(--blue_primary_800,#4370ac)]' : 'font-medium text-[color:var(--black_title,#0b1828)]'
-                }`}
+              <div className="flex justify-center">
+                <div className="flex h-[48px] w-[48px] items-center justify-center rounded-full bg-[#fef2f2]" aria-hidden>
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14zM10 11v6M14 11v6" />
+                  </svg>
+                </div>
+              </div>
+              <h2
+                id="drawing-delete-title"
+                className="mt-[24px] text-center font-['Pretendard',sans-serif] text-[18px] font-semibold leading-[1.35] text-[color:var(--black_title,#0b1828)]"
               >
-                {d.name}
-              </span>
-
-              {shouldShowGreenDot && (
-                <span className="relative w-[8px] h-[8px] rounded-[9999px] bg-[var(--green,#22c55e)]">
-                  <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[8px] h-[8px] rounded-[9999px] shadow-[0px_0px_0px_4px_rgba(34,197,94,0.2)]" />
-                </span>
-              )}
-            </button>
-          )
-        })}
-      </div>
+                해당 도면을 삭제하시겠습니까?
+              </h2>
+              {pendingDeleteName ? (
+                <p className="mt-[8px] text-center font-['Pretendard',sans-serif] text-[14px] leading-[1.4] text-[color:var(--black_300,#7a89a1)]">
+                  {pendingDeleteName}
+                </p>
+              ) : null}
+              <p className="mt-[12px] text-center font-['Pretendard',sans-serif] text-[14px] leading-[1.5] text-[color:var(--black_500,#485b77)]">
+                삭제 시 도면 내 생성된 센서 정보도 함께 삭제됩니다.
+              </p>
+              <div className="mt-[28px] flex gap-[12px]">
+                <button
+                  type="button"
+                  className="h-[52px] flex-1 rounded-[8px] border border-[#e2e8f0] bg-white font-['Pretendard',sans-serif] text-[16px] font-medium text-[color:var(--black_700,#2c3c53)]"
+                  onClick={() => setPendingDeleteDrawingId(null)}
+                >
+                  취소
+                </button>
+                <button
+                  type="button"
+                  className="h-[52px] flex-1 rounded-[8px] bg-[#ef4444] font-['Pretendard',sans-serif] text-[16px] font-medium text-white shadow-[0px_1px_2px_rgba(0,0,0,0.05)]"
+                  onClick={confirmRemoveDrawing}
+                >
+                  삭제
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </>
     )
   }
 
