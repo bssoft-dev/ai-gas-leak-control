@@ -1,4 +1,4 @@
-import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
+import { NavLink, Outlet } from 'react-router-dom'
 import { useEffect, useMemo, useRef, useState } from 'react'
 
 import { appShellAssets } from '../../assets/app-shell/appShellAssets'
@@ -101,8 +101,6 @@ export default function AppShellLayout() {
     allowIds?: Set<string>
   }) => {
     const { drawings, activeDrawingId, setActiveDrawingId } = useActiveDrawing()
-    const navigate = useNavigate()
-    const location = useLocation()
 
     return (
       <div className="flex flex-col gap-[4px]">
@@ -123,7 +121,6 @@ export default function AppShellLayout() {
               }
               onClick={() => {
                 setActiveDrawingId(d.id)
-                if (location.pathname !== '/') navigate('/')
               }}
             >
               <span
