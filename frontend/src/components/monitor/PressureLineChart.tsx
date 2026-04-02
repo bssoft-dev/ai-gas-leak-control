@@ -1,0 +1,80 @@
+import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
+
+import type { MonitorPressurePoint } from '../../api/monitorPressureSeries'
+
+const STROKE = {
+  green: '#7cbf6a',
+  yellow: '#caa23d',
+} as const
+
+/** Y축 틱 대신 플롯 영역(offset) 높이에 맞춰 가로 격자를 균등 배치 */
+function uniformHorizontalGrid(
+  props: { offset: { top: number; height: number } },
+  _syncWithTicks: boolean,
+): number[] {
+  const { top, height } = props.offset
+  if (!Number.isFinite(height) || height <= 0) return []
+  const segments = 4
+  const coords: number[] = []
+  for (let i = 0; i <= segments; i++) {
+    coords.push(top + (height * i) / segments)
+  }
+  return coords
+}
+
+type Props = {
+  points: MonitorPressurePoint[]
+  variant: 'green' | 'yellow'
+}
+
+export function PressureLineChart({ points, variant }: Props) {
+  const stroke = STROKE[variant]
+  const data = points
+
+  if (data.length === 0) {
+    return <div className="flex h-full w-full items-center justify-center bg-[#fafafa] text-[10px] text-[#94a3b8]">데이터 없음</div>
+  }
+
+  return (
+    <div
+      className="h-full w-full min-h-0 rounded-[3px] [&_.recharts-surface]:outline-none [&_.recharts-surface:focus]:shadow-[0_0_0_2px_var(--chart-focus-ring)]"
+      style={{ ['--chart-focus-ring' as string]: stroke }}
+    >
+      <ResponsiveContainer width="100%" height="100%">
+      <LineChart data={data} margin={{ top: 6, right: 8, left: 8, bottom: 2 }}>
+        <CartesianGrid
+          stroke="#eef2f6"
+          strokeOpacity={0.9}
+          vertical={false}
+          syncWithTicks={false}
+          horizontalCoordinatesGenerator={uniformHorizontalGrid}
+        />
+        <XAxis dataKey="at" type="number" domain={['dataMin', 'dataMax']} hide />
+        <YAxis domain={['auto', 'auto']} width={0} hide />
+        <Tooltip
+          contentStyle={{
+            fontSize: 11,
+            borderRadius: 6,
+            border: '1px solid #e2e8f0',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+          }}
+          labelFormatter={(t) =>
+            typeof t === 'number'
+              ? new Date(t).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', second: '2-digit' })
+              : ''
+          }
+          formatter={(value) => [`${Number(value).toFixed(2)} MPa`, '압력']}
+        />
+        <Line
+          type="monotone"
+          dataKey="value"
+          stroke={stroke}
+          strokeWidth={2}
+          dot={false}
+          isAnimationActive={false}
+        />
+      </LineChart>
+      </ResponsiveContainer>
+    </div>
+  )
+}
