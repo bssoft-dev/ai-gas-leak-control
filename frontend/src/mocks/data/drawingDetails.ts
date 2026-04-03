@@ -3,6 +3,8 @@ export type MockDrawingSensor = {
   left: number
   top: number
   variant: 'green' | 'yellow'
+  /** 생략 시 레거시 픽셀(900×슬롯높이 설계 기준) — UI에서 슬롯 %로 변환 */
+  positionUnit?: 'percent' | 'legacy_px'
 }
 
 export type MockDrawingDetail = {

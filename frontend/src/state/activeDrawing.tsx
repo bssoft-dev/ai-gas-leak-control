@@ -13,6 +13,8 @@ export type DrawingSensor = {
   left: number
   top: number
   variant: 'green' | 'yellow'
+  /** percent: left/top는 도면 이미지 슬롯 내 0~100. 생략 시 레거시 픽셀(고정 설계 폭 기준)로 해석 */
+  positionUnit?: 'percent' | 'legacy_px'
 }
 
 export type DrawingDetail = {

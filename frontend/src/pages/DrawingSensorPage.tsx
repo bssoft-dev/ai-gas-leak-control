@@ -3,7 +3,10 @@ import { useNavigate } from 'react-router-dom'
 
 import { drawingSensorAssets } from '../assets/drawing-sensor/drawingSensorAssets'
 import { monitorAssets } from '../assets/monitor/monitorAssets'
+import { DrawingSensorDot } from '../components/drawing/DrawingSensorDot'
+import { DrawingViewResetIcon } from '../components/drawing/DrawingViewResetIcon'
 import { PageContentGrid } from '../components/layout/PageContentGrid'
+import { getSensorPercentInSlot } from '../utils/drawingSensorPosition'
 import { useActiveDrawing } from '../state/activeDrawing'
 
 const ZOOM_MIN = 0.5
@@ -289,29 +292,6 @@ export default function DrawingSensorPage() {
     setDeleteConfirmId(null)
   }
 
-  const SensorDot = ({ left, top, variant }: { left: number; top: number; variant: 'green' | 'yellow' }) => {
-    const color = variant === 'green' ? '#7cbf6a' : '#caa23d'
-    const halo = variant === 'green' ? 'rgba(124,191,106,0.55)' : 'rgba(202,162,61,0.55)'
-    const haloMid = variant === 'green' ? 'rgba(124,191,106,0.25)' : 'rgba(202,162,61,0.25)'
-
-    return (
-      <div className="absolute" style={{ left, top, width: 14, height: 14 }}>
-        <div
-          className="absolute rounded-full"
-          style={{
-            left: -6,
-            top: -6,
-            width: 26,
-            height: 26,
-            background: `radial-gradient(circle, ${halo} 0%, ${haloMid} 45%, rgba(0,0,0,0) 70%)`,
-            filter: 'blur(0.2px)',
-          }}
-        />
-        <div className="absolute left-[2px] top-[2px] w-[10px] h-[10px] rounded-full" style={{ backgroundColor: color }} />
-      </div>
-    )
-  }
-
   return (
     <>
     <PageContentGrid>
@@ -334,9 +314,9 @@ export default function DrawingSensorPage() {
         </button>
       </div>
 
-      {/* Main card — 관제 탭과 동일: 상단 안내만 패딩, 도면 786px 풀폭 + FAB */}
+      {/* Main card — 관제 탭과 동일 그림자; 도면 영역은 최소 786px + 남는 높이 균등 */}
       <div className="mt-[12px] flex min-h-0 flex-1 flex-col">
-        <div className="relative overflow-hidden rounded-[8px] bg-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.3),0px_1px_3px_1px_rgba(0,0,0,0.15)]">
+        <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden rounded-[8px] bg-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.3),0px_1px_3px_1px_rgba(0,0,0,0.15)]">
           <div className="flex shrink-0 flex-wrap items-center justify-between gap-x-[12px] gap-y-[8px] px-[32px] pb-[12px] pt-[24px]">
             <div className="font-['Pretendard',sans-serif] font-normal text-[14px] leading-[normal] text-[color:var(--black_500,#485b77)]">
               도면 내 설치 위치 등록 (도면을 클릭하여 센서 추가)
@@ -361,7 +341,7 @@ export default function DrawingSensorPage() {
             </div>
           </div>
 
-          <div className="h-[786px] relative">
+          <div className="relative min-h-[786px] min-w-0 flex-1">
             <div
               ref={drawingViewportRef}
               className={`absolute inset-0 overflow-hidden touch-none select-none ${
@@ -388,39 +368,35 @@ export default function DrawingSensorPage() {
                     transition: isDrawingPanning ? 'none' : 'transform 0.15s ease-out',
                   }}
                 >
-                  <div
-                    ref={drawingCanvasRef}
-                    className={`relative h-full w-full overflow-hidden ${drawingZoom <= 1 ? 'cursor-crosshair' : ''}`}
-                    onClick={onDrawingCanvasClick}
-                    role="presentation"
-                  >
-                    <div className="pointer-events-none absolute inset-0 overflow-hidden">
-                      <img
-                        alt={drawingName}
-                        className="absolute left-0 top-[19.35%] w-full h-[61.3%] object-contain"
-                        src={activeDrawing?.imagePath ?? monitorAssets.imgDrawing}
-                        draggable={false}
-                      />
-                    </div>
-                    {(activeDrawing?.sensors ?? []).map((s) => (
-                      <SensorDot key={s.id} left={s.left} top={s.top} variant={s.variant} />
-                    ))}
-                    {pendingPlacement && (
-                      <div
-                        className="pointer-events-none absolute z-[15]"
-                        style={{
-                          left: `${pendingPlacement.leftPct}%`,
-                          top: `${pendingPlacement.topPct}%`,
-                          transform: 'translate(-50%, -50%)',
-                        }}
-                      >
-                        <SensorDot
-                          left={0}
-                          top={0}
-                          variant={unit === 'pressure' ? 'green' : 'yellow'}
+                  <div className="relative h-full w-full overflow-hidden">
+                    <div
+                      ref={drawingCanvasRef}
+                      className={`absolute left-0 top-[19.35%] h-[61.3%] w-full overflow-hidden ${drawingZoom <= 1 ? 'cursor-crosshair' : ''}`}
+                      onClick={onDrawingCanvasClick}
+                      role="presentation"
+                    >
+                      <div className="pointer-events-none relative h-full w-full">
+                        <img
+                          alt={drawingName}
+                          className="absolute inset-0 h-full w-full object-contain"
+                          src={activeDrawing?.imagePath ?? monitorAssets.imgDrawing}
+                          draggable={false}
                         />
+                        {(activeDrawing?.sensors ?? []).map((s) => {
+                          const { leftPct, topPct } = getSensorPercentInSlot(s)
+                          return (
+                            <DrawingSensorDot key={s.id} leftPct={leftPct} topPct={topPct} variant={s.variant} />
+                          )
+                        })}
+                        {pendingPlacement && (
+                          <DrawingSensorDot
+                            leftPct={pendingPlacement.leftPct}
+                            topPct={pendingPlacement.topPct}
+                            variant={unit === 'pressure' ? 'green' : 'yellow'}
+                          />
+                        )}
                       </div>
-                    )}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -488,15 +464,7 @@ export default function DrawingSensorPage() {
                         setDrawingPan({ x: 0, y: 0 })
                       }}
                     >
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
-                        <path
-                          d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M8 21H5a2 2 0 0 1-2-2v-3M16 21h3a2 2 0 0 0 2-2v-3"
-                          stroke="#94a3b8"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
+                      <DrawingViewResetIcon />
                     </button>
                     <button
                       type="button"
@@ -535,9 +503,10 @@ export default function DrawingSensorPage() {
         <div className="flex min-h-[40px] shrink-0 items-center font-['Pretendard',sans-serif] text-[16px] font-semibold uppercase leading-[1.2] text-[color:var(--blue_primary_800,#4370ac)] -translate-y-[2px]">
           등록된 센서 ({registeredSensors.length})
         </div>
-        <div className="mt-[12px] flex min-h-[786px] flex-1 flex-col overflow-hidden rounded-[8px] border border-[#e2e8f0] bg-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)]">
-          {/* 상단 고정: 센서 생성 */}
-          <div className="shrink-0 border-b border-[#e2e8f0] bg-[#fafafa] p-[12px]">
+        <div className="mt-[12px] flex min-h-0 flex-1 flex-col">
+          <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-[8px] bg-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.3),0px_1px_3px_1px_rgba(0,0,0,0.15)]">
+            {/* 상단 고정: 센서 생성 */}
+            <div className="shrink-0 border-b border-[#e2e8f0] bg-[#fafafa] p-[12px]">
             <div className="flex flex-col gap-[12px]">
               <div>
                 <div className="pb-[4px] font-['Pretendard',sans-serif] text-[13px] leading-[normal] text-[color:var(--black_500,#485b77)]">
@@ -593,7 +562,7 @@ export default function DrawingSensorPage() {
           <div className="shrink-0 border-b border-[#e2e8f0] px-[12px] py-[8px] font-['Pretendard',sans-serif] text-[12px] leading-[normal] text-[color:var(--black_500,#485b77)]">
             목록 ({registeredSensors.length})
           </div>
-          <div className="flex min-h-0 flex-1 flex-col gap-[8px] overflow-y-auto p-[12px]">
+          <div className="notion-scrollbar flex min-h-0 flex-1 flex-col gap-[8px] overflow-y-auto py-[12px] pl-[12px] pr-[4px]">
             {registeredSensors.map((s) =>
               editingId === s.id ? (
                 <div
@@ -721,7 +690,13 @@ export default function DrawingSensorPage() {
               ),
             )}
           </div>
+          </div>
         </div>
+        {/* 좌측 페이지네이션 행과 동일 높이 → 양열 flex-1 카드 높이 맞춤 */}
+        <div
+          className="mt-[18px] flex h-[20px] shrink-0 items-center justify-center gap-[51px]"
+          aria-hidden="true"
+        />
       </aside>
     </PageContentGrid>
 
