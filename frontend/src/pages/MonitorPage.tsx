@@ -1,10 +1,11 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { monitorAssets } from '../assets/monitor/monitorAssets'
 import { DrawingSensorDot } from '../components/drawing/DrawingSensorDot'
 import { DrawingViewResetIcon } from '../components/drawing/DrawingViewResetIcon'
 import { PageContentGrid } from '../components/layout/PageContentGrid'
+import { PressureChartDetailModal } from '../components/monitor/PressureChartDetailModal'
 import { PressureLineChart } from '../components/monitor/PressureLineChart'
 import { getSensorPercentInSlot } from '../utils/drawingSensorPosition'
 import { useMonitorPressureSeries } from '../hooks/useMonitorPressureSeries'
@@ -44,6 +45,7 @@ export default function MonitorPage() {
   const [drawingFabOpen, setDrawingFabOpen] = useState(false)
   const [drawingPan, setDrawingPan] = useState({ x: 0, y: 0 })
   const [isDrawingPanning, setIsDrawingPanning] = useState(false)
+  const [chartDetailId, setChartDetailId] = useState<string | null>(null)
   const drawingViewportRef = useRef<HTMLDivElement>(null)
   const dragRef = useRef<{ active: boolean; pointerId: number; lastX: number; lastY: number } | null>(null)
 
@@ -119,7 +121,17 @@ export default function MonitorPage() {
     { id: 'c5', title: '압력 센서 5', headerBg: '#fbf6e9', variant: 'yellow' },
   ]
 
+  const detailCard = chartDetailId ? cards.find((c) => c.id === chartDetailId) : null
+  const detailSeries = detailCard ? pressureBySensorId[detailCard.id] : undefined
+  const detailValueText =
+    detailSeries != null
+      ? `${detailSeries.latestValue.toFixed(2)} MPa`
+      : pressureSeriesError
+        ? '— MPa'
+        : '…'
+
   return (
+    <>
     <PageContentGrid>
         {/* 도면: 9/12 — 차트 카드와 동일 높이(786px) */}
         <section className="col-span-12 flex min-h-0 min-w-0 flex-col lg:col-span-9 lg:h-full">
@@ -302,7 +314,25 @@ export default function MonitorPage() {
                       </div>
                     </div>
                     <div className="bg-white border border-[#e2e8f0] rounded-bl-[4px] rounded-br-[4px] rounded-tr-[4px] overflow-hidden">
-                      <div className="h-[120px] w-full min-w-0 p-px">
+                      <div
+                        role="button"
+                        tabIndex={0}
+                        className="h-[120px] w-full min-w-0 cursor-pointer p-px outline-none transition-opacity hover:opacity-95 focus-visible:shadow-[inset_0_0_0_2px_var(--chart-focus-ring)]"
+                        style={
+                          {
+                            ['--chart-focus-ring' as string]:
+                              c.variant === 'green' ? '#7cbf6a' : '#caa23d',
+                          } as CSSProperties
+                        }
+                        aria-label={`${c.title} 차트 상세 보기`}
+                        onClick={() => setChartDetailId(c.id)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault()
+                            setChartDetailId(c.id)
+                          }
+                        }}
+                      >
                         <PressureLineChart points={series?.points ?? []} variant={c.variant} />
                       </div>
                     </div>
@@ -319,6 +349,20 @@ export default function MonitorPage() {
           />
         </aside>
     </PageContentGrid>
+
+    {detailCard && (
+      <PressureChartDetailModal
+        open
+        onClose={() => setChartDetailId(null)}
+        title={detailCard.title}
+        valueText={detailValueText}
+        headerBg={detailCard.headerBg}
+        variant={detailCard.variant}
+        points={detailSeries?.points ?? []}
+        hasSeriesError={pressureSeriesError}
+      />
+    )}
+    </>
   )
 }
 
