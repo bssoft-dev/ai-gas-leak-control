@@ -45,7 +45,8 @@ export default function MonitorPage() {
   const [drawingFabOpen, setDrawingFabOpen] = useState(false)
   const [drawingPan, setDrawingPan] = useState({ x: 0, y: 0 })
   const [isDrawingPanning, setIsDrawingPanning] = useState(false)
-  const [chartDetailId, setChartDetailId] = useState<string | null>(null)
+  // 디버깅/요청사항: 첫 진입 시 1번 차트 팝업을 강제로 띄움
+  const [chartDetailId, setChartDetailId] = useState<string | null>('c1')
   const drawingViewportRef = useRef<HTMLDivElement>(null)
   const dragRef = useRef<{ active: boolean; pointerId: number; lastX: number; lastY: number } | null>(null)
 
@@ -306,7 +307,7 @@ export default function MonitorPage() {
                 return (
                   <div key={c.id} className="w-full min-w-0">
                     <div
-                      className="border-t border-l border-r border-[#e2e8f0] rounded-tl-[8px] rounded-tr-[8px] px-[12px] py-[4px]"
+                      className="inline-flex w-fit max-w-full border-t border-l border-r border-[#e2e8f0] rounded-tl-[8px] rounded-tr-[8px] px-[12px] py-[4px]"
                       style={{ backgroundColor: c.headerBg }}
                     >
                       <div className="font-['Pretendard',sans-serif] text-[10px] leading-[15px] tracking-[0.5px] text-[#485b77]">
@@ -317,7 +318,7 @@ export default function MonitorPage() {
                       <div
                         role="button"
                         tabIndex={0}
-                        className="h-[120px] w-full min-w-0 cursor-pointer p-px outline-none transition-opacity hover:opacity-95 focus-visible:shadow-[inset_0_0_0_2px_var(--chart-focus-ring)]"
+                        className="h-[120px] w-full min-w-0 cursor-pointer p-px outline-none transition-opacity hover:opacity-95 focus-visible:shadow-[inset_0_0_0_2px_var(--chart-focus-ring)] [&_*]:pointer-events-none"
                         style={
                           {
                             ['--chart-focus-ring' as string]:

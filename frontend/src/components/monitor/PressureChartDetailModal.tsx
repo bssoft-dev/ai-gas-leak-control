@@ -1,7 +1,12 @@
-import { useEffect } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import type { MonitorPressurePoint } from '../../api/monitorPressureSeries'
 import { PressureChartDetail } from './PressureChartDetail'
+
+const STROKE = {
+  green: '#7cbf6a',
+  yellow: '#caa23d',
+} as const
 
 type Props = {
   open: boolean
@@ -38,19 +43,72 @@ export function PressureChartDetailModal({
     }
   }, [open, onClose])
 
-  if (!open) return null
+  const baseEnd = points.length > 0 ? points[points.length - 1].at : Date.now()
+  const baseEndDate = useMemo(() => new Date(baseEnd), [baseEnd])
+  const maxDateStr = useMemo(() => {
+    const yyyy = baseEndDate.getFullYear()
+    const mm = String(baseEndDate.getMonth() + 1).padStart(2, '0')
+    const dd = String(baseEndDate.getDate()).padStart(2, '0')
+    return `${yyyy}-${mm}-${dd}`
+  }, [baseEndDate])
+  const maxTimeStr = useMemo(() => {
+    const hh = String(baseEndDate.getHours()).padStart(2, '0')
+    const mm = String(baseEndDate.getMinutes()).padStart(2, '0')
+    return `${hh}:${mm}`
+  }, [baseEndDate])
+  const minDateStr = '2026-01-01'
+  const [selectedDate, setSelectedDate] = useState(() => {
+    const yyyy = baseEndDate.getFullYear()
+    const mm = String(baseEndDate.getMonth() + 1).padStart(2, '0')
+    const dd = String(baseEndDate.getDate()).padStart(2, '0')
+    return `${yyyy}-${mm}-${dd}`
+  })
+  const [selectedTime, setSelectedTime] = useState(() => {
+    const hh = String(baseEndDate.getHours()).padStart(2, '0')
+    const mm = String(baseEndDate.getMinutes()).padStart(2, '0')
+    return `${hh}:${mm}`
+  })
 
-  const bottomLabel =
-    points.length > 0
-      ? (() => {
-          const d = new Date(points[points.length - 1].at)
-          const yyyy = d.getFullYear()
-          const mm = String(d.getMonth() + 1).padStart(2, '0')
-          const dd = String(d.getDate()).padStart(2, '0')
-          const hh = d.getHours()
-          return `${yyyy} - ${mm} - ${dd} | ${hh}시`
-        })()
-      : ''
+  // 팝업을 새로 열 때 현재 날짜로 초기화
+  useEffect(() => {
+    setSelectedDate(maxDateStr)
+    setSelectedTime(maxTimeStr)
+  }, [baseEndDate, maxDateStr, maxTimeStr])
+
+  // 미래 날짜/최소 연도 제한 강제 (직접 입력, 브라우저별 동작 차이 보정)
+  useEffect(() => {
+    if (selectedDate > maxDateStr) setSelectedDate(maxDateStr)
+    else if (selectedDate < minDateStr) setSelectedDate(minDateStr)
+  }, [selectedDate, maxDateStr])
+
+  // 미래 시간 제한: max 날짜(오늘)에서는 maxTimeStr 이후로 못 가게
+  useEffect(() => {
+    if (selectedDate === maxDateStr && selectedTime > maxTimeStr) {
+      setSelectedTime(maxTimeStr)
+    }
+  }, [selectedDate, selectedTime, maxDateStr, maxTimeStr])
+
+  const anchorEndAt = useMemo(() => {
+    // selectedDate(YYYY-MM-DD) + selectedTime(HH:MM, 24h)로 anchorEndAt 생성
+    const [y, m, d] = selectedDate.split('-').map((v) => Number(v))
+    if (!Number.isFinite(y) || !Number.isFinite(m) || !Number.isFinite(d)) return baseEnd
+    const [hh, mm] = selectedTime.split(':').map((v) => Number(v))
+    const hours = Number.isFinite(hh) ? hh : baseEndDate.getHours()
+    const minutes = Number.isFinite(mm) ? mm : baseEndDate.getMinutes()
+    const anchor = new Date(y, m - 1, d, hours, minutes, 0, 0)
+    return anchor.getTime()
+  }, [selectedDate, selectedTime, baseEnd])
+
+  const bottomLabel = useMemo(() => {
+    const d = new Date(anchorEndAt)
+    const yyyy = d.getFullYear()
+    const mm = String(d.getMonth() + 1).padStart(2, '0')
+    const dd = String(d.getDate()).padStart(2, '0')
+    const hh = d.getHours()
+    return `${yyyy} - ${mm} - ${dd} | ${hh}시`
+  }, [anchorEndAt])
+
+  if (!open) return null
 
   return (
     <div
@@ -58,11 +116,14 @@ export function PressureChartDetailModal({
       role="dialog"
       aria-modal="true"
       aria-labelledby="pressure-chart-detail-title"
-      onClick={onClose}
+      onMouseDown={(e) => {
+        // 열기 클릭(mouseup/click)이 오버레이에 잡혀 즉시 닫히는 현상 방지
+        if (e.target === e.currentTarget) onClose()
+      }}
     >
       <div
         className="relative flex w-full max-w-[632px] flex-col overflow-hidden rounded-[8px] bg-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.3),0px_1px_3px_1px_rgba(0,0,0,0.15)]"
-        onClick={(e) => e.stopPropagation()}
+        onMouseDown={(e) => e.stopPropagation()}
       >
         <h2 id="pressure-chart-detail-title" className="sr-only">
           차트 상세
@@ -100,8 +161,46 @@ export function PressureChartDetailModal({
                 차트 데이터를 불러오지 못했습니다.
               </div>
             ) : (
-              <PressureChartDetail points={points} bottomLabel={bottomLabel} />
+              <PressureChartDetail
+                points={points}
+                bottomLabel={bottomLabel}
+                stroke={STROKE[variant]}
+                anchorEndAt={anchorEndAt}
+              />
             )}
+          </div>
+
+          {/* 하단: 날짜 선택 + 현재 버튼(1시 옆) */}
+          <div className="mt-[10px] flex items-center justify-center gap-[10px]">
+            <input
+              type="date"
+              className="h-[30px] rounded-[6px] border border-[#e2e8f0] bg-white px-[10px] font-['Pretendard',sans-serif] text-[12px] text-[#485b77]"
+              value={selectedDate}
+              onChange={(e) => setSelectedDate(e.target.value)}
+              min={minDateStr}
+              max={maxDateStr}
+              aria-label="날짜 선택"
+            />
+            <input
+              type="time"
+              className="h-[30px] w-[92px] rounded-[6px] border border-[#e2e8f0] bg-white px-[10px] font-['Pretendard',sans-serif] text-[12px] text-[#485b77]"
+              value={selectedTime}
+              onChange={(e) => setSelectedTime(e.target.value)}
+              max={selectedDate === maxDateStr ? maxTimeStr : undefined}
+              step={60}
+              aria-label="시간 선택(24시간)"
+            />
+            <button
+              type="button"
+              className="h-[30px] rounded-[6px] border border-[#e2e8f0] bg-white px-[10px] font-['Pretendard',sans-serif] text-[12px] text-[#485b77] hover:bg-[#f8fafc]"
+              onClick={() => {
+                setSelectedDate(maxDateStr)
+                setSelectedTime(maxTimeStr)
+              }}
+              aria-label="현재로 돌아오기"
+            >
+              현재
+            </button>
           </div>
         </div>
       </div>
