@@ -72,8 +72,18 @@ export function PressureChartDetail({ points, bottomLabel, stroke, anchorEndAt }
   const gid = useId()
   const gradientId = `pressureFill-${gid.replace(/:/g, '')}`
 
+  const onWheelHorizontal = (e: React.WheelEvent) => {
+    const el = xAxisScrollRef.current
+    if (!el) return
+    const dx = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY
+    if (dx === 0) return
+    // 팝업 내부에서만 사용: 휠을 가로 스크롤로 변환
+    e.preventDefault()
+    el.scrollLeft += dx
+  }
+
   return (
-    <div className="relative flex h-full w-full flex-col">
+    <div className="relative flex h-full w-full flex-col overscroll-contain" onWheel={onWheelHorizontal}>
       <div className="min-h-0 flex-1">
         <ResponsiveContainer width="100%" height="100%">
         <AreaChart data={chartData} margin={{ ...CHART_MARGIN, bottom: 2 }}>
@@ -134,16 +144,7 @@ export function PressureChartDetail({ points, bottomLabel, stroke, anchorEndAt }
         ref={xAxisScrollRef}
         className="notion-scrollbar shrink-0 overflow-x-auto pt-[2px] text-[9px] leading-[12px] text-[#64748b]"
         style={{ paddingLeft: plotLeftPadPx, paddingRight: CHART_MARGIN.right }}
-        onWheel={(e) => {
-          const el = xAxisScrollRef.current
-          if (!el) return
-          // 세로 휠을 가로 스크롤로 변환 (트랙패드/마우스 모두)
-          const dx = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY
-          if (dx !== 0) {
-            e.preventDefault()
-            el.scrollLeft += dx
-          }
-        }}
+        onWheel={onWheelHorizontal}
       >
         <div className="grid w-[max(100%,560px)] grid-cols-10 text-center">
           {xTicks.map((t) => (

@@ -57,6 +57,7 @@ export function PressureChartDetailModal({
     return `${hh}:${mm}`
   }, [baseEndDate])
   const minDateStr = '2026-01-01'
+  const [isPinnedToNow, setIsPinnedToNow] = useState(true)
   const [selectedDate, setSelectedDate] = useState(() => {
     const yyyy = baseEndDate.getFullYear()
     const mm = String(baseEndDate.getMonth() + 1).padStart(2, '0')
@@ -69,11 +70,21 @@ export function PressureChartDetailModal({
     return `${hh}:${mm}`
   })
 
-  // 팝업을 새로 열 때 현재 날짜로 초기화
+  // 팝업을 새로 열 때: "현재" 고정 모드로 초기화
   useEffect(() => {
+    if (!open) return
+    setIsPinnedToNow(true)
     setSelectedDate(maxDateStr)
     setSelectedTime(maxTimeStr)
-  }, [baseEndDate, maxDateStr, maxTimeStr])
+  }, [open])
+
+  // "현재" 고정일 때만, 폴링으로 들어오는 최신 시간에 따라가게
+  useEffect(() => {
+    if (!open) return
+    if (!isPinnedToNow) return
+    setSelectedDate(maxDateStr)
+    setSelectedTime(maxTimeStr)
+  }, [open, isPinnedToNow, maxDateStr, maxTimeStr])
 
   // 미래 날짜/최소 연도 제한 강제 (직접 입력, 브라우저별 동작 차이 보정)
   useEffect(() => {
@@ -122,7 +133,7 @@ export function PressureChartDetailModal({
       }}
     >
       <div
-        className="relative flex w-full max-w-[632px] flex-col overflow-hidden rounded-[8px] bg-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.3),0px_1px_3px_1px_rgba(0,0,0,0.15)]"
+        className="relative flex w-full max-w-[720px] flex-col overflow-hidden rounded-[8px] bg-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.3),0px_1px_3px_1px_rgba(0,0,0,0.15)]"
         onMouseDown={(e) => e.stopPropagation()}
       >
         <h2 id="pressure-chart-detail-title" className="sr-only">
@@ -155,7 +166,7 @@ export function PressureChartDetailModal({
         <div className="h-px w-full bg-[#e5e7eb]" aria-hidden />
 
         <div className="px-[16px] pb-[14px] pt-[10px]">
-          <div className="h-[360px] w-full">
+          <div className="h-[420px] w-full">
             {hasSeriesError && points.length === 0 ? (
               <div className="flex h-full w-full items-center justify-center bg-white px-[12px] text-center font-['Pretendard',sans-serif] text-[12px] text-[#94a3b8]">
                 차트 데이터를 불러오지 못했습니다.
@@ -176,7 +187,10 @@ export function PressureChartDetailModal({
               type="date"
               className="h-[30px] rounded-[6px] border border-[#e2e8f0] bg-white px-[10px] font-['Pretendard',sans-serif] text-[12px] text-[#485b77]"
               value={selectedDate}
-              onChange={(e) => setSelectedDate(e.target.value)}
+              onChange={(e) => {
+                setIsPinnedToNow(false)
+                setSelectedDate(e.target.value)
+              }}
               min={minDateStr}
               max={maxDateStr}
               aria-label="날짜 선택"
@@ -185,7 +199,10 @@ export function PressureChartDetailModal({
               type="time"
               className="h-[30px] w-[92px] rounded-[6px] border border-[#e2e8f0] bg-white px-[10px] font-['Pretendard',sans-serif] text-[12px] text-[#485b77]"
               value={selectedTime}
-              onChange={(e) => setSelectedTime(e.target.value)}
+              onChange={(e) => {
+                setIsPinnedToNow(false)
+                setSelectedTime(e.target.value)
+              }}
               max={selectedDate === maxDateStr ? maxTimeStr : undefined}
               step={60}
               aria-label="시간 선택(24시간)"
@@ -194,6 +211,7 @@ export function PressureChartDetailModal({
               type="button"
               className="h-[30px] rounded-[6px] border border-[#e2e8f0] bg-white px-[10px] font-['Pretendard',sans-serif] text-[12px] text-[#485b77] hover:bg-[#f8fafc]"
               onClick={() => {
+                setIsPinnedToNow(true)
                 setSelectedDate(maxDateStr)
                 setSelectedTime(maxTimeStr)
               }}

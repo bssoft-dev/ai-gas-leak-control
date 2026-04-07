@@ -1,4 +1,5 @@
-import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
+import { useId } from 'react'
+import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 
 import type { MonitorPressurePoint } from '../../api/monitorPressureSeries'
 
@@ -34,6 +35,8 @@ const timeTickFormatter = (t: number) =>
 
 export function PressureLineChart({ points, variant, showTimeAxis = false }: Props) {
   const stroke = STROKE[variant]
+  const gid = useId()
+  const gradientId = `pressureFill-${gid.replace(/:/g, '')}`
   const data = points
 
   if (data.length === 0) {
@@ -50,7 +53,13 @@ export function PressureLineChart({ points, variant, showTimeAxis = false }: Pro
       style={{ ['--chart-focus-ring' as string]: stroke }}
     >
       <ResponsiveContainer width="100%" height="100%">
-      <LineChart data={data} margin={margin}>
+      <AreaChart data={data} margin={margin}>
+        <defs>
+          <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={stroke} stopOpacity={0.12} />
+            <stop offset="100%" stopColor={stroke} stopOpacity={0.02} />
+          </linearGradient>
+        </defs>
         <CartesianGrid
           stroke="#eef2f6"
           strokeOpacity={0.9}
@@ -82,15 +91,17 @@ export function PressureLineChart({ points, variant, showTimeAxis = false }: Pro
           }
           formatter={(value) => [`${Number(value).toFixed(2)} MPa`, '압력']}
         />
-        <Line
+        <Area
           type="monotone"
           dataKey="value"
           stroke={stroke}
           strokeWidth={2}
+          fill={`url(#${gradientId})`}
+          fillOpacity={1}
           dot={false}
           isAnimationActive={false}
         />
-      </LineChart>
+      </AreaChart>
       </ResponsiveContainer>
     </div>
   )

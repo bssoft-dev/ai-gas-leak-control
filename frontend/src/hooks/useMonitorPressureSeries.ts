@@ -25,6 +25,7 @@ function buildMockSeries(now = Date.now()): MonitorPressureSensorSeries[] {
     { sensorId: 'c3', variant: 'green' as const, base: 11.9 },
     { sensorId: 'c4', variant: 'yellow' as const, base: 11.65 },
     { sensorId: 'c5', variant: 'yellow' as const, base: 11.58 },
+    { sensorId: 'c6', variant: 'yellow' as const, base: 11.72 },
   ]
   return configs.map((c, idx) => {
     const points = mockPressurePoints(now, idx + 1, c.base)

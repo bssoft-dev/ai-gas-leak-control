@@ -45,8 +45,7 @@ export default function MonitorPage() {
   const [drawingFabOpen, setDrawingFabOpen] = useState(false)
   const [drawingPan, setDrawingPan] = useState({ x: 0, y: 0 })
   const [isDrawingPanning, setIsDrawingPanning] = useState(false)
-  // 디버깅/요청사항: 첫 진입 시 1번 차트 팝업을 강제로 띄움
-  const [chartDetailId, setChartDetailId] = useState<string | null>('c1')
+  const [chartDetailId, setChartDetailId] = useState<string | null>(null)
   const drawingViewportRef = useRef<HTMLDivElement>(null)
   const dragRef = useRef<{ active: boolean; pointerId: number; lastX: number; lastY: number } | null>(null)
 
@@ -120,6 +119,7 @@ export default function MonitorPage() {
     { id: 'c3', title: '압력 센서 3', headerBg: '#f1f7ea', variant: 'green' },
     { id: 'c4', title: '압력 센서 4', headerBg: '#fbf6e9', variant: 'yellow' },
     { id: 'c5', title: '압력 센서 5', headerBg: '#fbf6e9', variant: 'yellow' },
+    { id: 'c6', title: '압력 센서 6', headerBg: '#fbf6e9', variant: 'yellow' },
   ]
 
   const detailCard = chartDetailId ? cards.find((c) => c.id === chartDetailId) : null
