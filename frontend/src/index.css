@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+@source "../index.html";
+@source "./**/*.{js,ts,jsx,tsx}";
+
 :root {
   --gl-bg-page: #ffffff;
   --gl-bg-card: #ffffff;

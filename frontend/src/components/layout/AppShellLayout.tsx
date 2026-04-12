@@ -2,6 +2,7 @@ import { NavLink, Outlet } from 'react-router-dom'
 import { useEffect, useMemo, useRef, useState } from 'react'
 
 import { appShellAssets } from '../../assets/app-shell/appShellAssets'
+import { drawingSensorAssets } from '../../assets/drawing-sensor/drawingSensorAssets'
 import { ActiveDrawingProvider, useActiveDrawing } from '../../state/activeDrawing'
 
 /** Figma: Aside — node 266:2730 / 254:2218 (max expanded width). Min matches current UI default. */
@@ -44,8 +45,37 @@ export default function AppShellLayout() {
     imgContentPasteCollapsed,
     imgHistory2Collapsed,
     imgDrawingsChevron,
-    imgDrawingDelete,
   } = appShellAssets
+
+  const { imgDelete } = drawingSensorAssets
+
+  const navIcons = useMemo(
+    () => ({
+      analytics: imgAnalyticsCollapsed,
+      contentPaste: imgContentPasteCollapsed,
+      history2: imgHistory2Collapsed,
+    }),
+    [imgAnalyticsCollapsed, imgContentPasteCollapsed, imgHistory2Collapsed],
+  )
+
+  const MaskIcon20 = ({ maskSrc, isActive }: { maskSrc: string; isActive: boolean }) => (
+    <span
+      className="block h-5 w-5 shrink-0"
+      style={{
+        backgroundColor: isActive ? BLUE_PRIMARY_800 : ICON_INACTIVE,
+        WebkitMaskImage: `url(${maskSrc})`,
+        WebkitMaskRepeat: 'no-repeat',
+        WebkitMaskPosition: 'center',
+        WebkitMaskSize: 'contain',
+        WebkitMaskMode: 'alpha',
+        maskImage: `url(${maskSrc})`,
+        maskRepeat: 'no-repeat',
+        maskPosition: 'center',
+        maskSize: 'contain',
+        maskMode: 'alpha',
+      }}
+    />
+  )
 
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
   const [isMenuExpanded, setIsMenuExpanded] = useState(true)
@@ -64,33 +94,6 @@ export default function AppShellLayout() {
   }, [expandedSidebarWidth])
 
   const sidebarWidth = isSidebarCollapsed ? SIDEBAR_COLLAPSED_W : expandedSidebarWidth
-  const navIcons = useMemo(
-    () => ({
-      analytics: { mask: imgAnalyticsCollapsed },
-      contentPaste: { mask: imgContentPasteCollapsed },
-      history2: { mask: imgHistory2Collapsed },
-    }),
-    [imgAnalyticsCollapsed, imgContentPasteCollapsed, imgHistory2Collapsed],
-  )
-
-  const MaskIcon20 = ({ maskSrc, isActive }: { maskSrc: string; isActive: boolean }) => {
-    return (
-      <span
-        className="block w-[20px] h-[20px]"
-        style={{
-          backgroundColor: isActive ? BLUE_PRIMARY_800 : ICON_INACTIVE,
-          WebkitMaskImage: `url(${maskSrc})`,
-          WebkitMaskRepeat: 'no-repeat',
-          WebkitMaskPosition: 'center',
-          WebkitMaskSize: 'contain',
-          maskImage: `url(${maskSrc})`,
-          maskRepeat: 'no-repeat',
-          maskPosition: 'center',
-          maskSize: 'contain',
-        }}
-      />
-    )
-  }
 
   const ActiveDrawingsList = ({
     filter,
@@ -162,7 +165,7 @@ export default function AppShellLayout() {
                       <img
                         alt=""
                         className="block h-[20px] w-[20px] transition-[filter] group-hover:[filter:invert(32%)_sepia(95%)_saturate(2582%)_hue-rotate(331deg)_brightness(99%)_contrast(96%)]"
-                        src={imgDrawingDelete}
+                        src={imgDelete}
                       />
                     </button>
                   </div>
@@ -259,7 +262,7 @@ export default function AppShellLayout() {
           >
             <img
               alt=""
-              className={`block w-[9px] h-[5.55px] object-contain self-center shrink-0 transition-transform ${isDrawingsExpanded ? '' : 'rotate-180'}`}
+              className={`block h-[10px] w-[6px] shrink-0 self-center object-contain transition-transform rotate-90 ${isDrawingsExpanded ? '' : 'rotate-180'}`}
               src={imgDrawingsChevron}
             />
           </button>
@@ -331,8 +334,8 @@ export default function AppShellLayout() {
             <div className="h-[64px] bg-white border-b border-[var(--gray_sidebar_stroke,#e2e8f0)]">
               <div className="relative flex h-full items-center px-[24px] pr-[60px]">
                 <div className="flex items-center gap-[12px] min-w-0">
-                  <div className="h-[15px] w-[36px] overflow-hidden relative shrink-0">
-                    <img alt="" className="absolute h-[160.8%] left-0 max-w-none top-[-0.4%] w-full" src={imgLogo1} />
+                  <div className="relative h-[15px] w-[36px] shrink-0 overflow-hidden">
+                    <img alt="" className="absolute left-0 top-[-0.4%] h-[160.8%] w-full max-w-none" src={imgLogo1} />
                   </div>
                   <div className="pr-[3.2px] min-w-0">
                     <div className="font-['Pretendard',sans-serif] font-semibold text-[16px] leading-[20px] tracking-[-0.35px] text-[color:var(--black_title,#0b1828)] truncate">
@@ -367,7 +370,7 @@ export default function AppShellLayout() {
                           : 'flex h-[36px] w-[44px] items-center justify-center rounded-[8px] px-[12px] py-[8px]'
                       }
                     >
-                      {({ isActive }) => <MaskIcon20 maskSrc={navIcons.analytics.mask} isActive={isActive} />}
+                      {({ isActive }) => <MaskIcon20 maskSrc={navIcons.analytics} isActive={isActive} />}
                     </NavLink>
                     <NavLink
                       to="/drawing-sensor"
@@ -377,7 +380,7 @@ export default function AppShellLayout() {
                           : 'flex h-[36px] w-[44px] items-center justify-center rounded-[8px] px-[12px] py-[8px]'
                       }
                     >
-                      {({ isActive }) => <MaskIcon20 maskSrc={navIcons.contentPaste.mask} isActive={isActive} />}
+                      {({ isActive }) => <MaskIcon20 maskSrc={navIcons.contentPaste} isActive={isActive} />}
                     </NavLink>
                     <NavLink
                       to="/ai-history"
@@ -387,7 +390,7 @@ export default function AppShellLayout() {
                           : 'flex h-[36px] w-[44px] items-center justify-center rounded-[8px] px-[12px] py-[8px]'
                       }
                     >
-                      {({ isActive }) => <MaskIcon20 maskSrc={navIcons.history2.mask} isActive={isActive} />}
+                      {({ isActive }) => <MaskIcon20 maskSrc={navIcons.history2} isActive={isActive} />}
                     </NavLink>
                   </div>
                 </nav>
@@ -407,7 +410,7 @@ export default function AppShellLayout() {
                 >
                   <img
                     alt=""
-                    className={`block w-[9px] h-[5.55px] object-contain self-center shrink-0 transition-transform ${isMenuExpanded ? '' : 'rotate-180'}`}
+                    className={`block h-[10px] w-[6px] shrink-0 self-center object-contain transition-transform rotate-90 ${isMenuExpanded ? '' : 'rotate-180'}`}
                     src={imgMenuChevron}
                   />
                 </button>
@@ -426,7 +429,7 @@ export default function AppShellLayout() {
                   >
                     {({ isActive }) => (
                       <>
-                        <MaskIcon20 maskSrc={navIcons.analytics.mask} isActive={isActive} />
+                        <MaskIcon20 maskSrc={navIcons.analytics} isActive={isActive} />
                         <span
                           className={`font-['Pretendard',sans-serif] text-[16px] leading-[20px] ${
                             isActive ? 'font-semibold text-[color:var(--blue_primary_800,#4370ac)]' : 'font-medium text-[color:var(--black_title,#0b1828)]'
@@ -447,7 +450,7 @@ export default function AppShellLayout() {
                   >
                     {({ isActive }) => (
                       <>
-                        <MaskIcon20 maskSrc={navIcons.contentPaste.mask} isActive={isActive} />
+                        <MaskIcon20 maskSrc={navIcons.contentPaste} isActive={isActive} />
                         <span
                           className={`font-['Pretendard',sans-serif] text-[16px] leading-[20px] ${
                             isActive ? 'font-semibold text-[color:var(--blue_primary_800,#4370ac)]' : 'font-medium text-[color:var(--black_title,#0b1828)]'
@@ -468,7 +471,7 @@ export default function AppShellLayout() {
                   >
                     {({ isActive }) => (
                       <>
-                        <MaskIcon20 maskSrc={navIcons.history2.mask} isActive={isActive} />
+                        <MaskIcon20 maskSrc={navIcons.history2} isActive={isActive} />
                         <span
                           className={`font-['Pretendard',sans-serif] text-[16px] leading-[20px] ${
                             isActive ? 'font-semibold text-[color:var(--blue_primary_800,#4370ac)]' : 'font-medium text-[color:var(--black_title,#0b1828)]'
@@ -564,7 +567,7 @@ export default function AppShellLayout() {
               </span>
               <span className="flex items-center gap-[6px]">
                 <span className="w-[6px] h-[6px]">
-                  <img alt="" className="block w-full h-full" src={imgRunDot} />
+                  <img alt="" className="block h-full w-full" src={imgRunDot} />
                 </span>
                 <span className="font-['Pretendard',sans-serif] font-medium text-[16px] leading-[15px] tracking-[-0.25px] text-[#22c55e] uppercase whitespace-nowrap">
                   Run
@@ -584,7 +587,7 @@ export default function AppShellLayout() {
                 className="h-[40px] bg-[#ef4444] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] rounded-br-[4px] rounded-tr-[4px] p-[6px] flex items-center justify-center"
                 aria-label="비상 제어 메뉴"
               >
-                <img alt="" className="block w-[6px] h-[3.7px]" src={imgEmergencyCaret} />
+                <img alt="" className="block h-[3.7px] w-[6px]" src={imgEmergencyCaret} />
               </button>
             </div>
           </div>
