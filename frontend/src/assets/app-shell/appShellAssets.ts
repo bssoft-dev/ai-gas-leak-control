@@ -1,17 +1,23 @@
+import { publicIconUrl } from '../../utils/publicIconUrl'
+
+const icon = publicIconUrl
+
 export const appShellAssets = {
-  imgLogo1: 'https://www.figma.com/api/mcp/asset/14d37254-50cd-4b15-aee0-cc505d138507',
-  imgRunDot: 'https://www.figma.com/api/mcp/asset/a10c55f4-ad83-4acc-8514-712d5fb10063',
-  imgEmergencyCaret: 'https://www.figma.com/api/mcp/asset/82fae68b-a90b-4d2b-84aa-81149488e20b',
-  imgKeyboardDoubleArrowRight: 'https://www.figma.com/api/mcp/asset/e5f0dd6e-0834-4801-8845-fbf393e7b609',
-  imgMenuChevron: 'https://www.figma.com/api/mcp/asset/0b88813f-6103-436e-9d12-c92f2a0ca08d',
-  imgDrawingsChevron: 'https://www.figma.com/api/mcp/asset/7a174ea3-534b-4cfc-ad49-5f09caec19bd',
+  imgLogo1: icon('logo.svg'),
+  imgRunDot: icon('run-dot.svg'),
+  imgEmergencyCaret: icon('emergency-caret.svg'),
+  /** 사이드바 열림(헤더) — 접기 « */
+  imgKeyboardDoubleArrowRight: icon('keyboard_double_arrow_right.svg'),
+  imgMenuChevron: icon('menu-chevron.svg'),
+  imgDrawingsChevron: icon('drawings-chevron.svg'),
 
-  // Collapsed sidebar (node 227:1705) - used as masks for consistent 20x20 icons.
-  imgKeyboardDoubleArrowRightCollapsed: 'https://www.figma.com/api/mcp/asset/cf00937e-480d-499f-96c0-2a010a1baeed',
-  imgAnalyticsCollapsed: 'https://www.figma.com/api/mcp/asset/fd55887c-2c83-4376-b524-853b080b9dcb',
-  imgContentPasteCollapsed: 'https://www.figma.com/api/mcp/asset/fe8abd38-7f0b-4089-a91d-3df639bcec1d',
-  imgHistory2Collapsed: 'https://www.figma.com/api/mcp/asset/f19592c6-269b-4596-a8c0-7eeda2959b2a',
+  /** 사이드바 닫힘(좁은 헤더) — 펼치기 » */
+  imgKeyboardDoubleArrowRightCollapsed: icon('keyboard_double_arrow_right-1.svg'),
+
+  // Collapsed 사이드바 네비 — 20x20 마스크 아이콘 (node 227:1705)
+  imgAnalyticsCollapsed: icon('mask-analytics.svg'),
+  imgContentPasteCollapsed: icon('mask-content-paste.svg'),
+  imgHistory2Collapsed: icon('mask-history.svg'),
   /** 도면 목록 행 삭제 (Figma sidebar drawing row) */
-  imgDrawingDelete: 'https://www.figma.com/api/mcp/asset/6dad48c3-69c3-45c8-89a3-05f1d24b908e',
+  imgDrawingDelete: icon('drawing-delete.svg'),
 } as const
-

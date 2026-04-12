@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="240" viewBox="0 0 400 240">
+  <rect width="400" height="240" fill="#f1f5f9"/>
+  <g stroke="#cbd5e1" stroke-width="2" fill="none">
+    <rect x="24" y="24" width="352" height="192" rx="4"/>
+    <path d="M24 80h352M24 160h352M120 24v192M280 24v192"/>
+  </g>
+  <text x="200" y="125" text-anchor="middle" fill="#94a3b8" font-family="system-ui,sans-serif" font-size="14">�t</text>
+</svg>

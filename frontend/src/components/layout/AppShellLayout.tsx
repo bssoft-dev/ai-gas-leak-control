@@ -319,17 +319,17 @@ export default function AppShellLayout() {
               <div className="h-full flex items-center justify-center px-[16px]">
                 <button
                   type="button"
-                  className="w-[46px] h-[38px] flex items-center justify-center"
+                  className="flex h-[36px] w-[36px] items-center justify-center"
                   aria-label="사이드바 펼치기"
                   onClick={() => setIsSidebarCollapsed(false)}
                 >
-                  <img alt="" className="block w-[46px] h-[38px] object-contain" src={imgKeyboardDoubleArrowRightCollapsed} />
+                  <img alt="" className="block h-[20px] w-[20px] object-contain" src={imgKeyboardDoubleArrowRightCollapsed} />
                 </button>
               </div>
             </div>
           ) : (
             <div className="h-[64px] bg-white border-b border-[var(--gray_sidebar_stroke,#e2e8f0)]">
-              <div className="relative h-full px-[24px] pr-[84px] flex items-center">
+              <div className="relative flex h-full items-center px-[24px] pr-[60px]">
                 <div className="flex items-center gap-[12px] min-w-0">
                   <div className="h-[15px] w-[36px] overflow-hidden relative shrink-0">
                     <img alt="" className="absolute h-[160.8%] left-0 max-w-none top-[-0.4%] w-full" src={imgLogo1} />
@@ -342,13 +342,11 @@ export default function AppShellLayout() {
                 </div>
                 <button
                   type="button"
-                  className="absolute right-[24px] top-1/2 -translate-y-1/2 w-[46px] h-[38px] flex items-center justify-center"
+                  className="absolute right-[24px] top-1/2 flex h-[36px] w-[36px] -translate-y-1/2 items-center justify-center"
                   aria-label="사이드바 접기"
                   onClick={() => setIsSidebarCollapsed(true)}
                 >
-                  <div className="-scale-y-100 rotate-180 flex items-center justify-center w-[46px] h-[38px]">
-                    <img alt="" className="block w-[46px] h-[38px] object-contain self-center" src={imgKeyboardDoubleArrowRight} />
-                  </div>
+                  <img alt="" className="block h-[20px] w-[20px] object-contain" src={imgKeyboardDoubleArrowRight} />
                 </button>
               </div>
             </div>
