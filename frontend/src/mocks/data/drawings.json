@@ -1,0 +1,193 @@
+[
+  {
+    "id": "drawing-1",
+    "name": "도면 1",
+    "is_active": true,
+    "filename": "map_1.png",
+    "file_type": "image/png",
+    "file_path": "mock-drawings/c__Users_hanna_AppData_Roaming_Cursor_User_workspaceStorage_be28888f42f1e76c3a9e8104c67c18d0_images_map_1-556f4a43-5990-4b5d-8c52-1f4230429a94.png",
+    "created_at": "2026-03-12T04:24:47.405534Z",
+    "updated_at": "2026-03-12T04:29:19.402336Z"
+  },
+  {
+    "id": "drawing-2",
+    "name": "도면 2",
+    "is_active": true,
+    "filename": "map_2.png",
+    "file_type": "image/png",
+    "file_path": "mock-drawings/c__Users_hanna_AppData_Roaming_Cursor_User_workspaceStorage_be28888f42f1e76c3a9e8104c67c18d0_images_map_2-3ac0c7a9-8a3a-43ea-b45c-4e43a99bbeef.png",
+    "created_at": "2026-03-12T04:24:47.405534Z",
+    "updated_at": "2026-03-12T04:29:19.402336Z"
+  },
+  {
+    "id": "drawing-3",
+    "name": "도면 3",
+    "is_active": true,
+    "filename": "map_3.png",
+    "file_type": "image/png",
+    "file_path": "mock-drawings/c__Users_hanna_AppData_Roaming_Cursor_User_workspaceStorage_be28888f42f1e76c3a9e8104c67c18d0_images_map_3-913c70e6-e189-4728-8a13-3869e57d270e.png",
+    "created_at": "2026-03-12T04:24:47.405534Z",
+    "updated_at": "2026-03-12T04:29:19.402336Z"
+  },
+  {
+    "id": "drawing-4",
+    "name": "도면 4",
+    "is_active": false,
+    "filename": "map_4.png",
+    "file_type": "image/png",
+    "file_path": "mock-drawings/c__Users_hanna_AppData_Roaming_Cursor_User_workspaceStorage_be28888f42f1e76c3a9e8104c67c18d0_images_map_4-5ac81381-b8fc-4a88-94b8-08f55a0b52e9.png",
+    "created_at": "2026-03-12T04:24:47.405534Z",
+    "updated_at": "2026-03-12T04:29:19.402336Z"
+  },
+  {
+    "id": "drawing-5",
+    "name": "도면 5",
+    "is_active": false,
+    "filename": "map_5.png",
+    "file_type": "image/png",
+    "file_path": "mock-drawings/c__Users_hanna_AppData_Roaming_Cursor_User_workspaceStorage_be28888f42f1e76c3a9e8104c67c18d0_images_map_5-6c8150d2-7e36-4289-bf5a-245d1bdd15eb.png",
+    "created_at": "2026-03-12T04:24:47.405534Z",
+    "updated_at": "2026-03-12T04:29:19.402336Z"
+  },
+  {
+    "id": "drawing-6",
+    "name": "도면 6",
+    "is_active": false,
+    "filename": "map_6.png",
+    "file_type": "image/png",
+    "file_path": "mock-drawings/c__Users_hanna_AppData_Roaming_Cursor_User_workspaceStorage_be28888f42f1e76c3a9e8104c67c18d0_images_map_6-ffb5fcd7-ce86-440b-b55d-614cbae67aeb.png",
+    "created_at": "2026-03-12T04:24:47.405534Z",
+    "updated_at": "2026-03-12T04:29:19.402336Z"
+  },
+  {
+    "id": "drawing-7",
+    "name": "도면 7",
+    "is_active": false,
+    "filename": "map_7.png",
+    "file_type": "image/png",
+    "file_path": "mock-drawings/c__Users_hanna_AppData_Roaming_Cursor_User_workspaceStorage_be28888f42f1e76c3a9e8104c67c18d0_images_map_7-37af5d58-8834-4c2d-9175-977e1e22182a.png",
+    "created_at": "2026-03-12T04:24:47.405534Z",
+    "updated_at": "2026-03-12T04:29:19.402336Z"
+  },
+  {
+    "id": "drawing-8",
+    "name": "도면 8",
+    "is_active": true,
+    "filename": "map_8.png",
+    "file_type": "image/png",
+    "file_path": "mock-drawings/c__Users_hanna_AppData_Roaming_Cursor_User_workspaceStorage_be28888f42f1e76c3a9e8104c67c18d0_images_map_8-28385b9e-c612-423b-bbbb-660b3c1d4908.png",
+    "created_at": "2026-03-12T04:24:47.405534Z",
+    "updated_at": "2026-03-12T04:29:19.402336Z"
+  },
+  {
+    "id": "drawing-9",
+    "name": "도면 9",
+    "is_active": false,
+    "filename": "map_9.png",
+    "file_type": "image/png",
+    "file_path": "mock-drawings/c__Users_hanna_AppData_Roaming_Cursor_User_workspaceStorage_be28888f42f1e76c3a9e8104c67c18d0_images_map_9-f064847b-7692-48ae-a831-8db869b3b573.png",
+    "created_at": "2026-03-12T04:24:47.405534Z",
+    "updated_at": "2026-03-12T04:29:19.402336Z"
+  },
+  {
+    "id": "drawing-10",
+    "name": "도면 10",
+    "is_active": false,
+    "filename": "map_10.png",
+    "file_type": "image/png",
+    "file_path": "mock-drawings/c__Users_hanna_AppData_Roaming_Cursor_User_workspaceStorage_be28888f42f1e76c3a9e8104c67c18d0_images_map_10-50aa964a-a0e3-4dbe-8638-26b6eb7b3387.png",
+    "created_at": "2026-03-12T04:24:47.405534Z",
+    "updated_at": "2026-03-12T04:29:19.402336Z"
+  },
+  {
+    "id": "drawing-11",
+    "name": "도면 11",
+    "is_active": false,
+    "filename": "map_11.png",
+    "file_type": "image/png",
+    "file_path": "mock-drawings/c__Users_hanna_AppData_Roaming_Cursor_User_workspaceStorage_be28888f42f1e76c3a9e8104c67c18d0_images_map_11-fc2446b0-7f22-4d78-bc67-f4fff9b25f5e.png",
+    "created_at": "2026-03-12T04:24:47.405534Z",
+    "updated_at": "2026-03-12T04:29:19.402336Z"
+  },
+  {
+    "id": "drawing-12",
+    "name": "도면 12",
+    "is_active": false,
+    "filename": "map_12.png",
+    "file_type": "image/png",
+    "file_path": "mock-drawings/c__Users_hanna_AppData_Roaming_Cursor_User_workspaceStorage_be28888f42f1e76c3a9e8104c67c18d0_images_map_12-08f18926-00bf-4cfe-b1a9-cbf5bc774791.png",
+    "created_at": "2026-03-12T04:24:47.405534Z",
+    "updated_at": "2026-03-12T04:29:19.402336Z"
+  },
+  {
+    "id": "drawing-13",
+    "name": "도면 13",
+    "is_active": false,
+    "filename": "map_13.png",
+    "file_type": "image/png",
+    "file_path": "mock-drawings/c__Users_hanna_AppData_Roaming_Cursor_User_workspaceStorage_be28888f42f1e76c3a9e8104c67c18d0_images_map_13-c82f982d-e169-488b-aeb8-cc1730eaf3df.png",
+    "created_at": "2026-03-12T04:24:47.405534Z",
+    "updated_at": "2026-03-12T04:29:19.402336Z"
+  },
+  {
+    "id": "drawing-14",
+    "name": "도면 14",
+    "is_active": false,
+    "filename": "map_14.png",
+    "file_type": "image/png",
+    "file_path": "mock-drawings/c__Users_hanna_AppData_Roaming_Cursor_User_workspaceStorage_be28888f42f1e76c3a9e8104c67c18d0_images_map_14-580dfe1e-6d1a-44f1-a81e-78dcdf02f9a9.png",
+    "created_at": "2026-03-12T04:24:47.405534Z",
+    "updated_at": "2026-03-12T04:29:19.402336Z"
+  },
+  {
+    "id": "drawing-15",
+    "name": "도면 15",
+    "is_active": false,
+    "filename": "map_15.png",
+    "file_type": "image/png",
+    "file_path": "mock-drawings/c__Users_hanna_AppData_Roaming_Cursor_User_workspaceStorage_be28888f42f1e76c3a9e8104c67c18d0_images_map_15-ba6b004e-0b75-4cf5-a9bf-8d5cafb6478b.png",
+    "created_at": "2026-03-12T04:24:47.405534Z",
+    "updated_at": "2026-03-12T04:29:19.402336Z"
+  },
+  {
+    "id": "drawing-16",
+    "name": "도면 16",
+    "is_active": false,
+    "filename": "map_16.png",
+    "file_type": "image/png",
+    "file_path": "mock-drawings/c__Users_hanna_AppData_Roaming_Cursor_User_workspaceStorage_be28888f42f1e76c3a9e8104c67c18d0_images_map_16-6cb4a549-6f42-4bd4-8edb-9b178f524b3d.png",
+    "created_at": "2026-03-12T04:24:47.405534Z",
+    "updated_at": "2026-03-12T04:29:19.402336Z"
+  },
+  {
+    "id": "drawing-18",
+    "name": "도면 18",
+    "is_active": false,
+    "filename": "map_18.png",
+    "file_type": "image/png",
+    "file_path": "mock-drawings/c__Users_hanna_AppData_Roaming_Cursor_User_workspaceStorage_be28888f42f1e76c3a9e8104c67c18d0_images_map_18-3ebe5522-5ccc-4055-aabd-88964d111afd.png",
+    "created_at": "2026-03-12T04:24:47.405534Z",
+    "updated_at": "2026-03-12T04:29:19.402336Z"
+  },
+  {
+    "id": "drawing-19",
+    "name": "도면 19",
+    "is_active": false,
+    "filename": "map_19.png",
+    "file_type": "image/png",
+    "file_path": "mock-drawings/c__Users_hanna_AppData_Roaming_Cursor_User_workspaceStorage_be28888f42f1e76c3a9e8104c67c18d0_images_map_19-f7e1a6cd-4fae-4837-a1d8-9e9e605efdc9.png",
+    "created_at": "2026-03-12T04:24:47.405534Z",
+    "updated_at": "2026-03-12T04:29:19.402336Z"
+  },
+  {
+    "id": "drawing-20",
+    "name": "도면 20",
+    "is_active": false,
+    "filename": "map_20.png",
+    "file_type": "image/png",
+    "file_path": "mock-drawings/c__Users_hanna_AppData_Roaming_Cursor_User_workspaceStorage_be28888f42f1e76c3a9e8104c67c18d0_images_map_20-5450ed8a-8177-4925-9829-649b4de66b3f.png",
+    "created_at": "2026-03-12T04:24:47.405534Z",
+    "updated_at": "2026-03-12T04:29:19.402336Z"
+  }
+]
+
