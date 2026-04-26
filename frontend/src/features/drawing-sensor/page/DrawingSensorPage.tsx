@@ -63,6 +63,18 @@ const MOCK_DRAWING_1_SENSORS: RegisteredSensor[] = [
   },
 ]
 
+function mapDrawingSensorsToRegisteredSensors(
+  sensors: NonNullable<ReturnType<typeof useActiveDrawing>['activeDrawing']>['sensors'],
+): RegisteredSensor[] {
+  return sensors.map((sensor) => ({
+    id: sensor.id,
+    label: sensor.label ?? sensor.id,
+    color: sensor.variant === 'yellow' ? 'orange' : 'green',
+    unitLabel: sensor.unitLabel ?? (sensor.variant === 'yellow' ? '유량 (L/min)' : '압력 (MPa)'),
+    posText: `(${sensor.left.toFixed(3)}%, ${sensor.top.toFixed(3)}%)`,
+  }))
+}
+
 export default function DrawingSensorPage() {
   const navigate = useNavigate()
   const { drawings, activeDrawing, activeDrawingId, activeIndex, total, goPrev, goNext } = useActiveDrawing()
@@ -88,9 +100,7 @@ export default function DrawingSensorPage() {
   const drawingViewportRef = useRef<HTMLDivElement>(null)
   const dragRef = useRef<{ active: boolean; pointerId: number; lastX: number; lastY: number } | null>(null)
 
-  const [registrationsByDrawing, setRegistrationsByDrawing] = useState<Record<string, RegisteredSensor[]>>(() => ({
-    'drawing-1': MOCK_DRAWING_1_SENSORS,
-  }))
+  const [registrationsByDrawing, setRegistrationsByDrawing] = useState<Record<string, RegisteredSensor[]>>({})
 
   const [alertMessage, setAlertMessage] = useState<string | null>(null)
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null)
@@ -113,6 +123,17 @@ export default function DrawingSensorPage() {
     setDrawingPan({ x: 0, y: 0 })
     setDrawingFabOpen(false)
   }, [drawingKey])
+
+  useEffect(() => {
+    if (!activeDrawingId || !activeDrawing) return
+    setRegistrationsByDrawing((prev) => {
+      if (prev[activeDrawingId]) return prev
+      return {
+        ...prev,
+        [activeDrawingId]: mapDrawingSensorsToRegisteredSensors(activeDrawing.sensors ?? []),
+      }
+    })
+  }, [activeDrawing, activeDrawingId])
 
   useEffect(() => {
     if (drawingZoom <= 1) {

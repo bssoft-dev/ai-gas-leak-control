@@ -1,6 +1,6 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import { OpenAPI } from '../../../api/core/OpenAPI'
 import { DefaultService } from '../../../api/services/DefaultService'
-import { mockDrawingDetails } from '../../../mocks/data/drawingDetails'
 
 export type DrawingItem = {
   id: string
@@ -14,6 +14,8 @@ export type DrawingSensor = {
   left: number
   top: number
   variant: 'green' | 'yellow'
+  label?: string
+  unitLabel?: string
   /** percent: left/top는 도면 이미지 슬롯 내 0~100. 생략 시 레거시 픽셀(고정 설계 폭 기준)로 해석 */
   positionUnit?: 'percent' | 'legacy_px'
 }
@@ -43,13 +45,35 @@ type ActiveDrawingContextValue = {
 
 const ActiveDrawingContext = createContext<ActiveDrawingContextValue | null>(null)
 
-const shouldUseDrawingDetailMocks =
-  import.meta.env.VITE_USE_DRAWING_DETAIL_MOCKS !== 'false'
+function normalizeSensorVariant(sensor: any): DrawingSensor['variant'] {
+  return String(sensor?.sensor_type ?? '').toLowerCase() === 'flow' ? 'yellow' : 'green'
+}
 
-function getMockDrawingDetail(id: string): DrawingDetail | null {
-  const detail = mockDrawingDetails[id]
-  if (!detail) return null
-  return detail as DrawingDetail
+function normalizeSensorUnitLabel(sensor: any): string {
+  const sensorType = String(sensor?.sensor_type ?? '').toLowerCase()
+  if (sensorType === 'flow') return '유량 (L/min)'
+  return `압력 (${String(sensor?.unit ?? 'MPa')})`
+}
+
+function normalizeDrawingDetailResponse(res: any, fallbackName?: string): DrawingDetail {
+  const drawing = res?.drawing ?? res ?? {}
+  const sensors = Array.isArray(res?.sensors) ? res.sensors : []
+  const drawingId = String(drawing.id ?? '')
+
+  return {
+    id: drawingId,
+    name: String(drawing.name ?? drawing.filename ?? fallbackName ?? drawingId),
+    imagePath: `${OpenAPI.BASE}/api/gas-leak/drawings/${drawingId}/file`,
+    sensors: sensors.map((sensor: any) => ({
+      id: String(sensor.id ?? sensor.label ?? crypto.randomUUID()),
+      left: Number(sensor.x ?? 0) * 100,
+      top: Number(sensor.y ?? 0) * 100,
+      variant: normalizeSensorVariant(sensor),
+      label: String(sensor.label ?? sensor.id ?? ''),
+      unitLabel: normalizeSensorUnitLabel(sensor),
+      positionUnit: 'percent' as const,
+    })),
+  }
 }
 
 export function ActiveDrawingProvider({ children }: { children: React.ReactNode }) {
@@ -108,21 +132,12 @@ export function ActiveDrawingProvider({ children }: { children: React.ReactNode 
     let mounted = true
     setIsLoadingActiveDrawing(true)
     setErrorActiveDrawing(null)
-
-    if (shouldUseDrawingDetailMocks) {
-      const detail = getMockDrawingDetail(activeDrawingId)
-      setActiveDrawing(detail)
-      setErrorActiveDrawing(detail ? null : `Drawing not found: ${activeDrawingId}`)
-      setIsLoadingActiveDrawing(false)
-      return () => {
-        mounted = false
-      }
-    }
+    const selectedDrawing = drawings.find((d) => d.id === activeDrawingId)
 
     DefaultService.getGasLeakDrawingApiGasLeakDrawingsDrawingIdGet(activeDrawingId)
       .then((res) => {
         if (!mounted) return
-        setActiveDrawing(res as DrawingDetail)
+        setActiveDrawing(normalizeDrawingDetailResponse(res, selectedDrawing?.name))
         setErrorActiveDrawing(null)
       })
       .catch((e) => {
@@ -138,7 +153,7 @@ export function ActiveDrawingProvider({ children }: { children: React.ReactNode 
     return () => {
       mounted = false
     }
-  }, [activeDrawingId])
+  }, [activeDrawingId, drawings])
 
   const activeIndex = useMemo(() => Math.max(0, drawings.findIndex((d) => d.id === activeDrawingId)), [activeDrawingId, drawings])
   const total = drawings.length
