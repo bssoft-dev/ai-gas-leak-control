@@ -65,11 +65,12 @@ const MOCK_DRAWING_1_SENSORS: RegisteredSensor[] = [
 
 export default function DrawingSensorPage() {
   const navigate = useNavigate()
-  const { activeDrawing, activeDrawingId, activeIndex, total, goPrev, goNext } = useActiveDrawing()
+  const { drawings, activeDrawing, activeDrawingId, activeIndex, total, goPrev, goNext } = useActiveDrawing()
 
   const { imgAttachFileAdd, imgChevronLeft, imgChevronRight, imgSelectCaret, imgEdit, imgDelete } = drawingSensorAssets
 
-  const drawingName = activeDrawing?.name ?? '도면'
+  const selectedDrawing = drawings.find((d) => d.id === activeDrawingId)
+  const drawingName = selectedDrawing?.name ?? activeDrawing?.name ?? '도면'
   const page = total <= 0 ? 0 : activeIndex + 1
 
   const drawingKey = activeDrawingId || '_none'

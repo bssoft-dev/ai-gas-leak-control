@@ -107,7 +107,8 @@ export default function MonitorPage() {
     }
   }, [])
 
-  const drawingName = activeDrawing?.name ?? drawings.find((d) => d.id === activeDrawingId)?.name ?? '도면'
+  const selectedDrawing = drawings.find((d) => d.id === activeDrawingId)
+  const drawingName = selectedDrawing?.name ?? activeDrawing?.name ?? '도면'
   const page = total <= 0 ? 0 : activeIndex + 1
   const totalPages = total
   const canResetDrawingView =
@@ -136,8 +137,8 @@ export default function MonitorPage() {
     <PageContentGrid>
         {/* 도면: 9/12 — 차트 카드와 동일 높이(786px) */}
         <section className="col-span-12 flex min-h-0 min-w-0 flex-col lg:col-span-9 lg:h-full">
-          <div className="shrink-0 font-['Pretendard',sans-serif] font-semibold text-[16px] leading-[1.2] text-[#4370ac] uppercase">
-            도면 명
+          <div className="shrink-0 font-['Pretendard',sans-serif] font-semibold text-[16px] leading-[1.2] text-[#4370ac]">
+            {drawingName}
           </div>
 
           <div className="mt-[12px] flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden rounded-[8px] bg-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.3),0px_1px_3px_1px_rgba(0,0,0,0.15)]">
