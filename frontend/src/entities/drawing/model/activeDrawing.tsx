@@ -1,5 +1,6 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { DefaultService } from '../../../api/services/DefaultService'
+import { mockDrawingDetails } from '../../../mocks/data/drawingDetails'
 
 export type DrawingItem = {
   id: string
@@ -42,6 +43,15 @@ type ActiveDrawingContextValue = {
 
 const ActiveDrawingContext = createContext<ActiveDrawingContextValue | null>(null)
 
+const shouldUseDrawingDetailMocks =
+  import.meta.env.VITE_USE_DRAWING_DETAIL_MOCKS !== 'false'
+
+function getMockDrawingDetail(id: string): DrawingDetail | null {
+  const detail = mockDrawingDetails[id]
+  if (!detail) return null
+  return detail as DrawingDetail
+}
+
 export function ActiveDrawingProvider({ children }: { children: React.ReactNode }) {
   const [drawings, setDrawings] = useState<DrawingItem[]>([])
   const [activeDrawingId, setActiveDrawingId] = useState<string>('')
@@ -65,7 +75,7 @@ export function ActiveDrawingProvider({ children }: { children: React.ReactNode 
               id: String(d.id),
               name: String(d.name ?? d.filename ?? d.id),
               status: 'ok' as const,
-              isActive: Boolean(d?.is_active ?? d?.isActive ?? false),
+              isActive: false,
             }))
           : []
 
@@ -98,6 +108,16 @@ export function ActiveDrawingProvider({ children }: { children: React.ReactNode 
     let mounted = true
     setIsLoadingActiveDrawing(true)
     setErrorActiveDrawing(null)
+
+    if (shouldUseDrawingDetailMocks) {
+      const detail = getMockDrawingDetail(activeDrawingId)
+      setActiveDrawing(detail)
+      setErrorActiveDrawing(detail ? null : `Drawing not found: ${activeDrawingId}`)
+      setIsLoadingActiveDrawing(false)
+      return () => {
+        mounted = false
+      }
+    }
 
     DefaultService.getGasLeakDrawingApiGasLeakDrawingsDrawingIdGet(activeDrawingId)
       .then((res) => {
