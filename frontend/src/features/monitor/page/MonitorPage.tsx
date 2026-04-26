@@ -16,6 +16,7 @@ type ChartCard = {
   title: string
   headerBg: string
   variant: 'green' | 'yellow'
+  unitLabel: string
 }
 
 const ZOOM_MIN = 0.5
@@ -36,8 +37,11 @@ function clampDrawingPan(x: number, y: number, zoom: number, vw: number, vh: num
 export default function MonitorPage() {
   const navigate = useNavigate()
   const { sensors: pressureSeries, error: pressureSeriesError } = useMonitorPressureSeries(2000)
-  const pressureBySensorId = useMemo(
-    () => Object.fromEntries(pressureSeries.map((s) => [s.sensorId, s])),
+  const pressureSeriesByVariant = useMemo(
+    () => ({
+      green: pressureSeries.find((s) => s.variant === 'green'),
+      yellow: pressureSeries.find((s) => s.variant === 'yellow'),
+    }),
     [pressureSeries],
   )
   const { drawings, activeDrawingId, activeDrawing, activeIndex, total, goPrev, goNext } = useActiveDrawing()
@@ -111,31 +115,36 @@ export default function MonitorPage() {
   const drawingName = selectedDrawing?.name ?? activeDrawing?.name ?? '도면'
   const page = total <= 0 ? 0 : activeIndex + 1
   const totalPages = total
-  const canResetDrawingView =
-    drawingZoom !== 1 || drawingPan.x !== 0 || drawingPan.y !== 0
+  const canResetDrawingView = drawingZoom !== 1 || drawingPan.x !== 0 || drawingPan.y !== 0
 
-  const cards: ChartCard[] = [
-    { id: 'c1', title: '압력 센서 1', headerBg: '#f1f7ea', variant: 'green' },
-    { id: 'c2', title: '압력 센서 2', headerBg: '#f1f7ea', variant: 'green' },
-    { id: 'c3', title: '압력 센서 3', headerBg: '#f1f7ea', variant: 'green' },
-    { id: 'c4', title: '압력 센서 4', headerBg: '#fbf6e9', variant: 'yellow' },
-    { id: 'c5', title: '압력 센서 5', headerBg: '#fbf6e9', variant: 'yellow' },
-    { id: 'c6', title: '압력 센서 6', headerBg: '#fbf6e9', variant: 'yellow' },
-  ]
+  const cards: ChartCard[] = useMemo(
+    () =>
+      (activeDrawing?.sensors ?? []).map((sensor, index) => {
+        const isFlow = sensor.variant === 'yellow'
+        return {
+          id: sensor.id,
+          title: sensor.label ?? `${isFlow ? '유량' : '압력'} 센서 ${index + 1}`,
+          headerBg: isFlow ? '#fbf6e9' : '#f1f7ea',
+          variant: sensor.variant,
+          unitLabel: sensor.unitLabel ?? (isFlow ? '유량 (L/min)' : '압력 (MPa)'),
+        }
+      }),
+    [activeDrawing?.sensors],
+  )
 
   const detailCard = chartDetailId ? cards.find((c) => c.id === chartDetailId) : null
-  const detailSeries = detailCard ? pressureBySensorId[detailCard.id] : undefined
+  const detailSeries = detailCard ? pressureSeriesByVariant[detailCard.variant] : undefined
+  const detailUnit = detailCard?.unitLabel.includes('L/min') ? 'L/min' : 'MPa'
   const detailValueText =
     detailSeries != null
-      ? `${detailSeries.latestValue.toFixed(2)} MPa`
+      ? `${detailSeries.latestValue.toFixed(2)} ${detailUnit}`
       : pressureSeriesError
-        ? '— MPa'
-        : '…'
+        ? `-- ${detailUnit}`
+        : '--'
 
   return (
     <>
-    <PageContentGrid>
-        {/* 도면: 9/12 — 차트 카드와 동일 높이(786px) */}
+      <PageContentGrid>
         <section className="col-span-12 flex min-h-0 min-w-0 flex-col lg:col-span-9 lg:h-full">
           <div className="shrink-0 font-['Pretendard',sans-serif] font-semibold text-[16px] leading-[1.2] text-[#4370ac]">
             {drawingName}
@@ -188,7 +197,6 @@ export default function MonitorPage() {
                 </div>
               </div>
 
-              {/* FAB: 닫힘 = 햄버거 원형만, 열림 = 세로 pill(확대·축소·수정) + X 토글 */}
               <div className="absolute bottom-[16px] right-[16px] z-20 flex flex-col-reverse items-center gap-[10px]">
                 <button
                   type="button"
@@ -243,7 +251,7 @@ export default function MonitorPage() {
                     <button
                       type="button"
                       className="flex h-[36px] w-[36px] items-center justify-center rounded-full hover:bg-[#f1f5f9] disabled:cursor-not-allowed disabled:opacity-35"
-                      aria-label="도면 크기·위치 원래대로"
+                      aria-label="도면 위치 초기화"
                       disabled={!canResetDrawingView}
                       onClick={() => {
                         setDrawingZoom(1)
@@ -255,7 +263,7 @@ export default function MonitorPage() {
                     <button
                       type="button"
                       className="flex h-[36px] w-[36px] items-center justify-center rounded-full hover:bg-[#f1f5f9]"
-                      aria-label="도면·센서 생성에서 수정"
+                      aria-label="도면/센서 생성으로 이동"
                       onClick={() => {
                         setDrawingFabOpen(false)
                         navigate('/drawing-sensor')
@@ -269,79 +277,79 @@ export default function MonitorPage() {
             </div>
           </div>
 
-          {/* Pagination */}
           <div className="mt-[18px] flex shrink-0 items-center justify-center gap-[51px] text-[16px] text-[#0b1828]">
-            <button type="button" className="w-[20px] h-[20px] flex items-center justify-center" onClick={goPrev}>
-              <img alt="" className="-scale-x-100 block w-[20px] h-[20px]" src={monitorAssets.imgChevronLeft} />
+            <button type="button" className="h-[20px] w-[20px] flex items-center justify-center" onClick={goPrev}>
+              <img alt="" className="-scale-x-100 block h-[20px] w-[20px]" src={monitorAssets.imgChevronLeft} />
             </button>
             <div className="font-['Pretendard',sans-serif] font-normal leading-[20px]">
               {page} / {totalPages}
             </div>
-            <button type="button" className="w-[20px] h-[20px] flex items-center justify-center" onClick={goNext}>
-              <img alt="" className="block w-[20px] h-[20px]" src={monitorAssets.imgChevronRight} />
+            <button type="button" className="h-[20px] w-[20px] flex items-center justify-center" onClick={goNext}>
+              <img alt="" className="block h-[20px] w-[20px]" src={monitorAssets.imgChevronRight} />
             </button>
           </div>
         </section>
 
-        {/* 실시간 차트: 3/12 — 도면 카드와 같은 세로 길이 */}
         <aside className="col-span-12 flex min-h-0 min-w-0 flex-col lg:col-span-3 lg:h-full">
-          <div className="shrink-0 font-['Pretendard',sans-serif] font-semibold text-[16px] leading-[1.2] text-[#4370ac] uppercase -translate-y-[2px]">
+          <div className="shrink-0 font-['Pretendard',sans-serif] font-semibold text-[16px] leading-[1.2] text-[#4370ac] -translate-y-[2px]">
             실시간 차트
           </div>
 
           <div className="mt-[12px] flex min-h-0 flex-1 flex-col">
             <div className="flex min-h-[786px] min-w-0 flex-1 flex-col overflow-hidden rounded-[8px] bg-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.3),0px_1px_3px_1px_rgba(0,0,0,0.15)]">
               <div className="notion-scrollbar flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto py-[8px] pl-[6px] pr-[4px] sm:pl-[8px]">
-              {pressureSeriesError && (
-                <div className="w-full rounded-[6px] border border-amber-200 bg-amber-50 px-[10px] py-[6px] font-['Pretendard',sans-serif] text-[10px] text-amber-900">
-                  차트 데이터를 불러오지 못했습니다. 개발 모드에서 MSW가 켜져 있는지 확인하세요.
-                </div>
-              )}
-              {cards.map((c) => {
-                const series = pressureBySensorId[c.id]
-                const valueText =
-                  series != null
-                    ? `${series.latestValue.toFixed(2)} MPa`
-                    : pressureSeriesError
-                      ? '— MPa'
-                      : '…'
-                return (
-                  <div key={c.id} className="w-full min-w-0">
-                    <div
-                      className="inline-flex w-fit max-w-full border-t border-l border-r border-[#e2e8f0] rounded-tl-[8px] rounded-tr-[8px] px-[12px] py-[4px]"
-                      style={{ backgroundColor: c.headerBg }}
-                    >
-                      <div className="font-['Pretendard',sans-serif] text-[10px] leading-[15px] tracking-[0.5px] text-[#485b77]">
-                        {c.title} : {valueText}
-                      </div>
-                    </div>
-                    <div className="bg-white border border-[#e2e8f0] rounded-bl-[4px] rounded-br-[4px] rounded-tr-[4px] overflow-hidden">
-                      <div
-                        role="button"
-                        tabIndex={0}
-                        className="h-[120px] w-full min-w-0 cursor-pointer p-px outline-none transition-opacity hover:opacity-95 focus-visible:shadow-[inset_0_0_0_2px_var(--chart-focus-ring)] [&_*]:pointer-events-none"
-                        style={
-                          {
-                            ['--chart-focus-ring' as string]:
-                              c.variant === 'green' ? '#7cbf6a' : '#caa23d',
-                          } as CSSProperties
-                        }
-                        aria-label={`${c.title} 차트 상세 보기`}
-                        onClick={() => setChartDetailId(c.id)}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter' || e.key === ' ') {
-                            e.preventDefault()
-                            setChartDetailId(c.id)
-                          }
-                        }}
-                      >
-                        <PressureLineChart points={series?.points ?? []} variant={c.variant} />
-                      </div>
-                    </div>
+                {pressureSeriesError && (
+                  <div className="w-full rounded-[6px] border border-amber-200 bg-amber-50 px-[10px] py-[6px] font-['Pretendard',sans-serif] text-[10px] text-amber-900">
+                    차트 데이터를 불러오지 못했습니다.
                   </div>
-                )
-              })}
-              <div className="h-[4px]" />
+                )}
+                {cards.map((c) => {
+                  const series = pressureSeriesByVariant[c.variant]
+                  const unit = c.unitLabel.includes('L/min') ? 'L/min' : 'MPa'
+                  const valueText =
+                    series != null
+                      ? `${series.latestValue.toFixed(2)} ${unit}`
+                      : pressureSeriesError
+                        ? `-- ${unit}`
+                        : '--'
+
+                  return (
+                    <div key={c.id} className="w-full min-w-0">
+                      <div
+                        className="inline-flex w-fit max-w-full rounded-tl-[8px] rounded-tr-[8px] border-l border-r border-t border-[#e2e8f0] px-[12px] py-[4px]"
+                        style={{ backgroundColor: c.headerBg }}
+                      >
+                        <div className="font-['Pretendard',sans-serif] text-[10px] leading-[15px] tracking-[0.5px] text-[#485b77]">
+                          {c.title} : {valueText}
+                        </div>
+                      </div>
+                      <div className="overflow-hidden rounded-bl-[4px] rounded-br-[4px] rounded-tr-[4px] border border-[#e2e8f0] bg-white">
+                        <div
+                          role="button"
+                          tabIndex={0}
+                          className="h-[120px] w-full min-w-0 cursor-pointer p-px outline-none transition-opacity hover:opacity-95 focus-visible:shadow-[inset_0_0_0_2px_var(--chart-focus-ring)] [&_*]:pointer-events-none"
+                          style={
+                            {
+                              ['--chart-focus-ring' as string]:
+                                c.variant === 'green' ? '#7cbf6a' : '#caa23d',
+                            } as CSSProperties
+                          }
+                          aria-label={`${c.title} 차트 상세 보기`}
+                          onClick={() => setChartDetailId(c.id)}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                              e.preventDefault()
+                              setChartDetailId(c.id)
+                            }
+                          }}
+                        >
+                          <PressureLineChart points={series?.points ?? []} variant={c.variant} />
+                        </div>
+                      </div>
+                    </div>
+                  )
+                })}
+                <div className="h-[4px]" />
               </div>
             </div>
           </div>
@@ -350,21 +358,20 @@ export default function MonitorPage() {
             aria-hidden="true"
           />
         </aside>
-    </PageContentGrid>
+      </PageContentGrid>
 
-    {detailCard && (
-      <PressureChartDetailModal
-        open
-        onClose={() => setChartDetailId(null)}
-        title={detailCard.title}
-        valueText={detailValueText}
-        headerBg={detailCard.headerBg}
-        variant={detailCard.variant}
-        points={detailSeries?.points ?? []}
-        hasSeriesError={pressureSeriesError}
-      />
-    )}
+      {detailCard && (
+        <PressureChartDetailModal
+          open
+          onClose={() => setChartDetailId(null)}
+          title={detailCard.title}
+          valueText={detailValueText}
+          headerBg={detailCard.headerBg}
+          variant={detailCard.variant}
+          points={detailSeries?.points ?? []}
+          hasSeriesError={pressureSeriesError}
+        />
+      )}
     </>
   )
 }
-
