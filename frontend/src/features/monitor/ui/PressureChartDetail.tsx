@@ -9,7 +9,7 @@ import {
 } from 'recharts'
 import { useId, useRef } from 'react'
 
-import type { MonitorPressurePoint } from '../../api/monitorPressureSeries'
+import type { MonitorPressurePoint } from '../../../api/monitorPressureSeries'
 
 type Props = {
   points: MonitorPressurePoint[]

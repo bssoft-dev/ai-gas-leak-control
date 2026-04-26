@@ -1,15 +1,15 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { monitorAssets } from '../assets/monitor/monitorAssets'
-import { DrawingSensorDot } from '../components/drawing/DrawingSensorDot'
-import { DrawingViewResetIcon } from '../components/drawing/DrawingViewResetIcon'
-import { PageContentGrid } from '../components/layout/PageContentGrid'
-import { PressureChartDetailModal } from '../components/monitor/PressureChartDetailModal'
-import { PressureLineChart } from '../components/monitor/PressureLineChart'
-import { getSensorPercentInSlot } from '../utils/drawingSensorPosition'
-import { useMonitorPressureSeries } from '../hooks/useMonitorPressureSeries'
-import { useActiveDrawing } from '../state/activeDrawing'
+import { getSensorPercentInSlot } from '../../../entities/drawing/lib/drawingSensorPosition'
+import { useActiveDrawing } from '../../../entities/drawing/model/activeDrawing'
+import { DrawingSensorDot } from '../../../entities/drawing/ui/DrawingSensorDot'
+import { DrawingViewResetIcon } from '../../../entities/drawing/ui/DrawingViewResetIcon'
+import { PageContentGrid } from '../../../shared/ui/layout/PageContentGrid'
+import { monitorAssets } from '../assets/monitorAssets'
+import { useMonitorPressureSeries } from '../model/useMonitorPressureSeries'
+import { PressureChartDetailModal } from '../ui/PressureChartDetailModal'
+import { PressureLineChart } from '../ui/PressureLineChart'
 
 type ChartCard = {
   id: string

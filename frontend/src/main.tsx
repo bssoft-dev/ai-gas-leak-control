@@ -3,15 +3,12 @@ import ReactDOM from 'react-dom/client'
 import './index.css'
 import App from './App'
 import { initOpenApi } from './api/initOpenApi'
-import { ErrorBoundary } from './components/ErrorBoundary'
+import { ErrorBoundary } from './shared/ui/ErrorBoundary'
 
 initOpenApi()
 
 async function bootstrap() {
-  const shouldUseMsw =
-    import.meta.env.DEV ||
-    // `vite preview`/정적 서빙으로 로컬 확인 시에도 백엔드가 없으면 MSW가 필요함
-    (import.meta.env.PROD && window.location.hostname === 'localhost')
+  const shouldUseMsw = import.meta.env.VITE_ENABLE_MSW === 'true'
 
   if (shouldUseMsw) {
     const { worker } = await import('./mocks/browser')

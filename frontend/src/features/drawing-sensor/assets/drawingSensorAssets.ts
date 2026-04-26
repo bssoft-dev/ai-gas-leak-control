@@ -1,4 +1,4 @@
-import { publicIconUrl } from '../../utils/publicIconUrl'
+import { publicIconUrl } from '../../../shared/lib/publicIconUrl'
 
 const icon = publicIconUrl
 

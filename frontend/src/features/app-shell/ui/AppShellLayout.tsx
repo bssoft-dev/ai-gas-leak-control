@@ -1,9 +1,9 @@
 import { NavLink, Outlet } from 'react-router-dom'
 import { useEffect, useMemo, useRef, useState } from 'react'
 
-import { appShellAssets } from '../../assets/app-shell/appShellAssets'
-import { drawingSensorAssets } from '../../assets/drawing-sensor/drawingSensorAssets'
-import { ActiveDrawingProvider, useActiveDrawing } from '../../state/activeDrawing'
+import { ActiveDrawingProvider, useActiveDrawing } from '../../../entities/drawing/model/activeDrawing'
+import { drawingSensorAssets } from '../../drawing-sensor/assets/drawingSensorAssets'
+import { appShellAssets } from '../assets/appShellAssets'
 
 /** Figma: Aside — node 266:2730 / 254:2218 (max expanded width). Min matches current UI default. */
 const SIDEBAR_COLLAPSED_W = 69

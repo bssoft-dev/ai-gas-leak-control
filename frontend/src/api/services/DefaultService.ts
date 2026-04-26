@@ -281,8 +281,56 @@ export class DefaultService {
         });
     }
     /**
+     * Get Gas Leak Control History
+     * 자동/수동 제어 실행 이력 (최신순)
+     * @returns any Successful Response
+     * @throws ApiError
+     */
+    public static getGasLeakControlHistoryApiGasLeakControlHistoryGet(): CancelablePromise<any> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/gas-leak/control-history',
+        });
+    }
+    /**
+     * Get Gas Leak Daily Usage
+     * 금일 가스 사용량 추정(L) — 유량 시뮬 누적
+     * @returns any Successful Response
+     * @throws ApiError
+     */
+    public static getGasLeakDailyUsageApiGasLeakDailyUsageGet(): CancelablePromise<any> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/gas-leak/daily-usage',
+        });
+    }
+    /**
+     * Post Gas Leak Policy
+     * 임계치·3단계·유예 시간 정책 저장
+     * @returns any Successful Response
+     * @throws ApiError
+     */
+    public static postGasLeakPolicyApiGasLeakPolicyPost(): CancelablePromise<any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/gas-leak/policy',
+        });
+    }
+    /**
+     * Post Gas Leak Cancel Auto Shutdown
+     * 자동 차단 유예 취소
+     * @returns any Successful Response
+     * @throws ApiError
+     */
+    public static postGasLeakCancelAutoShutdownApiGasLeakCancelAutoShutdownPost(): CancelablePromise<any> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/gas-leak/cancel-auto-shutdown',
+        });
+    }
+    /**
      * Stream Events
-     * SSE: 이벤트 버스 SSE 스트림을 프록시 (이벤트 발생 시 즉시 푸시).
+     * SSE: 이벤트 버스 SSE 스트림을 프록시 (이벤트 발생 시 즉시 푸시). 쿼리(client_id, targeted_only 등) 전달.
      * @returns any Successful Response
      * @throws ApiError
      */

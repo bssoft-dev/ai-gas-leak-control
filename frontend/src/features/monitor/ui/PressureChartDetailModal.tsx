@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 
-import type { MonitorPressurePoint } from '../../api/monitorPressureSeries'
+import type { MonitorPressurePoint } from '../../../api/monitorPressureSeries'
 import { PressureChartDetail } from './PressureChartDetail'
 
 const STROKE = {

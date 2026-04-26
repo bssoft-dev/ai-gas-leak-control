@@ -2,10 +2,10 @@ import React from 'react'
 import './App.css'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
-import AppShellLayout from './components/layout/AppShellLayout'
-import AiHistoryPage from './pages/AiHistoryPage'
-import DrawingSensorPage from './pages/DrawingSensorPage'
-import MonitorPage from './pages/MonitorPage'
+import AppShellLayout from './features/app-shell/ui/AppShellLayout'
+import AiHistoryPage from './features/ai-history/page/AiHistoryPage'
+import DrawingSensorPage from './features/drawing-sensor/page/DrawingSensorPage'
+import MonitorPage from './features/monitor/page/MonitorPage'
 
 export default function App() {
   return (

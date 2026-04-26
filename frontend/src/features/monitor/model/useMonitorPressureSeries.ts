@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 
-import { fetchMonitorPressureSeries, type MonitorPressureSensorSeries } from '../api/monitorPressureSeries'
+import { fetchMonitorPressureSeries, type MonitorPressureSensorSeries } from '../../../api/monitorPressureSeries'
 
 const PRESSURE_POINT_COUNT = 45
 const PRESSURE_STEP_MS = 2000

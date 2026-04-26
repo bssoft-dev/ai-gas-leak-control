@@ -1,7 +1,7 @@
 import { useId } from 'react'
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 
-import type { MonitorPressurePoint } from '../../api/monitorPressureSeries'
+import type { MonitorPressurePoint } from '../../../api/monitorPressureSeries'
 
 const STROKE = {
   green: '#7cbf6a',

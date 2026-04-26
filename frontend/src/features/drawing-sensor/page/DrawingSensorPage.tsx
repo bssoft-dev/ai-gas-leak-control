@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { drawingSensorAssets } from '../assets/drawing-sensor/drawingSensorAssets'
-import { monitorAssets } from '../assets/monitor/monitorAssets'
-import { DrawingSensorDot } from '../components/drawing/DrawingSensorDot'
-import { DrawingViewResetIcon } from '../components/drawing/DrawingViewResetIcon'
-import { PageContentGrid } from '../components/layout/PageContentGrid'
-import { getSensorPercentInSlot } from '../utils/drawingSensorPosition'
-import { useActiveDrawing } from '../state/activeDrawing'
+import { getSensorPercentInSlot } from '../../../entities/drawing/lib/drawingSensorPosition'
+import { useActiveDrawing } from '../../../entities/drawing/model/activeDrawing'
+import { DrawingSensorDot } from '../../../entities/drawing/ui/DrawingSensorDot'
+import { DrawingViewResetIcon } from '../../../entities/drawing/ui/DrawingViewResetIcon'
+import { PageContentGrid } from '../../../shared/ui/layout/PageContentGrid'
+import { monitorAssets } from '../../monitor/assets/monitorAssets'
+import { drawingSensorAssets } from '../assets/drawingSensorAssets'
 
 const ZOOM_MIN = 0.5
 const ZOOM_MAX = 2.5
