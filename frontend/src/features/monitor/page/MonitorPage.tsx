@@ -7,6 +7,7 @@ import { useDrawingViewport } from '../../../entities/drawing/model/useDrawingVi
 import { DrawingSensorDot } from '../../../entities/drawing/ui/DrawingSensorDot'
 import { DrawingViewResetIcon } from '../../../entities/drawing/ui/DrawingViewResetIcon'
 import { PageContentGrid } from '../../../shared/ui/layout/PageContentGrid'
+import { drawingSensorAssets } from '../../drawing-sensor/assets/drawingSensorAssets'
 import { monitorAssets } from '../assets/monitorAssets'
 import { buildMonitorChartCards } from '../lib/buildMonitorChartCards'
 import { useMonitorPressureSeries } from '../model/useMonitorPressureSeries'
@@ -15,6 +16,7 @@ import { PressureLineChart } from '../ui/PressureLineChart'
 
 export default function MonitorPage() {
   const navigate = useNavigate()
+  const { imgAttachFileAdd } = drawingSensorAssets
   const { sensors: pressureSeries, error: pressureSeriesError } = useMonitorPressureSeries(2000)
   const pressureSeriesByVariant = useMemo(
     () => ({
@@ -40,6 +42,29 @@ export default function MonitorPage() {
         ? `-- ${detailUnit}`
         : '--'
   const page = total <= 0 ? 0 : activeIndex + 1
+
+  if (total === 0) {
+    return (
+      <div className="flex min-h-[calc(100vh-64px)] items-center justify-center px-[24px]">
+        <div className="flex flex-col items-center justify-center rounded-[12px] bg-white px-[32px] py-[48px] text-center">
+          <p className="font-['Pretendard',sans-serif] text-[24px] font-semibold leading-[1.4] text-[color:var(--black_title,#0b1828)]">
+            업로드된 도면이 없습니다.
+          </p>
+          <button
+            type="button"
+            className="mt-[20px] flex h-[48px] items-center justify-center gap-[8px] rounded-[4px] bg-[var(--blue_icon,#1392ec)] px-[22px] py-[8px]"
+            onClick={() => navigate('/drawing-sensor')}
+            aria-label="도면 업로드"
+          >
+            <img alt="" className="block h-[20px] w-[20px]" src={imgAttachFileAdd} />
+            <span className="whitespace-nowrap font-['Pretendard',sans-serif] text-[16px] font-medium leading-[15px] tracking-[-0.25px] text-white">
+              도면 업로드
+            </span>
+          </button>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <>
