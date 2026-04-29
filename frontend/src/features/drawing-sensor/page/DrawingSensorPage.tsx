@@ -31,19 +31,28 @@ function mapUnitToPayload(sensor: RegisteredSensor) {
 
 export default function DrawingSensorPage() {
   const navigate = useNavigate()
-  const { drawings, activeDrawing, activeDrawingId, activeIndex, total, goPrev, goNext } = useActiveDrawing()
+  const {
+    drawings,
+    activeDrawing,
+    activeDrawingId,
+    activeIndex,
+    total,
+    goPrev,
+    goNext,
+    toggleDrawingActive,
+  } = useActiveDrawing()
   const { imgAttachFileAdd, imgChevronLeft, imgChevronRight } = drawingSensorAssets
   const viewport = useDrawingViewport(activeDrawingId)
   const drawingCanvasRef = useRef<HTMLDivElement>(null)
 
   const selectedDrawing = drawings.find((drawing) => drawing.id === activeDrawingId)
   const drawingName = selectedDrawing?.name ?? activeDrawing?.name ?? '도면'
+  const enabled = Boolean(selectedDrawing?.isActive)
   const drawingKey = activeDrawingId || '_none'
   const page = total <= 0 ? 0 : activeIndex + 1
 
   const [label, setLabel] = useState('')
   const [unit, setUnit] = useState<'pressure' | 'flow'>('pressure')
-  const [enabled, setEnabled] = useState(true)
   const [pendingPlacement, setPendingPlacement] = useState<{ leftPct: number; topPct: number } | null>(null)
   const [toastMessage, setToastMessage] = useState<string | null>(null)
   const [registrationsByDrawing, setRegistrationsByDrawing] = useState<Record<string, RegisteredSensor[]>>({})
@@ -58,6 +67,7 @@ export default function DrawingSensorPage() {
     () => registrationsByDrawing[drawingKey] ?? [],
     [registrationsByDrawing, drawingKey],
   )
+
   const displaySensors = useMemo(
     () =>
       registeredSensors.map((sensor) => ({
@@ -289,7 +299,9 @@ export default function DrawingSensorPage() {
           activeDrawing={activeDrawing}
           displaySensors={displaySensors}
           enabled={enabled}
-          onToggleEnabled={() => setEnabled((current) => !current)}
+          onToggleEnabled={() => {
+            if (activeDrawingId) toggleDrawingActive(activeDrawingId)
+          }}
           pendingPlacement={pendingPlacement}
           unit={unit}
           drawingCanvasRef={drawingCanvasRef}
