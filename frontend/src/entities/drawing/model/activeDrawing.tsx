@@ -1,6 +1,7 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { OpenAPI } from '../../../api/core/OpenAPI'
 import { DefaultService } from '../../../api/services/DefaultService'
+import { getDrawingFileKind, type DrawingFileKind } from '../lib/drawingFileKind'
 import { mockDrawingDetails } from '../../../mocks/data/drawingDetails'
 
 const ACTIVE_DRAWING_IDS_STORAGE_KEY = 'ai-gas-leak-control.activeDrawingIds'
@@ -34,6 +35,7 @@ export type DrawingDetail = {
   id: string
   name: string
   imagePath: string
+  fileKind?: DrawingFileKind
   sensors: DrawingSensor[]
 }
 
@@ -43,6 +45,7 @@ type ActiveDrawingContextValue = {
   activeDrawingId: string
   setActiveDrawingId: (id: string) => void
   toggleDrawingActive: (id: string) => void
+  refreshDrawings: (preferredActiveId?: string) => Promise<DrawingItem[]>
   removeDrawing: (id: string) => Promise<void>
   activeDrawing: DrawingDetail | null
   isLoadingDrawings: boolean
@@ -98,6 +101,7 @@ function normalizeDrawingDetailResponse(res: any, fallbackName?: string): Drawin
     id: drawingId,
     name: String(drawing.name ?? drawing.filename ?? fallbackName ?? drawingId),
     imagePath: `${OpenAPI.BASE}/api/gas-leak/drawings/${drawingId}/file`,
+    fileKind: getDrawingFileKind(drawing.file_type, drawing.name ?? drawing.filename ?? fallbackName ?? drawingId),
     sensors: sensors.map((sensor: any) => ({
       id: String(sensor.id ?? sensor.label ?? crypto.randomUUID()),
       left: Number(sensor.x ?? 0) * 100,
@@ -154,6 +158,46 @@ export function ActiveDrawingProvider({ children }: { children: React.ReactNode 
     window.localStorage.setItem(HIDDEN_DEMO_DRAWING_IDS_STORAGE_KEY, JSON.stringify(hiddenDemoDrawingIds))
   }, [hiddenDemoDrawingIds])
 
+  const applyDrawingsResponse = useCallback(
+    (res: any, preferredActiveId?: string) => {
+      const list = buildDrawingListWithDemos(res, activeDrawingIds, hiddenDemoDrawingIds)
+      const availableIdSet = new Set(list.map((drawing) => drawing.id))
+      const nextActiveDrawingIds = activeDrawingIds.filter((id) => availableIdSet.has(id))
+
+      setDrawings(list)
+      if (nextActiveDrawingIds.length !== activeDrawingIds.length) {
+        setActiveDrawingIds(nextActiveDrawingIds)
+      }
+
+      setActiveDrawingId((currentId) => {
+        const targetId = preferredActiveId ?? currentId
+        if (targetId && availableIdSet.has(targetId)) return targetId
+        return list[0]?.id ?? ''
+      })
+      setErrorDrawings(null)
+
+      return list
+    },
+    [activeDrawingIds, hiddenDemoDrawingIds],
+  )
+
+  const refreshDrawings = useCallback(
+    async (preferredActiveId?: string) => {
+      setIsLoadingDrawings(true)
+      setErrorDrawings(null)
+      try {
+        const res = await DefaultService.getGasLeakDrawingsApiGasLeakDrawingsGet()
+        return applyDrawingsResponse(res, preferredActiveId)
+      } catch (e: any) {
+        setErrorDrawings(e?.message ?? String(e))
+        throw e
+      } finally {
+        setIsLoadingDrawings(false)
+      }
+    },
+    [applyDrawingsResponse],
+  )
+
   useEffect(() => {
     let mounted = true
     setIsLoadingDrawings(true)
@@ -162,16 +206,7 @@ export function ActiveDrawingProvider({ children }: { children: React.ReactNode 
     DefaultService.getGasLeakDrawingsApiGasLeakDrawingsGet()
       .then((res) => {
         if (!mounted) return
-        const list = buildDrawingListWithDemos(res, activeDrawingIds, hiddenDemoDrawingIds)
-        const availableIdSet = new Set(list.map((drawing) => drawing.id))
-        const nextActiveDrawingIds = activeDrawingIds.filter((id) => availableIdSet.has(id))
-
-        setDrawings(list)
-        if (nextActiveDrawingIds.length !== activeDrawingIds.length) {
-          setActiveDrawingIds(nextActiveDrawingIds)
-        }
-        if (!activeDrawingId && list[0]?.id) setActiveDrawingId(list[0].id)
-        setErrorDrawings(null)
+        applyDrawingsResponse(res, activeDrawingId || undefined)
       })
       .catch((e) => {
         if (!mounted) return
@@ -214,6 +249,7 @@ export function ActiveDrawingProvider({ children }: { children: React.ReactNode 
       setActiveDrawing({
         ...mockDrawingDetail,
         name: selectedDrawing?.name ?? mockDrawingDetail.name,
+        fileKind: getDrawingFileKind(undefined, selectedDrawing?.name ?? mockDrawingDetail.name),
       })
       setErrorActiveDrawing(null)
       setIsLoadingActiveDrawing(false)
@@ -298,6 +334,7 @@ export function ActiveDrawingProvider({ children }: { children: React.ReactNode 
       activeDrawingId,
       setActiveDrawingId,
       toggleDrawingActive,
+      refreshDrawings,
       removeDrawing,
       activeDrawing,
       isLoadingDrawings,
@@ -319,6 +356,7 @@ export function ActiveDrawingProvider({ children }: { children: React.ReactNode 
     errorDrawings,
     isLoadingActiveDrawing,
     isLoadingDrawings,
+    refreshDrawings,
     removeDrawing,
     toggleDrawingActive,
     total,

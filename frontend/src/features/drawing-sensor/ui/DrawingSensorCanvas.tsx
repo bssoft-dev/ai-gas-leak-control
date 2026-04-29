@@ -1,6 +1,7 @@
 import { type MouseEvent as ReactMouseEvent, type PointerEvent as ReactPointerEvent, type RefObject } from 'react'
 
 import type { DrawingDetail } from '../../../entities/drawing/model/activeDrawing'
+import { DrawingMedia } from '../../../entities/drawing/ui/DrawingMedia'
 import { DrawingSensorDot } from '../../../entities/drawing/ui/DrawingSensorDot'
 import { DrawingViewResetIcon } from '../../../entities/drawing/ui/DrawingViewResetIcon'
 import { monitorAssets } from '../../monitor/assets/monitorAssets'
@@ -15,6 +16,8 @@ type DrawingSensorCanvasProps = {
   displaySensors: DisplaySensor[]
   enabled: boolean
   onToggleEnabled: () => void
+  onOpenUploadDialog: () => void
+  isUploadingDrawings: boolean
   pendingPlacement: { leftPct: number; topPct: number } | null
   unit: 'pressure' | 'flow'
   drawingCanvasRef: RefObject<HTMLDivElement>
@@ -43,6 +46,8 @@ export function DrawingSensorCanvas({
   displaySensors,
   enabled,
   onToggleEnabled,
+  onOpenUploadDialog,
+  isUploadingDrawings,
   pendingPlacement,
   unit,
   drawingCanvasRef,
@@ -75,12 +80,14 @@ export function DrawingSensorCanvas({
 
         <button
           type="button"
-          className="flex h-[40px] shrink-0 items-center justify-center gap-[8px] rounded-[4px] bg-[var(--blue_icon,#1392ec)] px-[22px] py-[8px]"
+          className="flex h-[40px] shrink-0 items-center justify-center gap-[8px] rounded-[4px] bg-[var(--blue_icon,#1392ec)] px-[22px] py-[8px] disabled:cursor-not-allowed disabled:opacity-60"
           aria-label="도면 추가"
+          disabled={isUploadingDrawings}
+          onClick={onOpenUploadDialog}
         >
           <img alt="" className="block h-[20px] w-[20px]" src={imgAttachFileAdd} />
           <span className="whitespace-nowrap font-['Pretendard',sans-serif] text-[16px] font-medium leading-[15px] tracking-[-0.25px] text-white">
-            도면 추가
+            {isUploadingDrawings ? '업로드 중...' : '도면 추가'}
           </span>
         </button>
       </div>
@@ -140,11 +147,10 @@ export function DrawingSensorCanvas({
                       role="presentation"
                     >
                       <div className="pointer-events-none relative h-full w-full">
-                        <img
+                        <DrawingMedia
                           alt={drawingName}
-                          className="absolute inset-0 h-full w-full object-contain"
                           src={activeDrawing?.imagePath}
-                          draggable={false}
+                          fileKind={activeDrawing?.fileKind}
                         />
                         {displaySensors.map((sensor) => (
                           <DrawingSensorDot

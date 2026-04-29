@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState, type ChangeEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { DefaultService } from '../../../api/services/DefaultService'
 import { useActiveDrawing } from '../../../entities/drawing/model/activeDrawing'
 import { useDrawingViewport } from '../../../entities/drawing/model/useDrawingViewport'
+import { formatDrawingName } from '../../../shared/lib/formatDrawingName'
 import { PageContentGrid } from '../../../shared/ui/layout/PageContentGrid'
 import { drawingSensorAssets } from '../assets/drawingSensorAssets'
 import {
@@ -29,6 +30,23 @@ function mapUnitToPayload(sensor: RegisteredSensor) {
   }
 }
 
+function isSupportedDrawingFile(file: File) {
+  return file.type.startsWith('image/') || file.type === 'application/pdf' || /\.pdf$/i.test(file.name)
+}
+
+function readFileAsBase64(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = () => {
+      const result = String(reader.result ?? '')
+      const [, base64 = ''] = result.split(',')
+      resolve(base64)
+    }
+    reader.onerror = () => reject(reader.error ?? new Error('파일을 읽을 수 없습니다.'))
+    reader.readAsDataURL(file)
+  })
+}
+
 export default function DrawingSensorPage() {
   const navigate = useNavigate()
   const {
@@ -39,14 +57,17 @@ export default function DrawingSensorPage() {
     total,
     goPrev,
     goNext,
+    setActiveDrawingId,
     toggleDrawingActive,
+    refreshDrawings,
   } = useActiveDrawing()
   const { imgAttachFileAdd, imgChevronLeft, imgChevronRight } = drawingSensorAssets
   const viewport = useDrawingViewport(activeDrawingId)
   const drawingCanvasRef = useRef<HTMLDivElement>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const selectedDrawing = drawings.find((drawing) => drawing.id === activeDrawingId)
-  const drawingName = selectedDrawing?.name ?? activeDrawing?.name ?? '도면'
+  const drawingName = formatDrawingName(selectedDrawing?.name ?? activeDrawing?.name) || '도면'
   const enabled = Boolean(selectedDrawing?.isActive)
   const drawingKey = activeDrawingId || '_none'
   const page = total <= 0 ? 0 : activeIndex + 1
@@ -62,6 +83,7 @@ export default function DrawingSensorPage() {
   const [editLabel, setEditLabel] = useState('')
   const [editUnit, setEditUnit] = useState<'pressure' | 'flow'>('pressure')
   const [isSavingSensors, setIsSavingSensors] = useState(false)
+  const [isUploadingDrawings, setIsUploadingDrawings] = useState(false)
 
   const registeredSensors = useMemo(
     () => registrationsByDrawing[drawingKey] ?? [],
@@ -89,13 +111,10 @@ export default function DrawingSensorPage() {
 
   useEffect(() => {
     if (!activeDrawingId || !activeDrawing) return
-    setRegistrationsByDrawing((prev) => {
-      if (prev[activeDrawingId]) return prev
-      return {
-        ...prev,
-        [activeDrawingId]: mapDrawingSensorsToRegisteredSensors(activeDrawing.sensors ?? []),
-      }
-    })
+    setRegistrationsByDrawing((prev) => ({
+      ...prev,
+      [activeDrawingId]: mapDrawingSensorsToRegisteredSensors(activeDrawing.sensors ?? []),
+    }))
   }, [activeDrawing, activeDrawingId])
 
   useEffect(() => {
@@ -146,6 +165,68 @@ export default function DrawingSensorPage() {
       return false
     } finally {
       setIsSavingSensors(false)
+    }
+  }
+
+  const openUploadDialog = () => {
+    if (isUploadingDrawings) return
+    fileInputRef.current?.click()
+  }
+
+  const handleDrawingFilesSelected = async (event: ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(event.target.files ?? [])
+    event.target.value = ''
+
+    if (files.length === 0) return
+
+    const unsupportedFiles = files.filter((file) => !isSupportedDrawingFile(file))
+    if (unsupportedFiles.length > 0) {
+      setAlertMessage('이미지 파일과 PDF 파일만 업로드할 수 있습니다.')
+      return
+    }
+
+    setIsUploadingDrawings(true)
+
+    const uploadedNames: string[] = []
+    const failedFiles: string[] = []
+
+    try {
+      for (const file of files) {
+        try {
+          const fileBase64 = await readFileAsBase64(file)
+          await DefaultService.publishEventApiEventsPublishPost({
+            type: 'GAS_LEAK_DRAWING_UPLOAD',
+            payload: {
+              name: file.name,
+              filename: file.name,
+              file_base64: fileBase64,
+            },
+          })
+          uploadedNames.push(file.name)
+        } catch {
+          failedFiles.push(file.name)
+        }
+      }
+
+      const refreshedDrawings = await refreshDrawings()
+      const uploadedDrawing = refreshedDrawings.find((drawing) => uploadedNames.includes(drawing.name))
+      if (uploadedDrawing) {
+        setActiveDrawingId(uploadedDrawing.id)
+      }
+
+      if (uploadedNames.length > 0) {
+        setToastMessage(
+          uploadedNames.length === 1
+            ? `${uploadedNames[0]} 업로드가 완료되었습니다.`
+            : `${uploadedNames.length}개의 도면 업로드가 완료되었습니다.`,
+        )
+      }
+
+      if (failedFiles.length > 0) {
+        setAlertMessage(`일부 파일 업로드에 실패했습니다: ${failedFiles.join(', ')}`)
+      }
+    } finally {
+      setIsUploadingDrawings(false)
     }
   }
 
@@ -272,27 +353,48 @@ export default function DrawingSensorPage() {
   if (total === 0) {
     return (
       <div className="flex min-h-[calc(100vh-64px)] items-center justify-center px-[24px]">
+        <input
+          ref={fileInputRef}
+          type="file"
+          multiple
+          accept="image/*,.png,.jpg,.jpeg,.pdf,application/pdf"
+          className="hidden"
+          onChange={handleDrawingFilesSelected}
+        />
         <div className="flex flex-col items-center justify-center rounded-[12px] bg-white px-[32px] py-[48px] text-center">
           <p className="font-['Pretendard',sans-serif] text-[24px] font-semibold leading-[1.4] text-[color:var(--black_title,#0b1828)]">
             업로드된 도면이 없습니다.
           </p>
           <button
             type="button"
-            className="mt-[20px] flex h-[48px] items-center justify-center gap-[8px] rounded-[4px] bg-[var(--blue_icon,#1392ec)] px-[22px] py-[8px]"
+            className="mt-[20px] flex h-[48px] items-center justify-center gap-[8px] rounded-[4px] bg-[var(--blue_icon,#1392ec)] px-[22px] py-[8px] disabled:cursor-not-allowed disabled:opacity-60"
+            onClick={openUploadDialog}
+            disabled={isUploadingDrawings}
             aria-label="도면 업로드"
           >
             <img alt="" className="block h-[20px] w-[20px]" src={imgAttachFileAdd} />
             <span className="whitespace-nowrap font-['Pretendard',sans-serif] text-[16px] font-medium leading-[15px] tracking-[-0.25px] text-white">
-              도면 업로드
+              {isUploadingDrawings ? '업로드 중...' : '도면 업로드'}
             </span>
           </button>
         </div>
+        <SensorAlertDialog message={alertMessage} onClose={() => setAlertMessage(null)} />
+        <SensorToast message={toastMessage} />
       </div>
     )
   }
 
   return (
     <>
+      <input
+        ref={fileInputRef}
+        type="file"
+        multiple
+        accept="image/*,.png,.jpg,.jpeg,.pdf,application/pdf"
+        className="hidden"
+        onChange={handleDrawingFilesSelected}
+      />
+
       <PageContentGrid>
         <DrawingSensorCanvas
           drawingName={drawingName}
@@ -302,6 +404,8 @@ export default function DrawingSensorPage() {
           onToggleEnabled={() => {
             if (activeDrawingId) toggleDrawingActive(activeDrawingId)
           }}
+          onOpenUploadDialog={openUploadDialog}
+          isUploadingDrawings={isUploadingDrawings}
           pendingPlacement={pendingPlacement}
           unit={unit}
           drawingCanvasRef={drawingCanvasRef}

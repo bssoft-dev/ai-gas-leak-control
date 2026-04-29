@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 
 import { useActiveDrawing } from '../../../entities/drawing/model/activeDrawing'
+import { formatDrawingName } from '../../../shared/lib/formatDrawingName'
 import { drawingSensorAssets } from '../../drawing-sensor/assets/drawingSensorAssets'
 import { appShellAssets } from '../assets/appShellAssets'
 import { normalizeSearchText } from '../model/sidebar'
@@ -99,7 +100,7 @@ function DrawingList({ filter, showGreenDot, allowIds }: DrawingListProps) {
   const [deleteErrorMessage, setDeleteErrorMessage] = useState<string | null>(null)
 
   const pendingDeleteName = useMemo(
-    () => drawings.find((drawing) => drawing.id === pendingDeleteDrawingId)?.name ?? '',
+    () => formatDrawingName(drawings.find((drawing) => drawing.id === pendingDeleteDrawingId)?.name),
     [drawings, pendingDeleteDrawingId],
   )
 
@@ -131,7 +132,7 @@ function DrawingList({ filter, showGreenDot, allowIds }: DrawingListProps) {
                   }`}
                   onClick={() => setActiveDrawingId(drawing.id)}
                 >
-                  {drawing.name}
+                  {formatDrawingName(drawing.name) || drawing.name}
                 </button>
 
                 <div className="flex shrink-0 items-center gap-[12px]">
@@ -140,7 +141,11 @@ function DrawingList({ filter, showGreenDot, allowIds }: DrawingListProps) {
                     className={`relative flex h-[20px] w-[20px] shrink-0 items-center justify-center rounded-[9999px] ${
                       isEnabled ? 'bg-[rgba(34,197,94,0.16)]' : 'bg-transparent'
                     }`}
-                    aria-label={isEnabled ? `${drawing.name} 활성 해제` : `${drawing.name} 활성 설정`}
+                    aria-label={
+                      isEnabled
+                        ? `${formatDrawingName(drawing.name) || drawing.name} 활성 해제`
+                        : `${formatDrawingName(drawing.name) || drawing.name} 활성 설정`
+                    }
                     onClick={(e) => {
                       e.preventDefault()
                       e.stopPropagation()
@@ -157,7 +162,7 @@ function DrawingList({ filter, showGreenDot, allowIds }: DrawingListProps) {
                   <button
                     type="button"
                     className="group flex h-[28px] w-[28px] shrink-0 items-center justify-center rounded-[4px] hover:bg-[#fef2f2]"
-                    aria-label={`${drawing.name} 삭제`}
+                    aria-label={`${formatDrawingName(drawing.name) || drawing.name} 삭제`}
                     onClick={(e) => {
                       e.preventDefault()
                       e.stopPropagation()

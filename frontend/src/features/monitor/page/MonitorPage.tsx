@@ -4,8 +4,10 @@ import { useNavigate } from 'react-router-dom'
 import { getSensorPercentInSlot } from '../../../entities/drawing/lib/drawingSensorPosition'
 import { useActiveDrawing } from '../../../entities/drawing/model/activeDrawing'
 import { useDrawingViewport } from '../../../entities/drawing/model/useDrawingViewport'
+import { DrawingMedia } from '../../../entities/drawing/ui/DrawingMedia'
 import { DrawingSensorDot } from '../../../entities/drawing/ui/DrawingSensorDot'
 import { DrawingViewResetIcon } from '../../../entities/drawing/ui/DrawingViewResetIcon'
+import { formatDrawingName } from '../../../shared/lib/formatDrawingName'
 import { PageContentGrid } from '../../../shared/ui/layout/PageContentGrid'
 import { drawingSensorAssets } from '../../drawing-sensor/assets/drawingSensorAssets'
 import { monitorAssets } from '../assets/monitorAssets'
@@ -30,7 +32,7 @@ export default function MonitorPage() {
   const viewport = useDrawingViewport(activeDrawingId)
 
   const selectedDrawing = drawings.find((drawing) => drawing.id === activeDrawingId)
-  const drawingName = selectedDrawing?.name ?? activeDrawing?.name ?? '도면'
+  const drawingName = formatDrawingName(selectedDrawing?.name ?? activeDrawing?.name) || '도면'
   const cards = useMemo(() => buildMonitorChartCards(activeDrawing?.sensors ?? []), [activeDrawing?.sensors])
   const detailCard = chartDetailId ? cards.find((card) => card.id === chartDetailId) : null
   const detailSeries = detailCard ? pressureSeriesByVariant[detailCard.variant] : undefined
@@ -101,10 +103,10 @@ export default function MonitorPage() {
                   >
                     <div className="pointer-events-none absolute left-0 top-[19.35%] h-[61.3%] w-full overflow-hidden">
                       <div className="relative h-full w-full">
-                        <img
+                        <DrawingMedia
                           alt={drawingName}
-                          className="absolute inset-0 h-full w-full object-contain"
                           src={activeDrawing?.imagePath}
+                          fileKind={activeDrawing?.fileKind}
                         />
                         {(activeDrawing?.sensors ?? []).map((sensor) => {
                           const { leftPct, topPct } = getSensorPercentInSlot(sensor)
