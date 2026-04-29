@@ -14,11 +14,15 @@ type DrawingListProps = {
 function DrawingDeleteDialog({
   drawingName,
   open,
+  isDeleting,
+  errorMessage,
   onClose,
   onConfirm,
 }: {
   drawingName: string
   open: boolean
+  isDeleting: boolean
+  errorMessage: string | null
   onClose: () => void
   onConfirm: () => void
 }) {
@@ -30,7 +34,9 @@ function DrawingDeleteDialog({
       role="alertdialog"
       aria-modal="true"
       aria-labelledby="drawing-delete-title"
-      onClick={onClose}
+      onClick={() => {
+        if (!isDeleting) onClose()
+      }}
     >
       <div
         className="w-full max-w-[500px] rounded-[12px] bg-white p-[40px] shadow-[0px_12px_40px_rgba(0,0,0,0.18)]"
@@ -55,22 +61,29 @@ function DrawingDeleteDialog({
           </p>
         ) : null}
         <p className="mt-[12px] text-center font-['Pretendard',sans-serif] text-[14px] leading-[1.5] text-[color:var(--black_500,#485b77)]">
-          삭제 후에는 도면과 연결된 센서 정보를 되돌릴 수 없습니다.
+          삭제 후에는 도면과 연결된 센서 정보를 복구할 수 없습니다.
         </p>
+        {errorMessage ? (
+          <p className="mt-[12px] text-center font-['Pretendard',sans-serif] text-[13px] leading-[1.5] text-[#dc2626]">
+            {errorMessage}
+          </p>
+        ) : null}
         <div className="mt-[28px] flex gap-[12px]">
           <button
             type="button"
-            className="h-[52px] flex-1 rounded-[8px] border border-[#e2e8f0] bg-white font-['Pretendard',sans-serif] text-[16px] font-medium text-[color:var(--black_700,#2c3c53)]"
+            className="h-[52px] flex-1 rounded-[8px] border border-[#e2e8f0] bg-white font-['Pretendard',sans-serif] text-[16px] font-medium text-[color:var(--black_700,#2c3c53)] disabled:cursor-not-allowed disabled:opacity-60"
+            disabled={isDeleting}
             onClick={onClose}
           >
             취소
           </button>
           <button
             type="button"
-            className="h-[52px] flex-1 rounded-[8px] bg-[#ef4444] font-['Pretendard',sans-serif] text-[16px] font-medium text-white shadow-[0px_1px_2px_rgba(0,0,0,0.05)]"
+            className="h-[52px] flex-1 rounded-[8px] bg-[#ef4444] font-['Pretendard',sans-serif] text-[16px] font-medium text-white shadow-[0px_1px_2px_rgba(0,0,0,0.05)] disabled:cursor-not-allowed disabled:opacity-60"
+            disabled={isDeleting}
             onClick={onConfirm}
           >
-            삭제
+            {isDeleting ? '삭제 중...' : '삭제'}
           </button>
         </div>
       </div>
@@ -79,9 +92,11 @@ function DrawingDeleteDialog({
 }
 
 function DrawingList({ filter, showGreenDot, allowIds }: DrawingListProps) {
-  const { drawings, activeDrawingId, setActiveDrawingId, removeDrawing } = useActiveDrawing()
+  const { drawings, activeDrawingId, setActiveDrawingId, toggleDrawingActive, removeDrawing } = useActiveDrawing()
   const { imgDelete } = drawingSensorAssets
   const [pendingDeleteDrawingId, setPendingDeleteDrawingId] = useState<string | null>(null)
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [deleteErrorMessage, setDeleteErrorMessage] = useState<string | null>(null)
 
   const pendingDeleteName = useMemo(
     () => drawings.find((drawing) => drawing.id === pendingDeleteDrawingId)?.name ?? '',
@@ -94,14 +109,15 @@ function DrawingList({ filter, showGreenDot, allowIds }: DrawingListProps) {
         {drawings
           .filter((drawing) => filter(drawing.id) && (allowIds ? allowIds.has(drawing.id) : true))
           .map((drawing) => {
-            const isActive = drawing.id === activeDrawingId
+            const isSelected = drawing.id === activeDrawingId
+            const isEnabled = Boolean(drawing.isActive)
             const shouldShowGreenDot = showGreenDot?.(drawing.id) ?? false
 
             return (
               <div
                 key={drawing.id}
                 className={
-                  isActive
+                  isSelected
                     ? 'flex w-full items-center justify-between gap-[8px] rounded-[4px] border border-[var(--blue_primary_500,#61a0e1)] bg-[var(--blue_primary_50,#e6f3fb)] px-[13px] py-[9px]'
                     : 'flex w-full items-center justify-between gap-[8px] rounded-[8px] px-[12px] py-[8px] hover:bg-[#f1f5f9]'
                 }
@@ -109,7 +125,7 @@ function DrawingList({ filter, showGreenDot, allowIds }: DrawingListProps) {
                 <button
                   type="button"
                   className={`min-w-0 flex-1 truncate text-left font-['Pretendard',sans-serif] text-[16px] leading-[20px] ${
-                    isActive
+                    isSelected
                       ? 'font-semibold text-[color:var(--blue_primary_800,#4370ac)]'
                       : 'font-medium text-[color:var(--black_title,#0b1828)]'
                   }`}
@@ -119,11 +135,25 @@ function DrawingList({ filter, showGreenDot, allowIds }: DrawingListProps) {
                 </button>
 
                 <div className="flex shrink-0 items-center gap-[12px]">
-                  {shouldShowGreenDot && (
-                    <span className="relative h-[8px] w-[8px] shrink-0 rounded-[9999px] bg-[var(--green,#22c55e)]">
-                      <span className="absolute left-0 top-1/2 h-[8px] w-[8px] -translate-y-1/2 rounded-[9999px] shadow-[0px_0px_0px_4px_rgba(34,197,94,0.2)]" />
-                    </span>
-                  )}
+                  <button
+                    type="button"
+                    className={`relative flex h-[20px] w-[20px] shrink-0 items-center justify-center rounded-[9999px] ${
+                      isEnabled ? 'bg-[rgba(34,197,94,0.16)]' : 'bg-transparent'
+                    }`}
+                    aria-label={isEnabled ? `${drawing.name} 활성 해제` : `${drawing.name} 활성 설정`}
+                    onClick={(e) => {
+                      e.preventDefault()
+                      e.stopPropagation()
+                      toggleDrawingActive(drawing.id)
+                    }}
+                  >
+                    {shouldShowGreenDot ? (
+                      <span className="relative h-[8px] w-[8px] shrink-0 rounded-[9999px] bg-[var(--green,#22c55e)]">
+                        <span className="absolute left-0 top-1/2 h-[8px] w-[8px] -translate-y-1/2 rounded-[9999px] shadow-[0px_0px_0px_4px_rgba(34,197,94,0.2)]" />
+                      </span>
+                    ) : null}
+                  </button>
+
                   <button
                     type="button"
                     className="group flex h-[28px] w-[28px] shrink-0 items-center justify-center rounded-[4px] hover:bg-[#fef2f2]"
@@ -131,6 +161,7 @@ function DrawingList({ filter, showGreenDot, allowIds }: DrawingListProps) {
                     onClick={(e) => {
                       e.preventDefault()
                       e.stopPropagation()
+                      setDeleteErrorMessage(null)
                       setPendingDeleteDrawingId(drawing.id)
                     }}
                   >
@@ -149,11 +180,25 @@ function DrawingList({ filter, showGreenDot, allowIds }: DrawingListProps) {
       <DrawingDeleteDialog
         drawingName={pendingDeleteName}
         open={pendingDeleteDrawingId != null}
-        onClose={() => setPendingDeleteDrawingId(null)}
-        onConfirm={() => {
-          if (!pendingDeleteDrawingId) return
-          removeDrawing(pendingDeleteDrawingId)
+        isDeleting={isDeleting}
+        errorMessage={deleteErrorMessage}
+        onClose={() => {
+          if (isDeleting) return
           setPendingDeleteDrawingId(null)
+          setDeleteErrorMessage(null)
+        }}
+        onConfirm={async () => {
+          if (!pendingDeleteDrawingId) return
+          setIsDeleting(true)
+          setDeleteErrorMessage(null)
+          try {
+            await removeDrawing(pendingDeleteDrawingId)
+            setPendingDeleteDrawingId(null)
+          } catch (error: any) {
+            setDeleteErrorMessage(error?.message ?? '도면 삭제에 실패했습니다.')
+          } finally {
+            setIsDeleting(false)
+          }
         }}
       />
     </>
@@ -220,6 +265,9 @@ export function DrawingManagementSection({ isExpanded, onToggle }: DrawingManage
             </div>
 
             <div className="px-[8px]">
+              <div className="mb-[8px] px-[2px] font-['Pretendard',sans-serif] text-[12px] font-semibold leading-[16px] text-[color:var(--green,#22c55e)]">
+                활성 도면
+              </div>
               <DrawingList
                 filter={(id) => activeIdSet.has(id)}
                 showGreenDot={() => true}
@@ -230,6 +278,9 @@ export function DrawingManagementSection({ isExpanded, onToggle }: DrawingManage
             <div className="my-[8px] border-t border-[#c0ccde]" />
 
             <div className="px-[8px] pb-[8px]">
+              <div className="mb-[8px] px-[2px] font-['Pretendard',sans-serif] text-[12px] font-semibold leading-[16px] text-[color:var(--black_300,#7a89a1)]">
+                비활성 도면
+              </div>
               <DrawingList filter={(id) => !activeIdSet.has(id)} allowIds={searchedIdSet ?? undefined} />
             </div>
           </div>

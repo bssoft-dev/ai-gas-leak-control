@@ -22,7 +22,7 @@ const PLACEMENT_TOAST = '도면을 먼저 클릭해서 센서 설치 위치를 �
 export default function DrawingSensorPage() {
   const navigate = useNavigate()
   const { drawings, activeDrawing, activeDrawingId, activeIndex, total, goPrev, goNext } = useActiveDrawing()
-  const { imgChevronLeft, imgChevronRight } = drawingSensorAssets
+  const { imgAttachFileAdd, imgChevronLeft, imgChevronRight } = drawingSensorAssets
   const viewport = useDrawingViewport(activeDrawingId)
   const drawingCanvasRef = useRef<HTMLDivElement>(null)
 

@@ -1,6 +1,16 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { OpenAPI } from '../../../api/core/OpenAPI'
 import { DefaultService } from '../../../api/services/DefaultService'
+import { mockDrawingDetails } from '../../../mocks/data/drawingDetails'
+
+const ACTIVE_DRAWING_IDS_STORAGE_KEY = 'ai-gas-leak-control.activeDrawingIds'
+const HIDDEN_DEMO_DRAWING_IDS_STORAGE_KEY = 'ai-gas-leak-control.hiddenDemoDrawingIds'
+const DEMO_DRAWINGS: DrawingItem[] = Object.values(mockDrawingDetails).map((drawing) => ({
+  id: drawing.id,
+  name: drawing.name,
+  status: 'ok',
+}))
+const DEMO_DRAWING_ID_SET = new Set(DEMO_DRAWINGS.map((drawing) => drawing.id))
 
 export type DrawingItem = {
   id: string
@@ -29,9 +39,11 @@ export type DrawingDetail = {
 
 type ActiveDrawingContextValue = {
   drawings: DrawingItem[]
+  activeDrawingIds: string[]
   activeDrawingId: string
   setActiveDrawingId: (id: string) => void
-  removeDrawing: (id: string) => void
+  toggleDrawingActive: (id: string) => void
+  removeDrawing: (id: string) => Promise<void>
   activeDrawing: DrawingDetail | null
   isLoadingDrawings: boolean
   isLoadingActiveDrawing: boolean
@@ -44,6 +56,28 @@ type ActiveDrawingContextValue = {
 }
 
 const ActiveDrawingContext = createContext<ActiveDrawingContextValue | null>(null)
+
+function readStoredActiveDrawingIds(): string[] {
+  return readStoredStringArray(ACTIVE_DRAWING_IDS_STORAGE_KEY)
+}
+
+function readStoredHiddenDemoDrawingIds(): string[] {
+  return readStoredStringArray(HIDDEN_DEMO_DRAWING_IDS_STORAGE_KEY)
+}
+
+function readStoredStringArray(storageKey: string): string[] {
+  if (typeof window === 'undefined') return []
+
+  try {
+    const raw = window.localStorage.getItem(storageKey)
+    if (!raw) return []
+
+    const parsed = JSON.parse(raw)
+    return Array.isArray(parsed) ? parsed.map(String) : []
+  } catch {
+    return []
+  }
+}
 
 function normalizeSensorVariant(sensor: any): DrawingSensor['variant'] {
   return String(sensor?.sensor_type ?? '').toLowerCase() === 'flow' ? 'yellow' : 'green'
@@ -76,8 +110,32 @@ function normalizeDrawingDetailResponse(res: any, fallbackName?: string): Drawin
   }
 }
 
+function buildDrawingListWithDemos(res: any, activeDrawingIds: string[], hiddenDemoDrawingIds: string[]): DrawingItem[] {
+  const apiList = Array.isArray(res)
+    ? res.map((d: any) => ({
+        id: String(d.id),
+        name: String(d.name ?? d.filename ?? d.id),
+        status: 'ok' as const,
+      }))
+    : []
+
+  const knownIds = new Set(apiList.map((drawing) => drawing.id))
+  const hiddenIdSet = new Set(hiddenDemoDrawingIds)
+  const merged = [
+    ...apiList,
+    ...DEMO_DRAWINGS.filter((drawing) => !knownIds.has(drawing.id) && !hiddenIdSet.has(drawing.id)),
+  ]
+
+  return merged.map((drawing) => ({
+    ...drawing,
+    isActive: activeDrawingIds.includes(drawing.id),
+  }))
+}
+
 export function ActiveDrawingProvider({ children }: { children: React.ReactNode }) {
   const [drawings, setDrawings] = useState<DrawingItem[]>([])
+  const [activeDrawingIds, setActiveDrawingIds] = useState<string[]>(() => readStoredActiveDrawingIds())
+  const [hiddenDemoDrawingIds, setHiddenDemoDrawingIds] = useState<string[]>(() => readStoredHiddenDemoDrawingIds())
   const [activeDrawingId, setActiveDrawingId] = useState<string>('')
   const [activeDrawing, setActiveDrawing] = useState<DrawingDetail | null>(null)
 
@@ -87,6 +145,16 @@ export function ActiveDrawingProvider({ children }: { children: React.ReactNode 
   const [errorActiveDrawing, setErrorActiveDrawing] = useState<string | null>(null)
 
   useEffect(() => {
+    if (typeof window === 'undefined') return
+    window.localStorage.setItem(ACTIVE_DRAWING_IDS_STORAGE_KEY, JSON.stringify(activeDrawingIds))
+  }, [activeDrawingIds])
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    window.localStorage.setItem(HIDDEN_DEMO_DRAWING_IDS_STORAGE_KEY, JSON.stringify(hiddenDemoDrawingIds))
+  }, [hiddenDemoDrawingIds])
+
+  useEffect(() => {
     let mounted = true
     setIsLoadingDrawings(true)
     setErrorDrawings(null)
@@ -94,16 +162,14 @@ export function ActiveDrawingProvider({ children }: { children: React.ReactNode 
     DefaultService.getGasLeakDrawingsApiGasLeakDrawingsGet()
       .then((res) => {
         if (!mounted) return
-        const list = Array.isArray(res)
-          ? res.map((d: any) => ({
-              id: String(d.id),
-              name: String(d.name ?? d.filename ?? d.id),
-              status: 'ok' as const,
-              isActive: false,
-            }))
-          : []
+        const list = buildDrawingListWithDemos(res, activeDrawingIds, hiddenDemoDrawingIds)
+        const availableIdSet = new Set(list.map((drawing) => drawing.id))
+        const nextActiveDrawingIds = activeDrawingIds.filter((id) => availableIdSet.has(id))
 
         setDrawings(list)
+        if (nextActiveDrawingIds.length !== activeDrawingIds.length) {
+          setActiveDrawingIds(nextActiveDrawingIds)
+        }
         if (!activeDrawingId && list[0]?.id) setActiveDrawingId(list[0].id)
         setErrorDrawings(null)
       })
@@ -123,6 +189,15 @@ export function ActiveDrawingProvider({ children }: { children: React.ReactNode 
   }, [])
 
   useEffect(() => {
+    setDrawings((prev) =>
+      prev.map((drawing) => ({
+        ...drawing,
+        isActive: activeDrawingIds.includes(drawing.id),
+      })),
+    )
+  }, [activeDrawingIds])
+
+  useEffect(() => {
     if (!activeDrawingId) {
       setActiveDrawing(null)
       setErrorActiveDrawing(null)
@@ -133,6 +208,19 @@ export function ActiveDrawingProvider({ children }: { children: React.ReactNode 
     setIsLoadingActiveDrawing(true)
     setErrorActiveDrawing(null)
     const selectedDrawing = drawings.find((d) => d.id === activeDrawingId)
+    const mockDrawingDetail = mockDrawingDetails[activeDrawingId]
+
+    if (mockDrawingDetail) {
+      setActiveDrawing({
+        ...mockDrawingDetail,
+        name: selectedDrawing?.name ?? mockDrawingDetail.name,
+      })
+      setErrorActiveDrawing(null)
+      setIsLoadingActiveDrawing(false)
+      return () => {
+        mounted = false
+      }
+    }
 
     DefaultService.getGasLeakDrawingApiGasLeakDrawingsDrawingIdGet(activeDrawingId)
       .then((res) => {
@@ -158,12 +246,37 @@ export function ActiveDrawingProvider({ children }: { children: React.ReactNode 
   const activeIndex = useMemo(() => Math.max(0, drawings.findIndex((d) => d.id === activeDrawingId)), [activeDrawingId, drawings])
   const total = drawings.length
 
-  const removeDrawing = useCallback((id: string) => {
+  const removeDrawingLocally = useCallback((id: string) => {
     setDrawings((prev) => {
       const next = prev.filter((d) => d.id !== id)
       setActiveDrawingId((cur) => (cur === id ? next[0]?.id ?? '' : cur))
       return next
     })
+    setActiveDrawingIds((prev) => prev.filter((drawingId) => drawingId !== id))
+  }, [])
+
+  const removeDrawing = useCallback(
+    async (id: string) => {
+      if (DEMO_DRAWING_ID_SET.has(id)) {
+        setHiddenDemoDrawingIds((prev) => (prev.includes(id) ? prev : [...prev, id]))
+        removeDrawingLocally(id)
+        return
+      }
+
+      await DefaultService.publishEventApiEventsPublishPost({
+        type: 'GAS_LEAK_DRAWING_DELETE',
+        payload: {
+          drawing_id: id,
+        },
+      })
+
+      removeDrawingLocally(id)
+    },
+    [removeDrawingLocally],
+  )
+
+  const toggleDrawingActive = useCallback((id: string) => {
+    setActiveDrawingIds((prev) => (prev.includes(id) ? prev.filter((drawingId) => drawingId !== id) : [...prev, id]))
   }, [])
 
   const value = useMemo<ActiveDrawingContextValue>(() => {
@@ -181,8 +294,10 @@ export function ActiveDrawingProvider({ children }: { children: React.ReactNode 
 
     return {
       drawings,
+      activeDrawingIds,
       activeDrawingId,
       setActiveDrawingId,
+      toggleDrawingActive,
       removeDrawing,
       activeDrawing,
       isLoadingDrawings,
@@ -196,6 +311,7 @@ export function ActiveDrawingProvider({ children }: { children: React.ReactNode 
     }
   }, [
     activeDrawing,
+    activeDrawingIds,
     activeDrawingId,
     activeIndex,
     drawings,
@@ -204,6 +320,7 @@ export function ActiveDrawingProvider({ children }: { children: React.ReactNode 
     isLoadingActiveDrawing,
     isLoadingDrawings,
     removeDrawing,
+    toggleDrawingActive,
     total,
   ])
 
