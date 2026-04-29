@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { DefaultService } from '../../../api/services/DefaultService'
 import { useActiveDrawing } from '../../../entities/drawing/model/activeDrawing'
 import { useDrawingViewport } from '../../../entities/drawing/model/useDrawingViewport'
+import { useEventStream } from '../../../shared/events/EventStreamProvider'
 import { formatDrawingName } from '../../../shared/lib/formatDrawingName'
 import { PageContentGrid } from '../../../shared/ui/layout/PageContentGrid'
 import { drawingSensorAssets } from '../assets/drawingSensorAssets'
@@ -49,6 +50,7 @@ function readFileAsBase64(file: File): Promise<string> {
 
 export default function DrawingSensorPage() {
   const navigate = useNavigate()
+  const { waitForEvent } = useEventStream()
   const {
     drawings,
     activeDrawing,
@@ -153,6 +155,15 @@ export default function DrawingSensorPage() {
           }),
         },
       })
+      const saveResult = await waitForEvent(
+        'GAS_LEAK_SENSORS_SAVED',
+        (payload) => !payload?.drawing_id || payload?.drawing_id === activeDrawingId,
+        8000,
+      ).catch(() => null)
+
+      if (saveResult?.payload?.success === false) {
+        throw new Error(saveResult.payload.error ?? '센서 저장에 실패했습니다.')
+      }
 
       setRegistrationsByDrawing((prev) => ({
         ...prev,
@@ -189,6 +200,7 @@ export default function DrawingSensorPage() {
 
     const uploadedNames: string[] = []
     const failedFiles: string[] = []
+    const uploadedDrawingIds: string[] = []
 
     try {
       for (const file of files) {
@@ -202,14 +214,34 @@ export default function DrawingSensorPage() {
               file_base64: fileBase64,
             },
           })
+          const uploadResult = await waitForEvent(
+            'GAS_LEAK_DRAWING_UPLOADED',
+            (payload) => {
+              const drawing = payload?.drawing
+              const candidateName = drawing?.filename ?? drawing?.name ?? payload?.filename ?? payload?.name
+              return payload?.success === false || candidateName === file.name
+            },
+            10000,
+          ).catch(() => null)
+
+          if (uploadResult?.payload?.success === false) {
+            failedFiles.push(file.name)
+            continue
+          }
+
           uploadedNames.push(file.name)
+          if (uploadResult?.payload?.drawing?.id) {
+            uploadedDrawingIds.push(String(uploadResult.payload.drawing.id))
+          }
         } catch {
           failedFiles.push(file.name)
         }
       }
 
       const refreshedDrawings = await refreshDrawings()
-      const uploadedDrawing = refreshedDrawings.find((drawing) => uploadedNames.includes(drawing.name))
+      const uploadedDrawing =
+        refreshedDrawings.find((drawing) => uploadedDrawingIds.includes(drawing.id)) ??
+        refreshedDrawings.find((drawing) => uploadedNames.includes(drawing.name))
       if (uploadedDrawing) {
         setActiveDrawingId(uploadedDrawing.id)
       }

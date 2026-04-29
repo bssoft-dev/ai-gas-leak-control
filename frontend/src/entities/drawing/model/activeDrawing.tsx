@@ -1,6 +1,7 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { OpenAPI } from '../../../api/core/OpenAPI'
 import { DefaultService } from '../../../api/services/DefaultService'
+import { useEventStream } from '../../../shared/events/EventStreamProvider'
 import { getDrawingFileKind, type DrawingFileKind } from '../lib/drawingFileKind'
 import { mockDrawingDetails } from '../../../mocks/data/drawingDetails'
 
@@ -137,6 +138,7 @@ function buildDrawingListWithDemos(res: any, activeDrawingIds: string[], hiddenD
 }
 
 export function ActiveDrawingProvider({ children }: { children: React.ReactNode }) {
+  const { waitForEvent } = useEventStream()
   const [drawings, setDrawings] = useState<DrawingItem[]>([])
   const [activeDrawingIds, setActiveDrawingIds] = useState<string[]>(() => readStoredActiveDrawingIds())
   const [hiddenDemoDrawingIds, setHiddenDemoDrawingIds] = useState<string[]>(() => readStoredHiddenDemoDrawingIds())
@@ -305,10 +307,19 @@ export function ActiveDrawingProvider({ children }: { children: React.ReactNode 
           drawing_id: id,
         },
       })
+      const deleteResult = await waitForEvent(
+        'GAS_LEAK_DRAWING_DELETED',
+        (payload) => !payload?.drawing_id || payload?.drawing_id === id,
+        8000,
+      ).catch(() => null)
+
+      if (deleteResult?.payload?.success === false) {
+        throw new Error(deleteResult.payload.error ?? '도면 삭제에 실패했습니다.')
+      }
 
       removeDrawingLocally(id)
     },
-    [removeDrawingLocally],
+    [removeDrawingLocally, waitForEvent],
   )
 
   const toggleDrawingActive = useCallback((id: string) => {
