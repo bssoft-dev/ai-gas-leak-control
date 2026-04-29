@@ -1,15 +1,18 @@
 import { type MouseEvent as ReactMouseEvent, type PointerEvent as ReactPointerEvent, type RefObject } from 'react'
 
-import { getSensorPercentInSlot } from '../../../entities/drawing/lib/drawingSensorPosition'
 import type { DrawingDetail } from '../../../entities/drawing/model/activeDrawing'
 import { DrawingSensorDot } from '../../../entities/drawing/ui/DrawingSensorDot'
 import { DrawingViewResetIcon } from '../../../entities/drawing/ui/DrawingViewResetIcon'
 import { monitorAssets } from '../../monitor/assets/monitorAssets'
 import { drawingSensorAssets } from '../assets/drawingSensorAssets'
+import type { RegisteredSensor } from '../model/registeredSensor'
+
+type DisplaySensor = Pick<RegisteredSensor, 'id' | 'xPct' | 'yPct' | 'color'>
 
 type DrawingSensorCanvasProps = {
   drawingName: string
   activeDrawing: DrawingDetail | null
+  displaySensors: DisplaySensor[]
   enabled: boolean
   onToggleEnabled: () => void
   pendingPlacement: { leftPct: number; topPct: number } | null
@@ -37,6 +40,7 @@ type DrawingSensorCanvasProps = {
 export function DrawingSensorCanvas({
   drawingName,
   activeDrawing,
+  displaySensors,
   enabled,
   onToggleEnabled,
   pendingPlacement,
@@ -142,17 +146,14 @@ export function DrawingSensorCanvas({
                           src={activeDrawing?.imagePath}
                           draggable={false}
                         />
-                        {(activeDrawing?.sensors ?? []).map((sensor) => {
-                          const { leftPct, topPct } = getSensorPercentInSlot(sensor)
-                          return (
-                            <DrawingSensorDot
-                              key={sensor.id}
-                              leftPct={leftPct}
-                              topPct={topPct}
-                              variant={sensor.variant}
-                            />
-                          )
-                        })}
+                        {displaySensors.map((sensor) => (
+                          <DrawingSensorDot
+                            key={sensor.id}
+                            leftPct={sensor.xPct}
+                            topPct={sensor.yPct}
+                            variant={sensor.color === 'orange' ? 'yellow' : 'green'}
+                          />
+                        ))}
                         {pendingPlacement && (
                           <DrawingSensorDot
                             leftPct={pendingPlacement.leftPct}

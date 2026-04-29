@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
+import { DefaultService } from '../../../api/services/DefaultService'
 import { useActiveDrawing } from '../../../entities/drawing/model/activeDrawing'
 import { useDrawingViewport } from '../../../entities/drawing/model/useDrawingViewport'
 import { PageContentGrid } from '../../../shared/ui/layout/PageContentGrid'
@@ -17,7 +18,16 @@ import { SensorDeleteDialog } from '../ui/SensorDeleteDialog'
 import { SensorManagementSidebar } from '../ui/SensorManagementSidebar'
 import { SensorToast } from '../ui/SensorToast'
 
-const PLACEMENT_TOAST = '도면을 먼저 클릭해서 센서 설치 위치를 선택해 주세요.'
+const PLACEMENT_TOAST = '도면을 먼저 클릭해서 센서 배치 위치를 선택해 주세요.'
+const DEFAULT_ZONE_ID = 'zone-1'
+
+function mapUnitToPayload(sensor: RegisteredSensor) {
+  const sensorType = sensor.color === 'orange' ? 'flow' : 'pressure'
+  return {
+    sensorType,
+    unit: sensorType === 'flow' ? 'L/min' : 'MPa',
+  }
+}
 
 export default function DrawingSensorPage() {
   const navigate = useNavigate()
@@ -42,10 +52,21 @@ export default function DrawingSensorPage() {
   const [editingId, setEditingId] = useState<string | null>(null)
   const [editLabel, setEditLabel] = useState('')
   const [editUnit, setEditUnit] = useState<'pressure' | 'flow'>('pressure')
+  const [isSavingSensors, setIsSavingSensors] = useState(false)
 
   const registeredSensors = useMemo(
     () => registrationsByDrawing[drawingKey] ?? [],
     [registrationsByDrawing, drawingKey],
+  )
+  const displaySensors = useMemo(
+    () =>
+      registeredSensors.map((sensor) => ({
+        id: sensor.id,
+        xPct: sensor.xPct,
+        yPct: sensor.yPct,
+        color: sensor.color,
+      })),
+    [registeredSensors],
   )
 
   useEffect(() => {
@@ -76,7 +97,49 @@ export default function DrawingSensorPage() {
   const unitLabel = unit === 'pressure' ? '압력 (MPa)' : '유량 (L/min)'
   const unitColor: RegisteredSensor['color'] = unit === 'pressure' ? 'green' : 'orange'
 
-  const onAdd = () => {
+  const persistSensors = async (nextSensors: RegisteredSensor[], successMessage: string) => {
+    if (!activeDrawingId) {
+      setAlertMessage('선택된 도면이 없습니다.')
+      return false
+    }
+
+    setIsSavingSensors(true)
+
+    try {
+      await DefaultService.publishEventApiEventsPublishPost({
+        type: 'GAS_LEAK_SENSORS_SAVE',
+        payload: {
+          drawing_id: activeDrawingId,
+          sensors: nextSensors.map((sensor) => {
+            const { sensorType, unit } = mapUnitToPayload(sensor)
+            return {
+              id: sensor.id,
+              label: sensor.label,
+              zone_id: sensor.zoneId || DEFAULT_ZONE_ID,
+              x: Number((sensor.xPct / 100).toFixed(6)),
+              y: Number((sensor.yPct / 100).toFixed(6)),
+              unit,
+              sensor_type: sensorType,
+            }
+          }),
+        },
+      })
+
+      setRegistrationsByDrawing((prev) => ({
+        ...prev,
+        [drawingKey]: nextSensors,
+      }))
+      setToastMessage(successMessage)
+      return true
+    } catch (error: any) {
+      setAlertMessage(error?.message ?? '센서 저장에 실패했습니다.')
+      return false
+    } finally {
+      setIsSavingSensors(false)
+    }
+  }
+
+  const onAdd = async () => {
     if (!pendingPlacement) {
       setToastMessage(PLACEMENT_TOAST)
       return
@@ -91,26 +154,28 @@ export default function DrawingSensorPage() {
     const nextLabelKey = normalizeLabelKey(trimmed)
     const duplicate = registeredSensors.some((sensor) => normalizeLabelKey(sensor.label) === nextLabelKey)
     if (duplicate) {
-      setAlertMessage('이 도면에서 이미 사용 중인 라벨명입니다.')
+      setAlertMessage('같은 도면에서 이미 사용 중인 라벨명입니다.')
       return
     }
 
     const sensorId = `S${Date.now()}`
-    const posText = `(${pendingPlacement.leftPct.toFixed(3)}%, ${pendingPlacement.topPct.toFixed(3)}%)`
+    const nextSensors = [
+      ...registeredSensors,
+      {
+        id: sensorId,
+        label: trimmed,
+        color: unitColor,
+        unitLabel,
+        posText: `(${pendingPlacement.leftPct.toFixed(3)}%, ${pendingPlacement.topPct.toFixed(3)}%)`,
+        xPct: pendingPlacement.leftPct,
+        yPct: pendingPlacement.topPct,
+        zoneId: DEFAULT_ZONE_ID,
+      },
+    ]
 
-    setRegistrationsByDrawing((prev) => ({
-      ...prev,
-      [drawingKey]: [
-        ...(prev[drawingKey] ?? []),
-        {
-          id: sensorId,
-          label: trimmed,
-          color: unitColor,
-          unitLabel,
-          posText,
-        },
-      ],
-    }))
+    const persisted = await persistSensors(nextSensors, '센서가 저장되었습니다.')
+    if (!persisted) return
+
     setLabel('')
     setPendingPlacement(null)
   }
@@ -151,7 +216,7 @@ export default function DrawingSensorPage() {
     setEditUnit(unitLabelToUnit(sensor.unitLabel))
   }
 
-  const saveEdit = () => {
+  const saveEdit = async () => {
     if (!editingId) return
 
     const trimmed = editLabel.trim()
@@ -165,36 +230,31 @@ export default function DrawingSensorPage() {
       (sensor) => sensor.id !== editingId && normalizeLabelKey(sensor.label) === nextLabelKey,
     )
     if (duplicate) {
-      setAlertMessage('이 도면에서 이미 사용 중인 라벨명입니다.')
+      setAlertMessage('같은 도면에서 이미 사용 중인 라벨명입니다.')
       return
     }
 
     const nextUnitLabel = editUnit === 'pressure' ? '압력 (MPa)' : '유량 (L/min)'
     const nextColor: RegisteredSensor['color'] = editUnit === 'pressure' ? 'green' : 'orange'
+    const nextSensors = registeredSensors.map((sensor) =>
+      sensor.id === editingId
+        ? { ...sensor, label: trimmed, unitLabel: nextUnitLabel, color: nextColor }
+        : sensor,
+    )
 
-    setRegistrationsByDrawing((prev) => {
-      const currentList = prev[drawingKey] ?? []
-      return {
-        ...prev,
-        [drawingKey]: currentList.map((sensor) =>
-          sensor.id === editingId
-            ? { ...sensor, label: trimmed, unitLabel: nextUnitLabel, color: nextColor }
-            : sensor,
-        ),
-      }
-    })
+    const persisted = await persistSensors(nextSensors, '센서가 수정되었습니다.')
+    if (!persisted) return
+
     setEditingId(null)
   }
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (!deleteConfirmId) return
-    setRegistrationsByDrawing((prev) => {
-      const currentList = prev[drawingKey] ?? []
-      return {
-        ...prev,
-        [drawingKey]: currentList.filter((sensor) => sensor.id !== deleteConfirmId),
-      }
-    })
+
+    const nextSensors = registeredSensors.filter((sensor) => sensor.id !== deleteConfirmId)
+    const persisted = await persistSensors(nextSensors, '센서가 삭제되었습니다.')
+    if (!persisted) return
+
     if (editingId === deleteConfirmId) setEditingId(null)
     setDeleteConfirmId(null)
   }
@@ -227,6 +287,7 @@ export default function DrawingSensorPage() {
         <DrawingSensorCanvas
           drawingName={drawingName}
           activeDrawing={activeDrawing}
+          displaySensors={displaySensors}
           enabled={enabled}
           onToggleEnabled={() => setEnabled((current) => !current)}
           pendingPlacement={pendingPlacement}
@@ -288,7 +349,9 @@ export default function DrawingSensorPage() {
       <SensorAlertDialog message={alertMessage} onClose={() => setAlertMessage(null)} />
       <SensorDeleteDialog
         open={deleteConfirmId != null}
-        onClose={() => setDeleteConfirmId(null)}
+        onClose={() => {
+          if (!isSavingSensors) setDeleteConfirmId(null)
+        }}
         onConfirm={confirmDelete}
       />
       <SensorToast message={toastMessage} />

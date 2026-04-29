@@ -6,6 +6,9 @@ export type RegisteredSensor = {
   color: 'green' | 'orange'
   unitLabel: string
   posText: string
+  xPct: number
+  yPct: number
+  zoneId: string
 }
 
 export function normalizeLabelKey(value: string) {
@@ -16,7 +19,7 @@ export function normalizeLabelKey(value: string) {
 }
 
 export function unitLabelToUnit(unitLabel: string): 'pressure' | 'flow' {
-  return unitLabel.includes('유량') ? 'flow' : 'pressure'
+  return unitLabel.toLowerCase().includes('l/min') ? 'flow' : 'pressure'
 }
 
 export function mapDrawingSensorsToRegisteredSensors(sensors: DrawingDetail['sensors']): RegisteredSensor[] {
@@ -26,5 +29,8 @@ export function mapDrawingSensorsToRegisteredSensors(sensors: DrawingDetail['sen
     color: sensor.variant === 'yellow' ? 'orange' : 'green',
     unitLabel: sensor.unitLabel ?? (sensor.variant === 'yellow' ? '유량 (L/min)' : '압력 (MPa)'),
     posText: `(${sensor.left.toFixed(3)}%, ${sensor.top.toFixed(3)}%)`,
+    xPct: sensor.left,
+    yPct: sensor.top,
+    zoneId: 'zone-1',
   }))
 }
