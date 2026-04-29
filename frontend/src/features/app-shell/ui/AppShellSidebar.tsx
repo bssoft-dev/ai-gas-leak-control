@@ -1,5 +1,5 @@
 import { type PointerEvent as ReactPointerEvent } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 
 import { appShellAssets } from '../assets/appShellAssets'
 import { DrawingManagementSection } from './DrawingManagementSection'
@@ -24,13 +24,36 @@ type NavItem = {
   to: string
   label: string
   iconSrc: string
+  end?: boolean
 }
 
-const NAV_ITEMS: NavItem[] = [
-  { to: '/', label: '관제', iconSrc: appShellAssets.imgAnalyticsCollapsed },
+type NavSection = {
+  label: string
+  iconSrc: string
+  basePath: string
+  items: NavItem[]
+}
+
+const PRIMARY_NAV_ITEMS: NavItem[] = [
+  { to: '/', label: '관제', iconSrc: appShellAssets.imgAnalyticsCollapsed, end: true },
   { to: '/drawing-sensor', label: '도면/센서 생성', iconSrc: appShellAssets.imgContentPasteCollapsed },
-  { to: '/ai-history', label: 'AI 판단 이력', iconSrc: appShellAssets.imgHistory2Collapsed },
 ]
+
+const HISTORY_SECTION: NavSection = {
+  label: '이력',
+  iconSrc: appShellAssets.imgHistory2Collapsed,
+  basePath: '/history',
+  items: [
+    { to: '/history/ai', label: 'AI 판단 이력', iconSrc: appShellAssets.imgHistory2Collapsed },
+    { to: '/history/control-alarm', label: '제어·알람 이력', iconSrc: appShellAssets.imgHistory2Collapsed },
+  ],
+}
+
+const SETTINGS_ITEM: NavItem = {
+  to: '/settings',
+  label: '설정',
+  iconSrc: appShellAssets.imgContentPasteCollapsed,
+}
 
 export function AppShellSidebar({
   sidebarWidth,
@@ -49,12 +72,16 @@ export function AppShellSidebar({
 }: AppShellSidebarProps) {
   const BLUE_PRIMARY_800 = '#4370ac'
   const ICON_INACTIVE = '#0b1828'
+  const location = useLocation()
+  const navigate = useNavigate()
   const {
     imgLogo1,
     imgKeyboardDoubleArrowRight,
     imgKeyboardDoubleArrowRightCollapsed,
     imgMenuChevron,
   } = appShellAssets
+
+  const isHistoryActive = location.pathname.startsWith(HISTORY_SECTION.basePath)
 
   const MaskIcon20 = ({ maskSrc, isActive }: { maskSrc: string; isActive: boolean }) => (
     <span
@@ -75,19 +102,19 @@ export function AppShellSidebar({
     />
   )
 
-  const renderNavLink = ({ to, label, iconSrc }: NavItem, compact = false) => (
+  const renderNavLink = ({ to, label, iconSrc, end }: NavItem, compact = false, nested = false) => (
     <NavLink
       key={to}
       to={to}
-      end={to === '/'}
+      end={end}
       className={({ isActive }) =>
         compact
           ? isActive
             ? 'flex h-[36px] w-[44px] items-center justify-center rounded-[4px] border border-[var(--blue_primary_500,#61a0e1)] bg-[var(--blue_primary_50,#e6f3fb)] px-[13px] py-[9px]'
             : 'flex h-[36px] w-[44px] items-center justify-center rounded-[8px] px-[12px] py-[8px]'
           : isActive
-            ? 'flex w-full items-center gap-[8px] rounded-[4px] border border-[var(--blue_primary_500,#61a0e1)] bg-[var(--blue_primary_50,#e6f3fb)] px-[13px] py-[9px]'
-            : 'flex w-full items-center gap-[8px] rounded-[4px] px-[12px] py-[8px] hover:bg-[#f1f5f9]'
+            ? `flex w-full items-center gap-[8px] rounded-[4px] border border-[var(--blue_primary_500,#61a0e1)] bg-[var(--blue_primary_50,#e6f3fb)] ${nested ? 'px-[12px] py-[8px]' : 'px-[13px] py-[9px]'}`
+            : `flex w-full items-center gap-[8px] rounded-[4px] ${nested ? 'px-[12px] py-[8px]' : 'px-[12px] py-[8px]'} hover:bg-[#f1f5f9]`
       }
     >
       {({ isActive }) => (
@@ -108,6 +135,54 @@ export function AppShellSidebar({
       )}
     </NavLink>
   )
+
+  const renderHistorySection = (compact = false) => {
+    if (compact) {
+      return (
+        <button
+          type="button"
+          className={
+            isHistoryActive
+              ? 'flex h-[36px] w-[44px] items-center justify-center rounded-[4px] border border-[var(--blue_primary_500,#61a0e1)] bg-[var(--blue_primary_50,#e6f3fb)] px-[13px] py-[9px]'
+              : 'flex h-[36px] w-[44px] items-center justify-center rounded-[8px] px-[12px] py-[8px]'
+          }
+          aria-label={HISTORY_SECTION.label}
+          onClick={() => navigate(HISTORY_SECTION.items[0].to)}
+        >
+          <MaskIcon20 maskSrc={HISTORY_SECTION.iconSrc} isActive={isHistoryActive} />
+        </button>
+      )
+    }
+
+    return (
+      <div className="flex flex-col gap-[4px]">
+        <button
+          type="button"
+          className={
+            isHistoryActive
+              ? 'flex w-full items-center gap-[8px] rounded-[4px] border border-[var(--blue_primary_500,#61a0e1)] bg-[var(--blue_primary_50,#e6f3fb)] px-[13px] py-[9px]'
+              : 'flex w-full items-center gap-[8px] rounded-[4px] px-[12px] py-[8px] hover:bg-[#f1f5f9]'
+          }
+          onClick={() => navigate(HISTORY_SECTION.items[0].to)}
+        >
+          <MaskIcon20 maskSrc={HISTORY_SECTION.iconSrc} isActive={isHistoryActive} />
+          <span
+            className={`font-['Pretendard',sans-serif] text-[16px] leading-[20px] ${
+              isHistoryActive
+                ? 'font-semibold text-[color:var(--blue_primary_800,#4370ac)]'
+                : 'font-medium text-[color:var(--black_title,#0b1828)]'
+            }`}
+          >
+            {HISTORY_SECTION.label}
+          </span>
+        </button>
+
+        <div className="ml-[16px] flex flex-col gap-[4px] border-l border-[#dbe4f0] pl-[12px]">
+          {HISTORY_SECTION.items.map((item) => renderNavLink(item, false, true))}
+        </div>
+      </div>
+    )
+  }
 
   return (
     <aside
@@ -155,9 +230,13 @@ export function AppShellSidebar({
       )}
 
       {isSidebarCollapsed ? (
-        <div className="h-[153px] w-[69px] shrink-0">
+        <div className="shrink-0">
           <div className="flex h-full flex-col items-center overflow-hidden px-[16px] pb-[24px] pt-[16px]">
-            <nav className="flex flex-col gap-[4px]">{NAV_ITEMS.map((item) => renderNavLink(item, true))}</nav>
+            <nav className="flex flex-col gap-[4px]">
+              {PRIMARY_NAV_ITEMS.map((item) => renderNavLink(item, true))}
+              {renderHistorySection(true)}
+              {renderNavLink(SETTINGS_ITEM, true)}
+            </nav>
           </div>
         </div>
       ) : (
@@ -180,7 +259,13 @@ export function AppShellSidebar({
             </button>
           </div>
 
-          {isMenuExpanded && <nav className="flex flex-col gap-[4px]">{NAV_ITEMS.map((item) => renderNavLink(item))}</nav>}
+          {isMenuExpanded && (
+            <nav className="flex flex-col gap-[4px]">
+              {PRIMARY_NAV_ITEMS.map((item) => renderNavLink(item))}
+              {renderHistorySection(false)}
+              {renderNavLink(SETTINGS_ITEM)}
+            </nav>
+          )}
 
           <DrawingManagementSection isExpanded={isDrawingsExpanded} onToggle={onToggleDrawings} />
         </div>

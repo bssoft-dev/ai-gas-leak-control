@@ -3,7 +3,7 @@ import { publicIconUrl } from '../../../shared/lib/publicIconUrl'
 const icon = publicIconUrl
 
 export const appShellAssets = {
-  imgLogo1: icon('logo.svg'),
+  imgLogo1: '/logo-bluesp.png',
   imgRunDot: icon('run-dot.svg'),
   imgEmergencyCaret: icon('emergency-caret.svg'),
   /** 사이드바 열림(헤더) — 접기 « */

@@ -1,5 +1,4 @@
 type Props = {
-  /** 이미지 슬롯(도면 영역) 기준 0~100% */
   leftPct: number
   topPct: number
   variant: 'green' | 'yellow'
