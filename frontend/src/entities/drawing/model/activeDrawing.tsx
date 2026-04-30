@@ -46,6 +46,7 @@ type ActiveDrawingContextValue = {
   activeDrawingId: string
   setActiveDrawingId: (id: string) => void
   toggleDrawingActive: (id: string) => void
+  replaceActiveDrawingSensors: (drawingId: string, sensors: DrawingSensor[]) => void
   refreshDrawings: (preferredActiveId?: string) => Promise<DrawingItem[]>
   removeDrawing: (id: string) => Promise<void>
   activeDrawing: DrawingDetail | null
@@ -330,6 +331,16 @@ export function ActiveDrawingProvider({ children }: { children: React.ReactNode 
     setActiveDrawingIds((prev) => (prev.includes(id) ? prev.filter((drawingId) => drawingId !== id) : [...prev, id]))
   }, [])
 
+  const replaceActiveDrawingSensors = useCallback((drawingId: string, sensors: DrawingSensor[]) => {
+    setActiveDrawing((prev) => {
+      if (!prev || prev.id !== drawingId) return prev
+      return {
+        ...prev,
+        sensors,
+      }
+    })
+  }, [])
+
   const value = useMemo<ActiveDrawingContextValue>(() => {
     const goPrev = () => {
       if (total <= 0) return
@@ -349,6 +360,7 @@ export function ActiveDrawingProvider({ children }: { children: React.ReactNode 
       activeDrawingId,
       setActiveDrawingId,
       toggleDrawingActive,
+      replaceActiveDrawingSensors,
       refreshDrawings,
       removeDrawing,
       activeDrawing,
@@ -371,6 +383,7 @@ export function ActiveDrawingProvider({ children }: { children: React.ReactNode 
     errorDrawings,
     isLoadingActiveDrawing,
     isLoadingDrawings,
+    replaceActiveDrawingSensors,
     refreshDrawings,
     removeDrawing,
     toggleDrawingActive,

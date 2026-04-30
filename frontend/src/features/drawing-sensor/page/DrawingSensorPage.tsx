@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState, type ChangeEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { DefaultService } from '../../../api/services/DefaultService'
-import { useActiveDrawing } from '../../../entities/drawing/model/activeDrawing'
+import { type DrawingSensor, useActiveDrawing } from '../../../entities/drawing/model/activeDrawing'
 import { useDrawingViewport } from '../../../entities/drawing/model/useDrawingViewport'
 import { useEventStream } from '../../../shared/events/EventStreamProvider'
 import { formatDrawingName } from '../../../shared/lib/formatDrawingName'
@@ -49,6 +49,18 @@ function readFileAsBase64(file: File): Promise<string> {
   })
 }
 
+function mapRegisteredSensorsToDrawingSensors(sensors: RegisteredSensor[]): DrawingSensor[] {
+  return sensors.map((sensor) => ({
+    id: sensor.id,
+    left: sensor.xPct,
+    top: sensor.yPct,
+    variant: sensor.color === 'orange' ? 'yellow' : 'green',
+    label: sensor.label,
+    unitLabel: sensor.unitLabel,
+    positionUnit: 'percent',
+  }))
+}
+
 export default function DrawingSensorPage() {
   const navigate = useNavigate()
   const { waitForEvent } = useEventStream()
@@ -62,6 +74,7 @@ export default function DrawingSensorPage() {
     goNext,
     setActiveDrawingId,
     toggleDrawingActive,
+    replaceActiveDrawingSensors,
     refreshDrawings,
   } = useActiveDrawing()
   const viewport = useDrawingViewport(activeDrawingId)
@@ -154,6 +167,7 @@ export default function DrawingSensorPage() {
           ...prev,
           [drawingKey]: nextSensors,
         }))
+        replaceActiveDrawingSensors(activeDrawingId, mapRegisteredSensorsToDrawingSensors(nextSensors))
         setToastMessage(successMessage)
         return true
       } finally {
@@ -196,6 +210,7 @@ export default function DrawingSensorPage() {
         ...prev,
         [drawingKey]: nextSensors,
       }))
+      replaceActiveDrawingSensors(activeDrawingId, mapRegisteredSensorsToDrawingSensors(nextSensors))
       setToastMessage(successMessage)
       return true
     } catch (error: any) {
@@ -468,7 +483,7 @@ export default function DrawingSensorPage() {
             disabled={isUploadingDrawings}
             aria-label="도면 업로드"
           >
-            <img alt="" className="block h-[20px] w-[20px]" src={imgAttachFileAdd} />
+            <span className="material-symbols-rounded text-[20px] leading-none text-white">upload_file</span>
             <span className="whitespace-nowrap font-['Pretendard',sans-serif] text-[16px] font-medium leading-[15px] tracking-[-0.25px] text-white">
               {isUploadingDrawings ? '업로드 중...' : '도면 업로드'}
             </span>

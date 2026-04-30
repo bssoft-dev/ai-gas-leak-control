@@ -82,7 +82,7 @@ function validateAndBuildPayload(form: PolicyForm): PolicyPayload {
 
 export default function SettingsPage() {
   const [form, setForm] = useState<PolicyForm>(EMPTY_FORM)
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
@@ -100,10 +100,6 @@ export default function SettingsPage() {
       setIsLoading(false)
     }
   }, [])
-
-  useEffect(() => {
-    void fetchState()
-  }, [fetchState])
 
   useEffect(() => {
     if (!successMessage) return
