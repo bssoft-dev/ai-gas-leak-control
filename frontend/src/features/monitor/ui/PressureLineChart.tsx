@@ -1,4 +1,4 @@
-import { useId } from 'react'
+import { useId, useMemo } from 'react'
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 
 import type { MonitorPressurePoint } from '../../../api/monitorPressureSeries'
@@ -33,11 +33,49 @@ type Props = {
 const timeTickFormatter = (t: number) =>
   new Date(t).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })
 
+function condensePreviewPoints(points: MonitorPressurePoint[], targetCount: number) {
+  if (points.length <= targetCount) return points
+
+  const bucketSize = (points.length - 1) / (targetCount - 1)
+  const sampled: MonitorPressurePoint[] = []
+
+  for (let i = 0; i < targetCount; i++) {
+    const startIndex = Math.floor(i * bucketSize)
+    const endIndex = Math.min(points.length - 1, Math.floor((i + 1) * bucketSize))
+    const bucket = points.slice(startIndex, endIndex + 1)
+    if (bucket.length === 0) continue
+
+    const pickedPoint =
+      i % 2 === 0
+        ? bucket.reduce((maxPoint, current) => (current.value > maxPoint.value ? current : maxPoint))
+        : bucket.reduce((minPoint, current) => (current.value < minPoint.value ? current : minPoint))
+
+    if (sampled[sampled.length - 1]?.at !== pickedPoint.at) {
+      sampled.push(pickedPoint)
+    }
+  }
+
+  const firstPoint = points[0]
+  const lastPoint = points[points.length - 1]
+
+  if (sampled[0]?.at !== firstPoint.at) {
+    sampled.unshift(firstPoint)
+  }
+  if (sampled[sampled.length - 1]?.at !== lastPoint.at) {
+    sampled.push(lastPoint)
+  }
+
+  return sampled.sort((a, b) => a.at - b.at)
+}
+
 export function PressureLineChart({ points, variant, showTimeAxis = false }: Props) {
   const stroke = STROKE[variant]
   const gid = useId()
   const gradientId = `pressureFill-${gid.replace(/:/g, '')}`
-  const data = points
+  const data = useMemo(
+    () => (showTimeAxis ? points : condensePreviewPoints(points, 12)),
+    [points, showTimeAxis],
+  )
 
   if (data.length === 0) {
     return <div className="flex h-full w-full items-center justify-center bg-[#fafafa] text-[10px] text-[#94a3b8]">데이터 없음</div>

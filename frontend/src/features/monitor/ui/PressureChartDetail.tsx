@@ -1,8 +1,8 @@
 import { useMemo, useRef, useState } from 'react'
 import {
-  Area,
-  AreaChart,
   CartesianGrid,
+  Line,
+  LineChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -209,14 +209,7 @@ export function PressureChartDetail({
       onLostPointerCapture={handlePointerEnd}
     >
       <ResponsiveContainer width="100%" height="100%">
-        <AreaChart data={chartData} margin={{ top: 16, right: 18, left: 10, bottom: 8 }}>
-          <defs>
-            <linearGradient id={`pressure-detail-fill-${stroke.replace('#', '')}`} x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor={stroke} stopOpacity={0.12} />
-              <stop offset="100%" stopColor={stroke} stopOpacity={0.02} />
-            </linearGradient>
-          </defs>
-
+        <LineChart data={chartData} margin={{ top: 16, right: 18, left: 10, bottom: 8 }}>
           <CartesianGrid
             stroke="#eef2f6"
             strokeOpacity={0.9}
@@ -263,18 +256,16 @@ export function PressureChartDetail({
             }}
           />
 
-          <Area
+          <Line
             type="monotone"
             dataKey="value"
             stroke={stroke}
             strokeWidth={2}
-            fill={`url(#pressure-detail-fill-${stroke.replace('#', '')})`}
-            fillOpacity={1}
             dot={false}
             activeDot={{ r: 4, strokeWidth: 0, fill: stroke }}
             isAnimationActive={false}
           />
-        </AreaChart>
+        </LineChart>
       </ResponsiveContainer>
     </div>
   )
