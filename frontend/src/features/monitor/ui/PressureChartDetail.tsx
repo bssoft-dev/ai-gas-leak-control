@@ -108,7 +108,15 @@ export function PressureChartDetail({
     return ticks
   }, [viewportEndAt, viewportStartAt])
 
+  const applyPanDelta = (deltaPixels: number, width: number) => {
+    if (!canPan || width <= 0) return
+    const duration = viewportEndAt - viewportStartAt
+    const deltaMs = (-deltaPixels / width) * duration
+    onPan(deltaMs)
+  }
+
   const handlePointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
+    event.preventDefault()
     activePointersRef.current.set(event.pointerId, { x: event.clientX, y: event.clientY })
     if (activePointersRef.current.size === 2) {
       const [first, second] = [...activePointersRef.current.values()]
@@ -148,10 +156,8 @@ export function PressureChartDetail({
     if (!canPan || !pointerStartRef.current) return
     const { x, width } = pointerStartRef.current
     if (width <= 0) return
-    const duration = viewportEndAt - viewportStartAt
     const deltaX = event.clientX - x
-    const deltaMs = (-deltaX / width) * duration
-    onPan(deltaMs)
+    applyPanDelta(deltaX, width)
     pointerStartRef.current = {
       x: event.clientX,
       width,
@@ -172,6 +178,15 @@ export function PressureChartDetail({
     }
   }
 
+  const handleWheel = (event: React.WheelEvent<HTMLDivElement>) => {
+    if (!canPan || !containerRef.current) return
+    const dominantDelta =
+      Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY
+    if (dominantDelta === 0) return
+    event.preventDefault()
+    applyPanDelta(dominantDelta, containerRef.current.clientWidth)
+  }
+
   if (chartData.length === 0) {
     return (
       <div className="flex h-full w-full items-center justify-center bg-white text-[12px] text-[#94a3b8]">
@@ -183,9 +198,10 @@ export function PressureChartDetail({
   return (
     <div
       ref={containerRef}
-      className={`h-full w-full touch-none select-none ${
+      className={`h-full w-full touch-none select-none outline-none [&_*]:outline-none [&_*]:focus:outline-none ${
         canPan ? (isDragging ? 'cursor-grabbing' : 'cursor-grab') : ''
       }`}
+      onWheel={handleWheel}
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerEnd}
