@@ -24,6 +24,16 @@
     <title>AI 가스 누출 자동제어</title>
   </head>
   <body>
+    <script>
+      ;(function () {
+        // HashRouter fallback: allow refresh/deep-link without server rewrite rules.
+        if (window.location.hash) return
+        var path = window.location.pathname || '/'
+        if (path === '/' || path === '/index.html') return
+        var search = window.location.search || ''
+        window.location.replace('/#' + path + search)
+      })()
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

@@ -163,13 +163,7 @@ function DrawingList({ listKind, filter, showGreenDot, allowIds }: DrawingListPr
   return (
     <>
       <div
-        className={`flex min-h-[40px] flex-col gap-[4px] rounded-[8px] transition-colors ${
-          isDropTarget
-            ? listKind === 'active'
-              ? 'bg-[var(--blue_primary_50,#e6f3fb)] ring-2 ring-[var(--blue_primary_500,#61a0e1)] ring-offset-2 ring-offset-[var(--gray_sidebar,#fafafa)]'
-              : 'bg-[#f1f5f9] ring-2 ring-[#94a3b8] ring-offset-2 ring-offset-[var(--gray_sidebar,#fafafa)]'
-            : ''
-        }`}
+        className="flex min-h-[40px] flex-col gap-[4px] rounded-[8px]"
         onDragOver={handleListDragOver}
         onDragEnter={handleListDragEnter}
         onDragLeave={handleListDragLeave}
@@ -193,8 +187,8 @@ function DrawingList({ listKind, filter, showGreenDot, allowIds }: DrawingListPr
                 }}
                 className={`cursor-grab active:cursor-grabbing ${
                   isSelected
-                    ? 'flex w-full items-center justify-between gap-[8px] rounded-[4px] border border-[var(--blue_primary_500,#61a0e1)] bg-[var(--blue_primary_50,#e6f3fb)] px-[13px] py-[9px]'
-                    : 'flex w-full items-center justify-between gap-[8px] rounded-[8px] px-[12px] py-[8px] hover:bg-[#f1f5f9]'
+                    ? 'flex w-full items-center justify-between gap-[8px] rounded-[8px] border border-[var(--blue_primary_500,#61a0e1)] bg-[var(--blue_primary_50,#e6f3fb)] px-[13px] py-[9px]'
+                    : 'flex w-full items-center justify-between gap-[8px] rounded-[8px] border border-transparent bg-transparent px-[13px] py-[9px] hover:bg-[#f1f5f9]'
                 }`}
               >
                 <button
@@ -315,7 +309,7 @@ function SectionToggle({
       </div>
       <button
         type="button"
-        className="font-['Pretendard',sans-serif] text-[11px] font-medium leading-[16px] text-[color:var(--black_300,#7a89a1)]"
+        className="whitespace-nowrap font-['Pretendard',sans-serif] text-[11px] font-medium leading-[16px] text-[color:var(--black_300,#7a89a1)]"
         onClick={onToggle}
       >
         {expanded ? '숨기기' : '보이기'}

@@ -250,21 +250,26 @@ export function PressureChartDetail({
           />
 
           <Tooltip
-            labelFormatter={(value) =>
-              typeof value === 'number'
-                ? new Date(value).toLocaleTimeString('ko-KR', {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit',
-                  })
-                : ''
-            }
-            formatter={(value) => [`${Number(value).toFixed(2)} MPa`, '압력']}
-            contentStyle={{
-              fontSize: 12,
-              borderRadius: 8,
-              border: '1px solid #e5e7eb',
-              boxShadow: '0 6px 18px rgba(0,0,0,0.10)',
+            content={({ label, payload }) => {
+              const at = typeof label === 'number' ? label : null
+              const value = payload?.[0]?.value
+              if (at == null || value == null) return null
+              const timeText = new Date(at).toLocaleTimeString('ko-KR', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: true,
+              })
+              return (
+                <div className="rounded-[10px] border border-[#e5e7eb] bg-white px-[12px] py-[10px] shadow-[0_10px_22px_rgba(15,23,42,0.10)]">
+                  <div className="font-['Pretendard',sans-serif] text-[13px] font-semibold text-[#0f172a]">
+                    {timeText}
+                  </div>
+                  <div className="mt-[6px] font-['Pretendard',sans-serif] text-[13px] font-medium text-[#0f172a]">
+                    압력 : {Number(value).toFixed(2)} MPa
+                  </div>
+                </div>
+              )
             }}
           />
 

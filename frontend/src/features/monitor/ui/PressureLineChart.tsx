@@ -4,8 +4,8 @@ import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YA
 import type { MonitorPressurePoint } from '../../../api/monitorPressureSeries'
 
 const STROKE = {
-  green: '#7cbf6a',
-  yellow: '#caa23d',
+  green: '#34d399',
+  yellow: '#fbbf24',
 } as const
 
 /** Y축 틱 대신 플롯 영역(offset) 높이에 맞춰 가로 격자를 균등 배치 */
@@ -83,7 +83,7 @@ export function PressureLineChart({ points, variant, showTimeAxis = false }: Pro
 
   const margin = showTimeAxis
     ? { top: 8, right: 12, left: 12, bottom: 22 }
-    : { top: 6, right: 8, left: 8, bottom: 2 }
+    : { top: 6, right: 8, left: 8, bottom: 6 }
 
   return (
     <div

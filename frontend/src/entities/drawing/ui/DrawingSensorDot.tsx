@@ -7,9 +7,17 @@ type Props = {
   variant: 'green' | 'yellow'
   label?: string
   forceShowLabel?: boolean
+  onClick?: () => void
 }
 
-export function DrawingSensorDot({ leftPct, topPct, variant, label, forceShowLabel = false }: Props) {
+export function DrawingSensorDot({
+  leftPct,
+  topPct,
+  variant,
+  label,
+  forceShowLabel = false,
+  onClick,
+}: Props) {
   // 관제 화면에서 눈에 띄는 선명한 톤 (초록/노랑) + 과하지 않은 그림자
   const color = variant === 'green' ? '#34d399' : '#fbbf24'
   const halo = variant === 'green' ? 'rgba(52,211,153,0.42)' : 'rgba(251,191,36,0.42)'
@@ -17,6 +25,7 @@ export function DrawingSensorDot({ leftPct, topPct, variant, label, forceShowLab
   const badgeBg = variant === 'green' ? '#34d399' : '#fbbf24'
   const badgeText = '#0b1828'
   const isInteractive = Boolean(label)
+  const isClickable = isInteractive && typeof onClick === 'function'
   const anchorRef = useRef<HTMLDivElement | null>(null)
   const [isHovering, setIsHovering] = useState(false)
   const tooltipRef = useRef<HTMLDivElement | null>(null)
@@ -97,7 +106,9 @@ export function DrawingSensorDot({ leftPct, topPct, variant, label, forceShowLab
   return (
     <div
       ref={anchorRef}
-      className={`absolute z-[10] ${isInteractive ? 'pointer-events-auto' : 'pointer-events-none'}`}
+      className={`absolute z-[10] ${
+        isInteractive ? 'pointer-events-auto' : 'pointer-events-none'
+      } ${isClickable ? 'cursor-pointer' : ''}`}
       style={{
         left: `${leftPct}%`,
         top: `${topPct}%`,
@@ -107,6 +118,7 @@ export function DrawingSensorDot({ leftPct, topPct, variant, label, forceShowLab
       }}
       onMouseEnter={isInteractive ? () => setIsHovering(true) : undefined}
       onMouseLeave={isInteractive ? () => setIsHovering(false) : undefined}
+      onClick={isClickable ? onClick : undefined}
     >
       <div
         className="absolute rounded-full"

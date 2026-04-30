@@ -46,6 +46,7 @@ export default function MonitorPage() {
     toggleDrawingActive,
   } = useActiveDrawing()
   const [chartDetailId, setChartDetailId] = useState<string | null>(null)
+  const [highlightedChartId, setHighlightedChartId] = useState<string | null>(null)
   const viewport = useDrawingViewport(activeDrawingId)
 
   const selectedDrawing = drawings.find((drawing) => drawing.id === activeDrawingId)
@@ -110,8 +111,8 @@ export default function MonitorPage() {
             </div>
           </div>
 
-          <div className="mt-[12px] flex min-h-0 min-w-0 flex-1 flex-col">
-            <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden rounded-[8px] bg-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.18),0px_1px_3px_1px_rgba(0,0,0,0.08)]">
+          <div className="mt-[8px] flex min-h-0 min-w-0 flex-1 flex-col">
+            <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden rounded-[8px] bg-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.12),0px_1px_3px_1px_rgba(0,0,0,0.05)]">
               <div className="flex shrink-0 flex-wrap items-center justify-between gap-x-[12px] gap-y-[8px] px-[32px] pb-[12px] pt-[24px]">
                 <div className="min-w-0 flex-1" aria-hidden="true" />
                 <div className="flex items-center gap-[12px] py-[4px]">
@@ -186,6 +187,7 @@ export default function MonitorPage() {
                                   topPct={topPct}
                                   variant={sensor.variant}
                                   label={sensor.label}
+                                  onClick={() => setHighlightedChartId(sensor.id)}
                                 />
                               )
                             })}
@@ -196,10 +198,11 @@ export default function MonitorPage() {
                 </div>
                 </div>
 
-                <div className="absolute bottom-[16px] right-[16px] z-20 flex flex-col-reverse items-center gap-[10px]">
+                <div className="absolute bottom-[16px] right-[16px] z-20">
+                <div className="relative h-[44px] w-[44px]">
                 <button
                   type="button"
-                  className="flex h-[44px] w-[44px] shrink-0 items-center justify-center rounded-full border border-[#e2e8f0] bg-white shadow-[0px_4px_14px_rgba(0,0,0,0.10)] transition-shadow hover:shadow-[0px_6px_18px_rgba(0,0,0,0.12)]"
+                  className="flex h-[44px] w-[44px] shrink-0 items-center justify-center rounded-full border border-[#e2e8f0] bg-white shadow-[0px_3px_10px_rgba(0,0,0,0.08)] transition-shadow hover:shadow-[0px_4px_12px_rgba(0,0,0,0.10)]"
                   aria-label={viewport.isFabOpen ? '도면 도구 닫기' : '도면 도구 열기'}
                   aria-expanded={viewport.isFabOpen}
                   onClick={() => viewport.setIsFabOpen((open) => !open)}
@@ -216,7 +219,7 @@ export default function MonitorPage() {
                 </button>
 
                 {viewport.isFabOpen && (
-                  <div className="flex flex-col items-center gap-[2px] rounded-[9999px] border border-[#e2e8f0] bg-white px-[6px] py-[8px] shadow-[0px_4px_14px_rgba(0,0,0,0.10)]">
+                  <div className="absolute bottom-[54px] right-0 flex flex-col items-center gap-[2px] rounded-[9999px] border border-[#e2e8f0] bg-white px-[6px] py-[8px] shadow-[0px_3px_10px_rgba(0,0,0,0.08)]">
                     <button
                       type="button"
                       className="flex h-[36px] w-[36px] items-center justify-center rounded-full hover:bg-[#f1f5f9]"
@@ -256,6 +259,7 @@ export default function MonitorPage() {
                   </div>
                 )}
                 </div>
+                </div>
 
                 <DrawingViewportMinimap
                   zoom={viewport.zoom}
@@ -284,9 +288,9 @@ export default function MonitorPage() {
             실시간 차트 ({cards.length})
           </div>
 
-          <div className="mt-[12px] flex min-h-0 flex-1 flex-col">
-            <div className="flex min-h-[786px] min-w-0 flex-1 flex-col overflow-hidden rounded-[8px] bg-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.18),0px_1px_3px_1px_rgba(0,0,0,0.08)]">
-              <div className="notion-scrollbar flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto py-[8px] pl-[6px] pr-[4px] sm:pl-[8px]">
+          <div className="mt-[8px] flex min-h-0 flex-1 flex-col">
+            <div className="flex min-h-[786px] min-w-0 flex-1 flex-col overflow-hidden rounded-[8px] bg-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.12),0px_1px_3px_1px_rgba(0,0,0,0.05)]">
+              <div className="notion-scrollbar flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto pt-[12px] pb-[8px] px-[6px] sm:px-[8px]">
                 {pressureSeriesError && (
                   <div className="w-full rounded-[6px] border border-amber-200 bg-amber-50 px-[10px] py-[6px] font-['Pretendard',sans-serif] text-[10px] text-amber-900">
                     차트 데이터를 불러오지 못했습니다.
@@ -306,14 +310,28 @@ export default function MonitorPage() {
                   return (
                     <div key={card.id} className="w-full min-w-0">
                       <div
-                        className="inline-flex w-fit max-w-full rounded-tl-[8px] rounded-tr-[8px] border-l border-r border-t border-[#e2e8f0] px-[12px] py-[4px]"
+                        className={`inline-flex w-fit max-w-full rounded-tl-[8px] rounded-tr-[8px] border-l border-r border-t px-[12px] py-[4px] ${
+                          highlightedChartId === card.id
+                            ? card.variant === 'green'
+                              ? 'border-[#34d399]'
+                              : 'border-[#fbbf24]'
+                            : 'border-[#e2e8f0]'
+                        }`}
                         style={{ backgroundColor: card.headerBg }}
                       >
                         <div className="font-['Pretendard',sans-serif] text-[10px] leading-[15px] tracking-[0.5px] text-[#485b77]">
                           {card.title} : {valueText}
                         </div>
                       </div>
-                      <div className="overflow-hidden rounded-bl-[4px] rounded-br-[4px] rounded-tr-[4px] border border-[#e2e8f0] bg-white">
+                      <div
+                        className={`overflow-hidden rounded-bl-[4px] rounded-br-[4px] rounded-tr-[4px] border bg-white ${
+                          highlightedChartId === card.id
+                            ? card.variant === 'green'
+                              ? 'border-[#34d399] shadow-[0px_6px_16px_rgba(52,211,153,0.14)]'
+                              : 'border-[#fbbf24] shadow-[0px_6px_16px_rgba(251,191,36,0.14)]'
+                            : 'border-[#e2e8f0]'
+                        }`}
+                      >
                         <div
                           role="button"
                           tabIndex={0}
@@ -321,14 +339,18 @@ export default function MonitorPage() {
                           style={
                             {
                               ['--chart-focus-ring' as string]:
-                                card.variant === 'green' ? '#7cbf6a' : '#caa23d',
+                                card.variant === 'green' ? '#34d399' : '#fbbf24',
                             } as CSSProperties
                           }
                           aria-label={`${card.title} 차트 상세 보기`}
-                          onClick={() => setChartDetailId(card.id)}
+                          onClick={() => {
+                            setHighlightedChartId(card.id)
+                            setChartDetailId(card.id)
+                          }}
                           onKeyDown={(e) => {
                             if (e.key === 'Enter' || e.key === ' ') {
                               e.preventDefault()
+                              setHighlightedChartId(card.id)
                               setChartDetailId(card.id)
                             }
                           }}

@@ -101,8 +101,8 @@ export function DrawingSensorCanvas({
         </button>
       </div>
 
-      <div className="mt-[12px] flex min-h-0 flex-1 flex-col">
-        <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden rounded-[8px] bg-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.18),0px_1px_3px_1px_rgba(0,0,0,0.08)]">
+      <div className="mt-[8px] flex min-h-0 flex-1 flex-col">
+        <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden rounded-[8px] bg-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.12),0px_1px_3px_1px_rgba(0,0,0,0.05)]">
           <div className="flex shrink-0 flex-wrap items-center justify-between gap-x-[12px] gap-y-[8px] px-[32px] pb-[12px] pt-[24px]">
             <div className="font-['Pretendard',sans-serif] text-[14px] font-normal leading-[normal] text-[color:var(--black_500,#485b77)]">
               도면 내 설치 위치 등록 (도면을 클릭하여 센서 추가)
@@ -193,10 +193,11 @@ export function DrawingSensorCanvas({
             </div>
 
             <div className="pointer-events-none absolute inset-0 z-20">
-              <div className="pointer-events-auto absolute bottom-[16px] right-[16px] flex flex-col-reverse items-center gap-[10px]">
+              <div className="pointer-events-auto absolute bottom-[16px] right-[16px]">
+                <div className="relative h-[44px] w-[44px]">
                 <button
                   type="button"
-                  className="flex h-[44px] w-[44px] shrink-0 items-center justify-center rounded-full border border-[#e2e8f0] bg-white shadow-[0px_4px_14px_rgba(0,0,0,0.10)] transition-shadow hover:shadow-[0px_6px_18px_rgba(0,0,0,0.12)]"
+                  className="flex h-[44px] w-[44px] shrink-0 items-center justify-center rounded-full border border-[#e2e8f0] bg-white shadow-[0px_3px_10px_rgba(0,0,0,0.08)] transition-shadow hover:shadow-[0px_4px_12px_rgba(0,0,0,0.10)]"
                   aria-label={isFabOpen ? '도면 도구 닫기' : '도면 도구 열기'}
                   aria-expanded={isFabOpen}
                   onClick={onToggleFab}
@@ -213,7 +214,7 @@ export function DrawingSensorCanvas({
                 </button>
 
                 {isFabOpen && (
-                  <div className="flex flex-col items-center gap-[2px] rounded-[9999px] border border-[#e2e8f0] bg-white px-[6px] py-[8px] shadow-[0px_4px_14px_rgba(0,0,0,0.10)]">
+                  <div className="absolute bottom-[54px] right-0 flex flex-col items-center gap-[2px] rounded-[9999px] border border-[#e2e8f0] bg-white px-[6px] py-[8px] shadow-[0px_3px_10px_rgba(0,0,0,0.08)]">
                     <button
                       type="button"
                       className="flex h-[36px] w-[36px] items-center justify-center rounded-full hover:bg-[#f1f5f9]"
@@ -241,6 +242,7 @@ export function DrawingSensorCanvas({
                     </button>
                   </div>
                 )}
+                </div>
               </div>
             </div>
 

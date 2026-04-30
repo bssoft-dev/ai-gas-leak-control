@@ -3,20 +3,14 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { DefaultService } from '../../../api/services/DefaultService'
 import { PaginationArrowButton } from '../../../shared/ui/navigation/PaginationArrowButton'
 import { HistoryTabs } from '../ui/HistoryTabs'
+import { ControlHistoryTimePicker } from '../ui/ControlHistoryTimePicker'
+import { IconTooltipButton } from '../ui/IconTooltipButton'
 
 type ControlHistoryRow = {
   at: string
   action: string
   detail: string
   level: number
-}
-
-type IconTooltipButtonProps = {
-  label: string
-  onClick: () => void
-  disabled?: boolean
-  spin?: boolean
-  icon?: 'refresh' | 'reset'
 }
 
 const PAGE_SIZE = 20
@@ -27,6 +21,8 @@ function getTodayYmd(): string {
   const d = new Date()
   return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`
 }
+
+const WEEKDAY_LABELS = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'] as const
 
 function getNowTimeHM(): string {
   const d = new Date()
@@ -56,6 +52,196 @@ function formatHistoryTime(value: string) {
   return formatter.format(date)
 }
 
+function parseYmd(ymd: string): Date | null {
+  if (!ymd) return null
+  const [y, m, d] = ymd.split('-').map(Number)
+  if (!Number.isFinite(y) || !Number.isFinite(m) || !Number.isFinite(d)) return null
+  const date = new Date(y, m - 1, d)
+  return Number.isNaN(date.getTime()) ? null : date
+}
+
+function formatYmd(date: Date): string {
+  return `${date.getFullYear()}-${pad2(date.getMonth() + 1)}-${pad2(date.getDate())}`
+}
+
+function startOfMonth(date: Date): Date {
+  return new Date(date.getFullYear(), date.getMonth(), 1)
+}
+
+function addMonths(date: Date, delta: number): Date {
+  return new Date(date.getFullYear(), date.getMonth() + delta, 1)
+}
+
+function isSameYmd(a: Date, b: Date): boolean {
+  return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate()
+}
+
+function clampDate(date: Date, maxYmd: string): Date {
+  const max = parseYmd(maxYmd)
+  if (!max) return date
+  return date.getTime() > max.getTime() ? max : date
+}
+
+function DatePickerInput({
+  label,
+  value,
+  onChange,
+  maxYmd,
+}: {
+  label: string
+  value: string
+  onChange: (next: string) => void
+  maxYmd: string
+}) {
+  const [open, setOpen] = useState(false)
+  const selectedDate = useMemo(() => parseYmd(value), [value])
+  const initialMonth = useMemo(() => {
+    const base = selectedDate ?? parseYmd(maxYmd) ?? new Date()
+    return startOfMonth(base)
+  }, [maxYmd, selectedDate])
+  const [visibleMonth, setVisibleMonth] = useState<Date>(initialMonth)
+
+  useEffect(() => {
+    // 선택 날짜가 바뀌면 보이는 월도 동기화
+    if (!selectedDate) return
+    setVisibleMonth(startOfMonth(selectedDate))
+  }, [selectedDate])
+
+  useEffect(() => {
+    if (!open) return
+    const onPointerDown = (e: MouseEvent) => {
+      const target = e.target as HTMLElement | null
+      if (!target) return
+      if (target.closest('[data-datepicker-root]')) return
+      setOpen(false)
+    }
+    window.addEventListener('mousedown', onPointerDown)
+    return () => window.removeEventListener('mousedown', onPointerDown)
+  }, [open])
+
+  const maxDate = useMemo(() => parseYmd(maxYmd) ?? new Date(), [maxYmd])
+
+  const monthLabel = useMemo(() => {
+    const yyyy = visibleMonth.getFullYear()
+    const mm = visibleMonth.toLocaleString('en-US', { month: 'long' })
+    return `${mm} ${yyyy}`
+  }, [visibleMonth])
+
+  const days = useMemo(() => {
+    const first = startOfMonth(visibleMonth)
+    const startDow = first.getDay()
+    const start = new Date(first)
+    start.setDate(first.getDate() - startDow)
+
+    const grid: { date: Date; inMonth: boolean; disabled: boolean }[] = []
+    for (let i = 0; i < 42; i++) {
+      const d = new Date(start)
+      d.setDate(start.getDate() + i)
+      const inMonth = d.getMonth() === visibleMonth.getMonth()
+      const disabled = d.getTime() > maxDate.getTime()
+      grid.push({ date: d, inMonth, disabled })
+    }
+    return grid
+  }, [maxDate, visibleMonth])
+
+  return (
+    <label className="min-w-[180px] flex-1 font-[Pretendard,sans-serif]">
+      <span className="mb-[8px] block text-[14px] font-semibold text-[#607a9f]">{label}</span>
+      <div className="relative" data-datepicker-root>
+        <button
+          type="button"
+          onClick={() => setOpen((prev) => !prev)}
+          className="flex h-[48px] w-full items-center justify-between rounded-[8px] border border-[#d7e1ee] bg-white px-[16px] font-[Pretendard,sans-serif] text-[15px] text-[#0f172a] transition focus:border-[#d7e1ee] focus:ring-0 focus:ring-offset-0 focus:[outline:0] focus:[box-shadow:none] focus-visible:[outline:0] focus-visible:[box-shadow:none]"
+          aria-label="시작 날짜"
+          aria-expanded={open}
+        >
+          <span className={value ? '' : 'text-[#9aacbf]'}>{value || 'YYYY-MM-DD'}</span>
+          <span className="material-symbols-rounded text-[20px] leading-none text-[#485b77]" aria-hidden="true">
+            calendar_month
+          </span>
+        </button>
+
+        {open && (
+          <div className="absolute left-0 top-full z-30 mt-[8px] w-full rounded-[8px] border border-[#e2e8f0] bg-white p-[16px] shadow-[0px_12px_28px_rgba(15,23,42,0.12)]">
+            <div className="relative flex items-center justify-center pb-[10px]">
+              <button
+                type="button"
+                className="absolute left-0 flex h-[32px] w-[32px] items-center justify-center rounded-[6px] hover:bg-[#f1f5f9] active:bg-[#e2e8f0]"
+                aria-label="이전 달"
+                onClick={() => setVisibleMonth((prev) => addMonths(prev, -1))}
+              >
+                <span className="material-symbols-rounded text-[20px] leading-none text-[#485b77]" aria-hidden="true">
+                  chevron_left
+                </span>
+              </button>
+              <div className="font-[Pretendard,sans-serif] text-[14px] font-semibold text-[#0f172a]">{monthLabel}</div>
+              <button
+                type="button"
+                className="absolute right-0 flex h-[32px] w-[32px] items-center justify-center rounded-[6px] hover:bg-[#f1f5f9] active:bg-[#e2e8f0]"
+                aria-label="다음 달"
+                onClick={() => setVisibleMonth((prev) => addMonths(prev, 1))}
+              >
+                <span className="material-symbols-rounded text-[20px] leading-none text-[#485b77]" aria-hidden="true">
+                  chevron_right
+                </span>
+              </button>
+            </div>
+
+            <div className="grid grid-cols-7 gap-[6px] pb-[6px] text-center font-[Pretendard,sans-serif] text-[12px] font-semibold text-[#64748b]">
+              {WEEKDAY_LABELS.map((d) => (
+                <div key={d}>{d}</div>
+              ))}
+            </div>
+
+            <div className="grid grid-cols-7 gap-[6px]">
+              {days.map(({ date, inMonth, disabled }) => {
+                const isSelected = selectedDate ? isSameYmd(date, selectedDate) : false
+                const isToday = isSameYmd(date, new Date())
+                const baseText = inMonth ? '#0f172a' : '#9aacbf'
+                return (
+                  <button
+                    key={date.toISOString()}
+                    type="button"
+                    disabled={disabled}
+                    className={`h-[34px] rounded-[8px] text-[13px] transition ${
+                      disabled ? 'cursor-not-allowed opacity-40' : 'hover:bg-[#f1f5f9] active:bg-[#e2e8f0]'
+                    } ${isSelected ? 'bg-[#4370ac] text-white' : ''}`}
+                    style={{
+                      color: isSelected ? '#ffffff' : baseText,
+                      border: isToday && !isSelected ? '1px solid rgba(97,160,225,0.55)' : '1px solid transparent',
+                    }}
+                    onClick={() => {
+                      const next = clampDate(date, maxYmd)
+                      onChange(formatYmd(next))
+                      setOpen(false)
+                    }}
+                  >
+                    {date.getDate()}
+                  </button>
+                )
+              })}
+            </div>
+
+            <div className="flex items-center justify-end pt-[10px]">
+              <button
+                type="button"
+                className="rounded-[6px] px-[10px] py-[6px] font-[Pretendard,sans-serif] text-[13px] font-medium text-[#4370ac] hover:bg-[#eef5fb] active:bg-[#e2e8f0]"
+                onClick={() => {
+                  onChange(maxYmd)
+                  setVisibleMonth(startOfMonth(parseYmd(maxYmd) ?? new Date()))
+                  setOpen(false)
+                }}
+              >
+                Today
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    </label>
+  )
+}
+
 /** 날짜·시간 입력으로 구간 시작 시각(ms). 둘 다 비어 있으면 null(하한 없음). 날짜만 있으면 해당일 00:00:00, 시간만 있으면 오늘 그 시각(로컬). */
 function getFilterRangeStartMs(selectedDate: string, selectedTime: string): number | null {
   const hasDate = Boolean(selectedDate)
@@ -73,41 +259,6 @@ function getFilterRangeStartMs(selectedDate: string, selectedTime: string): numb
   if (Number.isNaN(parsed.getTime())) return null
 
   return parsed.getTime()
-}
-
-function IconTooltipButton({
-  label,
-  onClick,
-  disabled = false,
-  spin = false,
-  icon = 'refresh',
-}: IconTooltipButtonProps) {
-  return (
-    <div className="group relative flex items-center">
-      <button
-        type="button"
-        onClick={onClick}
-        disabled={disabled}
-        className="inline-flex h-[40px] w-[40px] items-center justify-center rounded-full border border-[#d7e1ee] bg-white text-[#607a9f] transition hover:border-[#61a0e1] hover:text-[#4370ac] disabled:cursor-not-allowed disabled:opacity-50"
-      >
-        {icon === 'refresh' ? (
-          <span
-            className={`material-symbols-rounded text-[20px] ${spin ? 'animate-spin' : ''}`}
-            aria-hidden="true"
-          >
-            refresh
-          </span>
-        ) : (
-          <span className="material-symbols-rounded text-[20px]" aria-hidden="true">
-            filter_alt_off
-          </span>
-        )}
-      </button>
-      <div className="pointer-events-none absolute bottom-[calc(100%+8px)] left-1/2 z-10 -translate-x-1/2 whitespace-nowrap rounded-[8px] bg-[#23344d] px-[10px] py-[6px] text-[12px] font-medium text-white opacity-0 shadow-[0_8px_20px_rgba(15,23,42,0.18)] transition group-hover:opacity-100">
-        {label}
-      </div>
-    </div>
-  )
 }
 
 export function ControlAlarmHistoryPage() {
@@ -222,7 +373,7 @@ export function ControlAlarmHistoryPage() {
     return pagedRows.map((row, index) => (
       <div
         key={`${row.at}-${row.action}-${index}`}
-        className="grid grid-cols-[2.2fr_1.4fr_2.8fr_0.6fr] gap-[16px] border-t border-[#e8edf5] px-[24px] py-[22px] font-[Pretendard,sans-serif] text-[16px] leading-[1.6] text-[#1f2937]"
+        className="grid grid-cols-[2.2fr_1.4fr_2.8fr_0.6fr] gap-[16px] border-t border-[#e8edf5] px-[24px] py-[14px] font-[Pretendard,sans-serif] text-[16px] leading-[1.6] text-[#1f2937]"
       >
         <div>{formatHistoryTime(row.at)}</div>
         <div>{row.action}</div>
@@ -233,7 +384,7 @@ export function ControlAlarmHistoryPage() {
   }, [errorMessage, filteredRows.length, isLoading, pagedRows, rows.length])
 
   return (
-    <div className="w-full px-[24px] py-[24px]">
+    <div className="no-focus-outline w-full px-[24px] py-[24px]">
       <HistoryTabs
         actions={
           <IconTooltipButton
@@ -250,75 +401,16 @@ export function ControlAlarmHistoryPage() {
 
       <div className="mb-[24px] border-b border-[#dbe5f1] pb-[16px]">
         <div className="flex w-full flex-wrap items-end gap-[16px]">
-          <label className="min-w-[180px] flex-1 font-[Pretendard,sans-serif]">
-            <span className="mb-[8px] block text-[14px] font-semibold text-[#607a9f]">시작 날짜</span>
-            <input
-              type="date"
-              value={selectedDate}
-              onChange={(event) => setSelectedDate(event.target.value)}
-              max={getTodayYmd()}
-              className="h-[48px] w-full rounded-[14px] border border-[#d7e1ee] bg-white px-[16px] font-[Pretendard,sans-serif] text-[15px] text-[#0f172a] outline-none transition placeholder:text-[#9aacbf] focus:border-[#61a0e1]"
-            />
-          </label>
+          <DatePickerInput
+            label="시작 날짜"
+            value={selectedDate}
+            onChange={setSelectedDate}
+            maxYmd={getTodayYmd()}
+          />
 
           <label className="min-w-[180px] flex-1 font-[Pretendard,sans-serif]">
             <span className="mb-[8px] block text-[14px] font-semibold text-[#607a9f]">시작 시간</span>
-            <div className="flex gap-[8px]">
-              <div className="relative min-w-0 flex-1">
-                <select
-                  aria-label="시작 시각"
-                  value={selectedTime.length === 5 ? selectedTime.slice(0, 2) : ''}
-                  onChange={(event) => {
-                    const h = event.target.value
-                    if (!h) {
-                      setSelectedTime('')
-                      return
-                    }
-                    const m = selectedTime.length === 5 ? selectedTime.slice(3, 5) : '00'
-                    setSelectedTime(`${h}:${m}`)
-                  }}
-                  className="h-[48px] min-w-0 w-full appearance-none rounded-[14px] border border-[#d7e1ee] bg-white px-[20px] pr-[52px] font-[Pretendard,sans-serif] text-[15px] leading-[1] text-[#0f172a] outline-none transition focus:border-[#61a0e1]"
-                >
-                  <option value="">전체</option>
-                  {START_TIME_HOUR_OPTIONS.map((h) => (
-                    <option key={h} value={h}>
-                      {h}시
-                    </option>
-                  ))}
-                </select>
-                <span className="material-symbols-rounded pointer-events-none absolute right-[16px] top-1/2 -translate-y-1/2 text-[20px] text-[#485b77]">
-                  expand_more
-                </span>
-              </div>
-              <div className="relative min-w-0 flex-1">
-                <select
-                  aria-label="시작 분"
-                  value={selectedTime.length === 5 ? selectedTime.slice(3, 5) : ''}
-                  onChange={(event) => {
-                    const m = event.target.value
-                    if (!m) {
-                      const h = selectedTime.length === 5 ? selectedTime.slice(0, 2) : ''
-                      if (!h) setSelectedTime('')
-                      else setSelectedTime(`${h}:00`)
-                      return
-                    }
-                    const h = selectedTime.length === 5 ? selectedTime.slice(0, 2) : '00'
-                    setSelectedTime(`${h}:${m}`)
-                  }}
-                  className="h-[48px] min-w-0 w-full appearance-none rounded-[14px] border border-[#d7e1ee] bg-white px-[20px] pr-[52px] font-[Pretendard,sans-serif] text-[15px] leading-[1] text-[#0f172a] outline-none transition focus:border-[#61a0e1]"
-                >
-                  <option value="">—</option>
-                  {START_TIME_MINUTE_OPTIONS.map((m) => (
-                    <option key={m} value={m}>
-                      {m}분
-                    </option>
-                  ))}
-                </select>
-                <span className="material-symbols-rounded pointer-events-none absolute right-[16px] top-1/2 -translate-y-1/2 text-[20px] text-[#485b77]">
-                  expand_more
-                </span>
-              </div>
-            </div>
+            <ControlHistoryTimePicker value={selectedTime} onChange={setSelectedTime} />
           </label>
 
           <label className="min-w-[180px] flex-1 font-[Pretendard,sans-serif]">
@@ -327,7 +419,7 @@ export function ControlAlarmHistoryPage() {
               <select
                 value={actionQuery}
                 onChange={(event) => setActionQuery(event.target.value)}
-                className="h-[48px] w-full appearance-none rounded-[14px] border border-[#d7e1ee] bg-white px-[20px] pr-[52px] font-[Pretendard,sans-serif] text-[15px] leading-[1] text-[#0f172a] outline-none transition focus:border-[#61a0e1]"
+                className="h-[48px] w-full appearance-none rounded-[8px] border border-[#d7e1ee] bg-white px-[20px] pr-[52px] font-[Pretendard,sans-serif] text-[15px] leading-[1] text-[#0f172a] outline-none transition focus:border-[#d7e1ee] focus:ring-0 focus:ring-offset-0 focus:[outline:0] focus:[box-shadow:none] focus-visible:[outline:0] focus-visible:[box-shadow:none]"
               >
                 <option value="">전체</option>
                 {actionOptions.map((action) => (
@@ -353,8 +445,8 @@ export function ControlAlarmHistoryPage() {
         </div>
       </div>
 
-      <div className="overflow-hidden rounded-[16px] border border-[#dbe5f1] bg-white">
-        <div className="grid grid-cols-[2.2fr_1.4fr_2.8fr_0.6fr] gap-[16px] bg-[#f8fafc] px-[24px] py-[18px] font-[Pretendard,sans-serif] text-[15px] font-semibold text-[#607a9f]">
+      <div className="overflow-hidden rounded-[8px] border border-[#dbe5f1] bg-white">
+        <div className="grid grid-cols-[2.2fr_1.4fr_2.8fr_0.6fr] gap-[16px] bg-[#f8fafc] px-[24px] py-[14px] font-[Pretendard,sans-serif] text-[15px] font-semibold text-[#607a9f]">
           <div>시각</div>
           <div>동작</div>
           <div>내용</div>

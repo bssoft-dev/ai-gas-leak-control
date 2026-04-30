@@ -79,6 +79,12 @@ button {
   outline-offset: 2px;
 }
 
+/* History filters: disable browser focus outline */
+.no-focus-outline :focus-visible {
+  outline: none !important;
+  outline-offset: 0 !important;
+}
+
 /* Notion-like scrollbar (scoped opt-in) */
 .notion-scrollbar {
   scrollbar-width: thin;

@@ -145,7 +145,7 @@ export function AppShellSidebar({
         <>
           {materialIconName ? (
             <span
-              className={`material-symbols-rounded sidebar-icon block h-5 w-5 shrink-0 ${materialIconName === 'settings' ? 'text-[18px]' : 'text-[20px]'} ${
+              className={`material-symbols-rounded sidebar-icon block h-5 w-5 shrink-0 text-[20px] leading-none ${
                 isActive
                   ? nested
                     ? 'text-[#7a9cc4]'

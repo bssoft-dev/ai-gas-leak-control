@@ -49,8 +49,8 @@ export function SensorManagementSidebar({
       <div className="flex min-h-[40px] shrink-0 items-center font-['Pretendard',sans-serif] text-[16px] font-semibold leading-[1.2] text-[color:var(--blue_primary_800,#4370ac)] -translate-y-[2px]">
         등록된 센서 ({registeredSensors.length})
       </div>
-      <div className="mt-[12px] flex min-h-0 flex-1 flex-col">
-        <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-[8px] bg-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.18),0px_1px_3px_1px_rgba(0,0,0,0.08)]">
+      <div className="mt-[8px] flex min-h-0 flex-1 flex-col">
+        <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-[8px] bg-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.12),0px_1px_3px_1px_rgba(0,0,0,0.05)]">
           <div className="shrink-0 border-b border-[#e2e8f0] bg-[#fafafa] p-[12px]">
             <div className="flex flex-col gap-[12px]">
               <div>
@@ -93,14 +93,14 @@ export function SensorManagementSidebar({
               <div className="flex gap-[8px]">
                 <button
                   type="button"
-                  className={`h-[40px] flex-1 rounded-[8px] bg-[var(--blue_icon,#1392ec)] font-['Pretendard',sans-serif] text-[14px] leading-[20px] text-white ${!enabled ? 'cursor-not-allowed opacity-60' : ''}`}
+                  className={`h-[40px] flex-1 rounded-[4px] bg-[var(--blue_icon,#1392ec)] font-['Pretendard',sans-serif] text-[14px] leading-[20px] text-white ${!enabled ? 'cursor-not-allowed opacity-60' : ''}`}
                   onClick={onAdd}
                 >
                   추가
                 </button>
                 <button
                   type="button"
-                  className={`h-[40px] flex-1 rounded-[8px] bg-[var(--gray_sidebar_stroke,#e2e8f0)] font-['Pretendard',sans-serif] text-[14px] leading-[20px] text-[color:var(--black_700,#2c3c53)] ${!enabled ? 'cursor-not-allowed opacity-60' : ''}`}
+                  className={`h-[40px] flex-1 rounded-[4px] bg-[var(--gray_sidebar_stroke,#e2e8f0)] font-['Pretendard',sans-serif] text-[14px] leading-[20px] text-[color:var(--black_700,#2c3c53)] ${!enabled ? 'cursor-not-allowed opacity-60' : ''}`}
                   onClick={onCancel}
                 >
                   취소
@@ -109,23 +109,23 @@ export function SensorManagementSidebar({
             </div>
           </div>
 
-          <div className="shrink-0 border-b border-[#e2e8f0] px-[12px] py-[8px] font-['Pretendard',sans-serif] text-[12px] leading-[normal] text-[color:var(--black_500,#485b77)]">
+          <div className="shrink-0 px-[12px] pt-[10px] pb-[6px] font-['Pretendard',sans-serif] text-[12px] leading-[normal] text-[color:var(--black_500,#485b77)]">
             목록 ({registeredSensors.length})
           </div>
 
-          <div className="notion-scrollbar flex min-h-0 flex-1 flex-col gap-[8px] overflow-y-auto py-[12px] pl-[12px] pr-[4px]">
+          <div className="notion-scrollbar flex min-h-0 flex-1 flex-col gap-[8px] overflow-y-auto px-[12px] pt-[8px] pb-[12px]">
             {registeredSensors.map((sensor) =>
               editingId === sensor.id ? (
                 <div
                   key={sensor.id}
-                  className="flex flex-col gap-[12px] rounded-[8px] border border-[#e2e8f0] bg-white p-[14px]"
+                  className="flex flex-col gap-[10px] rounded-[8px] border border-[#e2e8f0] bg-white p-[12px]"
                 >
                   <div className="flex min-w-0 flex-col gap-[12px]">
                     <div
-                      className={`h-[32px] w-[4px] shrink-0 self-start rounded-full ${
+                      className={`h-[40px] w-[4px] shrink-0 self-start rounded-full ${
                         editUnit === 'pressure'
-                          ? 'bg-[var(--green_sensor,#85b548)]'
-                          : 'bg-[var(--orange_sensor,#daa324)]'
+                          ? 'bg-[var(--green_sensor,#34d399)]'
+                          : 'bg-[var(--orange_sensor,#fbbf24)]'
                       }`}
                     />
                     <div className="flex min-w-0 flex-col gap-[12px]">
@@ -201,7 +201,7 @@ export function SensorManagementSidebar({
                   key={sensor.id}
                   role="button"
                   tabIndex={0}
-                  className={`flex min-w-0 flex-col gap-[10px] rounded-[8px] border bg-white p-[14px] outline-none transition-colors ${
+                  className={`flex min-w-0 flex-col gap-[8px] rounded-[8px] border bg-white p-[12px] outline-none transition-colors ${
                     selectedSensorId === sensor.id
                       ? sensor.color === 'green'
                         ? 'border-[#34d399] ring-2 ring-[rgba(52,211,153,0.30)]'
@@ -216,53 +216,57 @@ export function SensorManagementSidebar({
                     }
                   }}
                 >
-                  <div className="flex min-w-0 items-start gap-[12px]">
+                  <div className="flex min-w-0 flex-1 gap-[12px]">
                     <div
-                      className={`mt-[2px] h-[32px] w-[4px] shrink-0 rounded-full ${
+                      className={`w-[4px] shrink-0 self-stretch rounded-full ${
                         sensor.color === 'green'
-                          ? 'bg-[var(--green_sensor,#85b548)]'
-                          : 'bg-[var(--orange_sensor,#daa324)]'
+                          ? 'bg-[var(--green_sensor,#34d399)]'
+                          : 'bg-[var(--orange_sensor,#fbbf24)]'
                       }`}
+                      aria-hidden
                     />
-                    <div className="flex min-w-0 flex-1 flex-col gap-[4px]">
-                      <div className="truncate font-['Pretendard',sans-serif] text-[15px] leading-[20px] text-[color:var(--black_700,#2c3c53)]">
-                        {sensor.label}
+                    <div className="flex min-w-0 flex-1 flex-col gap-[8px]">
+                      <div className="flex min-w-0 flex-1 flex-col gap-[2px]">
+                        <div className="truncate font-['Pretendard',sans-serif] text-[15px] leading-[20px] text-[color:var(--black_700,#2c3c53)]">
+                          {sensor.label}
+                        </div>
+                        <div className="break-words font-['Pretendard',sans-serif] text-[12px] leading-[normal] text-[color:var(--black_300,#7a89a1)]">
+                          {sensor.unitLabel}
+                        </div>
+                        <div className="break-all font-['Pretendard',sans-serif] text-[11px] leading-[normal] text-[color:var(--black_300,#7a89a1)]">
+                          {sensor.posText}
+                        </div>
                       </div>
-                      <div className="break-words font-['Pretendard',sans-serif] text-[12px] leading-[normal] text-[color:var(--black_300,#7a89a1)]">
-                        {sensor.unitLabel}
-                      </div>
-                      <div className="break-all font-['Pretendard',sans-serif] text-[11px] leading-[normal] text-[color:var(--black_300,#7a89a1)]">
-                        {sensor.posText}
+
+                      <div className="flex justify-end gap-[4px]">
+                        <button
+                          type="button"
+                          className={`flex h-[28px] w-[28px] items-center justify-center rounded-[4px] hover:bg-[#f1f5f9] ${!enabled ? 'cursor-not-allowed opacity-50' : ''}`}
+                          aria-label="센서 편집"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            onStartEdit(sensor)
+                          }}
+                        >
+                          <img alt="" className="block h-[20px] w-[20px]" src={imgEdit} />
+                        </button>
+                        <button
+                          type="button"
+                          className={`group flex h-[28px] w-[28px] items-center justify-center rounded-[4px] transition-colors hover:bg-[#f1f5f9] active:bg-[#e2e8f0] ${!enabled ? 'cursor-not-allowed opacity-50' : ''}`}
+                          aria-label="센서 삭제"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            onRequestDelete(sensor.id)
+                          }}
+                        >
+                          <img
+                            alt=""
+                            className="block h-[20px] w-[20px] opacity-80 transition-opacity group-hover:opacity-100"
+                            src={imgDelete}
+                          />
+                        </button>
                       </div>
                     </div>
-                  </div>
-                  <div className="flex justify-end gap-[4px]">
-                    <button
-                      type="button"
-                      className={`flex h-[28px] w-[28px] items-center justify-center rounded-[4px] hover:bg-[#f1f5f9] ${!enabled ? 'cursor-not-allowed opacity-50' : ''}`}
-                      aria-label="센서 편집"
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        onStartEdit(sensor)
-                      }}
-                    >
-                      <img alt="" className="block h-[20px] w-[20px]" src={imgEdit} />
-                    </button>
-                    <button
-                      type="button"
-                      className={`group flex h-[28px] w-[28px] items-center justify-center rounded-[4px] transition-colors hover:bg-[#f1f5f9] active:bg-[#e2e8f0] ${!enabled ? 'cursor-not-allowed opacity-50' : ''}`}
-                      aria-label="센서 삭제"
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        onRequestDelete(sensor.id)
-                      }}
-                    >
-                      <img
-                        alt=""
-                        className="block h-[20px] w-[20px] opacity-80 transition-opacity group-hover:opacity-100"
-                        src={imgDelete}
-                      />
-                    </button>
                   </div>
                 </div>
               ),
