@@ -5,6 +5,7 @@ import {
   DRAWING_ZOOM_MAX,
   DRAWING_ZOOM_MIN,
   DRAWING_ZOOM_STEP,
+  getPanLimits,
 } from '../lib/drawingViewport'
 
 type PointerDragState = {
@@ -43,6 +44,10 @@ export function useDrawingViewport(resetKey: string) {
     (e: ReactPointerEvent) => {
       if (zoom <= 1) return
       if (e.button !== 0) return
+      const target = e.target as HTMLElement | null
+      if (target?.closest?.('[data-sensor-drawing-slot]')) {
+        return
+      }
       const el = viewportRef.current
       if (!el) return
       e.preventDefault()
@@ -87,6 +92,17 @@ export function useDrawingViewport(resetKey: string) {
     }
   }, [])
 
+  const panToSlotFraction = useCallback((nx: number, ny: number) => {
+    const el = viewportRef.current
+    if (!el || zoom <= 1) return
+    const vw = el.clientWidth
+    const vh = el.clientHeight
+    const { maxX, maxY } = getPanLimits(vw, vh, zoom)
+    const px = (0.5 - nx) * 2 * maxX
+    const py = (0.4 - ny) * 2 * maxY
+    setPan(clampDrawingPan(px, py, zoom, vw, vh))
+  }, [zoom])
+
   const resetView = useCallback(() => {
     setZoom(1)
     setPan({ x: 0, y: 0 })
@@ -113,6 +129,7 @@ export function useDrawingViewport(resetKey: string) {
     resetView,
     zoomIn,
     zoomOut,
+    panToSlotFraction,
     canResetView: zoom !== 1 || pan.x !== 0 || pan.y !== 0,
     onLostPointerCapture: () => {
       dragRef.current = null

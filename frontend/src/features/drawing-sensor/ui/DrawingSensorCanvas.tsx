@@ -11,6 +11,7 @@ import { DrawingViewResetIcon } from '../../../entities/drawing/ui/DrawingViewRe
 import { monitorAssets } from '../../monitor/assets/monitorAssets'
 import { drawingSensorAssets } from '../assets/drawingSensorAssets'
 import type { RegisteredSensor } from '../model/registeredSensor'
+import { DrawingViewportMinimap } from './DrawingViewportMinimap'
 
 type DisplaySensor = Pick<RegisteredSensor, 'id' | 'xPct' | 'yPct' | 'color'>
 
@@ -42,6 +43,7 @@ type DrawingSensorCanvasProps = {
   onZoomOut: () => void
   onResetView: () => void
   onMoveToMonitor: () => void
+  onPanToSlotFraction: (nx: number, ny: number) => void
 }
 
 export function DrawingSensorCanvas({
@@ -72,6 +74,7 @@ export function DrawingSensorCanvas({
   onZoomOut,
   onResetView,
   onMoveToMonitor,
+  onPanToSlotFraction,
 }: DrawingSensorCanvasProps) {
   const { imgAttachFileAdd } = drawingSensorAssets
 
@@ -146,7 +149,10 @@ export function DrawingSensorCanvas({
                   <div className="relative h-full w-full overflow-hidden">
                     <div
                       ref={drawingCanvasRef}
-                      className={`absolute left-0 w-full overflow-hidden ${zoom <= 1 ? 'cursor-crosshair' : ''}`}
+                      data-sensor-drawing-slot
+                      className={`absolute left-0 w-full overflow-hidden ${
+                        enabled ? 'cursor-crosshair' : 'cursor-not-allowed opacity-90'
+                      }`}
                       style={{
                         top: `${DRAWING_IMAGE_SLOT_TOP_PCT}%`,
                         height: `${DRAWING_IMAGE_SLOT_HEIGHT_PCT}%`,
@@ -241,6 +247,16 @@ export function DrawingSensorCanvas({
                 )}
               </div>
             </div>
+
+            <DrawingViewportMinimap
+              zoom={zoom}
+              pan={pan}
+              viewportRef={viewportRef}
+              imagePath={activeDrawing?.imagePath}
+              fileKind={activeDrawing?.fileKind}
+              drawingName={drawingName}
+              onNavigate={onPanToSlotFraction}
+            />
           </div>
         </div>
       </div>

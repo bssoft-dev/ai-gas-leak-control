@@ -322,7 +322,6 @@ export default function DrawingSensorPage() {
       showInactiveWarning()
       return
     }
-    if (viewport.zoom > 1) return
     const element = drawingCanvasRef.current
     if (!element) return
 
@@ -489,6 +488,7 @@ export default function DrawingSensorPage() {
             viewport.setIsFabOpen(false)
             navigate('/')
           }}
+          onPanToSlotFraction={viewport.panToSlotFraction}
         />
 
         <SensorManagementSidebar
