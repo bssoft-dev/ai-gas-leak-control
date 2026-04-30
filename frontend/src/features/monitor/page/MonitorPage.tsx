@@ -1,7 +1,11 @@
 import { useMemo, useState, type CSSProperties } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { getSensorPercentInSlot } from '../../../entities/drawing/lib/drawingSensorPosition'
+import {
+  DRAWING_IMAGE_SLOT_HEIGHT_PCT,
+  DRAWING_IMAGE_SLOT_TOP_PCT,
+  getSensorPercentInSlot,
+} from '../../../entities/drawing/lib/drawingSensorPosition'
 import { useActiveDrawing } from '../../../entities/drawing/model/activeDrawing'
 import { useDrawingViewport } from '../../../entities/drawing/model/useDrawingViewport'
 import { DrawingMedia } from '../../../entities/drawing/ui/DrawingMedia'
@@ -86,8 +90,19 @@ export default function MonitorPage() {
     <>
       <PageContentGrid>
         <section className="col-span-12 flex min-h-0 min-w-0 flex-col lg:col-span-9 lg:h-full">
-          <div className="shrink-0 font-['Pretendard',sans-serif] font-semibold text-[16px] leading-[1.2] text-[#4370ac]">
-            {drawingName}
+          <div className="flex min-h-[40px] shrink-0 items-center justify-between gap-[12px]">
+            <div className="min-w-0 font-['Pretendard',sans-serif] text-[16px] font-semibold leading-[1.2] text-[color:var(--blue_primary_800,#4370ac)]">
+              {drawingName}
+            </div>
+            <div
+              className="invisible flex h-[40px] shrink-0 items-center justify-center gap-[8px] rounded-[4px] px-[22px] py-[8px]"
+              aria-hidden
+            >
+              <img alt="" className="block h-[20px] w-[20px]" src={imgAttachFileAdd} />
+              <span className="whitespace-nowrap font-['Pretendard',sans-serif] text-[16px] font-medium leading-[15px] tracking-[-0.25px]">
+                도면 추가
+              </span>
+            </div>
           </div>
 
           <div className="mt-[12px] flex min-h-0 min-w-0 flex-1 flex-col">
@@ -145,25 +160,33 @@ export default function MonitorPage() {
                       transition: viewport.isPanning ? 'none' : 'transform 0.15s ease-out',
                     }}
                   >
-                    <div className="pointer-events-none absolute inset-[24px] overflow-hidden">
-                      <div className="relative h-full w-full">
-                        <DrawingMedia
-                          alt={drawingName}
-                          src={activeDrawing?.imagePath}
-                          fileKind={activeDrawing?.fileKind}
-                        />
-                        {isDrawingActive &&
-                          (activeDrawing?.sensors ?? []).map((sensor) => {
-                          const { leftPct, topPct } = getSensorPercentInSlot(sensor)
-                          return (
-                            <DrawingSensorDot
-                              key={sensor.id}
-                              leftPct={leftPct}
-                              topPct={topPct}
-                              variant={sensor.variant}
-                            />
-                          )
-                          })}
+                    <div className="relative h-full w-full overflow-hidden">
+                      <div
+                        className="pointer-events-none absolute left-0 w-full overflow-hidden"
+                        style={{
+                          top: `${DRAWING_IMAGE_SLOT_TOP_PCT}%`,
+                          height: `${DRAWING_IMAGE_SLOT_HEIGHT_PCT}%`,
+                        }}
+                      >
+                        <div className="relative h-full w-full">
+                          <DrawingMedia
+                            alt={drawingName}
+                            src={activeDrawing?.imagePath}
+                            fileKind={activeDrawing?.fileKind}
+                          />
+                          {isDrawingActive &&
+                            (activeDrawing?.sensors ?? []).map((sensor) => {
+                              const { leftPct, topPct } = getSensorPercentInSlot(sensor)
+                              return (
+                                <DrawingSensorDot
+                                  key={sensor.id}
+                                  leftPct={leftPct}
+                                  topPct={topPct}
+                                  variant={sensor.variant}
+                                />
+                              )
+                            })}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -244,7 +267,7 @@ export default function MonitorPage() {
         </section>
 
         <aside className="col-span-12 flex min-h-0 min-w-0 flex-col lg:col-span-3 lg:h-full">
-          <div className="shrink-0 font-['Pretendard',sans-serif] font-semibold text-[16px] leading-[1.2] text-[#4370ac] -translate-y-[2px]">
+          <div className="flex min-h-[40px] shrink-0 items-center font-['Pretendard',sans-serif] text-[16px] font-semibold leading-[1.2] text-[color:var(--blue_primary_800,#4370ac)] -translate-y-[2px]">
             실시간 차트
           </div>
 

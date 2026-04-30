@@ -7,6 +7,7 @@ import { useDrawingViewport } from '../../../entities/drawing/model/useDrawingVi
 import { useEventStream } from '../../../shared/events/EventStreamProvider'
 import { formatDrawingName } from '../../../shared/lib/formatDrawingName'
 import { PageContentGrid } from '../../../shared/ui/layout/PageContentGrid'
+import { PaginationArrowButton } from '../../../shared/ui/navigation/PaginationArrowButton'
 import { drawingSensorAssets } from '../assets/drawingSensorAssets'
 import {
   mapDrawingSensorsToRegisteredSensors,
@@ -63,7 +64,7 @@ export default function DrawingSensorPage() {
     toggleDrawingActive,
     refreshDrawings,
   } = useActiveDrawing()
-  const { imgAttachFileAdd, imgChevronLeft, imgChevronRight } = drawingSensorAssets
+  const { imgAttachFileAdd } = drawingSensorAssets
   const viewport = useDrawingViewport(activeDrawingId)
   const drawingCanvasRef = useRef<HTMLDivElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -510,15 +511,21 @@ export default function DrawingSensorPage() {
         />
 
         <div className="col-span-12 mt-[18px] flex shrink-0 items-center justify-center gap-[51px] text-[16px] text-[#0b1828] lg:col-span-9">
-          <button type="button" className="flex h-[20px] w-[20px] items-center justify-center" onClick={goPrev}>
-            <img alt="" className="-scale-x-100 block h-[20px] w-[20px]" src={imgChevronLeft} />
-          </button>
+          <PaginationArrowButton
+            direction="prev"
+            onClick={goPrev}
+            disabled={total <= 0 || page <= 1}
+            ariaLabel="이전 도면"
+          />
           <div className="font-['Pretendard',sans-serif] font-normal leading-[20px]">
             {page} / {total}
           </div>
-          <button type="button" className="flex h-[20px] w-[20px] items-center justify-center" onClick={goNext}>
-            <img alt="" className="block h-[20px] w-[20px]" src={imgChevronRight} />
-          </button>
+          <PaginationArrowButton
+            direction="next"
+            onClick={goNext}
+            disabled={total <= 0 || page >= total}
+            ariaLabel="다음 도면"
+          />
         </div>
       </PageContentGrid>
 

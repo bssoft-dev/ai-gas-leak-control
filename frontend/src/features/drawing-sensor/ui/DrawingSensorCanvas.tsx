@@ -1,5 +1,9 @@
 import { type MouseEvent as ReactMouseEvent, type PointerEvent as ReactPointerEvent, type RefObject } from 'react'
 
+import {
+  DRAWING_IMAGE_SLOT_HEIGHT_PCT,
+  DRAWING_IMAGE_SLOT_TOP_PCT,
+} from '../../../entities/drawing/lib/drawingSensorPosition'
 import type { DrawingDetail } from '../../../entities/drawing/model/activeDrawing'
 import { DrawingMedia } from '../../../entities/drawing/ui/DrawingMedia'
 import { DrawingSensorDot } from '../../../entities/drawing/ui/DrawingSensorDot'
@@ -142,7 +146,11 @@ export function DrawingSensorCanvas({
                   <div className="relative h-full w-full overflow-hidden">
                     <div
                       ref={drawingCanvasRef}
-                      className={`absolute left-0 top-[19.35%] h-[61.3%] w-full overflow-hidden ${zoom <= 1 ? 'cursor-crosshair' : ''}`}
+                      className={`absolute left-0 w-full overflow-hidden ${zoom <= 1 ? 'cursor-crosshair' : ''}`}
+                      style={{
+                        top: `${DRAWING_IMAGE_SLOT_TOP_PCT}%`,
+                        height: `${DRAWING_IMAGE_SLOT_HEIGHT_PCT}%`,
+                      }}
                       onClick={onCanvasClick}
                       role="presentation"
                     >
