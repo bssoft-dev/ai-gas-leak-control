@@ -13,7 +13,7 @@ type HistoryTabsProps = {
 
 export function HistoryTabs({ className, actions }: HistoryTabsProps) {
   return (
-    <div className={className ?? 'mb-[16px] flex flex-wrap items-center justify-between gap-[12px]'}>
+    <div className={className ?? 'mb-[16px] flex flex-wrap items-center gap-[12px]'}>
       <div className="flex flex-wrap items-center gap-[8px]">
         {HISTORY_TAB_ITEMS.map((item) => (
           <NavLink
@@ -28,8 +28,8 @@ export function HistoryTabs({ className, actions }: HistoryTabsProps) {
             {item.label}
           </NavLink>
         ))}
+        {actions ? <div className="flex items-center gap-[8px]">{actions}</div> : null}
       </div>
-      {actions ? <div className="flex items-center gap-[8px]">{actions}</div> : null}
     </div>
   )
 }

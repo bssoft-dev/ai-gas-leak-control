@@ -71,6 +71,7 @@ export function AppShellSidebar({
   onResizeStart,
 }: AppShellSidebarProps) {
   const BLUE_PRIMARY_800 = '#4370ac'
+  const BLUE_ACTIVE_SOFT = '#7a9cc4'
   const ICON_INACTIVE = '#0b1828'
   const location = useLocation()
   const navigate = useNavigate()
@@ -83,11 +84,19 @@ export function AppShellSidebar({
 
   const isHistoryActive = location.pathname.startsWith(HISTORY_SECTION.basePath)
 
-  const MaskIcon20 = ({ maskSrc, isActive }: { maskSrc: string; isActive: boolean }) => (
+  const MaskIcon20 = ({
+    maskSrc,
+    isActive,
+    activeTone = 'strong',
+  }: {
+    maskSrc: string
+    isActive: boolean
+    activeTone?: 'strong' | 'soft'
+  }) => (
     <span
       className="block h-5 w-5 shrink-0"
       style={{
-        backgroundColor: isActive ? BLUE_PRIMARY_800 : ICON_INACTIVE,
+        backgroundColor: isActive ? (activeTone === 'soft' ? BLUE_ACTIVE_SOFT : BLUE_PRIMARY_800) : ICON_INACTIVE,
         WebkitMaskImage: `url(${maskSrc})`,
         WebkitMaskRepeat: 'no-repeat',
         WebkitMaskPosition: 'center',
@@ -113,18 +122,26 @@ export function AppShellSidebar({
             ? 'flex h-[36px] w-[44px] items-center justify-center rounded-[4px] border border-[var(--blue_primary_500,#61a0e1)] bg-[var(--blue_primary_50,#e6f3fb)] px-[13px] py-[9px]'
             : 'flex h-[36px] w-[44px] items-center justify-center rounded-[8px] px-[12px] py-[8px]'
           : isActive
-            ? `flex w-full items-center gap-[8px] rounded-[4px] border border-[var(--blue_primary_500,#61a0e1)] bg-[var(--blue_primary_50,#e6f3fb)] ${nested ? 'px-[12px] py-[8px]' : 'px-[13px] py-[9px]'}`
+            ? nested
+              ? 'flex w-full items-center gap-[8px] rounded-[4px] bg-[#eef5fb] px-[12px] py-[8px]'
+              : `flex w-full items-center gap-[8px] rounded-[4px] border border-[var(--blue_primary_500,#61a0e1)] bg-[var(--blue_primary_50,#e6f3fb)] px-[13px] py-[9px]`
             : `flex w-full items-center gap-[8px] rounded-[4px] ${nested ? 'px-[12px] py-[8px]' : 'px-[12px] py-[8px]'} hover:bg-[#f1f5f9]`
       }
     >
       {({ isActive }) => (
         <>
-          <MaskIcon20 maskSrc={iconSrc} isActive={isActive} />
+          <MaskIcon20
+            maskSrc={iconSrc}
+            isActive={isActive}
+            activeTone={nested && isActive ? 'soft' : 'strong'}
+          />
           {!compact && (
             <span
               className={`font-['Pretendard',sans-serif] text-[16px] leading-[20px] ${
                 isActive
-                  ? 'font-semibold text-[color:var(--blue_primary_800,#4370ac)]'
+                  ? nested
+                    ? 'font-medium text-[#7a9cc4]'
+                    : 'font-semibold text-[color:var(--blue_primary_800,#4370ac)]'
                   : 'font-medium text-[color:var(--black_title,#0b1828)]'
               }`}
             >

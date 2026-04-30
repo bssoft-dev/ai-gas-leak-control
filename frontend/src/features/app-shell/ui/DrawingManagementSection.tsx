@@ -304,16 +304,14 @@ function SectionToggle({
   title,
   expanded,
   onToggle,
-  titleClassName,
 }: {
   title: string
   expanded: boolean
   onToggle: () => void
-  titleClassName: string
 }) {
   return (
     <div className="mb-[8px] flex items-center justify-between px-[2px]">
-      <div className={`font-['Pretendard',sans-serif] text-[12px] font-semibold leading-[16px] ${titleClassName}`}>
+      <div className="font-['Pretendard',sans-serif] text-[12px] font-semibold leading-[16px] text-[color:var(--black_300,#7a89a1)]">
         {title}
       </div>
       <button
@@ -338,6 +336,9 @@ export function DrawingManagementSection({ isExpanded, onToggle }: DrawingManage
     () => new Set(drawings.filter((drawing) => drawing.isActive).map((drawing) => drawing.id)),
     [drawings],
   )
+
+  const activeDrawingCount = useMemo(() => drawings.filter((drawing) => drawing.isActive).length, [drawings])
+  const inactiveDrawingCount = useMemo(() => drawings.filter((drawing) => !drawing.isActive).length, [drawings])
 
   const searchedIdSet = useMemo(() => {
     const query = normalizeSearchText(drawingSearch)
@@ -386,10 +387,9 @@ export function DrawingManagementSection({ isExpanded, onToggle }: DrawingManage
 
             <div className="px-[8px]">
               <SectionToggle
-                title="도면목록"
+                title={`활성화 도면 (${activeDrawingCount}개)`}
                 expanded={isDrawingListExpanded}
                 onToggle={() => setIsDrawingListExpanded((prev) => !prev)}
-                titleClassName="text-[color:var(--green,#22c55e)]"
               />
               {isDrawingListExpanded && (
                 <DrawingList
@@ -405,10 +405,9 @@ export function DrawingManagementSection({ isExpanded, onToggle }: DrawingManage
 
             <div className="px-[8px] pb-[8px]">
               <SectionToggle
-                title="비활성도면"
+                title={`비활성도면 (${inactiveDrawingCount}개)`}
                 expanded={isInactiveListExpanded}
                 onToggle={() => setIsInactiveListExpanded((prev) => !prev)}
-                titleClassName="text-[color:var(--black_300,#7a89a1)]"
               />
               {isInactiveListExpanded && (
                 <DrawingList

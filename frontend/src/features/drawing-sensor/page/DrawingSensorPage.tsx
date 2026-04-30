@@ -15,6 +15,7 @@ import {
   type RegisteredSensor,
   unitLabelToUnit,
 } from '../model/registeredSensor'
+import { mockDrawingDetails } from '../../../mocks/data/drawingDetails'
 import { DrawingSensorCanvas } from '../ui/DrawingSensorCanvas'
 import { SensorAlertDialog } from '../ui/SensorAlertDialog'
 import { SensorDeleteDialog } from '../ui/SensorDeleteDialog'
@@ -114,10 +115,16 @@ export default function DrawingSensorPage() {
 
   useEffect(() => {
     if (!activeDrawingId || !activeDrawing) return
-    setRegistrationsByDrawing((prev) => ({
-      ...prev,
-      [activeDrawingId]: mapDrawingSensorsToRegisteredSensors(activeDrawing.sensors ?? []),
-    }))
+    const isMockDrawing = Boolean(mockDrawingDetails[activeDrawingId])
+    setRegistrationsByDrawing((prev) => {
+      if (isMockDrawing && prev[activeDrawingId] !== undefined) {
+        return prev
+      }
+      return {
+        ...prev,
+        [activeDrawingId]: mapDrawingSensorsToRegisteredSensors(activeDrawing.sensors ?? []),
+      }
+    })
   }, [activeDrawing, activeDrawingId])
 
   useEffect(() => {
@@ -136,6 +143,21 @@ export default function DrawingSensorPage() {
     if (!activeDrawingId) {
       setAlertMessage('선택된 도면이 없습니다.')
       return false
+    }
+
+    const isMockDrawing = Boolean(mockDrawingDetails[activeDrawingId])
+    if (isMockDrawing) {
+      setIsSavingSensors(true)
+      try {
+        setRegistrationsByDrawing((prev) => ({
+          ...prev,
+          [drawingKey]: nextSensors,
+        }))
+        setToastMessage(successMessage)
+        return true
+      } finally {
+        setIsSavingSensors(false)
+      }
     }
 
     setIsSavingSensors(true)

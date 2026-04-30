@@ -215,12 +215,12 @@ export function ControlAlarmHistoryPage() {
     return pagedRows.map((row, index) => (
       <div
         key={`${row.at}-${row.action}-${index}`}
-        className="grid grid-cols-[2.2fr_1.4fr_2.8fr_0.6fr] gap-[16px] border-t border-[#e8edf5] px-[24px] py-[22px] font-[Pretendard,sans-serif] text-[16px] text-[#0f172a]"
+        className="grid grid-cols-[2.2fr_1.4fr_2.8fr_0.6fr] gap-[16px] border-t border-[#e8edf5] px-[24px] py-[22px] font-[Pretendard,sans-serif] text-[16px] leading-[1.6] text-[#1f2937]"
       >
-        <div className="font-semibold leading-[1.5] text-[#0f172a]">{formatHistoryTime(row.at)}</div>
-        <div className="font-semibold leading-[1.5] text-[#4370ac]">{row.action}</div>
-        <div className="leading-[1.6] text-[#1f2937]">{row.detail || '-'}</div>
-        <div className="text-right font-semibold leading-[1.5] text-[#0f172a]">{row.level}</div>
+        <div>{formatHistoryTime(row.at)}</div>
+        <div>{row.action}</div>
+        <div>{row.detail || '-'}</div>
+        <div className="text-right">{row.level}</div>
       </div>
     ))
   }, [errorMessage, filteredRows.length, isLoading, pagedRows, rows.length])
