@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
 import type { MonitorPressurePoint } from '../../../api/monitorPressureSeries'
 import { PressureChartDetail } from './PressureChartDetail'
@@ -59,6 +59,14 @@ export function PressureChartDetailModal({
   const [selectedTime, setSelectedTime] = useState('')
   const [zoomLevel, setZoomLevel] = useState(1)
   const [viewEndAt, setViewEndAt] = useState(baseEnd)
+  const [toastMessage, setToastMessage] = useState<string | null>(null)
+  const lastClampToastKeyRef = useRef<string>('')
+
+  useEffect(() => {
+    if (!toastMessage) return
+    const timeoutId = window.setTimeout(() => setToastMessage(null), 2500)
+    return () => window.clearTimeout(timeoutId)
+  }, [toastMessage])
 
   useEffect(() => {
     if (!open) return
@@ -119,14 +127,29 @@ export function PressureChartDetailModal({
     const hours = Number.isFinite(Number(hoursText)) ? Number(hoursText) : baseEndDate.getHours()
     const minutes = Number.isFinite(Number(minutesText)) ? Number(minutesText) : baseEndDate.getMinutes()
 
-    return new Date(year, month - 1, day, hours, minutes, 59, 999).getTime()
+    // time input은 분 단위 선택이므로, 해당 분의 시작 시점으로 앵커를 잡는다.
+    return new Date(year, month - 1, day, hours, minutes, 0, 0).getTime()
   }, [baseEnd, baseEndDate, selectedDate, selectedTime])
 
-  const nearestAvailableEndAt = useMemo(() => {
-    if (sortedPoints.length === 0) return anchorEndAt
-    const clampedTarget = Math.min(anchorEndAt, baseEnd)
-    const found = [...sortedPoints].reverse().find((point) => point.at <= clampedTarget)
-    return found?.at ?? sortedPoints[sortedPoints.length - 1].at
+  const nearestAvailable = useMemo(() => {
+    if (sortedPoints.length === 0) {
+      return { endAt: baseEnd, noDataAtSelection: true }
+    }
+
+    // 선택한 "분" 범위(00~59초) 안에 데이터가 있는지 확인
+    const minuteStart = anchorEndAt
+    const minuteEnd = minuteStart + 60_000 - 1
+    const clampedMinuteEnd = Math.min(minuteEnd, baseEnd)
+
+    const inMinute = [...sortedPoints]
+      .reverse()
+      .find((point) => point.at >= minuteStart && point.at <= clampedMinuteEnd)
+
+    if (!inMinute) {
+      return { endAt: baseEnd, noDataAtSelection: true }
+    }
+
+    return { endAt: inMinute.at, noDataAtSelection: false }
   }, [anchorEndAt, baseEnd, sortedPoints])
 
   const yDomain = useMemo<[number, number]>(() => {
@@ -148,19 +171,59 @@ export function PressureChartDetailModal({
   useEffect(() => {
     if (!open) return
     if (isPinnedToLatest) {
-      setViewEndAt(nearestAvailableEndAt)
+      setViewEndAt(nearestAvailable.endAt)
       return
     }
 
     setViewEndAt((previous) => {
       const minEnd = baseStart + currentWindowMs
-      const maxEnd = nearestAvailableEndAt
+      const maxEnd = nearestAvailable.endAt
       if (minEnd > maxEnd) {
         return maxEnd
       }
       return clamp(previous, minEnd, maxEnd)
     })
-  }, [open, isPinnedToLatest, nearestAvailableEndAt, baseStart, currentWindowMs])
+  }, [open, isPinnedToLatest, nearestAvailable.endAt, baseStart, currentWindowMs])
+
+  useEffect(() => {
+    if (!open || isPinnedToLatest) return
+    if (!selectedDate || !selectedTime) return
+
+    const minEnd = baseStart + currentWindowMs
+    const maxEnd = nearestAvailable.endAt
+    if (minEnd > maxEnd) {
+      setViewEndAt(maxEnd)
+      return
+    }
+    if (nearestAvailable.noDataAtSelection) {
+      const toastKey = `${selectedDate} ${selectedTime}`
+      if (lastClampToastKeyRef.current !== toastKey) {
+        lastClampToastKeyRef.current = toastKey
+        setToastMessage('해당 시간대에 데이터가 없습니다.')
+      }
+      // 데이터가 없는 과거 시점으로는 이동하지 않고, 현재(최신)로 복귀
+      setIsPinnedToLatest(true)
+      setSelectedDate(maxDateStr)
+      setSelectedTime(maxTimeStr)
+      setZoomLevel(1)
+      setViewEndAt(baseEnd)
+      return
+    }
+
+    setViewEndAt(clamp(maxEnd, minEnd, maxEnd))
+  }, [
+    open,
+    isPinnedToLatest,
+    selectedDate,
+    selectedTime,
+    nearestAvailable.endAt,
+    nearestAvailable.noDataAtSelection,
+    baseStart,
+    currentWindowMs,
+    baseEnd,
+    maxDateStr,
+    maxTimeStr,
+  ])
 
   const viewStartAt = useMemo(() => viewEndAt - currentWindowMs, [currentWindowMs, viewEndAt])
   const canZoomIn = zoomLevel < MAX_ZOOM_LEVEL
@@ -245,7 +308,7 @@ export function PressureChartDetailModal({
         <div className="h-px w-full bg-[#e5e7eb]" aria-hidden="true" />
 
         <div className="px-[16px] pb-[14px] pt-[10px]">
-          <div className="relative h-[420px] w-full">
+          <div className="relative z-0 h-[420px] w-full">
             {hasSeriesError && points.length === 0 ? (
               <div className="flex h-full w-full items-center justify-center bg-white px-[12px] text-center font-['Pretendard',sans-serif] text-[12px] text-[#94a3b8]">
                 차트 데이터를 불러오지 못했습니다.
@@ -303,10 +366,10 @@ export function PressureChartDetailModal({
             )}
           </div>
 
-          <div className="mt-[10px] flex items-center justify-center gap-[10px]">
+          <div className="relative z-10 mt-[10px] flex items-center justify-center gap-[10px] pointer-events-auto">
             <input
               type="date"
-              className="h-[30px] rounded-[6px] border border-[#e2e8f0] bg-white px-[10px] font-['Pretendard',sans-serif] text-[12px] text-[#485b77]"
+              className="h-[30px] rounded-[6px] border border-[#e2e8f0] bg-white px-[10px] font-['Pretendard',sans-serif] text-[12px] text-[#485b77] pointer-events-auto"
               value={selectedDate}
               onChange={(event) => {
                 setIsPinnedToLatest(false)
@@ -318,7 +381,8 @@ export function PressureChartDetailModal({
             />
             <input
               type="time"
-              className="h-[30px] w-[100px] rounded-[6px] border border-[#e2e8f0] bg-white px-[10px] font-['Pretendard',sans-serif] text-[12px] text-[#485b77]"
+              className="h-[30px] rounded-[6px] border border-[#e2e8f0] bg-white px-[10px] font-['Pretendard',sans-serif] text-[12px] text-[#485b77] pointer-events-auto"
+              style={{ width: 'clamp(96px, 10vw, 110px)' }}
               value={selectedTime}
               onChange={(event) => {
                 setIsPinnedToLatest(false)
@@ -343,6 +407,16 @@ export function PressureChartDetailModal({
           </div>
         </div>
       </div>
+
+      {toastMessage && (
+        <div
+          className="pointer-events-none fixed bottom-[28px] left-1/2 z-[300] max-w-[min(92vw,420px)] -translate-x-1/2 rounded-[10px] bg-[#2f2f2f] px-[18px] py-[12px] text-center font-['Pretendard',sans-serif] text-[14px] leading-[1.45] text-white shadow-[0px_8px_24px_rgba(0,0,0,0.22)]"
+          role="status"
+          aria-live="polite"
+        >
+          {toastMessage}
+        </div>
+      )}
     </div>
   )
 }

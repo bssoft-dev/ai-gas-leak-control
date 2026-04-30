@@ -6,6 +6,7 @@ type SensorManagementSidebarProps = {
   label: string
   unit: 'pressure' | 'flow'
   registeredSensors: RegisteredSensor[]
+  selectedSensorId: string | null
   editingId: string | null
   editLabel: string
   editUnit: 'pressure' | 'flow'
@@ -18,6 +19,7 @@ type SensorManagementSidebarProps = {
   onEditUnitChange: (value: 'pressure' | 'flow') => void
   onSaveEdit: () => void
   onRequestDelete: (sensorId: string) => void
+  onSelectSensor: (sensorId: string) => void
 }
 
 export function SensorManagementSidebar({
@@ -25,6 +27,7 @@ export function SensorManagementSidebar({
   label,
   unit,
   registeredSensors,
+  selectedSensorId,
   editingId,
   editLabel,
   editUnit,
@@ -37,6 +40,7 @@ export function SensorManagementSidebar({
   onEditUnitChange,
   onSaveEdit,
   onRequestDelete,
+  onSelectSensor,
 }: SensorManagementSidebarProps) {
   const { imgSelectCaret, imgEdit, imgDelete } = drawingSensorAssets
 
@@ -195,7 +199,22 @@ export function SensorManagementSidebar({
               ) : (
                 <div
                   key={sensor.id}
-                  className="flex min-w-0 flex-col gap-[10px] rounded-[8px] border border-[#e2e8f0] bg-white p-[14px]"
+                  role="button"
+                  tabIndex={0}
+                  className={`flex min-w-0 flex-col gap-[10px] rounded-[8px] border bg-white p-[14px] outline-none transition-colors ${
+                    selectedSensorId === sensor.id
+                      ? sensor.color === 'green'
+                        ? 'border-[#34d399] ring-2 ring-[rgba(52,211,153,0.30)]'
+                        : 'border-[#fbbf24] ring-2 ring-[rgba(251,191,36,0.30)]'
+                      : 'border-[#e2e8f0] hover:bg-[#f8fafc]'
+                  }`}
+                  onClick={() => onSelectSensor(sensor.id)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault()
+                      onSelectSensor(sensor.id)
+                    }
+                  }}
                 >
                   <div className="flex min-w-0 items-start gap-[12px]">
                     <div
@@ -222,7 +241,10 @@ export function SensorManagementSidebar({
                       type="button"
                       className={`flex h-[28px] w-[28px] items-center justify-center rounded-[4px] hover:bg-[#f1f5f9] ${!enabled ? 'cursor-not-allowed opacity-50' : ''}`}
                       aria-label="센서 편집"
-                      onClick={() => onStartEdit(sensor)}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        onStartEdit(sensor)
+                      }}
                     >
                       <img alt="" className="block h-[20px] w-[20px]" src={imgEdit} />
                     </button>
@@ -230,7 +252,10 @@ export function SensorManagementSidebar({
                       type="button"
                       className={`group flex h-[28px] w-[28px] items-center justify-center rounded-[4px] hover:bg-[#fef2f2] ${!enabled ? 'cursor-not-allowed opacity-50' : ''}`}
                       aria-label="센서 삭제"
-                      onClick={() => onRequestDelete(sensor.id)}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        onRequestDelete(sensor.id)
+                      }}
                     >
                       <img
                         alt=""

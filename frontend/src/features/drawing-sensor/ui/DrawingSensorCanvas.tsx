@@ -13,12 +13,13 @@ import { drawingSensorAssets } from '../assets/drawingSensorAssets'
 import type { RegisteredSensor } from '../model/registeredSensor'
 import { DrawingViewportMinimap } from './DrawingViewportMinimap'
 
-type DisplaySensor = Pick<RegisteredSensor, 'id' | 'xPct' | 'yPct' | 'color'>
+type DisplaySensor = Pick<RegisteredSensor, 'id' | 'xPct' | 'yPct' | 'color' | 'label'>
 
 type DrawingSensorCanvasProps = {
   drawingName: string
   activeDrawing: DrawingDetail | null
   displaySensors: DisplaySensor[]
+  selectedSensorId: string | null
   enabled: boolean
   onToggleEnabled: () => void
   onOpenUploadDialog: () => void
@@ -50,6 +51,7 @@ export function DrawingSensorCanvas({
   drawingName,
   activeDrawing,
   displaySensors,
+  selectedSensorId,
   enabled,
   onToggleEnabled,
   onOpenUploadDialog,
@@ -172,6 +174,8 @@ export function DrawingSensorCanvas({
                             leftPct={sensor.xPct}
                             topPct={sensor.yPct}
                             variant={sensor.color === 'orange' ? 'yellow' : 'green'}
+                            label={sensor.label}
+                            forceShowLabel={selectedSensorId === sensor.id}
                           />
                         ))}
                         {pendingPlacement && (

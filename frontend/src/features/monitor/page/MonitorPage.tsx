@@ -266,7 +266,7 @@ export default function MonitorPage() {
 
         <aside className="col-span-12 flex min-h-0 min-w-0 flex-col lg:col-span-3 lg:h-full">
           <div className="flex min-h-[40px] shrink-0 items-center font-['Pretendard',sans-serif] text-[16px] font-semibold leading-[1.2] text-[color:var(--blue_primary_800,#4370ac)] -translate-y-[2px]">
-            실시간 차트
+            실시간 차트 ({cards.length})
           </div>
 
           <div className="mt-[12px] flex min-h-0 flex-1 flex-col">

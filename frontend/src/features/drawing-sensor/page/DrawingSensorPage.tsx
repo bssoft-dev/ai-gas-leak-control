@@ -84,6 +84,7 @@ export default function DrawingSensorPage() {
   const [alertMessage, setAlertMessage] = useState<string | null>(null)
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null)
   const [editingId, setEditingId] = useState<string | null>(null)
+  const [selectedSensorId, setSelectedSensorId] = useState<string | null>(null)
   const [editLabel, setEditLabel] = useState('')
   const [editUnit, setEditUnit] = useState<'pressure' | 'flow'>('pressure')
   const [isSavingSensors, setIsSavingSensors] = useState(false)
@@ -101,6 +102,7 @@ export default function DrawingSensorPage() {
         xPct: sensor.xPct,
         yPct: sensor.yPct,
         color: sensor.color,
+        label: sensor.label,
       })),
     [registeredSensors],
   )
@@ -111,6 +113,7 @@ export default function DrawingSensorPage() {
     setEditingId(null)
     setDeleteConfirmId(null)
     setPendingPlacement(null)
+    setSelectedSensorId(null)
   }, [drawingKey])
 
   useEffect(() => {
@@ -390,6 +393,7 @@ export default function DrawingSensorPage() {
     setEditingId(sensor.id)
     setEditLabel(sensor.label)
     setEditUnit(unitLabelToUnit(sensor.unitLabel))
+    setSelectedSensorId(sensor.id)
   }
 
   const saveEdit = async () => {
@@ -440,6 +444,7 @@ export default function DrawingSensorPage() {
     if (!persisted) return
 
     if (editingId === deleteConfirmId) setEditingId(null)
+    if (selectedSensorId === deleteConfirmId) setSelectedSensorId(null)
     setDeleteConfirmId(null)
   }
 
@@ -493,6 +498,7 @@ export default function DrawingSensorPage() {
           drawingName={drawingName}
           activeDrawing={activeDrawing}
           displaySensors={displaySensors}
+          selectedSensorId={selectedSensorId}
           enabled={enabled}
           onToggleEnabled={() => {
             if (activeDrawingId) toggleDrawingActive(activeDrawingId)
@@ -530,6 +536,7 @@ export default function DrawingSensorPage() {
           label={label}
           unit={unit}
           registeredSensors={registeredSensors}
+          selectedSensorId={selectedSensorId}
           editingId={editingId}
           editLabel={editLabel}
           editUnit={editUnit}
@@ -542,6 +549,9 @@ export default function DrawingSensorPage() {
           onEditUnitChange={setEditUnit}
           onSaveEdit={saveEdit}
           onRequestDelete={requestDeleteSensor}
+          onSelectSensor={(sensorId) => {
+            setSelectedSensorId((prev) => (prev === sensorId ? null : sensorId))
+          }}
         />
 
         <div className="col-span-12 mt-[18px] flex shrink-0 items-center justify-center gap-[51px] text-[16px] text-[#0b1828] lg:col-span-9">

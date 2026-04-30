@@ -101,12 +101,15 @@ export function PressureChartDetail({
 
   const xTicks = useMemo(() => {
     const alignedStart = Math.ceil(viewportStartAt / TICK_STEP_MS) * TICK_STEP_MS
+    const alignedEnd = Math.floor(viewportEndAt / TICK_STEP_MS) * TICK_STEP_MS
     const ticks: number[] = []
-    for (let current = alignedStart; current <= viewportEndAt; current += TICK_STEP_MS) {
+    for (let current = alignedStart; current <= alignedEnd; current += TICK_STEP_MS) {
       ticks.push(current)
     }
-    if (ticks.length === 0 || ticks[ticks.length - 1] !== viewportEndAt) {
-      ticks.push(viewportEndAt)
+    if (ticks.length === 0) {
+      ticks.push(alignedEnd)
+    } else if (ticks[ticks.length - 1] !== alignedEnd) {
+      ticks.push(alignedEnd)
     }
     return ticks
   }, [viewportEndAt, viewportStartAt])

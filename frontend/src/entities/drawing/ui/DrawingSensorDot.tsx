@@ -6,9 +6,10 @@ type Props = {
   topPct: number
   variant: 'green' | 'yellow'
   label?: string
+  forceShowLabel?: boolean
 }
 
-export function DrawingSensorDot({ leftPct, topPct, variant, label }: Props) {
+export function DrawingSensorDot({ leftPct, topPct, variant, label, forceShowLabel = false }: Props) {
   // 관제 화면에서 눈에 띄는 선명한 톤 (초록/노랑) + 과하지 않은 그림자
   const color = variant === 'green' ? '#34d399' : '#fbbf24'
   const halo = variant === 'green' ? 'rgba(52,211,153,0.42)' : 'rgba(251,191,36,0.42)'
@@ -20,9 +21,10 @@ export function DrawingSensorDot({ leftPct, topPct, variant, label }: Props) {
   const [isHovering, setIsHovering] = useState(false)
   const tooltipRef = useRef<HTMLDivElement | null>(null)
   const [tooltipPos, setTooltipPos] = useState<{ left: number; top: number } | null>(null)
+  const showTooltip = isInteractive && (forceShowLabel || isHovering)
 
   const tooltipNode = useMemo(() => {
-    if (!label || !isHovering || !tooltipPos) return null
+    if (!label || !showTooltip || !tooltipPos) return null
 
     const { left, top } = tooltipPos
 
@@ -53,10 +55,10 @@ export function DrawingSensorDot({ leftPct, topPct, variant, label }: Props) {
       </div>,
       document.body,
     )
-  }, [badgeBg, badgeText, isHovering, label, tooltipPos])
+  }, [badgeBg, badgeText, label, showTooltip, tooltipPos])
 
   useLayoutEffect(() => {
-    if (!isInteractive || !isHovering) return
+    if (!isInteractive || !showTooltip) return
 
     const update = () => {
       const el = anchorRef.current
@@ -90,7 +92,7 @@ export function DrawingSensorDot({ leftPct, topPct, variant, label }: Props) {
       window.removeEventListener('scroll', update, true)
       window.removeEventListener('resize', update)
     }
-  }, [isHovering, isInteractive])
+  }, [showTooltip, isInteractive])
 
   return (
     <div
