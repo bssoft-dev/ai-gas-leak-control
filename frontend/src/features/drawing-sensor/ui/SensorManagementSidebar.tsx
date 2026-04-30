@@ -2,6 +2,7 @@ import { drawingSensorAssets } from '../assets/drawingSensorAssets'
 import type { RegisteredSensor } from '../model/registeredSensor'
 
 type SensorManagementSidebarProps = {
+  enabled: boolean
   label: string
   unit: 'pressure' | 'flow'
   registeredSensors: RegisteredSensor[]
@@ -20,6 +21,7 @@ type SensorManagementSidebarProps = {
 }
 
 export function SensorManagementSidebar({
+  enabled,
   label,
   unit,
   registeredSensors,
@@ -53,10 +55,11 @@ export function SensorManagementSidebar({
                 </div>
                 <div className="flex h-[40px] w-full items-center rounded-[4px] border border-[#e2e8f0] bg-white px-[13px]">
                   <input
-                    className="w-full bg-transparent font-['Pretendard',sans-serif] text-[14px] text-[#0b1828] outline-none placeholder:text-[#6b7280]"
+                    className="w-full bg-transparent font-['Pretendard',sans-serif] text-[14px] text-[#0b1828] outline-none placeholder:text-[#6b7280] disabled:cursor-not-allowed disabled:text-[#94a3b8]"
                     placeholder="예: 압력-1"
                     value={label}
                     onChange={(e) => onLabelChange(e.target.value)}
+                    disabled={!enabled}
                   />
                 </div>
               </div>
@@ -67,9 +70,10 @@ export function SensorManagementSidebar({
                 </div>
                 <div className="relative w-full">
                   <select
-                    className="h-[40px] w-full appearance-none rounded-[4px] border border-[#e2e8f0] bg-white pl-[12px] pr-[36px] font-['Pretendard',sans-serif] text-[14px] text-[color:var(--black_title,#0b1828)]"
+                    className="h-[40px] w-full appearance-none rounded-[4px] border border-[#e2e8f0] bg-white pl-[12px] pr-[36px] font-['Pretendard',sans-serif] text-[14px] text-[color:var(--black_title,#0b1828)] disabled:cursor-not-allowed disabled:text-[#94a3b8]"
                     value={unit}
                     onChange={(e) => onUnitChange(e.target.value as 'pressure' | 'flow')}
+                    disabled={!enabled}
                   >
                     <option value="pressure">압력 (MPa)</option>
                     <option value="flow">유량 (L/min)</option>
@@ -85,15 +89,17 @@ export function SensorManagementSidebar({
               <div className="flex gap-[8px]">
                 <button
                   type="button"
-                  className="h-[40px] flex-1 rounded-[8px] bg-[var(--blue_icon,#1392ec)] font-['Pretendard',sans-serif] text-[14px] leading-[20px] text-white"
+                  className="h-[40px] flex-1 rounded-[8px] bg-[var(--blue_icon,#1392ec)] font-['Pretendard',sans-serif] text-[14px] leading-[20px] text-white disabled:cursor-not-allowed disabled:opacity-50"
                   onClick={onAdd}
+                  disabled={!enabled}
                 >
                   추가
                 </button>
                 <button
                   type="button"
-                  className="h-[40px] flex-1 rounded-[8px] bg-[var(--gray_sidebar_stroke,#e2e8f0)] font-['Pretendard',sans-serif] text-[14px] leading-[20px] text-[color:var(--black_700,#2c3c53)]"
+                  className="h-[40px] flex-1 rounded-[8px] bg-[var(--gray_sidebar_stroke,#e2e8f0)] font-['Pretendard',sans-serif] text-[14px] leading-[20px] text-[color:var(--black_700,#2c3c53)] disabled:cursor-not-allowed disabled:opacity-50"
                   onClick={onCancel}
+                  disabled={!enabled}
                 >
                   취소
                 </button>
@@ -127,9 +133,10 @@ export function SensorManagementSidebar({
                         </div>
                         <div className="flex h-[40px] items-center rounded-[4px] border border-[#e2e8f0] bg-[#f8fafc] px-[13px]">
                           <input
-                            className="w-full bg-transparent font-['Pretendard',sans-serif] text-[14px] text-[#0b1828] outline-none"
+                            className="w-full bg-transparent font-['Pretendard',sans-serif] text-[14px] text-[#0b1828] outline-none disabled:cursor-not-allowed disabled:text-[#94a3b8]"
                             value={editLabel}
                             onChange={(e) => onEditLabelChange(e.target.value)}
+                            disabled={!enabled}
                           />
                         </div>
                       </div>
@@ -139,9 +146,10 @@ export function SensorManagementSidebar({
                         </div>
                         <div className="relative w-full">
                           <select
-                            className="h-[40px] w-full appearance-none rounded-[4px] border border-[#e2e8f0] bg-[#f8fafc] pl-[12px] pr-[36px] font-['Pretendard',sans-serif] text-[14px] text-[color:var(--black_title,#0b1828)]"
+                            className="h-[40px] w-full appearance-none rounded-[4px] border border-[#e2e8f0] bg-[#f8fafc] pl-[12px] pr-[36px] font-['Pretendard',sans-serif] text-[14px] text-[color:var(--black_title,#0b1828)] disabled:cursor-not-allowed disabled:text-[#94a3b8]"
                             value={editUnit}
                             onChange={(e) => onEditUnitChange(e.target.value as 'pressure' | 'flow')}
+                            disabled={!enabled}
                           >
                             <option value="pressure">압력 (MPa)</option>
                             <option value="flow">유량 (L/min)</option>
@@ -158,9 +166,10 @@ export function SensorManagementSidebar({
                   <div className="flex justify-end gap-[4px]">
                     <button
                       type="button"
-                      className="flex h-[28px] w-[28px] items-center justify-center rounded-[4px] hover:bg-[#eff6ff]"
+                      className="flex h-[28px] w-[28px] items-center justify-center rounded-[4px] hover:bg-[#eff6ff] disabled:cursor-not-allowed disabled:opacity-40"
                       aria-label="수정 저장"
                       onClick={onSaveEdit}
+                      disabled={!enabled}
                     >
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
                         <path
@@ -174,9 +183,10 @@ export function SensorManagementSidebar({
                     </button>
                     <button
                       type="button"
-                      className="group flex h-[28px] w-[28px] items-center justify-center rounded-[4px] hover:bg-[#fef2f2]"
+                      className="group flex h-[28px] w-[28px] items-center justify-center rounded-[4px] hover:bg-[#fef2f2] disabled:cursor-not-allowed disabled:opacity-40"
                       aria-label="센서 삭제"
                       onClick={() => onRequestDelete(sensor.id)}
+                      disabled={!enabled}
                     >
                       <img
                         alt=""
@@ -214,17 +224,19 @@ export function SensorManagementSidebar({
                   <div className="flex justify-end gap-[4px]">
                     <button
                       type="button"
-                      className="flex h-[28px] w-[28px] items-center justify-center rounded-[4px] hover:bg-[#f1f5f9]"
+                      className="flex h-[28px] w-[28px] items-center justify-center rounded-[4px] hover:bg-[#f1f5f9] disabled:cursor-not-allowed disabled:opacity-40"
                       aria-label="센서 편집"
                       onClick={() => onStartEdit(sensor)}
+                      disabled={!enabled}
                     >
                       <img alt="" className="block h-[20px] w-[20px]" src={imgEdit} />
                     </button>
                     <button
                       type="button"
-                      className="group flex h-[28px] w-[28px] items-center justify-center rounded-[4px] hover:bg-[#fef2f2]"
+                      className="group flex h-[28px] w-[28px] items-center justify-center rounded-[4px] hover:bg-[#fef2f2] disabled:cursor-not-allowed disabled:opacity-40"
                       aria-label="센서 삭제"
                       onClick={() => onRequestDelete(sensor.id)}
+                      disabled={!enabled}
                     >
                       <img
                         alt=""

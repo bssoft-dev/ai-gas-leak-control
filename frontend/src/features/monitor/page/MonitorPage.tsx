@@ -9,6 +9,7 @@ import { DrawingSensorDot } from '../../../entities/drawing/ui/DrawingSensorDot'
 import { DrawingViewResetIcon } from '../../../entities/drawing/ui/DrawingViewResetIcon'
 import { formatDrawingName } from '../../../shared/lib/formatDrawingName'
 import { PageContentGrid } from '../../../shared/ui/layout/PageContentGrid'
+import { PaginationArrowButton } from '../../../shared/ui/navigation/PaginationArrowButton'
 import { drawingSensorAssets } from '../../drawing-sensor/assets/drawingSensorAssets'
 import { monitorAssets } from '../assets/monitorAssets'
 import { buildMonitorChartCards } from '../lib/buildMonitorChartCards'
@@ -32,8 +33,12 @@ export default function MonitorPage() {
   const viewport = useDrawingViewport(activeDrawingId)
 
   const selectedDrawing = drawings.find((drawing) => drawing.id === activeDrawingId)
+  const isDrawingActive = Boolean(selectedDrawing?.isActive)
   const drawingName = formatDrawingName(selectedDrawing?.name ?? activeDrawing?.name) || '도면'
-  const cards = useMemo(() => buildMonitorChartCards(activeDrawing?.sensors ?? []), [activeDrawing?.sensors])
+  const cards = useMemo(
+    () => (isDrawingActive ? buildMonitorChartCards(activeDrawing?.sensors ?? []) : []),
+    [activeDrawing?.sensors, isDrawingActive],
+  )
   const detailCard = chartDetailId ? cards.find((card) => card.id === chartDetailId) : null
   const detailSeries = detailCard ? pressureSeriesByVariant[detailCard.variant] : undefined
   const detailUnit = detailCard?.unitLabel.includes('L/min') ? 'L/min' : 'MPa'
@@ -108,7 +113,8 @@ export default function MonitorPage() {
                           src={activeDrawing?.imagePath}
                           fileKind={activeDrawing?.fileKind}
                         />
-                        {(activeDrawing?.sensors ?? []).map((sensor) => {
+                        {isDrawingActive &&
+                          (activeDrawing?.sensors ?? []).map((sensor) => {
                           const { leftPct, topPct } = getSensorPercentInSlot(sensor)
                           return (
                             <DrawingSensorDot
@@ -118,7 +124,7 @@ export default function MonitorPage() {
                               variant={sensor.variant}
                             />
                           )
-                        })}
+                          })}
                       </div>
                     </div>
                   </div>
@@ -189,15 +195,11 @@ export default function MonitorPage() {
           </div>
 
           <div className="mt-[18px] flex shrink-0 items-center justify-center gap-[51px] text-[16px] text-[#0b1828]">
-            <button type="button" className="flex h-[20px] w-[20px] items-center justify-center" onClick={goPrev}>
-              <img alt="" className="-scale-x-100 block h-[20px] w-[20px]" src={monitorAssets.imgChevronLeft} />
-            </button>
+            <PaginationArrowButton direction="prev" onClick={goPrev} ariaLabel="이전 도면" />
             <div className="font-['Pretendard',sans-serif] font-normal leading-[20px]">
               {page} / {total}
             </div>
-            <button type="button" className="flex h-[20px] w-[20px] items-center justify-center" onClick={goNext}>
-              <img alt="" className="block h-[20px] w-[20px]" src={monitorAssets.imgChevronRight} />
-            </button>
+            <PaginationArrowButton direction="next" onClick={goNext} ariaLabel="다음 도면" />
           </div>
         </section>
 
@@ -261,6 +263,11 @@ export default function MonitorPage() {
                     </div>
                   )
                 })}
+                {!isDrawingActive && (
+                  <div className="flex min-h-[140px] items-center justify-center px-[16px] text-center font-['Pretendard',sans-serif] text-[13px] leading-[1.6] text-[#7a89a1]">
+                    비활성화 도면은 센서 차트와 센서 표시를 제공하지 않습니다.
+                  </div>
+                )}
                 <div className="h-[4px]" />
               </div>
             </div>

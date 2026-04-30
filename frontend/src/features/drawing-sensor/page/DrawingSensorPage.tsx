@@ -127,6 +127,9 @@ export default function DrawingSensorPage() {
 
   const unitLabel = unit === 'pressure' ? '압력 (MPa)' : '유량 (L/min)'
   const unitColor: RegisteredSensor['color'] = unit === 'pressure' ? 'green' : 'orange'
+  const showInactiveWarning = () => {
+    setAlertMessage('비활성화 도면은 센서 생성, 수정, 삭제를 할 수 없습니다.')
+  }
 
   const persistSensors = async (nextSensors: RegisteredSensor[], successMessage: string) => {
     if (!activeDrawingId) {
@@ -263,6 +266,10 @@ export default function DrawingSensorPage() {
   }
 
   const onAdd = async () => {
+    if (!enabled) {
+      showInactiveWarning()
+      return
+    }
     if (!pendingPlacement) {
       setToastMessage(PLACEMENT_TOAST)
       return
@@ -310,6 +317,10 @@ export default function DrawingSensorPage() {
   }
 
   const onDrawingCanvasClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!enabled) {
+      showInactiveWarning()
+      return
+    }
     if (viewport.zoom > 1) return
     const element = drawingCanvasRef.current
     if (!element) return
@@ -326,6 +337,10 @@ export default function DrawingSensorPage() {
   }
 
   const onLabelChange = (value: string) => {
+    if (!enabled) {
+      showInactiveWarning()
+      return
+    }
     if (!pendingPlacement && value.length > 0) {
       setToastMessage(PLACEMENT_TOAST)
       return
@@ -334,12 +349,20 @@ export default function DrawingSensorPage() {
   }
 
   const startEdit = (sensor: RegisteredSensor) => {
+    if (!enabled) {
+      showInactiveWarning()
+      return
+    }
     setEditingId(sensor.id)
     setEditLabel(sensor.label)
     setEditUnit(unitLabelToUnit(sensor.unitLabel))
   }
 
   const saveEdit = async () => {
+    if (!enabled) {
+      showInactiveWarning()
+      return
+    }
     if (!editingId) return
 
     const trimmed = editLabel.trim()
@@ -372,6 +395,10 @@ export default function DrawingSensorPage() {
   }
 
   const confirmDelete = async () => {
+    if (!enabled) {
+      showInactiveWarning()
+      return
+    }
     if (!deleteConfirmId) return
 
     const nextSensors = registeredSensors.filter((sensor) => sensor.id !== deleteConfirmId)
@@ -464,6 +491,7 @@ export default function DrawingSensorPage() {
         />
 
         <SensorManagementSidebar
+          enabled={enabled}
           label={label}
           unit={unit}
           registeredSensors={registeredSensors}
