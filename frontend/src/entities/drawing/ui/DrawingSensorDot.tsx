@@ -97,7 +97,7 @@ export function DrawingSensorDot({ leftPct, topPct, variant, label, forceShowLab
   return (
     <div
       ref={anchorRef}
-      className={`absolute ${isInteractive ? 'pointer-events-auto' : 'pointer-events-none'}`}
+      className={`absolute z-[10] ${isInteractive ? 'pointer-events-auto' : 'pointer-events-none'}`}
       style={{
         left: `${leftPct}%`,
         top: `${topPct}%`,

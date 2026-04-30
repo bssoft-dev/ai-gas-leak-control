@@ -252,6 +252,10 @@ export function ActiveDrawingProvider({ children }: { children: React.ReactNode 
         ...mockDrawingDetail,
         name: selectedDrawing?.name ?? mockDrawingDetail.name,
         fileKind: getDrawingFileKind(undefined, selectedDrawing?.name ?? mockDrawingDetail.name),
+        sensors: mockDrawingDetail.sensors.map((sensor) => ({
+          ...sensor,
+          label: sensor.id,
+        })),
       })
       setErrorActiveDrawing(null)
       setIsLoadingActiveDrawing(false)
