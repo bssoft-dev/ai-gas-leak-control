@@ -91,36 +91,16 @@ function IconTooltipButton({
         className="inline-flex h-[40px] w-[40px] items-center justify-center rounded-full border border-[#d7e1ee] bg-white text-[#607a9f] transition hover:border-[#61a0e1] hover:text-[#4370ac] disabled:cursor-not-allowed disabled:opacity-50"
       >
         {icon === 'refresh' ? (
-          <svg
-            viewBox="0 0 24 24"
-            className={`h-[20px] w-[20px] ${spin ? 'animate-spin' : ''}`}
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+          <span
+            className={`material-symbols-rounded text-[20px] ${spin ? 'animate-spin' : ''}`}
             aria-hidden="true"
           >
-            <path d="M21 12a9 9 0 1 1-2.64-6.36" />
-            <path d="M21 3v6h-6" />
-          </svg>
+            refresh
+          </span>
         ) : (
-          <svg
-            viewBox="0 0 24 24"
-            className="h-[20px] w-[20px]"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-hidden="true"
-          >
-            <path d="M6 7h12" />
-            <path d="M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7" />
-            <path d="M8 7l.8 11a1.5 1.5 0 0 0 1.5 1.4h3.4a1.5 1.5 0 0 0 1.5-1.4L16 7" />
-            <path d="M10.25 10.25v5.5" />
-            <path d="M13.75 10.25v5.5" />
-          </svg>
+          <span className="material-symbols-rounded text-[20px]" aria-hidden="true">
+            filter_alt_off
+          </span>
         )}
       </button>
       <div className="pointer-events-none absolute bottom-[calc(100%+8px)] left-1/2 z-10 -translate-x-1/2 whitespace-nowrap rounded-[8px] bg-[#23344d] px-[10px] py-[6px] text-[12px] font-medium text-white opacity-0 shadow-[0_8px_20px_rgba(15,23,42,0.18)] transition group-hover:opacity-100">
@@ -283,67 +263,82 @@ export function ControlAlarmHistoryPage() {
           <label className="min-w-[180px] flex-1 font-[Pretendard,sans-serif]">
             <span className="mb-[8px] block text-[14px] font-semibold text-[#607a9f]">시작 시간</span>
             <div className="flex gap-[8px]">
-              <select
-                aria-label="시작 시각"
-                value={selectedTime.length === 5 ? selectedTime.slice(0, 2) : ''}
-                onChange={(event) => {
-                  const h = event.target.value
-                  if (!h) {
-                    setSelectedTime('')
-                    return
-                  }
-                  const m = selectedTime.length === 5 ? selectedTime.slice(3, 5) : '00'
-                  setSelectedTime(`${h}:${m}`)
-                }}
-                className="h-[48px] min-w-0 flex-1 rounded-[14px] border border-[#d7e1ee] bg-white px-[12px] font-[Pretendard,sans-serif] text-[15px] text-[#0f172a] outline-none transition focus:border-[#61a0e1]"
-              >
-                <option value="">전체</option>
-                {START_TIME_HOUR_OPTIONS.map((h) => (
-                  <option key={h} value={h}>
-                    {h}시
-                  </option>
-                ))}
-              </select>
-              <select
-                aria-label="시작 분"
-                value={selectedTime.length === 5 ? selectedTime.slice(3, 5) : ''}
-                onChange={(event) => {
-                  const m = event.target.value
-                  if (!m) {
-                    const h = selectedTime.length === 5 ? selectedTime.slice(0, 2) : ''
-                    if (!h) setSelectedTime('')
-                    else setSelectedTime(`${h}:00`)
-                    return
-                  }
-                  const h = selectedTime.length === 5 ? selectedTime.slice(0, 2) : '00'
-                  setSelectedTime(`${h}:${m}`)
-                }}
-                className="h-[48px] min-w-0 flex-1 rounded-[14px] border border-[#d7e1ee] bg-white px-[12px] font-[Pretendard,sans-serif] text-[15px] text-[#0f172a] outline-none transition focus:border-[#61a0e1]"
-              >
-                <option value="">—</option>
-                {START_TIME_MINUTE_OPTIONS.map((m) => (
-                  <option key={m} value={m}>
-                    {m}분
-                  </option>
-                ))}
-              </select>
+              <div className="relative min-w-0 flex-1">
+                <select
+                  aria-label="시작 시각"
+                  value={selectedTime.length === 5 ? selectedTime.slice(0, 2) : ''}
+                  onChange={(event) => {
+                    const h = event.target.value
+                    if (!h) {
+                      setSelectedTime('')
+                      return
+                    }
+                    const m = selectedTime.length === 5 ? selectedTime.slice(3, 5) : '00'
+                    setSelectedTime(`${h}:${m}`)
+                  }}
+                  className="h-[48px] min-w-0 w-full appearance-none rounded-[14px] border border-[#d7e1ee] bg-white px-[20px] pr-[52px] font-[Pretendard,sans-serif] text-[15px] leading-[1] text-[#0f172a] outline-none transition focus:border-[#61a0e1]"
+                >
+                  <option value="">전체</option>
+                  {START_TIME_HOUR_OPTIONS.map((h) => (
+                    <option key={h} value={h}>
+                      {h}시
+                    </option>
+                  ))}
+                </select>
+                <span className="material-symbols-rounded pointer-events-none absolute right-[16px] top-1/2 -translate-y-1/2 text-[20px] text-[#485b77]">
+                  expand_more
+                </span>
+              </div>
+              <div className="relative min-w-0 flex-1">
+                <select
+                  aria-label="시작 분"
+                  value={selectedTime.length === 5 ? selectedTime.slice(3, 5) : ''}
+                  onChange={(event) => {
+                    const m = event.target.value
+                    if (!m) {
+                      const h = selectedTime.length === 5 ? selectedTime.slice(0, 2) : ''
+                      if (!h) setSelectedTime('')
+                      else setSelectedTime(`${h}:00`)
+                      return
+                    }
+                    const h = selectedTime.length === 5 ? selectedTime.slice(0, 2) : '00'
+                    setSelectedTime(`${h}:${m}`)
+                  }}
+                  className="h-[48px] min-w-0 w-full appearance-none rounded-[14px] border border-[#d7e1ee] bg-white px-[20px] pr-[52px] font-[Pretendard,sans-serif] text-[15px] leading-[1] text-[#0f172a] outline-none transition focus:border-[#61a0e1]"
+                >
+                  <option value="">—</option>
+                  {START_TIME_MINUTE_OPTIONS.map((m) => (
+                    <option key={m} value={m}>
+                      {m}분
+                    </option>
+                  ))}
+                </select>
+                <span className="material-symbols-rounded pointer-events-none absolute right-[16px] top-1/2 -translate-y-1/2 text-[20px] text-[#485b77]">
+                  expand_more
+                </span>
+              </div>
             </div>
           </label>
 
           <label className="min-w-[180px] flex-1 font-[Pretendard,sans-serif]">
             <span className="mb-[8px] block text-[14px] font-semibold text-[#607a9f]">동작</span>
-            <select
-              value={actionQuery}
-              onChange={(event) => setActionQuery(event.target.value)}
-              className="h-[48px] w-full rounded-[14px] border border-[#d7e1ee] bg-white px-[16px] font-[Pretendard,sans-serif] text-[15px] text-[#0f172a] outline-none transition focus:border-[#61a0e1]"
-            >
-              <option value="">전체</option>
-              {actionOptions.map((action) => (
-                <option key={action} value={action}>
-                  {action}
-                </option>
-              ))}
-            </select>
+            <div className="relative">
+              <select
+                value={actionQuery}
+                onChange={(event) => setActionQuery(event.target.value)}
+                className="h-[48px] w-full appearance-none rounded-[14px] border border-[#d7e1ee] bg-white px-[20px] pr-[52px] font-[Pretendard,sans-serif] text-[15px] leading-[1] text-[#0f172a] outline-none transition focus:border-[#61a0e1]"
+              >
+                <option value="">전체</option>
+                {actionOptions.map((action) => (
+                  <option key={action} value={action}>
+                    {action}
+                  </option>
+                ))}
+              </select>
+              <span className="material-symbols-rounded pointer-events-none absolute right-[16px] top-1/2 -translate-y-1/2 text-[20px] text-[#485b77]">
+                expand_more
+              </span>
+            </div>
           </label>
 
           <div className="shrink-0 font-[Pretendard,sans-serif]">

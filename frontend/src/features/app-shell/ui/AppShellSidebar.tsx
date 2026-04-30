@@ -24,6 +24,7 @@ type NavItem = {
   to: string
   label: string
   iconSrc: string
+  materialIconName?: string
   end?: boolean
 }
 
@@ -44,8 +45,18 @@ const HISTORY_SECTION: NavSection = {
   iconSrc: appShellAssets.imgHistory2Collapsed,
   basePath: '/history',
   items: [
-    { to: '/history/ai', label: 'AI 판단 이력', iconSrc: appShellAssets.imgHistory2Collapsed },
-    { to: '/history/control-alarm', label: '제어·알람 이력', iconSrc: appShellAssets.imgHistory2Collapsed },
+    {
+      to: '/history/ai',
+      label: 'AI 판단 이력',
+      iconSrc: appShellAssets.imgHistory2Collapsed,
+      materialIconName: 'article',
+    },
+    {
+      to: '/history/control-alarm',
+      label: '제어·알람 이력',
+      iconSrc: appShellAssets.imgHistory2Collapsed,
+      materialIconName: 'notifications',
+    },
   ],
 }
 
@@ -53,6 +64,7 @@ const SETTINGS_ITEM: NavItem = {
   to: '/settings',
   label: '설정',
   iconSrc: appShellAssets.imgContentPasteCollapsed,
+  materialIconName: 'settings',
 }
 
 export function AppShellSidebar({
@@ -77,9 +89,6 @@ export function AppShellSidebar({
   const navigate = useNavigate()
   const {
     imgLogo1,
-    imgKeyboardDoubleArrowRight,
-    imgKeyboardDoubleArrowRightCollapsed,
-    imgMenuChevron,
   } = appShellAssets
 
   const isHistoryActive = location.pathname.startsWith(HISTORY_SECTION.basePath)
@@ -111,7 +120,11 @@ export function AppShellSidebar({
     />
   )
 
-  const renderNavLink = ({ to, label, iconSrc, end }: NavItem, compact = false, nested = false) => (
+  const renderNavLink = (
+    { to, label, iconSrc, materialIconName, end }: NavItem,
+    compact = false,
+    nested = false,
+  ) => (
     <NavLink
       key={to}
       to={to}
@@ -130,11 +143,26 @@ export function AppShellSidebar({
     >
       {({ isActive }) => (
         <>
-          <MaskIcon20
-            maskSrc={iconSrc}
-            isActive={isActive}
-            activeTone={nested && isActive ? 'soft' : 'strong'}
-          />
+          {materialIconName ? (
+            <span
+              className={`material-symbols-rounded block h-5 w-5 shrink-0 text-[20px] ${
+                isActive
+                  ? nested
+                    ? 'text-[#7a9cc4]'
+                    : 'text-[#4370ac]'
+                  : 'text-[#0b1828]'
+              }`}
+              aria-hidden="true"
+            >
+              {materialIconName}
+            </span>
+          ) : (
+            <MaskIcon20
+              maskSrc={iconSrc}
+              isActive={isActive}
+              activeTone={nested && isActive ? 'soft' : 'strong'}
+            />
+          )}
           {!compact && (
             <span
               className={`font-['Pretendard',sans-serif] text-[16px] leading-[20px] ${
@@ -217,7 +245,9 @@ export function AppShellSidebar({
               aria-label="사이드바 펼치기"
               onClick={onExpandSidebar}
             >
-              <img alt="" className="block h-[20px] w-[20px] object-contain" src={imgKeyboardDoubleArrowRightCollapsed} />
+              <span className="material-symbols-rounded text-[22px] text-[#61718C]" aria-hidden="true">
+                keyboard_double_arrow_right
+              </span>
             </button>
           </div>
         </div>
@@ -240,7 +270,9 @@ export function AppShellSidebar({
               aria-label="사이드바 접기"
               onClick={onCollapseSidebar}
             >
-              <img alt="" className="block h-[20px] w-[20px] object-contain" src={imgKeyboardDoubleArrowRight} />
+              <span className="material-symbols-rounded text-[22px] text-[#61718C]" aria-hidden="true">
+                keyboard_double_arrow_left
+              </span>
             </button>
           </div>
         </div>
@@ -268,11 +300,14 @@ export function AppShellSidebar({
               aria-label="메뉴 접기/펼치기"
               onClick={onToggleMenu}
             >
-              <img
-                alt=""
-                className={`block h-[10px] w-[6px] shrink-0 self-center object-contain transition-transform rotate-90 ${isMenuExpanded ? '' : 'rotate-180'}`}
-                src={imgMenuChevron}
-              />
+              <span
+                className={`material-symbols-rounded text-[18px] text-[#7A89A1] transition-transform ${
+                  isMenuExpanded ? 'rotate-90' : '-rotate-90'
+                }`}
+                aria-hidden="true"
+              >
+                chevron_right
+              </span>
             </button>
           </div>
 

@@ -7,9 +7,11 @@ import {
 import type { DrawingDetail } from '../../../entities/drawing/model/activeDrawing'
 import { DrawingMedia } from '../../../entities/drawing/ui/DrawingMedia'
 import { DrawingSensorDot } from '../../../entities/drawing/ui/DrawingSensorDot'
-import { DrawingViewResetIcon } from '../../../entities/drawing/ui/DrawingViewResetIcon'
-import { monitorAssets } from '../../monitor/assets/monitorAssets'
-import { drawingSensorAssets } from '../assets/drawingSensorAssets'
+import {
+  DrawingResetIcon,
+  DrawingZoomInIcon,
+  DrawingZoomOutIcon,
+} from '../../../entities/drawing/ui/DrawingToolIcons'
 import type { RegisteredSensor } from '../model/registeredSensor'
 import { DrawingViewportMinimap } from './DrawingViewportMinimap'
 
@@ -78,8 +80,6 @@ export function DrawingSensorCanvas({
   onMoveToMonitor,
   onPanToSlotFraction,
 }: DrawingSensorCanvasProps) {
-  const { imgAttachFileAdd } = drawingSensorAssets
-
   return (
     <section className="col-span-12 flex min-h-0 min-w-0 flex-col lg:col-span-9 lg:h-full">
       <div className="flex min-h-[40px] shrink-0 items-center justify-between gap-[12px]">
@@ -94,7 +94,7 @@ export function DrawingSensorCanvas({
           disabled={isUploadingDrawings}
           onClick={onOpenUploadDialog}
         >
-          <img alt="" className="block h-[20px] w-[20px]" src={imgAttachFileAdd} />
+          <span className="material-symbols-rounded text-[20px] leading-none text-white">upload_file</span>
           <span className="whitespace-nowrap font-['Pretendard',sans-serif] text-[16px] font-medium leading-[15px] tracking-[-0.25px] text-white">
             {isUploadingDrawings ? '업로드 중...' : '도면 추가'}
           </span>
@@ -220,7 +220,7 @@ export function DrawingSensorCanvas({
                       aria-label="도면 확대"
                       onClick={onZoomIn}
                     >
-                      <img alt="" className="block h-[20px] w-[20px]" src={monitorAssets.imgAddCircle} />
+                      <DrawingZoomInIcon />
                     </button>
                     <button
                       type="button"
@@ -228,7 +228,7 @@ export function DrawingSensorCanvas({
                       aria-label="도면 축소"
                       onClick={onZoomOut}
                     >
-                      <img alt="" className="block h-[20px] w-[20px]" src={monitorAssets.imgDoNotDisturbOn} />
+                      <DrawingZoomOutIcon />
                     </button>
                     <button
                       type="button"
@@ -237,7 +237,7 @@ export function DrawingSensorCanvas({
                       disabled={!canResetView}
                       onClick={onResetView}
                     >
-                      <DrawingViewResetIcon />
+                      <DrawingResetIcon />
                     </button>
                   </div>
                 )}

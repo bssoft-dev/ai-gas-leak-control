@@ -8,7 +8,6 @@ import { useEventStream } from '../../../shared/events/EventStreamProvider'
 import { formatDrawingName } from '../../../shared/lib/formatDrawingName'
 import { PageContentGrid } from '../../../shared/ui/layout/PageContentGrid'
 import { PaginationArrowButton } from '../../../shared/ui/navigation/PaginationArrowButton'
-import { drawingSensorAssets } from '../assets/drawingSensorAssets'
 import {
   mapDrawingSensorsToRegisteredSensors,
   normalizeLabelKey,
@@ -65,7 +64,6 @@ export default function DrawingSensorPage() {
     toggleDrawingActive,
     refreshDrawings,
   } = useActiveDrawing()
-  const { imgAttachFileAdd } = drawingSensorAssets
   const viewport = useDrawingViewport(activeDrawingId)
   const drawingCanvasRef = useRef<HTMLDivElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)

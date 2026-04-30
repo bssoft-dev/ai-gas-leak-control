@@ -10,13 +10,16 @@ import { useActiveDrawing } from '../../../entities/drawing/model/activeDrawing'
 import { useDrawingViewport } from '../../../entities/drawing/model/useDrawingViewport'
 import { DrawingMedia } from '../../../entities/drawing/ui/DrawingMedia'
 import { DrawingSensorDot } from '../../../entities/drawing/ui/DrawingSensorDot'
-import { DrawingViewResetIcon } from '../../../entities/drawing/ui/DrawingViewResetIcon'
+import {
+  DrawingEditIcon,
+  DrawingResetIcon,
+  DrawingZoomInIcon,
+  DrawingZoomOutIcon,
+} from '../../../entities/drawing/ui/DrawingToolIcons'
 import { formatDrawingName } from '../../../shared/lib/formatDrawingName'
 import { PageContentGrid } from '../../../shared/ui/layout/PageContentGrid'
 import { PaginationArrowButton } from '../../../shared/ui/navigation/PaginationArrowButton'
-import { drawingSensorAssets } from '../../drawing-sensor/assets/drawingSensorAssets'
 import { DrawingViewportMinimap } from '../../drawing-sensor/ui/DrawingViewportMinimap'
-import { monitorAssets } from '../assets/monitorAssets'
 import { buildMonitorChartCards } from '../lib/buildMonitorChartCards'
 import { useMonitorPressureSeries } from '../model/useMonitorPressureSeries'
 import { PressureChartDetailModal } from '../ui/PressureChartDetailModal'
@@ -24,7 +27,6 @@ import { PressureLineChart } from '../ui/PressureLineChart'
 
 export default function MonitorPage() {
   const navigate = useNavigate()
-  const { imgAttachFileAdd } = drawingSensorAssets
   const { sensors: pressureSeries, error: pressureSeriesError } = useMonitorPressureSeries(2000)
   const pressureSeriesByVariant = useMemo(
     () => ({
@@ -77,7 +79,7 @@ export default function MonitorPage() {
             onClick={() => navigate('/drawing-sensor')}
             aria-label="도면 업로드"
           >
-            <img alt="" className="block h-[20px] w-[20px]" src={imgAttachFileAdd} />
+            <span className="material-symbols-rounded text-[20px] leading-none text-white">upload_file</span>
             <span className="whitespace-nowrap font-['Pretendard',sans-serif] text-[16px] font-medium leading-[15px] tracking-[-0.25px] text-white">
               도면 업로드
             </span>
@@ -99,7 +101,9 @@ export default function MonitorPage() {
               className="invisible flex h-[40px] shrink-0 items-center justify-center gap-[8px] rounded-[4px] px-[22px] py-[8px]"
               aria-hidden
             >
-              <img alt="" className="block h-[20px] w-[20px]" src={imgAttachFileAdd} />
+              <span className="material-symbols-rounded text-[20px] leading-none text-[color:var(--blue_icon,#1392ec)]">
+                upload_file
+              </span>
               <span className="whitespace-nowrap font-['Pretendard',sans-serif] text-[16px] font-medium leading-[15px] tracking-[-0.25px]">
                 도면 추가
               </span>
@@ -219,7 +223,7 @@ export default function MonitorPage() {
                       aria-label="도면 확대"
                       onClick={viewport.zoomIn}
                     >
-                      <img alt="" className="block h-[20px] w-[20px]" src={monitorAssets.imgAddCircle} />
+                      <DrawingZoomInIcon />
                     </button>
                     <button
                       type="button"
@@ -227,7 +231,7 @@ export default function MonitorPage() {
                       aria-label="도면 축소"
                       onClick={viewport.zoomOut}
                     >
-                      <img alt="" className="block h-[20px] w-[20px]" src={monitorAssets.imgDoNotDisturbOn} />
+                      <DrawingZoomOutIcon />
                     </button>
                     <button
                       type="button"
@@ -236,7 +240,7 @@ export default function MonitorPage() {
                       disabled={!viewport.canResetView}
                       onClick={viewport.resetView}
                     >
-                      <DrawingViewResetIcon />
+                      <DrawingResetIcon />
                     </button>
                     <button
                       type="button"
@@ -247,7 +251,7 @@ export default function MonitorPage() {
                         navigate('/drawing-sensor')
                       }}
                     >
-                      <img alt="" className="block h-[20px] w-[20px]" src={monitorAssets.imgEditSquare} />
+                      <DrawingEditIcon />
                     </button>
                   </div>
                 )}
