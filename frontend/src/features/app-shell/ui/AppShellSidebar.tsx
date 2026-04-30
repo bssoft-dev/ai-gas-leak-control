@@ -280,14 +280,14 @@ export function AppShellSidebar({
               onClick={onExpandSidebar}
             >
               <span className="material-symbols-rounded sidebar-icon text-[22px] text-[#61718C]" aria-hidden="true">
-                keyboard_double_arrow_right
+                menu
               </span>
             </button>
           </div>
         </div>
       ) : (
         <div className="h-[64px] border-b border-[var(--gray_sidebar_stroke,#e2e8f0)] bg-white">
-          <div className="relative flex h-full items-center px-[24px] pr-[60px]">
+          <div className="relative flex h-full items-center px-[24px] pr-[56px]">
             <div className="flex min-w-0 items-center gap-[12px]">
               <div className="relative h-[15px] w-[36px] shrink-0 overflow-hidden">
                 <img alt="" className="absolute left-0 top-[-0.4%] h-[160.8%] w-full max-w-none" src={imgLogo1} />
@@ -300,12 +300,12 @@ export function AppShellSidebar({
             </div>
             <button
               type="button"
-              className="absolute right-[24px] top-1/2 flex h-[36px] w-[36px] -translate-y-1/2 items-center justify-center"
+              className="absolute right-[16px] top-1/2 flex h-[36px] w-[36px] -translate-y-1/2 items-center justify-center"
               aria-label="사이드바 접기"
               onClick={isMobileViewport ? onCloseMobileSidebar : onCollapseSidebar}
             >
               <span className="material-symbols-rounded sidebar-icon text-[22px] text-[#61718C]" aria-hidden="true">
-                {isMobileViewport ? 'close' : 'keyboard_double_arrow_left'}
+                {isMobileViewport ? 'close' : 'menu'}
               </span>
             </button>
           </div>

@@ -548,7 +548,7 @@ export function ControlAlarmHistoryPage() {
             disabled={currentPage === 1}
             ariaLabel="이전 페이지"
           />
-          <div className="min-w-[6rem] shrink-0 text-center tabular-nums font-[Pretendard,sans-serif] text-[14px] font-semibold text-[#485b77]">
+          <div className="min-w-[6rem] shrink-0 text-center tabular-nums font-[Pretendard,sans-serif] text-[14px] font-normal text-[#8ea1bb]">
             {currentPage} / {totalPages}
           </div>
           <PaginationArrowButton

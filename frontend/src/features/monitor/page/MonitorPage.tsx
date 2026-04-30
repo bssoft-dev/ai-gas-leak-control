@@ -274,7 +274,7 @@ export default function MonitorPage() {
             </div>
           </div>
 
-          <div className="mt-[18px] flex shrink-0 items-center justify-center gap-[51px] text-[16px] text-[#0b1828]">
+          <div className="mt-[18px] flex shrink-0 items-center justify-center gap-[51px] text-[16px] text-[#8ea1bb]">
             <PaginationArrowButton direction="prev" onClick={goPrev} ariaLabel="이전 도면" />
             <div className="min-w-[6.5rem] shrink-0 text-center tabular-nums font-['Pretendard',sans-serif] font-normal leading-[20px]">
               {page} / {total}

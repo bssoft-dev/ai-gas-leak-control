@@ -83,7 +83,7 @@ export function DrawingSensorCanvas({
   return (
     <section className="col-span-12 flex min-h-0 min-w-0 flex-col xl:col-span-9 xl:h-full">
       <div className="flex min-h-[40px] shrink-0 items-center justify-between gap-[12px]">
-        <div className="font-['Pretendard',sans-serif] text-[16px] font-semibold leading-[1.2] text-[color:var(--blue_primary_800,#4370ac)]">
+        <div className="min-w-0 font-['Pretendard',sans-serif] text-[16px] font-semibold leading-[1.2] text-[color:var(--blue_primary_800,#4370ac)]">
           {drawingName}
         </div>
 
