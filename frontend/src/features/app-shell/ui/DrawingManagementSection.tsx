@@ -211,28 +211,38 @@ function DrawingList({ listKind, filter, showGreenDot, allowIds }: DrawingListPr
                 </button>
 
                 <div className="flex shrink-0 items-center gap-[12px]">
-                  <button
-                    type="button"
-                    className={`relative flex h-[20px] w-[20px] shrink-0 items-center justify-center rounded-[9999px] ${
-                      isEnabled ? 'bg-[rgba(34,197,94,0.16)]' : 'bg-transparent'
-                    }`}
-                    aria-label={
-                      isEnabled
-                        ? `${formatDrawingName(drawing.name) || drawing.name} 활성 해제`
-                        : `${formatDrawingName(drawing.name) || drawing.name} 활성 설정`
-                    }
-                    onClick={(e) => {
-                      e.preventDefault()
-                      e.stopPropagation()
-                      toggleDrawingActive(drawing.id)
-                    }}
-                  >
-                    {shouldShowGreenDot ? (
-                      <span className="relative h-[8px] w-[8px] shrink-0 rounded-[9999px] bg-[var(--green,#22c55e)]">
-                        <span className="absolute left-0 top-1/2 h-[8px] w-[8px] -translate-y-1/2 rounded-[9999px] shadow-[0px_0px_0px_4px_rgba(34,197,94,0.2)]" />
-                      </span>
-                    ) : null}
-                  </button>
+                  {listKind === 'active' ? (
+                    <div
+                      className="relative flex h-[20px] w-[20px] shrink-0 items-center justify-center rounded-[9999px] bg-[rgba(34,197,94,0.16)]"
+                      role="status"
+                      aria-label={`${formatDrawingName(drawing.name) || drawing.name} 활성`}
+                    >
+                      {shouldShowGreenDot ? (
+                        <span className="relative h-[8px] w-[8px] shrink-0 rounded-[9999px] bg-[var(--green,#22c55e)]">
+                          <span className="absolute left-0 top-1/2 h-[8px] w-[8px] -translate-y-1/2 rounded-[9999px] shadow-[0px_0px_0px_4px_rgba(34,197,94,0.2)]" />
+                        </span>
+                      ) : null}
+                    </div>
+                  ) : (
+                    <button
+                      type="button"
+                      className={`relative flex h-[20px] w-[20px] shrink-0 items-center justify-center rounded-[9999px] ${
+                        isEnabled ? 'bg-[rgba(34,197,94,0.16)]' : 'bg-transparent'
+                      }`}
+                      aria-label={`${formatDrawingName(drawing.name) || drawing.name} 활성 설정`}
+                      onClick={(e) => {
+                        e.preventDefault()
+                        e.stopPropagation()
+                        toggleDrawingActive(drawing.id)
+                      }}
+                    >
+                      {shouldShowGreenDot ? (
+                        <span className="relative h-[8px] w-[8px] shrink-0 rounded-[9999px] bg-[var(--green,#22c55e)]">
+                          <span className="absolute left-0 top-1/2 h-[8px] w-[8px] -translate-y-1/2 rounded-[9999px] shadow-[0px_0px_0px_4px_rgba(34,197,94,0.2)]" />
+                        </span>
+                      ) : null}
+                    </button>
+                  )}
 
                   <button
                     type="button"
