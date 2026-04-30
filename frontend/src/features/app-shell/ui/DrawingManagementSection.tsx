@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState, type DragEvent } from 'react'
 
 import { useActiveDrawing } from '../../../entities/drawing/model/activeDrawing'
 import { formatDrawingName } from '../../../shared/lib/formatDrawingName'
@@ -6,7 +6,10 @@ import { drawingSensorAssets } from '../../drawing-sensor/assets/drawingSensorAs
 import { appShellAssets } from '../assets/appShellAssets'
 import { normalizeSearchText } from '../model/sidebar'
 
+const DRAWING_ID_MIME = 'application/x-ai-gas-drawing-id'
+
 type DrawingListProps = {
+  listKind: 'active' | 'inactive'
   filter: (id: string) => boolean
   showGreenDot?: (id: string) => boolean
   allowIds?: Set<string>
@@ -101,21 +104,78 @@ function DrawingDeleteDialog({
   )
 }
 
-function DrawingList({ filter, showGreenDot, allowIds }: DrawingListProps) {
+function DrawingList({ listKind, filter, showGreenDot, allowIds }: DrawingListProps) {
   const { drawings, activeDrawingId, setActiveDrawingId, toggleDrawingActive, removeDrawing } = useActiveDrawing()
   const { imgDelete } = drawingSensorAssets
   const [pendingDeleteDrawingId, setPendingDeleteDrawingId] = useState<string | null>(null)
   const [isDeleting, setIsDeleting] = useState(false)
   const [deleteErrorMessage, setDeleteErrorMessage] = useState<string | null>(null)
+  const [isDropTarget, setIsDropTarget] = useState(false)
 
   const pendingDeleteName = useMemo(
     () => formatDrawingName(drawings.find((drawing) => drawing.id === pendingDeleteDrawingId)?.name),
     [drawings, pendingDeleteDrawingId],
   )
 
+  const readDraggedDrawingId = (e: DragEvent) =>
+    e.dataTransfer.getData(DRAWING_ID_MIME) || e.dataTransfer.getData('text/plain')
+
+  const handleListDragOver = (e: DragEvent) => {
+    e.preventDefault()
+    e.dataTransfer.dropEffect = 'move'
+  }
+
+  const handleListDragEnter = (e: DragEvent) => {
+    e.preventDefault()
+    setIsDropTarget(true)
+  }
+
+  const handleListDragLeave = (e: DragEvent) => {
+    if (!e.currentTarget.contains(e.relatedTarget as Node | null)) {
+      setIsDropTarget(false)
+    }
+  }
+
+  const handleListDrop = (e: DragEvent) => {
+    e.preventDefault()
+    setIsDropTarget(false)
+    const id = readDraggedDrawingId(e)
+    if (!id) return
+    const drawing = drawings.find((d) => d.id === id)
+    if (!drawing) return
+
+    if (listKind === 'active') {
+      if (!drawing.isActive) {
+        toggleDrawingActive(id)
+      }
+      setActiveDrawingId(id)
+      return
+    }
+
+    if (drawing.isActive) {
+      toggleDrawingActive(id)
+      if (activeDrawingId === id) {
+        const nextActive = drawings.find((d) => d.id !== id && d.isActive)
+        setActiveDrawingId(nextActive?.id ?? '')
+      }
+    }
+  }
+
   return (
     <>
-      <div className="flex flex-col gap-[4px]">
+      <div
+        className={`flex min-h-[40px] flex-col gap-[4px] rounded-[8px] transition-colors ${
+          isDropTarget
+            ? listKind === 'active'
+              ? 'bg-[var(--blue_primary_50,#e6f3fb)] ring-2 ring-[var(--blue_primary_500,#61a0e1)] ring-offset-2 ring-offset-[var(--gray_sidebar,#fafafa)]'
+              : 'bg-[#f1f5f9] ring-2 ring-[#94a3b8] ring-offset-2 ring-offset-[var(--gray_sidebar,#fafafa)]'
+            : ''
+        }`}
+        onDragOver={handleListDragOver}
+        onDragEnter={handleListDragEnter}
+        onDragLeave={handleListDragLeave}
+        onDrop={handleListDrop}
+      >
         {drawings
           .filter((drawing) => filter(drawing.id) && (allowIds ? allowIds.has(drawing.id) : true))
           .map((drawing) => {
@@ -126,11 +186,17 @@ function DrawingList({ filter, showGreenDot, allowIds }: DrawingListProps) {
             return (
               <div
                 key={drawing.id}
-                className={
+                draggable
+                onDragStart={(e) => {
+                  e.dataTransfer.setData(DRAWING_ID_MIME, drawing.id)
+                  e.dataTransfer.setData('text/plain', drawing.id)
+                  e.dataTransfer.effectAllowed = 'move'
+                }}
+                className={`cursor-grab active:cursor-grabbing ${
                   isSelected
                     ? 'flex w-full items-center justify-between gap-[8px] rounded-[4px] border border-[var(--blue_primary_500,#61a0e1)] bg-[var(--blue_primary_50,#e6f3fb)] px-[13px] py-[9px]'
                     : 'flex w-full items-center justify-between gap-[8px] rounded-[8px] px-[12px] py-[8px] hover:bg-[#f1f5f9]'
-                }
+                }`}
               >
                 <button
                   type="button"
@@ -317,6 +383,7 @@ export function DrawingManagementSection({ isExpanded, onToggle }: DrawingManage
               />
               {isDrawingListExpanded && (
                 <DrawingList
+                  listKind="active"
                   filter={(id) => activeIdSet.has(id)}
                   showGreenDot={() => true}
                   allowIds={searchedIdSet ?? undefined}
@@ -334,7 +401,11 @@ export function DrawingManagementSection({ isExpanded, onToggle }: DrawingManage
                 titleClassName="text-[color:var(--black_300,#7a89a1)]"
               />
               {isInactiveListExpanded && (
-                <DrawingList filter={(id) => !activeIdSet.has(id)} allowIds={searchedIdSet ?? undefined} />
+                <DrawingList
+                  listKind="inactive"
+                  filter={(id) => !activeIdSet.has(id)}
+                  allowIds={searchedIdSet ?? undefined}
+                />
               )}
             </div>
           </div>

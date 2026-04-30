@@ -331,6 +331,22 @@ export default function MonitorPage() {
                     비활성화 도면은 센서 차트와 센서 표시를 제공하지 않습니다.
                   </div>
                 )}
+                {isDrawingActive && cards.length === 0 && (
+                  <div className="flex min-h-[160px] flex-col items-center justify-center gap-[16px] px-[16px] pb-[8px] text-center">
+                    <p className="font-['Pretendard',sans-serif] text-[13px] leading-[1.65] text-[#7a89a1]">
+                      센서가 없습니다.
+                      <br />
+                      도면/센서 생성에서 센서를 등록해 보세요.
+                    </p>
+                    <button
+                      type="button"
+                      className="flex h-[40px] shrink-0 items-center justify-center rounded-[4px] bg-[var(--blue_icon,#1392ec)] px-[22px] py-[8px] font-['Pretendard',sans-serif] text-[16px] font-medium leading-[15px] tracking-[-0.25px] text-white transition hover:opacity-95"
+                      onClick={() => navigate('/drawing-sensor')}
+                    >
+                      센서 생성
+                    </button>
+                  </div>
+                )}
                 <div className="h-[4px]" />
               </div>
             </div>
