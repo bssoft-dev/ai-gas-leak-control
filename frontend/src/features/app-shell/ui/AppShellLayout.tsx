@@ -91,10 +91,15 @@ export default function AppShellLayout() {
             <AppShellHeader sidebarWidth={sidebarWidth} isResizingSidebar={isResizingSidebar} />
 
             <main
-              className={`min-h-screen bg-white pt-[64px] ${isResizingSidebar ? '' : 'transition-[margin-left] duration-200'}`}
+              className={`flex min-h-screen flex-col bg-white pt-[64px] ${isResizingSidebar ? '' : 'transition-[margin-left] duration-200'}`}
               style={{ marginLeft: sidebarWidth }}
             >
-              <Outlet />
+              <div className="min-h-0 flex-1">
+                <Outlet />
+              </div>
+              <footer className="shrink-0 border-t border-[#e8edf5] px-[24px] py-[8px] text-right font-['Pretendard',sans-serif] text-[11px] leading-[1.4] text-[#94a3b8]">
+                Copyright © BLUESP. All rights reserved. / Designed & Developed by BSSOFT
+              </footer>
             </main>
           </div>
         </div>
