@@ -145,7 +145,7 @@ export function AppShellSidebar({
         <>
           {materialIconName ? (
             <span
-              className={`material-symbols-rounded block h-5 w-5 shrink-0 text-[20px] ${
+              className={`material-symbols-rounded sidebar-icon block h-5 w-5 shrink-0 ${materialIconName === 'settings' ? 'text-[18px]' : 'text-[20px]'} ${
                 isActive
                   ? nested
                     ? 'text-[#7a9cc4]'
@@ -245,7 +245,7 @@ export function AppShellSidebar({
               aria-label="사이드바 펼치기"
               onClick={onExpandSidebar}
             >
-              <span className="material-symbols-rounded text-[22px] text-[#61718C]" aria-hidden="true">
+              <span className="material-symbols-rounded sidebar-icon text-[22px] text-[#61718C]" aria-hidden="true">
                 keyboard_double_arrow_right
               </span>
             </button>
@@ -270,7 +270,7 @@ export function AppShellSidebar({
               aria-label="사이드바 접기"
               onClick={onCollapseSidebar}
             >
-              <span className="material-symbols-rounded text-[22px] text-[#61718C]" aria-hidden="true">
+              <span className="material-symbols-rounded sidebar-icon text-[22px] text-[#61718C]" aria-hidden="true">
                 keyboard_double_arrow_left
               </span>
             </button>
@@ -301,7 +301,7 @@ export function AppShellSidebar({
               onClick={onToggleMenu}
             >
               <span
-                className={`material-symbols-rounded text-[18px] text-[#7A89A1] transition-transform ${
+                className={`material-symbols-rounded sidebar-icon text-[18px] text-[#7A89A1] transition-transform ${
                   isMenuExpanded ? 'rotate-90' : '-rotate-90'
                 }`}
                 aria-hidden="true"

@@ -22,7 +22,7 @@ function extractMesEquipmentRunning(stateResponse: any): boolean | null {
 }
 
 export function AppShellHeader({ sidebarWidth, isResizingSidebar }: AppShellHeaderProps) {
-  const { imgRunDot, imgEmergencyCaret } = appShellAssets
+  const { imgRunDot } = appShellAssets
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [pendingActionKey, setPendingActionKey] = useState<string | null>(null)
   const [toastMessage, setToastMessage] = useState<string | null>(null)
@@ -217,7 +217,14 @@ export function AppShellHeader({ sidebarWidth, isResizingSidebar }: AppShellHead
             aria-label="비상 제어 메뉴"
             aria-expanded={isMenuOpen}
           >
-            <img alt="" className="block h-[3.7px] w-[6px]" src={imgEmergencyCaret} />
+            <span
+              aria-hidden
+              className={`material-symbols-rounded text-[18px] leading-none text-white transition-transform ${
+                isMenuOpen ? 'rotate-180' : ''
+              }`}
+            >
+              expand_more
+            </span>
           </button>
 
           {isMenuOpen && (

@@ -97,7 +97,7 @@ export default function AppShellLayout() {
               <div className="min-h-0 flex-1">
                 <Outlet />
               </div>
-              <footer className="shrink-0 border-t border-[#e8edf5] px-[24px] py-[8px] text-right font-['Pretendard',sans-serif] text-[11px] leading-[1.4] text-[#94a3b8]">
+              <footer className="shrink-0 px-[24px] py-[8px] text-right font-['Pretendard',sans-serif] text-[11px] leading-[1.4] text-[#94a3b8]">
                 Copyright © BLUESP. All rights reserved. / Designed & Developed by BSSOFT
               </footer>
             </main>

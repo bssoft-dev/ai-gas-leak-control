@@ -3,7 +3,6 @@ import { useMemo, useState, type DragEvent } from 'react'
 import { useActiveDrawing } from '../../../entities/drawing/model/activeDrawing'
 import { formatDrawingName } from '../../../shared/lib/formatDrawingName'
 import { drawingSensorAssets } from '../../drawing-sensor/assets/drawingSensorAssets'
-import { appShellAssets } from '../assets/appShellAssets'
 import { normalizeSearchText } from '../model/sidebar'
 
 const DRAWING_ID_MIME = 'application/x-ai-gas-drawing-id'
@@ -246,7 +245,7 @@ function DrawingList({ listKind, filter, showGreenDot, allowIds }: DrawingListPr
 
                   <button
                     type="button"
-                    className="group flex h-[28px] w-[28px] shrink-0 items-center justify-center rounded-[4px] hover:bg-[#fef2f2]"
+                    className="group flex h-[28px] w-[28px] shrink-0 items-center justify-center rounded-[4px] transition-colors hover:bg-[#f1f5f9] active:bg-[#e2e8f0]"
                     aria-label={`${formatDrawingName(drawing.name) || drawing.name} 삭제`}
                     onClick={(e) => {
                       e.preventDefault()
@@ -257,7 +256,7 @@ function DrawingList({ listKind, filter, showGreenDot, allowIds }: DrawingListPr
                   >
                     <img
                       alt=""
-                      className="block h-[20px] w-[20px] transition-[filter] group-hover:[filter:invert(32%)_sepia(95%)_saturate(2582%)_hue-rotate(331deg)_brightness(99%)_contrast(96%)]"
+                      className="block h-[20px] w-[20px] opacity-80 transition-opacity group-hover:opacity-100"
                       src={imgDelete}
                     />
                   </button>
@@ -327,7 +326,6 @@ function SectionToggle({
 
 export function DrawingManagementSection({ isExpanded, onToggle }: DrawingManagementSectionProps) {
   const { drawings } = useActiveDrawing()
-  const { imgDrawingsChevron } = appShellAssets
   const [drawingSearch, setDrawingSearch] = useState('')
   const [isDrawingListExpanded, setIsDrawingListExpanded] = useState(true)
   const [isInactiveListExpanded, setIsInactiveListExpanded] = useState(true)
@@ -363,11 +361,14 @@ export function DrawingManagementSection({ isExpanded, onToggle }: DrawingManage
           aria-label="도면 관리 접기/펼치기"
           onClick={onToggle}
         >
-          <img
-            alt=""
-            className={`block h-[10px] w-[6px] shrink-0 self-center object-contain transition-transform rotate-90 ${isExpanded ? '' : 'rotate-180'}`}
-            src={imgDrawingsChevron}
-          />
+          <span
+            aria-hidden
+            className={`material-symbols-rounded sidebar-icon text-[18px] text-[#7A89A1] transition-transform ${
+              isExpanded ? 'rotate-90' : '-rotate-90'
+            }`}
+          >
+            chevron_right
+          </span>
         </button>
       </div>
 

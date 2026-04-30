@@ -184,13 +184,13 @@ export function SensorManagementSidebar({
                     </button>
                     <button
                       type="button"
-                      className={`group flex h-[28px] w-[28px] items-center justify-center rounded-[4px] hover:bg-[#fef2f2] ${!enabled ? 'cursor-not-allowed opacity-50' : ''}`}
+                      className={`group flex h-[28px] w-[28px] items-center justify-center rounded-[4px] transition-colors hover:bg-[#f1f5f9] active:bg-[#e2e8f0] ${!enabled ? 'cursor-not-allowed opacity-50' : ''}`}
                       aria-label="센서 삭제"
                       onClick={() => onRequestDelete(sensor.id)}
                     >
                       <img
                         alt=""
-                        className="block h-[20px] w-[20px] transition-[filter] group-hover:[filter:invert(32%)_sepia(95%)_saturate(2582%)_hue-rotate(331deg)_brightness(99%)_contrast(96%)]"
+                        className="block h-[20px] w-[20px] opacity-80 transition-opacity group-hover:opacity-100"
                         src={imgDelete}
                       />
                     </button>
@@ -250,7 +250,7 @@ export function SensorManagementSidebar({
                     </button>
                     <button
                       type="button"
-                      className={`group flex h-[28px] w-[28px] items-center justify-center rounded-[4px] hover:bg-[#fef2f2] ${!enabled ? 'cursor-not-allowed opacity-50' : ''}`}
+                      className={`group flex h-[28px] w-[28px] items-center justify-center rounded-[4px] transition-colors hover:bg-[#f1f5f9] active:bg-[#e2e8f0] ${!enabled ? 'cursor-not-allowed opacity-50' : ''}`}
                       aria-label="센서 삭제"
                       onClick={(e) => {
                         e.stopPropagation()
@@ -259,7 +259,7 @@ export function SensorManagementSidebar({
                     >
                       <img
                         alt=""
-                        className="block h-[20px] w-[20px] transition-[filter] group-hover:[filter:invert(32%)_sepia(95%)_saturate(2582%)_hue-rotate(331deg)_brightness(99%)_contrast(96%)]"
+                        className="block h-[20px] w-[20px] opacity-80 transition-opacity group-hover:opacity-100"
                         src={imgDelete}
                       />
                     </button>

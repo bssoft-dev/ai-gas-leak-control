@@ -256,6 +256,7 @@ export function ControlAlarmHistoryPage() {
               type="date"
               value={selectedDate}
               onChange={(event) => setSelectedDate(event.target.value)}
+              max={getTodayYmd()}
               className="h-[48px] w-full rounded-[14px] border border-[#d7e1ee] bg-white px-[16px] font-[Pretendard,sans-serif] text-[15px] text-[#0f172a] outline-none transition placeholder:text-[#9aacbf] focus:border-[#61a0e1]"
             />
           </label>

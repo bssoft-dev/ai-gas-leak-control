@@ -66,6 +66,14 @@ button {
     'opsz' 24;
 }
 
+.material-symbols-rounded.sidebar-icon {
+  font-variation-settings:
+    'FILL' 0,
+    'wght' 250,
+    'GRAD' 0,
+    'opsz' 24;
+}
+
 :focus-visible {
   outline: 2px solid var(--gl-primary);
   outline-offset: 2px;

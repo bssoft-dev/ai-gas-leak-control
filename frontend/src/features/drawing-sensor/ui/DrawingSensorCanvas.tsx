@@ -89,13 +89,13 @@ export function DrawingSensorCanvas({
 
         <button
           type="button"
-          className="flex h-[40px] shrink-0 items-center justify-center gap-[8px] rounded-[4px] bg-[var(--blue_icon,#1392ec)] px-[22px] py-[8px] disabled:cursor-not-allowed disabled:opacity-60"
+          className="flex h-[36px] shrink-0 items-center justify-center gap-[6px] rounded-[4px] bg-[var(--blue_icon,#1392ec)] px-[18px] py-[6px] disabled:cursor-not-allowed disabled:opacity-60"
           aria-label="도면 추가"
           disabled={isUploadingDrawings}
           onClick={onOpenUploadDialog}
         >
-          <span className="material-symbols-rounded text-[20px] leading-none text-white">upload_file</span>
-          <span className="whitespace-nowrap font-['Pretendard',sans-serif] text-[16px] font-medium leading-[15px] tracking-[-0.25px] text-white">
+          <span className="material-symbols-rounded text-[18px] leading-none text-white">upload_file</span>
+          <span className="whitespace-nowrap font-['Pretendard',sans-serif] text-[15px] font-medium leading-[15px] tracking-[-0.2px] text-white">
             {isUploadingDrawings ? '업로드 중...' : '도면 추가'}
           </span>
         </button>
