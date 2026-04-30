@@ -15,6 +15,7 @@ import { formatDrawingName } from '../../../shared/lib/formatDrawingName'
 import { PageContentGrid } from '../../../shared/ui/layout/PageContentGrid'
 import { PaginationArrowButton } from '../../../shared/ui/navigation/PaginationArrowButton'
 import { drawingSensorAssets } from '../../drawing-sensor/assets/drawingSensorAssets'
+import { DrawingViewportMinimap } from '../../drawing-sensor/ui/DrawingViewportMinimap'
 import { monitorAssets } from '../assets/monitorAssets'
 import { buildMonitorChartCards } from '../lib/buildMonitorChartCards'
 import { useMonitorPressureSeries } from '../model/useMonitorPressureSeries'
@@ -251,6 +252,16 @@ export default function MonitorPage() {
                   </div>
                 )}
                 </div>
+
+                <DrawingViewportMinimap
+                  zoom={viewport.zoom}
+                  pan={viewport.pan}
+                  viewportRef={viewport.viewportRef}
+                  imagePath={activeDrawing?.imagePath}
+                  fileKind={activeDrawing?.fileKind}
+                  drawingName={drawingName}
+                  onNavigate={viewport.panToSlotFraction}
+                />
               </div>
             </div>
           </div>

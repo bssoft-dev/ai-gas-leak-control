@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { DefaultService } from '../../../api/services/DefaultService'
 import { appShellAssets } from '../assets/appShellAssets'
@@ -16,13 +16,39 @@ type HeaderActionItem = {
   onClick: () => Promise<void>
 }
 
+function extractMesEquipmentRunning(stateResponse: any): boolean | null {
+  const rawValue = stateResponse?.mes_equipment_running ?? stateResponse?.mesEquipmentRunning
+  return typeof rawValue === 'boolean' ? rawValue : null
+}
+
 export function AppShellHeader({ sidebarWidth, isResizingSidebar }: AppShellHeaderProps) {
   const { imgRunDot, imgEmergencyCaret } = appShellAssets
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [pendingActionKey, setPendingActionKey] = useState<string | null>(null)
   const [toastMessage, setToastMessage] = useState<string | null>(null)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [mesEquipmentRunning, setMesEquipmentRunning] = useState<boolean | null>(null)
   const menuRef = useRef<HTMLDivElement>(null)
+
+  const fetchMesState = useCallback(async () => {
+    try {
+      const response = await DefaultService.getGasLeakStateApiGasLeakStateGet()
+      const nextValue = extractMesEquipmentRunning(response)
+      if (nextValue !== null) {
+        setMesEquipmentRunning(nextValue)
+      }
+    } catch {
+      // Keep the latest visible state when polling fails.
+    }
+  }, [])
+
+  useEffect(() => {
+    void fetchMesState()
+    const intervalId = window.setInterval(() => {
+      void fetchMesState()
+    }, 2000)
+    return () => window.clearInterval(intervalId)
+  }, [fetchMesState])
 
   useEffect(() => {
     if (!isMenuOpen) return
@@ -75,7 +101,7 @@ export function AppShellHeader({ sidebarWidth, isResizingSidebar }: AppShellHead
       },
       {
         key: 'alarm-off',
-        label: '경광등/사이렌 해제',
+        label: '경광등·사이렌 해제',
         description: '경광등과 사이렌 OFF 이벤트를 발행합니다.',
         onClick: () =>
           publishHeaderEvent('GAS_LEAK_ALARM_CONTROL', {
@@ -116,7 +142,9 @@ export function AppShellHeader({ sidebarWidth, isResizingSidebar }: AppShellHead
 
   const renderSection = (title: string, items: HeaderActionItem[]) => (
     <div className="flex flex-col gap-[6px]">
-      <div className="px-[4px] font-['Pretendard',sans-serif] text-[12px] font-semibold text-[#7a89a1]">{title}</div>
+      <div className="px-[4px] font-['Pretendard',sans-serif] text-[12px] font-semibold text-[#7a89a1]">
+        {title}
+      </div>
       {items.map((item) => {
         const isPending = pendingActionKey === item.key
         return (
@@ -126,9 +154,7 @@ export function AppShellHeader({ sidebarWidth, isResizingSidebar }: AppShellHead
             onClick={() => void runAction(item)}
             disabled={pendingActionKey != null}
             className={`flex w-full flex-col items-start gap-[2px] rounded-[8px] px-[12px] py-[10px] text-left transition ${
-              item.danger
-                ? 'bg-[#fff5f5] hover:bg-[#fee2e2]'
-                : 'bg-white hover:bg-[#f8fafc]'
+              item.danger ? 'bg-[#fff5f5] hover:bg-[#fee2e2]' : 'bg-white hover:bg-[#f8fafc]'
             } disabled:cursor-not-allowed disabled:opacity-60`}
           >
             <span
@@ -147,6 +173,9 @@ export function AppShellHeader({ sidebarWidth, isResizingSidebar }: AppShellHead
     </div>
   )
 
+  const mesStatusText = mesEquipmentRunning === false ? 'STOP' : 'RUN'
+  const mesStatusColor = mesEquipmentRunning === false ? '#64748b' : '#22c55e'
+
   return (
     <header
       className={`fixed right-0 top-0 z-10 h-[64px] border-b border-[var(--gray_sidebar_stroke,#e2e8f0)] bg-white ${
@@ -160,11 +189,15 @@ export function AppShellHeader({ sidebarWidth, isResizingSidebar }: AppShellHead
             MES 설비 가동
           </span>
           <span className="flex items-center gap-[6px]">
-            <span className="h-[6px] w-[6px]">
-              <img alt="" className="block h-full w-full" src={imgRunDot} />
+            <span className="relative h-[6px] w-[6px]">
+              <img alt="" className="block h-full w-full opacity-0" src={imgRunDot} />
+              <span className="absolute inset-0 rounded-full" style={{ backgroundColor: mesStatusColor }} />
             </span>
-            <span className="whitespace-nowrap font-['Pretendard',sans-serif] text-[16px] font-medium leading-[15px] tracking-[-0.25px] text-[#22c55e]">
-              RUN
+            <span
+              className="whitespace-nowrap font-['Pretendard',sans-serif] text-[16px] font-medium leading-[15px] tracking-[-0.25px]"
+              style={{ color: mesStatusColor }}
+            >
+              {mesStatusText}
             </span>
           </span>
         </div>
