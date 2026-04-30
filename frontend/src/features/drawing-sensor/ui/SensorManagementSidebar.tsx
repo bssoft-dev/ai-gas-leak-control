@@ -50,7 +50,7 @@ export function SensorManagementSidebar({
         등록된 센서 ({registeredSensors.length})
       </div>
       <div className="mt-[12px] flex min-h-0 flex-1 flex-col">
-        <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-[8px] bg-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.3),0px_1px_3px_1px_rgba(0,0,0,0.15)]">
+        <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-[8px] bg-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.18),0px_1px_3px_1px_rgba(0,0,0,0.08)]">
           <div className="shrink-0 border-b border-[#e2e8f0] bg-[#fafafa] p-[12px]">
             <div className="flex flex-col gap-[12px]">
               <div>

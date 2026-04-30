@@ -106,7 +106,7 @@ export default function MonitorPage() {
           </div>
 
           <div className="mt-[12px] flex min-h-0 min-w-0 flex-1 flex-col">
-            <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden rounded-[8px] bg-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.3),0px_1px_3px_1px_rgba(0,0,0,0.15)]">
+            <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden rounded-[8px] bg-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.18),0px_1px_3px_1px_rgba(0,0,0,0.08)]">
               <div className="flex shrink-0 flex-wrap items-center justify-between gap-x-[12px] gap-y-[8px] px-[32px] pb-[12px] pt-[24px]">
                 <div className="min-w-0 flex-1" aria-hidden="true" />
                 <div className="flex items-center gap-[12px] py-[4px]">
@@ -194,7 +194,7 @@ export default function MonitorPage() {
                 <div className="absolute bottom-[16px] right-[16px] z-20 flex flex-col-reverse items-center gap-[10px]">
                 <button
                   type="button"
-                  className="flex h-[44px] w-[44px] shrink-0 items-center justify-center rounded-full border border-[#e2e8f0] bg-white shadow-[0px_4px_14px_rgba(0,0,0,0.14)] transition-shadow hover:shadow-[0px_6px_18px_rgba(0,0,0,0.16)]"
+                  className="flex h-[44px] w-[44px] shrink-0 items-center justify-center rounded-full border border-[#e2e8f0] bg-white shadow-[0px_4px_14px_rgba(0,0,0,0.10)] transition-shadow hover:shadow-[0px_6px_18px_rgba(0,0,0,0.12)]"
                   aria-label={viewport.isFabOpen ? '도면 도구 닫기' : '도면 도구 열기'}
                   aria-expanded={viewport.isFabOpen}
                   onClick={() => viewport.setIsFabOpen((open) => !open)}
@@ -211,7 +211,7 @@ export default function MonitorPage() {
                 </button>
 
                 {viewport.isFabOpen && (
-                  <div className="flex flex-col items-center gap-[2px] rounded-[9999px] border border-[#e2e8f0] bg-white px-[6px] py-[8px] shadow-[0px_4px_14px_rgba(0,0,0,0.14)]">
+                  <div className="flex flex-col items-center gap-[2px] rounded-[9999px] border border-[#e2e8f0] bg-white px-[6px] py-[8px] shadow-[0px_4px_14px_rgba(0,0,0,0.10)]">
                     <button
                       type="button"
                       className="flex h-[36px] w-[36px] items-center justify-center rounded-full hover:bg-[#f1f5f9]"
@@ -270,7 +270,7 @@ export default function MonitorPage() {
           </div>
 
           <div className="mt-[12px] flex min-h-0 flex-1 flex-col">
-            <div className="flex min-h-[786px] min-w-0 flex-1 flex-col overflow-hidden rounded-[8px] bg-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.3),0px_1px_3px_1px_rgba(0,0,0,0.15)]">
+            <div className="flex min-h-[786px] min-w-0 flex-1 flex-col overflow-hidden rounded-[8px] bg-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.18),0px_1px_3px_1px_rgba(0,0,0,0.08)]">
               <div className="notion-scrollbar flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto py-[8px] pl-[6px] pr-[4px] sm:pl-[8px]">
                 {pressureSeriesError && (
                   <div className="w-full rounded-[6px] border border-amber-200 bg-amber-50 px-[10px] py-[6px] font-['Pretendard',sans-serif] text-[10px] text-amber-900">

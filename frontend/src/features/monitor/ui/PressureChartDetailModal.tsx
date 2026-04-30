@@ -277,7 +277,7 @@ export function PressureChartDetailModal({
       }}
     >
       <div
-        className="relative flex w-full max-w-[1120px] flex-col overflow-hidden rounded-[8px] bg-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.3),0px_1px_3px_1px_rgba(0,0,0,0.15)]"
+        className="relative flex w-full max-w-[1120px] flex-col overflow-hidden rounded-[8px] bg-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.18),0px_1px_3px_1px_rgba(0,0,0,0.08)]"
         onMouseDown={(event) => event.stopPropagation()}
       >
         <h2 id="pressure-chart-detail-title" className="sr-only">
