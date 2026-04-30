@@ -251,7 +251,6 @@ export function SensorManagementSidebar({
           </div>
         </div>
       </div>
-      <div className="mt-[18px] flex h-[20px] shrink-0 items-center justify-center gap-[51px]" aria-hidden="true" />
     </aside>
   )
 }

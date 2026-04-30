@@ -226,7 +226,7 @@ export function ControlAlarmHistoryPage() {
   }, [errorMessage, filteredRows.length, isLoading, pagedRows, rows.length])
 
   return (
-    <div className="w-full">
+    <div className="w-full px-[24px] py-[24px]">
       <HistoryTabs
         actions={
           <IconTooltipButton
@@ -279,7 +279,14 @@ export function ControlAlarmHistoryPage() {
             </select>
           </label>
 
-          <IconTooltipButton label="필터 초기화" onClick={resetFilters} icon="reset" />
+          <div className="shrink-0 font-[Pretendard,sans-serif]">
+            <span className="mb-[8px] block text-[14px] font-semibold text-transparent select-none" aria-hidden>
+              {'\u00a0'}
+            </span>
+            <div className="flex h-[48px] items-center">
+              <IconTooltipButton label="필터 초기화" onClick={resetFilters} icon="reset" />
+            </div>
+          </div>
         </div>
       </div>
 

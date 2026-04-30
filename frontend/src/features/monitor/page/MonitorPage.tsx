@@ -28,7 +28,16 @@ export default function MonitorPage() {
     }),
     [pressureSeries],
   )
-  const { drawings, activeDrawingId, activeDrawing, activeIndex, total, goPrev, goNext } = useActiveDrawing()
+  const {
+    drawings,
+    activeDrawingId,
+    activeDrawing,
+    activeIndex,
+    total,
+    goPrev,
+    goNext,
+    toggleDrawingActive,
+  } = useActiveDrawing()
   const [chartDetailId, setChartDetailId] = useState<string | null>(null)
   const viewport = useDrawingViewport(activeDrawingId)
 
@@ -81,19 +90,49 @@ export default function MonitorPage() {
             {drawingName}
           </div>
 
-          <div className="mt-[12px] flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden rounded-[8px] bg-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.3),0px_1px_3px_1px_rgba(0,0,0,0.15)]">
-            <div className="relative h-[786px] min-w-0 shrink-0">
-              <div
-                ref={viewport.viewportRef}
-                className={`absolute inset-0 overflow-hidden touch-none select-none ${
-                  viewport.zoom > 1 ? (viewport.isPanning ? 'cursor-grabbing' : 'cursor-grab') : ''
-                }`}
-                onPointerDown={viewport.onPointerDown}
-                onPointerMove={viewport.onPointerMove}
-                onPointerUp={viewport.endPointerDrag}
-                onPointerCancel={viewport.endPointerDrag}
-                onLostPointerCapture={viewport.onLostPointerCapture}
-              >
+          <div className="mt-[12px] flex min-h-0 min-w-0 flex-1 flex-col">
+            <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden rounded-[8px] bg-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.3),0px_1px_3px_1px_rgba(0,0,0,0.15)]">
+              <div className="flex shrink-0 flex-wrap items-center justify-between gap-x-[12px] gap-y-[8px] px-[32px] pb-[12px] pt-[24px]">
+                <div className="font-['Pretendard',sans-serif] text-[14px] font-normal leading-[normal] text-[color:var(--black_500,#485b77)]">
+                  도면 내 설치 위치 등록 (도면을 클릭하여 센서 추가)
+                </div>
+
+                <div className="flex items-center gap-[12px] py-[4px]">
+                  <div className="font-['Pretendard',sans-serif] text-[14px] font-normal leading-[normal] text-[color:var(--black_500,#485b77)]">
+                    활성화 여부
+                  </div>
+                  <button
+                    type="button"
+                    className="relative h-[20px] w-[36px] rounded-full disabled:cursor-not-allowed disabled:opacity-50"
+                    style={{ backgroundColor: isDrawingActive ? '#22c55e' : '#e2e8f0' }}
+                    aria-label="활성화 여부"
+                    disabled={!activeDrawingId}
+                    onClick={() => {
+                      if (activeDrawingId) {
+                        toggleDrawingActive(activeDrawingId)
+                      }
+                    }}
+                  >
+                    <span
+                      className="absolute top-[2px] size-[16px] rounded-full border border-white bg-white"
+                      style={{ left: isDrawingActive ? 18 : 2 }}
+                    />
+                  </button>
+                </div>
+              </div>
+
+              <div className="relative min-h-[786px] min-w-0 flex-1 shrink-0">
+                <div
+                  ref={viewport.viewportRef}
+                  className={`absolute inset-0 overflow-hidden touch-none select-none ${
+                    viewport.zoom > 1 ? (viewport.isPanning ? 'cursor-grabbing' : 'cursor-grab') : ''
+                  }`}
+                  onPointerDown={viewport.onPointerDown}
+                  onPointerMove={viewport.onPointerMove}
+                  onPointerUp={viewport.endPointerDrag}
+                  onPointerCancel={viewport.endPointerDrag}
+                  onLostPointerCapture={viewport.onLostPointerCapture}
+                >
                 <div
                   className="relative h-full w-full"
                   style={{ transform: `translate(${viewport.pan.x}px, ${viewport.pan.y}px)` }}
@@ -129,9 +168,9 @@ export default function MonitorPage() {
                     </div>
                   </div>
                 </div>
-              </div>
+                </div>
 
-              <div className="absolute bottom-[16px] right-[16px] z-20 flex flex-col-reverse items-center gap-[10px]">
+                <div className="absolute bottom-[16px] right-[16px] z-20 flex flex-col-reverse items-center gap-[10px]">
                 <button
                   type="button"
                   className="flex h-[44px] w-[44px] shrink-0 items-center justify-center rounded-full border border-[#e2e8f0] bg-white shadow-[0px_4px_14px_rgba(0,0,0,0.14)] transition-shadow hover:shadow-[0px_6px_18px_rgba(0,0,0,0.16)]"
@@ -190,6 +229,7 @@ export default function MonitorPage() {
                     </button>
                   </div>
                 )}
+                </div>
               </div>
             </div>
           </div>
