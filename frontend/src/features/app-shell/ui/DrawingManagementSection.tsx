@@ -45,7 +45,16 @@ function DrawingDeleteDialog({
       >
         <div className="flex justify-center">
           <div className="flex h-[48px] w-[48px] items-center justify-center rounded-full bg-[#fef2f2]" aria-hidden>
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg
+              width="28"
+              height="28"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#ef4444"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
               <path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14zM10 11v6M14 11v6" />
             </svg>
           </div>
@@ -215,10 +224,39 @@ type DrawingManagementSectionProps = {
   onToggle: () => void
 }
 
+function SectionToggle({
+  title,
+  expanded,
+  onToggle,
+  titleClassName,
+}: {
+  title: string
+  expanded: boolean
+  onToggle: () => void
+  titleClassName: string
+}) {
+  return (
+    <div className="mb-[8px] flex items-center justify-between px-[2px]">
+      <div className={`font-['Pretendard',sans-serif] text-[12px] font-semibold leading-[16px] ${titleClassName}`}>
+        {title}
+      </div>
+      <button
+        type="button"
+        className="font-['Pretendard',sans-serif] text-[11px] font-medium leading-[16px] text-[color:var(--black_300,#7a89a1)]"
+        onClick={onToggle}
+      >
+        {expanded ? '숨기기' : '보이기'}
+      </button>
+    </div>
+  )
+}
+
 export function DrawingManagementSection({ isExpanded, onToggle }: DrawingManagementSectionProps) {
   const { drawings } = useActiveDrawing()
   const { imgDrawingsChevron } = appShellAssets
   const [drawingSearch, setDrawingSearch] = useState('')
+  const [isDrawingListExpanded, setIsDrawingListExpanded] = useState(true)
+  const [isInactiveListExpanded, setIsInactiveListExpanded] = useState(true)
 
   const activeIdSet = useMemo(
     () => new Set(drawings.filter((drawing) => drawing.isActive).map((drawing) => drawing.id)),
@@ -228,6 +266,7 @@ export function DrawingManagementSection({ isExpanded, onToggle }: DrawingManage
   const searchedIdSet = useMemo(() => {
     const query = normalizeSearchText(drawingSearch)
     if (!query) return null
+
     return new Set(
       drawings
         .filter((drawing) => normalizeSearchText(String(drawing.name ?? '')).includes(query))
@@ -270,23 +309,33 @@ export function DrawingManagementSection({ isExpanded, onToggle }: DrawingManage
             </div>
 
             <div className="px-[8px]">
-              <div className="mb-[8px] px-[2px] font-['Pretendard',sans-serif] text-[12px] font-semibold leading-[16px] text-[color:var(--green,#22c55e)]">
-                활성 도면
-              </div>
-              <DrawingList
-                filter={(id) => activeIdSet.has(id)}
-                showGreenDot={() => true}
-                allowIds={searchedIdSet ?? undefined}
+              <SectionToggle
+                title="도면목록"
+                expanded={isDrawingListExpanded}
+                onToggle={() => setIsDrawingListExpanded((prev) => !prev)}
+                titleClassName="text-[color:var(--green,#22c55e)]"
               />
+              {isDrawingListExpanded && (
+                <DrawingList
+                  filter={(id) => activeIdSet.has(id)}
+                  showGreenDot={() => true}
+                  allowIds={searchedIdSet ?? undefined}
+                />
+              )}
             </div>
 
             <div className="my-[8px] border-t border-[#c0ccde]" />
 
             <div className="px-[8px] pb-[8px]">
-              <div className="mb-[8px] px-[2px] font-['Pretendard',sans-serif] text-[12px] font-semibold leading-[16px] text-[color:var(--black_300,#7a89a1)]">
-                비활성 도면
-              </div>
-              <DrawingList filter={(id) => !activeIdSet.has(id)} allowIds={searchedIdSet ?? undefined} />
+              <SectionToggle
+                title="비활성도면"
+                expanded={isInactiveListExpanded}
+                onToggle={() => setIsInactiveListExpanded((prev) => !prev)}
+                titleClassName="text-[color:var(--black_300,#7a89a1)]"
+              />
+              {isInactiveListExpanded && (
+                <DrawingList filter={(id) => !activeIdSet.has(id)} allowIds={searchedIdSet ?? undefined} />
+              )}
             </div>
           </div>
         </div>

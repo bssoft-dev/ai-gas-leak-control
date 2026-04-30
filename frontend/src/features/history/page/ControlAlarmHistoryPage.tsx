@@ -16,6 +16,7 @@ type IconTooltipButtonProps = {
   onClick: () => void
   disabled?: boolean
   spin?: boolean
+  icon?: 'refresh' | 'reset'
 }
 
 const PAGE_SIZE = 20
@@ -40,7 +41,13 @@ function formatHistoryTime(value: string) {
   return formatter.format(date)
 }
 
-function IconTooltipButton({ label, onClick, disabled = false, spin = false }: IconTooltipButtonProps) {
+function IconTooltipButton({
+  label,
+  onClick,
+  disabled = false,
+  spin = false,
+  icon = 'refresh',
+}: IconTooltipButtonProps) {
   return (
     <div className="group relative flex items-center">
       <button
@@ -49,21 +56,40 @@ function IconTooltipButton({ label, onClick, disabled = false, spin = false }: I
         disabled={disabled}
         className="inline-flex h-[40px] w-[40px] items-center justify-center rounded-full border border-[#d7e1ee] bg-white text-[#607a9f] transition hover:border-[#61a0e1] hover:text-[#4370ac] disabled:cursor-not-allowed disabled:opacity-50"
       >
-        <svg
-          viewBox="0 0 24 24"
-          className={`h-[20px] w-[20px] ${spin ? 'animate-spin' : ''}`}
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.8"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          aria-hidden="true"
-        >
-          <path d="M21 12a9 9 0 1 1-2.64-6.36" />
-          <path d="M21 3v6h-6" />
-        </svg>
+        {icon === 'refresh' ? (
+          <svg
+            viewBox="0 0 24 24"
+            className={`h-[20px] w-[20px] ${spin ? 'animate-spin' : ''}`}
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M21 12a9 9 0 1 1-2.64-6.36" />
+            <path d="M21 3v6h-6" />
+          </svg>
+        ) : (
+          <svg
+            viewBox="0 0 24 24"
+            className="h-[20px] w-[20px]"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M6 7h12" />
+            <path d="M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7" />
+            <path d="M8 7l.8 11a1.5 1.5 0 0 0 1.5 1.4h3.4a1.5 1.5 0 0 0 1.5-1.4L16 7" />
+            <path d="M10.25 10.25v5.5" />
+            <path d="M13.75 10.25v5.5" />
+          </svg>
+        )}
       </button>
-      <div className="pointer-events-none absolute bottom-[calc(100%+8px)] left-1/2 z-10 -translate-x-1/2 rounded-[8px] bg-[#23344d] px-[10px] py-[6px] text-[12px] font-medium text-white opacity-0 shadow-[0_8px_20px_rgba(15,23,42,0.18)] transition group-hover:opacity-100">
+      <div className="pointer-events-none absolute bottom-[calc(100%+8px)] left-1/2 z-10 -translate-x-1/2 whitespace-nowrap rounded-[8px] bg-[#23344d] px-[10px] py-[6px] text-[12px] font-medium text-white opacity-0 shadow-[0_8px_20px_rgba(15,23,42,0.18)] transition group-hover:opacity-100">
         {label}
       </div>
     </div>
@@ -85,8 +111,7 @@ export function ControlAlarmHistoryPage() {
 
     try {
       const response = await DefaultService.getGasLeakControlHistoryApiGasLeakControlHistoryGet()
-      const nextRows = Array.isArray(response) ? response : []
-      setRows(nextRows)
+      setRows(Array.isArray(response) ? response : [])
     } catch (error) {
       setErrorMessage(error instanceof Error ? error.message : '제어·알람 이력을 불러오지 못했습니다.')
     } finally {
@@ -211,6 +236,7 @@ export function ControlAlarmHistoryPage() {
             }}
             disabled={isLoading}
             spin={isLoading}
+            icon="refresh"
           />
         }
       />
@@ -253,7 +279,7 @@ export function ControlAlarmHistoryPage() {
             </select>
           </label>
 
-          <IconTooltipButton label="필터 초기화" onClick={resetFilters} />
+          <IconTooltipButton label="필터 초기화" onClick={resetFilters} icon="reset" />
         </div>
       </div>
 

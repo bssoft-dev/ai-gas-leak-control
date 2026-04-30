@@ -82,7 +82,7 @@ export default function MonitorPage() {
           </div>
 
           <div className="mt-[12px] flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden rounded-[8px] bg-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.3),0px_1px_3px_1px_rgba(0,0,0,0.15)]">
-            <div className="relative min-h-[786px] min-w-0 flex-1">
+            <div className="relative h-[786px] min-w-0 shrink-0">
               <div
                 ref={viewport.viewportRef}
                 className={`absolute inset-0 overflow-hidden touch-none select-none ${
@@ -106,7 +106,7 @@ export default function MonitorPage() {
                       transition: viewport.isPanning ? 'none' : 'transform 0.15s ease-out',
                     }}
                   >
-                    <div className="pointer-events-none absolute left-0 top-[19.35%] h-[61.3%] w-full overflow-hidden">
+                    <div className="pointer-events-none absolute inset-[24px] overflow-hidden">
                       <div className="relative h-full w-full">
                         <DrawingMedia
                           alt={drawingName}

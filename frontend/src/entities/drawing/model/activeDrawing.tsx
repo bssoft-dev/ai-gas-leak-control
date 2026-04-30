@@ -174,7 +174,7 @@ export function ActiveDrawingProvider({ children }: { children: React.ReactNode 
       setActiveDrawingId((currentId) => {
         const targetId = preferredActiveId ?? currentId
         if (targetId && availableIdSet.has(targetId)) return targetId
-        return list[0]?.id ?? ''
+        return list.find((drawing) => drawing.isActive)?.id ?? list[0]?.id ?? ''
       })
       setErrorDrawings(null)
 
@@ -329,13 +329,13 @@ export function ActiveDrawingProvider({ children }: { children: React.ReactNode 
   const value = useMemo<ActiveDrawingContextValue>(() => {
     const goPrev = () => {
       if (total <= 0) return
-      const nextIdx = Math.max(0, activeIndex - 1)
+      const nextIdx = activeIndex <= 0 ? total - 1 : activeIndex - 1
       setActiveDrawingId(drawings[nextIdx]?.id ?? activeDrawingId)
     }
 
     const goNext = () => {
       if (total <= 0) return
-      const nextIdx = Math.min(total - 1, activeIndex + 1)
+      const nextIdx = activeIndex >= total - 1 ? 0 : activeIndex + 1
       setActiveDrawingId(drawings[nextIdx]?.id ?? activeDrawingId)
     }
 
