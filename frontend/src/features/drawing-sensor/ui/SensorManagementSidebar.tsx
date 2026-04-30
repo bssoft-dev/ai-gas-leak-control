@@ -89,17 +89,15 @@ export function SensorManagementSidebar({
               <div className="flex gap-[8px]">
                 <button
                   type="button"
-                  className="h-[40px] flex-1 rounded-[8px] bg-[var(--blue_icon,#1392ec)] font-['Pretendard',sans-serif] text-[14px] leading-[20px] text-white disabled:cursor-not-allowed disabled:opacity-50"
+                  className={`h-[40px] flex-1 rounded-[8px] bg-[var(--blue_icon,#1392ec)] font-['Pretendard',sans-serif] text-[14px] leading-[20px] text-white ${!enabled ? 'cursor-not-allowed opacity-60' : ''}`}
                   onClick={onAdd}
-                  disabled={!enabled}
                 >
                   추가
                 </button>
                 <button
                   type="button"
-                  className="h-[40px] flex-1 rounded-[8px] bg-[var(--gray_sidebar_stroke,#e2e8f0)] font-['Pretendard',sans-serif] text-[14px] leading-[20px] text-[color:var(--black_700,#2c3c53)] disabled:cursor-not-allowed disabled:opacity-50"
+                  className={`h-[40px] flex-1 rounded-[8px] bg-[var(--gray_sidebar_stroke,#e2e8f0)] font-['Pretendard',sans-serif] text-[14px] leading-[20px] text-[color:var(--black_700,#2c3c53)] ${!enabled ? 'cursor-not-allowed opacity-60' : ''}`}
                   onClick={onCancel}
-                  disabled={!enabled}
                 >
                   취소
                 </button>
@@ -166,10 +164,9 @@ export function SensorManagementSidebar({
                   <div className="flex justify-end gap-[4px]">
                     <button
                       type="button"
-                      className="flex h-[28px] w-[28px] items-center justify-center rounded-[4px] hover:bg-[#eff6ff] disabled:cursor-not-allowed disabled:opacity-40"
+                      className={`flex h-[28px] w-[28px] items-center justify-center rounded-[4px] hover:bg-[#eff6ff] ${!enabled ? 'cursor-not-allowed opacity-50' : ''}`}
                       aria-label="수정 저장"
                       onClick={onSaveEdit}
-                      disabled={!enabled}
                     >
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
                         <path
@@ -183,10 +180,9 @@ export function SensorManagementSidebar({
                     </button>
                     <button
                       type="button"
-                      className="group flex h-[28px] w-[28px] items-center justify-center rounded-[4px] hover:bg-[#fef2f2] disabled:cursor-not-allowed disabled:opacity-40"
+                      className={`group flex h-[28px] w-[28px] items-center justify-center rounded-[4px] hover:bg-[#fef2f2] ${!enabled ? 'cursor-not-allowed opacity-50' : ''}`}
                       aria-label="센서 삭제"
                       onClick={() => onRequestDelete(sensor.id)}
-                      disabled={!enabled}
                     >
                       <img
                         alt=""
@@ -224,19 +220,17 @@ export function SensorManagementSidebar({
                   <div className="flex justify-end gap-[4px]">
                     <button
                       type="button"
-                      className="flex h-[28px] w-[28px] items-center justify-center rounded-[4px] hover:bg-[#f1f5f9] disabled:cursor-not-allowed disabled:opacity-40"
+                      className={`flex h-[28px] w-[28px] items-center justify-center rounded-[4px] hover:bg-[#f1f5f9] ${!enabled ? 'cursor-not-allowed opacity-50' : ''}`}
                       aria-label="센서 편집"
                       onClick={() => onStartEdit(sensor)}
-                      disabled={!enabled}
                     >
                       <img alt="" className="block h-[20px] w-[20px]" src={imgEdit} />
                     </button>
                     <button
                       type="button"
-                      className="group flex h-[28px] w-[28px] items-center justify-center rounded-[4px] hover:bg-[#fef2f2] disabled:cursor-not-allowed disabled:opacity-40"
+                      className={`group flex h-[28px] w-[28px] items-center justify-center rounded-[4px] hover:bg-[#fef2f2] ${!enabled ? 'cursor-not-allowed opacity-50' : ''}`}
                       aria-label="센서 삭제"
                       onClick={() => onRequestDelete(sensor.id)}
-                      disabled={!enabled}
                     >
                       <img
                         alt=""

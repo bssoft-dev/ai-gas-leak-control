@@ -334,9 +334,21 @@ export default function DrawingSensorPage() {
   }
 
   const onCancel = () => {
+    if (!enabled) {
+      showInactiveWarning()
+      return
+    }
     setLabel('')
     setUnit('pressure')
     setPendingPlacement(null)
+  }
+
+  const requestDeleteSensor = (sensorId: string) => {
+    if (!enabled) {
+      showInactiveWarning()
+      return
+    }
+    setDeleteConfirmId(sensorId)
   }
 
   const onDrawingCanvasClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -529,23 +541,23 @@ export default function DrawingSensorPage() {
           onEditLabelChange={setEditLabel}
           onEditUnitChange={setEditUnit}
           onSaveEdit={saveEdit}
-          onRequestDelete={setDeleteConfirmId}
+          onRequestDelete={requestDeleteSensor}
         />
 
         <div className="col-span-12 mt-[18px] flex shrink-0 items-center justify-center gap-[51px] text-[16px] text-[#0b1828] lg:col-span-9">
           <PaginationArrowButton
             direction="prev"
             onClick={goPrev}
-            disabled={total <= 0 || page <= 1}
+            disabled={total <= 0}
             ariaLabel="이전 도면"
           />
-          <div className="font-['Pretendard',sans-serif] font-normal leading-[20px]">
+          <div className="min-w-[6.5rem] shrink-0 text-center tabular-nums font-['Pretendard',sans-serif] font-normal leading-[20px]">
             {page} / {total}
           </div>
           <PaginationArrowButton
             direction="next"
             onClick={goNext}
-            disabled={total <= 0 || page >= total}
+            disabled={total <= 0}
             ariaLabel="다음 도면"
           />
         </div>

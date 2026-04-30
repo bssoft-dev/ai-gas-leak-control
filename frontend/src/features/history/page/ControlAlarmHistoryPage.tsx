@@ -21,6 +21,21 @@ type IconTooltipButtonProps = {
 
 const PAGE_SIZE = 20
 
+const pad2 = (n: number) => String(n).padStart(2, '0')
+
+function getTodayYmd(): string {
+  const d = new Date()
+  return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`
+}
+
+function getNowTimeHM(): string {
+  const d = new Date()
+  return `${pad2(d.getHours())}:${pad2(d.getMinutes())}`
+}
+
+const START_TIME_HOUR_OPTIONS = Array.from({ length: 24 }, (_, i) => pad2(i))
+const START_TIME_MINUTE_OPTIONS = Array.from({ length: 60 }, (_, i) => pad2(i))
+
 const formatter = new Intl.DateTimeFormat('ko-KR', {
   year: 'numeric',
   month: 'numeric',
@@ -39,6 +54,25 @@ function formatHistoryTime(value: string) {
   }
 
   return formatter.format(date)
+}
+
+/** 날짜·시간 입력으로 구간 시작 시각(ms). 둘 다 비어 있으면 null(하한 없음). 날짜만 있으면 해당일 00:00:00, 시간만 있으면 오늘 그 시각(로컬). */
+function getFilterRangeStartMs(selectedDate: string, selectedTime: string): number | null {
+  const hasDate = Boolean(selectedDate)
+  const hasTime = Boolean(selectedTime && selectedTime.length > 0)
+  if (!hasDate && !hasTime) return null
+
+  const datePart = hasDate ? selectedDate : getTodayYmd()
+  const timePart = hasTime
+    ? selectedTime.length === 5
+      ? `${selectedTime}:00`
+      : selectedTime
+    : '00:00:00'
+
+  const parsed = new Date(`${datePart}T${timePart}`)
+  if (Number.isNaN(parsed.getTime())) return null
+
+  return parsed.getTime()
 }
 
 function IconTooltipButton({
@@ -101,9 +135,15 @@ export function ControlAlarmHistoryPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [errorMessage, setErrorMessage] = useState('')
   const [selectedDate, setSelectedDate] = useState('')
-  const [selectedTime, setSelectedTime] = useState('')
+  const [selectedTime, setSelectedTime] = useState(getNowTimeHM)
   const [actionQuery, setActionQuery] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
+
+  useEffect(() => {
+    if (!selectedDate && selectedTime) {
+      setSelectedDate(getTodayYmd())
+    }
+  }, [selectedDate, selectedTime])
 
   const loadRows = useCallback(async () => {
     setIsLoading(true)
@@ -129,32 +169,19 @@ export function ControlAlarmHistoryPage() {
   )
 
   const filteredRows = useMemo(() => {
-    return rows.filter((row) => {
-      const date = new Date(row.at)
-      const hasValidDate = !Number.isNaN(date.getTime())
+    const nowMs = Date.now()
+    const rangeStartMs = getFilterRangeStartMs(selectedDate, selectedTime)
 
-      if (selectedDate) {
-        const rowDate = hasValidDate ? date.toISOString().slice(0, 10) : ''
-        if (rowDate !== selectedDate) {
-          return false
-        }
-      }
-
-      if (selectedTime) {
-        const rowTime = hasValidDate
-          ? `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`
-          : ''
-        if (rowTime !== selectedTime) {
-          return false
-        }
-      }
-
-      if (actionQuery && row.action !== actionQuery) {
-        return false
-      }
-
+    const inRange = rows.filter((row) => {
+      const rowMs = new Date(row.at).getTime()
+      if (Number.isNaN(rowMs)) return false
+      if (rowMs > nowMs) return false
+      if (rangeStartMs != null && rowMs < rangeStartMs) return false
+      if (actionQuery && row.action !== actionQuery) return false
       return true
     })
+
+    return inRange.sort((a, b) => new Date(a.at).getTime() - new Date(b.at).getTime())
   }, [actionQuery, rows, selectedDate, selectedTime])
 
   const totalPages = Math.max(1, Math.ceil(filteredRows.length / PAGE_SIZE))
@@ -207,7 +234,7 @@ export function ControlAlarmHistoryPage() {
     if (filteredRows.length === 0) {
       return (
         <div className="flex min-h-[240px] items-center justify-center px-[24px] py-[56px] text-center font-[Pretendard,sans-serif] text-[15px] text-[#607a9f]">
-          선택한 조건에 맞는 이력이 없습니다.
+          시작 시각부터 현재까지 구간에 해당하는 이력이 없습니다.
         </div>
       )
     }
@@ -244,7 +271,7 @@ export function ControlAlarmHistoryPage() {
       <div className="mb-[24px] border-b border-[#dbe5f1] pb-[16px]">
         <div className="flex w-full flex-wrap items-end gap-[16px]">
           <label className="min-w-[180px] flex-1 font-[Pretendard,sans-serif]">
-            <span className="mb-[8px] block text-[14px] font-semibold text-[#607a9f]">날짜</span>
+            <span className="mb-[8px] block text-[14px] font-semibold text-[#607a9f]">시작 날짜</span>
             <input
               type="date"
               value={selectedDate}
@@ -254,13 +281,53 @@ export function ControlAlarmHistoryPage() {
           </label>
 
           <label className="min-w-[180px] flex-1 font-[Pretendard,sans-serif]">
-            <span className="mb-[8px] block text-[14px] font-semibold text-[#607a9f]">시간</span>
-            <input
-              type="time"
-              value={selectedTime}
-              onChange={(event) => setSelectedTime(event.target.value)}
-              className="h-[48px] w-full rounded-[14px] border border-[#d7e1ee] bg-white px-[16px] font-[Pretendard,sans-serif] text-[15px] text-[#0f172a] outline-none transition focus:border-[#61a0e1]"
-            />
+            <span className="mb-[8px] block text-[14px] font-semibold text-[#607a9f]">시작 시간</span>
+            <div className="flex gap-[8px]">
+              <select
+                aria-label="시작 시각"
+                value={selectedTime.length === 5 ? selectedTime.slice(0, 2) : ''}
+                onChange={(event) => {
+                  const h = event.target.value
+                  if (!h) {
+                    setSelectedTime('')
+                    return
+                  }
+                  const m = selectedTime.length === 5 ? selectedTime.slice(3, 5) : '00'
+                  setSelectedTime(`${h}:${m}`)
+                }}
+                className="h-[48px] min-w-0 flex-1 rounded-[14px] border border-[#d7e1ee] bg-white px-[12px] font-[Pretendard,sans-serif] text-[15px] text-[#0f172a] outline-none transition focus:border-[#61a0e1]"
+              >
+                <option value="">전체</option>
+                {START_TIME_HOUR_OPTIONS.map((h) => (
+                  <option key={h} value={h}>
+                    {h}시
+                  </option>
+                ))}
+              </select>
+              <select
+                aria-label="시작 분"
+                value={selectedTime.length === 5 ? selectedTime.slice(3, 5) : ''}
+                onChange={(event) => {
+                  const m = event.target.value
+                  if (!m) {
+                    const h = selectedTime.length === 5 ? selectedTime.slice(0, 2) : ''
+                    if (!h) setSelectedTime('')
+                    else setSelectedTime(`${h}:00`)
+                    return
+                  }
+                  const h = selectedTime.length === 5 ? selectedTime.slice(0, 2) : '00'
+                  setSelectedTime(`${h}:${m}`)
+                }}
+                className="h-[48px] min-w-0 flex-1 rounded-[14px] border border-[#d7e1ee] bg-white px-[12px] font-[Pretendard,sans-serif] text-[15px] text-[#0f172a] outline-none transition focus:border-[#61a0e1]"
+              >
+                <option value="">—</option>
+                {START_TIME_MINUTE_OPTIONS.map((m) => (
+                  <option key={m} value={m}>
+                    {m}분
+                  </option>
+                ))}
+              </select>
+            </div>
           </label>
 
           <label className="min-w-[180px] flex-1 font-[Pretendard,sans-serif]">
@@ -309,7 +376,7 @@ export function ControlAlarmHistoryPage() {
             disabled={currentPage === 1}
             ariaLabel="이전 페이지"
           />
-          <div className="font-[Pretendard,sans-serif] text-[14px] font-semibold text-[#485b77]">
+          <div className="min-w-[6rem] shrink-0 text-center tabular-nums font-[Pretendard,sans-serif] text-[14px] font-semibold text-[#485b77]">
             {currentPage} / {totalPages}
           </div>
           <PaginationArrowButton

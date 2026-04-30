@@ -108,10 +108,7 @@ export default function MonitorPage() {
           <div className="mt-[12px] flex min-h-0 min-w-0 flex-1 flex-col">
             <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden rounded-[8px] bg-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.3),0px_1px_3px_1px_rgba(0,0,0,0.15)]">
               <div className="flex shrink-0 flex-wrap items-center justify-between gap-x-[12px] gap-y-[8px] px-[32px] pb-[12px] pt-[24px]">
-                <div className="font-['Pretendard',sans-serif] text-[14px] font-normal leading-[normal] text-[color:var(--black_500,#485b77)]">
-                  도면 내 설치 위치 등록 (도면을 클릭하여 센서 추가)
-                </div>
-
+                <div className="min-w-0 flex-1" aria-hidden="true" />
                 <div className="flex items-center gap-[12px] py-[4px]">
                   <div className="font-['Pretendard',sans-serif] text-[14px] font-normal leading-[normal] text-[color:var(--black_500,#485b77)]">
                     활성화 여부
@@ -162,7 +159,7 @@ export default function MonitorPage() {
                   >
                     <div className="relative h-full w-full overflow-hidden">
                       <div
-                        className="pointer-events-none absolute left-0 w-full overflow-hidden"
+                        className="absolute left-0 w-full overflow-visible"
                         style={{
                           top: `${DRAWING_IMAGE_SLOT_TOP_PCT}%`,
                           height: `${DRAWING_IMAGE_SLOT_HEIGHT_PCT}%`,
@@ -183,6 +180,7 @@ export default function MonitorPage() {
                                   leftPct={leftPct}
                                   topPct={topPct}
                                   variant={sensor.variant}
+                                  label={sensor.label}
                                 />
                               )
                             })}
@@ -259,7 +257,7 @@ export default function MonitorPage() {
 
           <div className="mt-[18px] flex shrink-0 items-center justify-center gap-[51px] text-[16px] text-[#0b1828]">
             <PaginationArrowButton direction="prev" onClick={goPrev} ariaLabel="이전 도면" />
-            <div className="font-['Pretendard',sans-serif] font-normal leading-[20px]">
+            <div className="min-w-[6.5rem] shrink-0 text-center tabular-nums font-['Pretendard',sans-serif] font-normal leading-[20px]">
               {page} / {total}
             </div>
             <PaginationArrowButton direction="next" onClick={goNext} ariaLabel="다음 도면" />

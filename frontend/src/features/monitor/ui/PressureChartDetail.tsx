@@ -1,8 +1,9 @@
-import { useMemo, useRef, useState } from 'react'
+import { useId, useMemo, useRef, useState } from 'react'
 import {
+  Area,
   CartesianGrid,
+  ComposedChart,
   Line,
-  LineChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -71,6 +72,8 @@ export function PressureChartDetail({
   onPan,
   onPinchZoom,
 }: Props) {
+  const gid = useId()
+  const gradientId = `pressureDetailFill-${gid.replace(/:/g, '')}`
   const containerRef = useRef<HTMLDivElement | null>(null)
   const pointerStartRef = useRef<{ x: number; width: number } | null>(null)
   const activePointersRef = useRef<Map<number, { x: number; y: number }>>(new Map())
@@ -209,7 +212,13 @@ export function PressureChartDetail({
       onLostPointerCapture={handlePointerEnd}
     >
       <ResponsiveContainer width="100%" height="100%">
-        <LineChart data={chartData} margin={{ top: 16, right: 18, left: 10, bottom: 8 }}>
+        <ComposedChart data={chartData} margin={{ top: 16, right: 18, left: 10, bottom: 8 }}>
+          <defs>
+            <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor={stroke} stopOpacity={0.14} />
+              <stop offset="100%" stopColor={stroke} stopOpacity={0.02} />
+            </linearGradient>
+          </defs>
           <CartesianGrid
             stroke="#eef2f6"
             strokeOpacity={0.9}
@@ -256,6 +265,14 @@ export function PressureChartDetail({
             }}
           />
 
+          <Area
+            type="monotone"
+            dataKey="value"
+            stroke="none"
+            fill={`url(#${gradientId})`}
+            fillOpacity={1}
+            isAnimationActive={false}
+          />
           <Line
             type="monotone"
             dataKey="value"
@@ -265,7 +282,7 @@ export function PressureChartDetail({
             activeDot={{ r: 4, strokeWidth: 0, fill: stroke }}
             isAnimationActive={false}
           />
-        </LineChart>
+        </ComposedChart>
       </ResponsiveContainer>
     </div>
   )

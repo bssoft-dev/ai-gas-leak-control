@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 
 import { OpenAPI } from '../../../api/core/OpenAPI'
 import { DefaultService } from '../../../api/services/DefaultService'
+import { Toast } from '../../../shared/ui/feedback/Toast'
 
 type PolicyForm = {
   level1_warning_pct: string
@@ -152,6 +153,7 @@ export default function SettingsPage() {
 
   return (
     <div className="px-[24px] py-[24px]">
+      <Toast message={successMessage} position="top-center" />
       <div className="rounded-[8px] border border-[#e2e8f0] bg-[#fbfdff] px-[20px] py-[20px] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.04)]">
         <h2 className="font-['Pretendard',sans-serif] text-[18px] font-semibold leading-[1.4] text-[#0b1828]">
           정책 · 임계치
@@ -233,10 +235,6 @@ export default function SettingsPage() {
             <span className="font-['Pretendard',sans-serif] text-[13px] text-[#7a89a1]">
               현재 정책을 불러오는 중입니다.
             </span>
-          ) : null}
-
-          {successMessage ? (
-            <span className="font-['Pretendard',sans-serif] text-[13px] text-[#2f855a]">{successMessage}</span>
           ) : null}
 
           {errorMessage ? (
