@@ -11,8 +11,11 @@ type AppShellSidebarProps = {
   isDrawingsExpanded: boolean
   isResizingSidebar: boolean
   resizeHandleHover: boolean
+  isMobileViewport: boolean
+  isMobileSidebarOpen: boolean
   onExpandSidebar: () => void
   onCollapseSidebar: () => void
+  onCloseMobileSidebar: () => void
   onToggleMenu: () => void
   onToggleDrawings: () => void
   onResizeHandleEnter: () => void
@@ -74,8 +77,11 @@ export function AppShellSidebar({
   isDrawingsExpanded,
   isResizingSidebar,
   resizeHandleHover,
+  isMobileViewport,
+  isMobileSidebarOpen,
   onExpandSidebar,
   onCollapseSidebar,
+  onCloseMobileSidebar,
   onToggleMenu,
   onToggleDrawings,
   onResizeHandleEnter,
@@ -84,7 +90,7 @@ export function AppShellSidebar({
 }: AppShellSidebarProps) {
   const BLUE_PRIMARY_800 = '#4370ac'
   const BLUE_ACTIVE_SOFT = '#7a9cc4'
-  const ICON_INACTIVE = '#0b1828'
+  const ICON_INACTIVE = '#2c3c53'
   const location = useLocation()
   const navigate = useNavigate()
   const {
@@ -92,6 +98,12 @@ export function AppShellSidebar({
   } = appShellAssets
 
   const isHistoryActive = location.pathname.startsWith(HISTORY_SECTION.basePath)
+  const showCollapsedSidebar = !isMobileViewport && isSidebarCollapsed
+  const mobileTransformClass = isMobileViewport
+    ? isMobileSidebarOpen
+      ? 'translate-x-0 shadow-[0_18px_48px_rgba(15,23,42,0.22)]'
+      : '-translate-x-full'
+    : 'translate-x-0'
 
   const MaskIcon20 = ({
     maskSrc,
@@ -106,15 +118,16 @@ export function AppShellSidebar({
       className="block h-5 w-5 shrink-0"
       style={{
         backgroundColor: isActive ? (activeTone === 'soft' ? BLUE_ACTIVE_SOFT : BLUE_PRIMARY_800) : ICON_INACTIVE,
+        opacity: isActive ? 0.86 : 0.78,
         WebkitMaskImage: `url(${maskSrc})`,
         WebkitMaskRepeat: 'no-repeat',
         WebkitMaskPosition: 'center',
-        WebkitMaskSize: 'contain',
+        WebkitMaskSize: '86% 86%',
         WebkitMaskMode: 'alpha',
         maskImage: `url(${maskSrc})`,
         maskRepeat: 'no-repeat',
         maskPosition: 'center',
-        maskSize: 'contain',
+        maskSize: '86% 86%',
         maskMode: 'alpha',
       }}
     />
@@ -129,6 +142,9 @@ export function AppShellSidebar({
       key={to}
       to={to}
       end={end}
+      onClick={() => {
+        if (isMobileViewport) onCloseMobileSidebar()
+      }}
       className={({ isActive }) =>
         compact
           ? isActive
@@ -150,8 +166,20 @@ export function AppShellSidebar({
                   ? nested
                     ? 'text-[#7a9cc4]'
                     : 'text-[#4370ac]'
-                  : 'text-[#0b1828]'
+                  : 'text-[#2c3c53]'
               }`}
+              style={
+                materialIconName === 'settings'
+                  ? {
+                      fontSize: 20,
+                      opacity: isActive ? 0.86 : 0.78,
+                      fontVariationSettings: "'FILL' 0, 'wght' 170, 'GRAD' 0, 'opsz' 24",
+                    }
+                  : {
+                      opacity: isActive ? 0.86 : 0.78,
+                      fontVariationSettings: "'FILL' 0, 'wght' 170, 'GRAD' 0, 'opsz' 24",
+                    }
+              }
               aria-hidden="true"
             >
               {materialIconName}
@@ -192,7 +220,10 @@ export function AppShellSidebar({
               : 'flex h-[36px] w-[44px] items-center justify-center rounded-[8px] px-[12px] py-[8px]'
           }
           aria-label={HISTORY_SECTION.label}
-          onClick={() => navigate(HISTORY_SECTION.items[0].to)}
+          onClick={() => {
+            navigate(HISTORY_SECTION.items[0].to)
+            if (isMobileViewport) onCloseMobileSidebar()
+          }}
         >
           <MaskIcon20 maskSrc={HISTORY_SECTION.iconSrc} isActive={isHistoryActive} />
         </button>
@@ -208,7 +239,10 @@ export function AppShellSidebar({
               ? 'flex w-full items-center gap-[8px] rounded-[4px] border border-[var(--blue_primary_500,#61a0e1)] bg-[var(--blue_primary_50,#e6f3fb)] px-[13px] py-[9px]'
               : 'flex w-full items-center gap-[8px] rounded-[4px] px-[12px] py-[8px] hover:bg-[#f1f5f9]'
           }
-          onClick={() => navigate(HISTORY_SECTION.items[0].to)}
+          onClick={() => {
+            navigate(HISTORY_SECTION.items[0].to)
+            if (isMobileViewport) onCloseMobileSidebar()
+          }}
         >
           <MaskIcon20 maskSrc={HISTORY_SECTION.iconSrc} isActive={isHistoryActive} />
           <span
@@ -231,12 +265,12 @@ export function AppShellSidebar({
 
   return (
     <aside
-      className={`fixed left-0 top-0 z-20 flex h-screen flex-col border-r border-[var(--gray_sidebar_stroke,#e2e8f0)] bg-[var(--gray_sidebar,#fafafa)] ${
-        isResizingSidebar ? '' : 'transition-[width] duration-200'
+      className={`fixed left-0 top-0 z-20 flex h-screen max-w-[calc(100vw-48px)] flex-col border-r border-[var(--gray_sidebar_stroke,#e2e8f0)] bg-[var(--gray_sidebar,#fafafa)] ${mobileTransformClass} ${
+        isResizingSidebar ? '' : 'transition-[width,transform] duration-200'
       }`}
       style={{ width: sidebarWidth }}
     >
-      {isSidebarCollapsed ? (
+      {showCollapsedSidebar ? (
         <div className="h-[64px] w-[69px] border-b border-r border-[var(--gray_sidebar_stroke,#e2e8f0)] bg-white">
           <div className="flex h-full items-center justify-center px-[16px]">
             <button
@@ -268,17 +302,17 @@ export function AppShellSidebar({
               type="button"
               className="absolute right-[24px] top-1/2 flex h-[36px] w-[36px] -translate-y-1/2 items-center justify-center"
               aria-label="사이드바 접기"
-              onClick={onCollapseSidebar}
+              onClick={isMobileViewport ? onCloseMobileSidebar : onCollapseSidebar}
             >
               <span className="material-symbols-rounded sidebar-icon text-[22px] text-[#61718C]" aria-hidden="true">
-                keyboard_double_arrow_left
+                {isMobileViewport ? 'close' : 'keyboard_double_arrow_left'}
               </span>
             </button>
           </div>
         </div>
       )}
 
-      {isSidebarCollapsed ? (
+      {showCollapsedSidebar ? (
         <div className="shrink-0">
           <div className="flex h-full flex-col items-center overflow-hidden px-[16px] pb-[24px] pt-[16px]">
             <nav className="flex flex-col gap-[4px]">
@@ -323,7 +357,7 @@ export function AppShellSidebar({
         </div>
       )}
 
-      {!isSidebarCollapsed && (
+      {!showCollapsedSidebar && !isMobileViewport && (
         <div
           className="absolute right-0 top-0 z-30 h-full w-[6px]"
           onMouseEnter={onResizeHandleEnter}

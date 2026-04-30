@@ -45,12 +45,12 @@ export function SensorManagementSidebar({
   const { imgSelectCaret, imgEdit, imgDelete } = drawingSensorAssets
 
   return (
-    <aside className="col-span-12 flex min-h-0 min-w-0 flex-col lg:col-span-3 lg:h-full">
+    <aside className="col-span-12 flex min-h-0 min-w-0 flex-col xl:col-span-3 xl:h-full">
       <div className="flex min-h-[40px] shrink-0 items-center font-['Pretendard',sans-serif] text-[16px] font-semibold leading-[1.2] text-[color:var(--blue_primary_800,#4370ac)] -translate-y-[2px]">
         등록된 센서 ({registeredSensors.length})
       </div>
       <div className="mt-[8px] flex min-h-0 flex-1 flex-col">
-        <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-[8px] bg-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.12),0px_1px_3px_1px_rgba(0,0,0,0.05)]">
+        <div className="flex max-h-[560px] min-h-[320px] flex-1 flex-col overflow-hidden rounded-[8px] bg-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.12),0px_1px_3px_1px_rgba(0,0,0,0.05)] md:max-h-[640px] xl:max-h-none xl:min-h-0">
           <div className="shrink-0 border-b border-[#e2e8f0] bg-[#fafafa] p-[12px]">
             <div className="flex flex-col gap-[12px]">
               <div>

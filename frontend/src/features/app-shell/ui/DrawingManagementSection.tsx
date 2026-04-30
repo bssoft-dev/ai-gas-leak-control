@@ -358,10 +358,10 @@ export function DrawingManagementSection({ isExpanded, onToggle }: DrawingManage
           <span
             aria-hidden
             className={`material-symbols-rounded sidebar-icon text-[18px] text-[#7A89A1] transition-transform ${
-              isExpanded ? 'rotate-90' : '-rotate-90'
+              isExpanded ? 'rotate-180' : 'rotate-0'
             }`}
           >
-            chevron_right
+            expand_more
           </span>
         </button>
       </div>

@@ -6,6 +6,8 @@ import { appShellAssets } from '../assets/appShellAssets'
 type AppShellHeaderProps = {
   sidebarWidth: number
   isResizingSidebar: boolean
+  isMobileViewport: boolean
+  onOpenMobileSidebar: () => void
 }
 
 type HeaderActionItem = {
@@ -21,7 +23,12 @@ function extractMesEquipmentRunning(stateResponse: any): boolean | null {
   return typeof rawValue === 'boolean' ? rawValue : null
 }
 
-export function AppShellHeader({ sidebarWidth, isResizingSidebar }: AppShellHeaderProps) {
+export function AppShellHeader({
+  sidebarWidth,
+  isResizingSidebar,
+  isMobileViewport,
+  onOpenMobileSidebar,
+}: AppShellHeaderProps) {
   const { imgRunDot } = appShellAssets
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [pendingActionKey, setPendingActionKey] = useState<string | null>(null)
@@ -183,18 +190,32 @@ export function AppShellHeader({ sidebarWidth, isResizingSidebar }: AppShellHead
       }`}
       style={{ left: sidebarWidth }}
     >
-      <div className="relative flex h-full items-center justify-end gap-[12px] pl-[24px] pr-[24px]">
-        <div className="flex h-[42px] items-center gap-[8px] rounded-[4px] border border-[#e2e8f0] bg-[#f8fafc] px-[13px] py-[5px]">
-          <span className="whitespace-nowrap font-['Pretendard',sans-serif] text-[16px] font-medium leading-[15px] tracking-[-0.25px] text-[color:var(--black_title,#0b1828)]">
+      <div className="relative flex h-full items-center gap-[6px] px-[12px] sm:gap-[10px] sm:px-[16px] lg:justify-end lg:gap-[12px] lg:px-[24px]">
+        {isMobileViewport && (
+          <button
+            type="button"
+            className="flex h-[40px] w-[40px] shrink-0 items-center justify-center rounded-[8px] border border-[#e2e8f0] bg-white text-[#485b77]"
+            aria-label="사이드바 열기"
+            onClick={onOpenMobileSidebar}
+          >
+            <span className="material-symbols-rounded sidebar-icon text-[22px]" aria-hidden="true">
+              menu
+            </span>
+          </button>
+        )}
+
+        <div className="ml-auto flex min-w-0 items-center justify-end gap-[8px] sm:gap-[12px]">
+        <div className="flex h-[40px] min-w-0 items-center gap-[6px] rounded-[4px] border border-[#e2e8f0] bg-[#f8fafc] px-[10px] py-[5px] sm:h-[42px] sm:gap-[8px] sm:px-[13px]">
+          <span className="whitespace-nowrap font-['Pretendard',sans-serif] text-[14px] font-medium leading-[15px] tracking-[-0.25px] text-[color:var(--black_title,#0b1828)] max-[480px]:hidden sm:text-[16px]">
             MES 설비 가동
           </span>
           <span className="flex items-center gap-[6px]">
-            <span className="relative h-[6px] w-[6px]">
+            <span className="relative h-[6px] w-[6px] shrink-0">
               <img alt="" className="block h-full w-full opacity-0" src={imgRunDot} />
               <span className="absolute inset-0 rounded-full" style={{ backgroundColor: mesStatusColor }} />
             </span>
             <span
-              className="whitespace-nowrap font-['Pretendard',sans-serif] text-[16px] font-medium leading-[15px] tracking-[-0.25px]"
+              className="whitespace-nowrap font-['Pretendard',sans-serif] text-[14px] font-medium leading-[15px] tracking-[-0.25px] sm:text-[16px]"
               style={{ color: mesStatusColor }}
             >
               {mesStatusText}
@@ -202,11 +223,11 @@ export function AppShellHeader({ sidebarWidth, isResizingSidebar }: AppShellHead
           </span>
         </div>
 
-        <div ref={menuRef} className="relative flex h-[41px] items-center">
+        <div ref={menuRef} className="relative flex h-[41px] shrink-0 items-center">
           <button
             type="button"
             onClick={() => setIsMenuOpen((open) => !open)}
-            className="h-[40px] rounded-bl-[4px] rounded-tl-[4px] border border-[rgba(226,232,240,0.1)] bg-[#ef4444] px-[13px] py-[7px] font-['Pretendard',sans-serif] text-[16px] font-medium leading-[15px] tracking-[-0.25px] text-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)]"
+            className="h-[40px] rounded-bl-[4px] rounded-tl-[4px] border border-[rgba(226,232,240,0.1)] bg-[#ef4444] px-[10px] py-[7px] font-['Pretendard',sans-serif] text-[14px] font-medium leading-[15px] tracking-[-0.25px] text-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] sm:px-[13px] sm:text-[16px]"
           >
             비상 제어
           </button>
@@ -228,7 +249,7 @@ export function AppShellHeader({ sidebarWidth, isResizingSidebar }: AppShellHead
           </button>
 
           {isMenuOpen && (
-            <div className="absolute right-0 top-[52px] z-20 w-[312px] rounded-[10px] border border-[#e2e8f0] bg-white p-[12px] shadow-[0px_16px_40px_rgba(15,23,42,0.14)]">
+            <div className="absolute right-0 top-[52px] z-20 w-[min(calc(100vw-24px),312px)] rounded-[10px] border border-[#e2e8f0] bg-white p-[12px] shadow-[0px_16px_40px_rgba(15,23,42,0.14)]">
               <div className="flex flex-col gap-[12px]">
                 {renderSection('긴급 제어', emergencyActions)}
                 <div className="h-px w-full bg-[#eef2f7]" />
@@ -236,6 +257,7 @@ export function AppShellHeader({ sidebarWidth, isResizingSidebar }: AppShellHead
               </div>
             </div>
           )}
+        </div>
         </div>
 
         {(toastMessage || errorMessage) && (

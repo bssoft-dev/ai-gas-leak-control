@@ -567,7 +567,7 @@ export default function DrawingSensorPage() {
           }}
         />
 
-        <div className="col-span-12 mt-[18px] flex shrink-0 items-center justify-center gap-[51px] text-[16px] text-[#0b1828] lg:col-span-9">
+        <div className="col-span-12 mt-[12px] flex shrink-0 items-center justify-center gap-[36px] text-[16px] text-[#0b1828] md:gap-[51px] xl:col-span-9">
           <PaginationArrowButton
             direction="prev"
             onClick={goPrev}

@@ -93,7 +93,7 @@ export default function MonitorPage() {
   return (
     <>
       <PageContentGrid>
-        <section className="col-span-12 flex min-h-0 min-w-0 flex-col lg:col-span-9 lg:h-full">
+        <section className="col-span-12 flex min-h-0 min-w-0 flex-col xl:col-span-9 xl:h-full">
           <div className="flex min-h-[40px] shrink-0 items-center justify-between gap-[12px]">
             <div className="min-w-0 font-['Pretendard',sans-serif] text-[16px] font-semibold leading-[1.2] text-[color:var(--blue_primary_800,#4370ac)]">
               {drawingName}
@@ -113,7 +113,7 @@ export default function MonitorPage() {
 
           <div className="mt-[8px] flex min-h-0 min-w-0 flex-1 flex-col">
             <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden rounded-[8px] bg-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.12),0px_1px_3px_1px_rgba(0,0,0,0.05)]">
-              <div className="flex shrink-0 flex-wrap items-center justify-between gap-x-[12px] gap-y-[8px] px-[32px] pb-[12px] pt-[24px]">
+              <div className="flex shrink-0 flex-wrap items-center justify-between gap-x-[12px] gap-y-[8px] px-[16px] pb-[12px] pt-[16px] md:px-[24px] xl:px-[32px] xl:pt-[24px]">
                 <div className="min-w-0 flex-1" aria-hidden="true" />
                 <div className="flex items-center gap-[12px] py-[4px]">
                   <div className="font-['Pretendard',sans-serif] text-[14px] font-normal leading-[normal] text-[color:var(--black_500,#485b77)]">
@@ -139,7 +139,7 @@ export default function MonitorPage() {
                 </div>
               </div>
 
-              <div className="relative min-h-[786px] min-w-0 flex-1 shrink-0">
+              <div className="relative min-h-[420px] min-w-0 flex-1 shrink-0 md:min-h-[560px] xl:min-h-[786px]">
                 <div
                   ref={viewport.viewportRef}
                   className={`absolute inset-0 overflow-hidden touch-none select-none ${
@@ -283,13 +283,13 @@ export default function MonitorPage() {
           </div>
         </section>
 
-        <aside className="col-span-12 flex min-h-0 min-w-0 flex-col lg:col-span-3 lg:h-full">
+        <aside className="col-span-12 flex min-h-0 min-w-0 flex-col xl:col-span-3 xl:h-full">
           <div className="flex min-h-[40px] shrink-0 items-center font-['Pretendard',sans-serif] text-[16px] font-semibold leading-[1.2] text-[color:var(--blue_primary_800,#4370ac)] -translate-y-[2px]">
             실시간 차트 ({cards.length})
           </div>
 
           <div className="mt-[8px] flex min-h-0 flex-1 flex-col">
-            <div className="flex min-h-[786px] min-w-0 flex-1 flex-col overflow-hidden rounded-[8px] bg-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.12),0px_1px_3px_1px_rgba(0,0,0,0.05)]">
+            <div className="flex max-h-[520px] min-h-[320px] min-w-0 flex-1 flex-col overflow-hidden rounded-[8px] bg-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.12),0px_1px_3px_1px_rgba(0,0,0,0.05)] md:max-h-[640px] xl:max-h-none xl:min-h-[786px]">
               <div className="notion-scrollbar flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto pt-[12px] pb-[8px] px-[6px] sm:px-[8px]">
                 {pressureSeriesError && (
                   <div className="w-full rounded-[6px] border border-amber-200 bg-amber-50 px-[10px] py-[6px] font-['Pretendard',sans-serif] text-[10px] text-amber-900">

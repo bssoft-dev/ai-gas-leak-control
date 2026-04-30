@@ -660,7 +660,7 @@ export function PressureChartDetailModal({
 
   return (
     <div
-      className="fixed inset-0 z-[220] flex items-center justify-center bg-[#0b1828]/45 px-[24px] py-[24px]"
+      className="fixed inset-0 z-[220] flex items-center justify-center bg-[#0b1828]/45 px-[12px] py-[12px] md:px-[24px] md:py-[24px]"
       role="dialog"
       aria-modal="true"
       aria-labelledby="pressure-chart-detail-title"
@@ -702,7 +702,7 @@ export function PressureChartDetailModal({
         <div className="h-px w-full bg-[#e5e7eb]" aria-hidden="true" />
 
         <div className="px-[16px] pb-[14px] pt-[10px]">
-          <div className="relative z-0 h-[420px] w-full">
+          <div className="relative z-0 h-[320px] w-full md:h-[420px]">
             {hasSeriesError && points.length === 0 ? (
               <div className="flex h-full w-full items-center justify-center bg-white px-[12px] text-center font-['Pretendard',sans-serif] text-[12px] text-[#94a3b8]">
                 차트 데이터를 불러오지 못했습니다.
@@ -760,7 +760,7 @@ export function PressureChartDetailModal({
             )}
           </div>
 
-          <div className="relative z-10 mt-[10px] flex items-center justify-center gap-[10px] pointer-events-auto">
+          <div className="relative z-10 mt-[10px] flex flex-wrap items-center justify-center gap-[8px] pointer-events-auto md:gap-[10px]">
             <InlineDatePicker
               value={draftDate}
               minYmd={minDateStr}

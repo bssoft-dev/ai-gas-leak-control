@@ -2,7 +2,7 @@ import { HistoryTabs } from '../../history/ui/HistoryTabs'
 
 export default function AiHistoryPage() {
   return (
-    <div className="px-[24px] py-[24px]">
+    <div className="px-[12px] py-[18px] sm:px-[16px] md:px-[24px] md:py-[24px]">
       <HistoryTabs />
       <div className="rounded-[12px] border border-[#e2e8f0] bg-white px-[24px] py-[28px] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.04)]">
         <h1 className="font-['Pretendard',sans-serif] text-[24px] font-semibold leading-[1.3] text-[#0b1828]">

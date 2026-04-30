@@ -81,7 +81,7 @@ export function DrawingSensorCanvas({
   onPanToSlotFraction,
 }: DrawingSensorCanvasProps) {
   return (
-    <section className="col-span-12 flex min-h-0 min-w-0 flex-col lg:col-span-9 lg:h-full">
+    <section className="col-span-12 flex min-h-0 min-w-0 flex-col xl:col-span-9 xl:h-full">
       <div className="flex min-h-[40px] shrink-0 items-center justify-between gap-[12px]">
         <div className="font-['Pretendard',sans-serif] text-[16px] font-semibold leading-[1.2] text-[color:var(--blue_primary_800,#4370ac)]">
           {drawingName}
@@ -103,7 +103,7 @@ export function DrawingSensorCanvas({
 
       <div className="mt-[8px] flex min-h-0 flex-1 flex-col">
         <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden rounded-[8px] bg-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.12),0px_1px_3px_1px_rgba(0,0,0,0.05)]">
-          <div className="flex shrink-0 flex-wrap items-center justify-between gap-x-[12px] gap-y-[8px] px-[32px] pb-[12px] pt-[24px]">
+          <div className="flex shrink-0 flex-wrap items-center justify-between gap-x-[12px] gap-y-[8px] px-[16px] pb-[12px] pt-[16px] md:px-[24px] xl:px-[32px] xl:pt-[24px]">
             <div className="font-['Pretendard',sans-serif] text-[14px] font-normal leading-[normal] text-[color:var(--black_500,#485b77)]">
               도면 내 설치 위치 등록 (도면을 클릭하여 센서 추가)
             </div>
@@ -127,7 +127,7 @@ export function DrawingSensorCanvas({
             </div>
           </div>
 
-          <div className="relative min-h-[786px] min-w-0 flex-1">
+          <div className="relative min-h-[420px] min-w-0 flex-1 md:min-h-[560px] xl:min-h-[786px]">
             <div
               ref={viewportRef}
               className={`absolute inset-0 overflow-hidden touch-none select-none ${

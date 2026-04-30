@@ -148,7 +148,7 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="px-[24px] py-[24px]">
+    <div className="px-[12px] py-[18px] sm:px-[16px] md:px-[24px] md:py-[24px]">
       <Toast message={successMessage} position="top-center" />
       <div className="rounded-[8px] border border-[#e2e8f0] bg-[#fbfdff] px-[20px] py-[20px] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.04)]">
         <h2 className="font-['Pretendard',sans-serif] text-[18px] font-semibold leading-[1.4] text-[#0b1828]">

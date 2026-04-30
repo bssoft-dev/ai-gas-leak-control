@@ -13,8 +13,17 @@ import {
 import { AppShellHeader } from './AppShellHeader'
 import { AppShellSidebar } from './AppShellSidebar'
 
+function getViewportTier() {
+  if (typeof window === 'undefined') return 'desktop'
+  if (window.innerWidth < 768) return 'mobile'
+  if (window.innerWidth < 1024) return 'tablet'
+  return 'desktop'
+}
+
 export default function AppShellLayout() {
+  const [viewportTier, setViewportTier] = useState(getViewportTier)
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)
   const [isMenuExpanded, setIsMenuExpanded] = useState(true)
   const [isDrawingsExpanded, setIsDrawingsExpanded] = useState(true)
   const [expandedSidebarWidth, setExpandedSidebarWidth] = useState(() => {
@@ -30,7 +39,27 @@ export default function AppShellLayout() {
     resizeLastWidthRef.current = expandedSidebarWidth
   }, [expandedSidebarWidth])
 
-  const sidebarWidth = isSidebarCollapsed ? SIDEBAR_COLLAPSED_W : expandedSidebarWidth
+  useEffect(() => {
+    const onResize = () => setViewportTier(getViewportTier())
+    window.addEventListener('resize', onResize)
+    return () => window.removeEventListener('resize', onResize)
+  }, [])
+
+  useEffect(() => {
+    if (viewportTier !== 'mobile') {
+      setIsMobileSidebarOpen(false)
+    }
+  }, [viewportTier])
+
+  const isMobileViewport = viewportTier === 'mobile'
+  const isTabletViewport = viewportTier === 'tablet'
+  const effectiveSidebarCollapsed = isTabletViewport ? true : isSidebarCollapsed
+  const sidebarWidth = isMobileViewport
+    ? Math.min(320, Math.max(SIDEBAR_MIN_EXPANDED_W, expandedSidebarWidth))
+    : effectiveSidebarCollapsed
+      ? SIDEBAR_COLLAPSED_W
+      : expandedSidebarWidth
+  const contentOffset = isMobileViewport ? 0 : sidebarWidth
 
   return (
     <EventStreamProvider>
@@ -39,13 +68,16 @@ export default function AppShellLayout() {
           <div className="relative min-h-screen w-full">
             <AppShellSidebar
               sidebarWidth={sidebarWidth}
-              isSidebarCollapsed={isSidebarCollapsed}
+              isSidebarCollapsed={effectiveSidebarCollapsed}
               isMenuExpanded={isMenuExpanded}
               isDrawingsExpanded={isDrawingsExpanded}
               isResizingSidebar={isResizingSidebar}
               resizeHandleHover={resizeHandleHover}
+              isMobileViewport={isMobileViewport}
+              isMobileSidebarOpen={isMobileSidebarOpen}
               onExpandSidebar={() => setIsSidebarCollapsed(false)}
               onCollapseSidebar={() => setIsSidebarCollapsed(true)}
+              onCloseMobileSidebar={() => setIsMobileSidebarOpen(false)}
               onToggleMenu={() => setIsMenuExpanded((expanded) => !expanded)}
               onToggleDrawings={() => setIsDrawingsExpanded((expanded) => !expanded)}
               onResizeHandleEnter={() => setResizeHandleHover(true)}
@@ -88,16 +120,30 @@ export default function AppShellLayout() {
               }}
             />
 
-            <AppShellHeader sidebarWidth={sidebarWidth} isResizingSidebar={isResizingSidebar} />
+            {isMobileViewport && isMobileSidebarOpen && (
+              <button
+                type="button"
+                className="fixed inset-0 z-[15] cursor-default bg-[#0b1828]/35"
+                aria-label="사이드바 닫기"
+                onClick={() => setIsMobileSidebarOpen(false)}
+              />
+            )}
+
+            <AppShellHeader
+              sidebarWidth={contentOffset}
+              isResizingSidebar={isResizingSidebar}
+              isMobileViewport={isMobileViewport}
+              onOpenMobileSidebar={() => setIsMobileSidebarOpen(true)}
+            />
 
             <main
               className={`flex min-h-screen flex-col bg-white pt-[64px] ${isResizingSidebar ? '' : 'transition-[margin-left] duration-200'}`}
-              style={{ marginLeft: sidebarWidth }}
+              style={{ marginLeft: contentOffset }}
             >
               <div className="min-h-0 flex-1">
                 <Outlet />
               </div>
-              <footer className="shrink-0 px-[24px] py-[8px] text-right font-['Pretendard',sans-serif] text-[11px] leading-[1.4] text-[#94a3b8]">
+              <footer className="shrink-0 px-[12px] py-[8px] text-right font-['Pretendard',sans-serif] text-[10px] leading-[1.4] text-[#94a3b8] sm:px-[16px] md:px-[24px] md:text-[11px]">
                 Copyright © BLUESP. All rights reserved. / Designed & Developed by BSSOFT
               </footer>
             </main>

@@ -242,6 +242,99 @@ function DatePickerInput({
   )
 }
 
+function ActionPickerInput({
+  label,
+  value,
+  options,
+  onChange,
+}: {
+  label: string
+  value: string
+  options: string[]
+  onChange: (next: string) => void
+}) {
+  const [open, setOpen] = useState(false)
+  const selectedLabel = value || '전체'
+  const items = useMemo(() => ['', ...options], [options])
+
+  useEffect(() => {
+    if (!open) return
+    const onPointerDown = (e: MouseEvent) => {
+      const target = e.target as HTMLElement | null
+      if (!target) return
+      if (target.closest('[data-action-picker-root]')) return
+      setOpen(false)
+    }
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setOpen(false)
+    }
+    window.addEventListener('mousedown', onPointerDown)
+    window.addEventListener('keydown', onKeyDown)
+    return () => {
+      window.removeEventListener('mousedown', onPointerDown)
+      window.removeEventListener('keydown', onKeyDown)
+    }
+  }, [open])
+
+  return (
+    <label className="min-w-[180px] flex-1 font-[Pretendard,sans-serif]">
+      <span className="mb-[8px] block text-[14px] font-semibold text-[#607a9f]">{label}</span>
+      <div className="relative" data-action-picker-root>
+        <button
+          type="button"
+          onClick={() => setOpen((prev) => !prev)}
+          className="flex h-[48px] w-full items-center justify-between rounded-[8px] border border-[#d7e1ee] bg-white px-[20px] font-[Pretendard,sans-serif] text-[15px] leading-[1] text-[#0f172a] transition focus:border-[#d7e1ee] focus:ring-0 focus:ring-offset-0 focus:[outline:0] focus:[box-shadow:none] focus-visible:[outline:0] focus-visible:[box-shadow:none]"
+          aria-label={label}
+          aria-expanded={open}
+        >
+          <span className="min-w-0 truncate text-left">{selectedLabel}</span>
+          <span
+            className={`material-symbols-rounded shrink-0 text-[20px] leading-none text-[#485b77] transition-transform ${
+              open ? 'rotate-180' : ''
+            }`}
+            aria-hidden="true"
+          >
+            expand_more
+          </span>
+        </button>
+
+        {open && (
+          <div className="absolute left-0 top-full z-30 mt-[8px] w-full overflow-hidden rounded-[8px] border border-[#e2e8f0] bg-white p-[8px] shadow-[0px_12px_28px_rgba(15,23,42,0.12)]">
+            <div className="notion-scrollbar flex max-h-[240px] flex-col gap-[4px] overflow-y-auto">
+              {items.map((item) => {
+                const optionLabel = item || '전체'
+                const isSelected = item === value
+                return (
+                  <button
+                    key={item || '_all'}
+                    type="button"
+                    className={`flex h-[40px] w-full items-center justify-between rounded-[8px] px-[12px] text-left font-[Pretendard,sans-serif] text-[14px] transition ${
+                      isSelected
+                        ? 'bg-[#eef5fb] font-semibold text-[#4370ac]'
+                        : 'text-[#0f172a] hover:bg-[#f8fafc] active:bg-[#e2e8f0]'
+                    }`}
+                    onClick={() => {
+                      onChange(item)
+                      setOpen(false)
+                    }}
+                  >
+                    <span className="min-w-0 truncate">{optionLabel}</span>
+                    {isSelected ? (
+                      <span className="material-symbols-rounded text-[18px] leading-none text-[#4370ac]" aria-hidden>
+                        check
+                      </span>
+                    ) : null}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+        )}
+      </div>
+    </label>
+  )
+}
+
 /** 날짜·시간 입력으로 구간 시작 시각(ms). 둘 다 비어 있으면 null(하한 없음). 날짜만 있으면 해당일 00:00:00, 시간만 있으면 오늘 그 시각(로컬). */
 function getFilterRangeStartMs(selectedDate: string, selectedTime: string): number | null {
   const hasDate = Boolean(selectedDate)
@@ -373,7 +466,7 @@ export function ControlAlarmHistoryPage() {
     return pagedRows.map((row, index) => (
       <div
         key={`${row.at}-${row.action}-${index}`}
-        className="grid grid-cols-[2.2fr_1.4fr_2.8fr_0.6fr] gap-[16px] border-t border-[#e8edf5] px-[24px] py-[14px] font-[Pretendard,sans-serif] text-[16px] leading-[1.6] text-[#1f2937]"
+        className="grid min-w-[760px] grid-cols-[2.2fr_1.4fr_2.8fr_0.6fr] gap-[16px] border-t border-[#e8edf5] px-[16px] py-[14px] font-[Pretendard,sans-serif] text-[14px] leading-[1.6] text-[#1f2937] md:px-[24px] md:text-[16px]"
       >
         <div>{formatHistoryTime(row.at)}</div>
         <div>{row.action}</div>
@@ -384,9 +477,10 @@ export function ControlAlarmHistoryPage() {
   }, [errorMessage, filteredRows.length, isLoading, pagedRows, rows.length])
 
   return (
-    <div className="no-focus-outline w-full px-[24px] py-[24px]">
+    <div className="no-focus-outline w-full px-[12px] py-[18px] sm:px-[16px] md:px-[24px] md:py-[24px]">
       <HistoryTabs
         actions={
+          <>
           <IconTooltipButton
             label="새로고침"
             onClick={() => {
@@ -396,10 +490,14 @@ export function ControlAlarmHistoryPage() {
             spin={isLoading}
             icon="refresh"
           />
+          <div className="xl:hidden">
+            <IconTooltipButton label="필터 초기화" onClick={resetFilters} icon="reset" />
+          </div>
+          </>
         }
       />
 
-      <div className="mb-[24px] border-b border-[#dbe5f1] pb-[16px]">
+      <div className="mb-[20px] border-b border-[#dbe5f1] pb-[16px] md:mb-[24px]">
         <div className="flex w-full flex-wrap items-end gap-[16px]">
           <DatePickerInput
             label="시작 날짜"
@@ -413,28 +511,14 @@ export function ControlAlarmHistoryPage() {
             <ControlHistoryTimePicker value={selectedTime} onChange={setSelectedTime} />
           </label>
 
-          <label className="min-w-[180px] flex-1 font-[Pretendard,sans-serif]">
-            <span className="mb-[8px] block text-[14px] font-semibold text-[#607a9f]">동작</span>
-            <div className="relative">
-              <select
-                value={actionQuery}
-                onChange={(event) => setActionQuery(event.target.value)}
-                className="h-[48px] w-full appearance-none rounded-[8px] border border-[#d7e1ee] bg-white px-[20px] pr-[52px] font-[Pretendard,sans-serif] text-[15px] leading-[1] text-[#0f172a] outline-none transition focus:border-[#d7e1ee] focus:ring-0 focus:ring-offset-0 focus:[outline:0] focus:[box-shadow:none] focus-visible:[outline:0] focus-visible:[box-shadow:none]"
-              >
-                <option value="">전체</option>
-                {actionOptions.map((action) => (
-                  <option key={action} value={action}>
-                    {action}
-                  </option>
-                ))}
-              </select>
-              <span className="material-symbols-rounded pointer-events-none absolute right-[16px] top-1/2 -translate-y-1/2 text-[20px] text-[#485b77]">
-                expand_more
-              </span>
-            </div>
-          </label>
+          <ActionPickerInput
+            label="동작"
+            value={actionQuery}
+            options={actionOptions}
+            onChange={setActionQuery}
+          />
 
-          <div className="shrink-0 font-[Pretendard,sans-serif]">
+          <div className="hidden shrink-0 font-[Pretendard,sans-serif] xl:block">
             <span className="mb-[8px] block text-[14px] font-semibold text-transparent select-none" aria-hidden>
               {'\u00a0'}
             </span>
@@ -445,8 +529,8 @@ export function ControlAlarmHistoryPage() {
         </div>
       </div>
 
-      <div className="overflow-hidden rounded-[8px] border border-[#dbe5f1] bg-white">
-        <div className="grid grid-cols-[2.2fr_1.4fr_2.8fr_0.6fr] gap-[16px] bg-[#f8fafc] px-[24px] py-[14px] font-[Pretendard,sans-serif] text-[15px] font-semibold text-[#607a9f]">
+      <div className="overflow-x-auto rounded-[8px] border border-[#dbe5f1] bg-white">
+        <div className="grid min-w-[760px] grid-cols-[2.2fr_1.4fr_2.8fr_0.6fr] gap-[16px] bg-[#f8fafc] px-[16px] py-[14px] font-[Pretendard,sans-serif] text-[14px] font-semibold text-[#607a9f] md:px-[24px] md:text-[15px]">
           <div>시각</div>
           <div>동작</div>
           <div>내용</div>
