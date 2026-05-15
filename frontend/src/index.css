@@ -42,9 +42,47 @@ button {
   cursor: pointer;
 }
 
+.material-symbols-rounded {
+  font-family: 'Material Symbols Rounded';
+  font-weight: 400;
+  font-style: normal;
+  font-size: 20px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24;
+}
+
+.material-symbols-rounded.sidebar-icon {
+  font-variation-settings:
+    'FILL' 0,
+    'wght' 170,
+    'GRAD' 0,
+    'opsz' 24;
+}
+
 :focus-visible {
   outline: 2px solid var(--gl-primary);
   outline-offset: 2px;
+}
+
+/* History filters: disable browser focus outline */
+.no-focus-outline :focus-visible {
+  outline: none !important;
+  outline-offset: 0 !important;
 }
 
 /* Notion-like scrollbar (scoped opt-in) */

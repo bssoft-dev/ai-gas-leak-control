@@ -312,7 +312,8 @@ class GasLeakPlantModule(Module):
 
     def _handle_sensors_save(self, event: Event) -> List[Event]:
         payload = event.payload or {}
-        drawing_id = payload.get("drawing_id")
+        raw_id = payload.get("drawing_id")
+        drawing_id = str(raw_id).strip() if raw_id is not None else ""
         sensors = payload.get("sensors")
         if not drawing_id or not isinstance(sensors, list):
             return [
@@ -323,7 +324,7 @@ class GasLeakPlantModule(Module):
                 )
             ]
         drawings = _load_drawings()
-        drawing = next((d for d in drawings if d.get("id") == drawing_id), None)
+        drawing = next((d for d in drawings if str(d.get("id", "")) == drawing_id), None)
         if not drawing:
             return [
                 Event(

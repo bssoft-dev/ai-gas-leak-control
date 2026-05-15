@@ -1,22 +1,27 @@
 import React from 'react'
 import './App.css'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { HashRouter, Navigate, Route, Routes } from 'react-router-dom'
 
-import AppShellLayout from './components/layout/AppShellLayout'
-import AiHistoryPage from './pages/AiHistoryPage'
-import DrawingSensorPage from './pages/DrawingSensorPage'
-import MonitorPage from './pages/MonitorPage'
+import AppShellLayout from './features/app-shell/ui/AppShellLayout'
+import AiHistoryPage from './features/ai-history/page/AiHistoryPage'
+import DrawingSensorPage from './features/drawing-sensor/page/DrawingSensorPage'
+import ControlAlarmHistoryPage from './features/history/page/ControlAlarmHistoryPage'
+import MonitorPage from './features/monitor/page/MonitorPage'
+import SettingsPage from './features/settings/page/SettingsPage'
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
         <Route element={<AppShellLayout />}>
           <Route path="/" element={<MonitorPage />} />
           <Route path="/drawing-sensor" element={<DrawingSensorPage />} />
-          <Route path="/ai-history" element={<AiHistoryPage />} />
+          <Route path="/history/ai" element={<AiHistoryPage />} />
+          <Route path="/history/control-alarm" element={<ControlAlarmHistoryPage />} />
+          <Route path="/settings" element={<SettingsPage />} />
+          <Route path="/ai-history" element={<Navigate to="/history/ai" replace />} />
         </Route>
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   )
 }
