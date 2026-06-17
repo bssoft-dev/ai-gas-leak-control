@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>로그인 처리</title>
+  <style>
+    body { font-family: system-ui, sans-serif; padding: 1.5rem; text-align: center; color: #374151; }
+  </style>
+</head>
+<body>
+  <p>로그인을 완료하는 중입니다…</p>
+  <p style="font-size: 12px; color: #9ca3af;">잠시 후 이 창이 닫힙니다.</p>
+  <script>
+    (function () {
+      var hash = window.location.hash || '';
+      var search = window.location.search || '';
+
+      function parseOAuthPayload(hash, search) {
+        var tryParse = function(s) {
+          if (!s || s.length < 2) return null;
+          var q = s.startsWith('#') || s.startsWith('?') ? s.slice(1) : s;
+          return new URLSearchParams(q);
+        };
+        var params = tryParse(hash);
+        if (!params || (!params.get('access_token') && !params.get('error'))) {
+          var p2 = tryParse(search);
+          if (p2 && (p2.get('access_token') || p2.get('error'))) params = p2;
+        }
+        if (!params) return { access_token: null };
+        return {
+          access_token: params.get('access_token'),
+          refresh_token: params.get('refresh_token'),
+          error: params.get('error') || params.get('error_code') || params.get('error_description')
+        };
+      }
+
+      try {
+        if (window.opener && !window.opener.closed) {
+          window.opener.postMessage(
+            { type: 'DANGBAE_OAUTH', hash: hash, search: search },
+            window.location.origin
+          );
+          setTimeout(function () {
+            try { window.close(); } catch (_) {}
+          }, 400);
+        } else {
+          var parsed = parseOAuthPayload(hash, search);
+          if (parsed.access_token) {
+            localStorage.setItem('dangbae_auth_access_token', parsed.access_token);
+            window.location.href = window.location.origin + '/#/request';
+          } else {
+            window.location.href = window.location.origin;
+          }
+        }
+      } catch (e) {
+        window.location.href = window.location.origin;
+      }
+    })();
+  </script>
+</body>
+</html>

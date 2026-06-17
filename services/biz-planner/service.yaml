@@ -1,0 +1,117 @@
+# SagoHub Service: BizPlanner (ST-BP-2026)
+# 단일 마크다운(Plan.md) 기반 사업계획서 저작 도구
+# - 양식(Template) 기반 초기화 / 갭 분석·작성 제안 / 웹 검색·보강
+
+service:
+  id: "com.SagoHub.biz-planner"
+  version: "1.0.0"
+  name: "SagoHub BizPlanner"
+  description: "양식 기반 Plan.md 생성, 부족한 정보 갭 분석 및 웹 검색 보강"
+  author: "SagoHub Team"
+  icon: "icon.png"
+  category: "productivity"
+
+  ui_server:
+    host: "0.0.0.0"
+    port: 8080
+    external_port: 26014
+
+# -----------------------------------------------------------
+# Config: 프로젝트 폴더, Plan.md 경로, 참고자료 폴더
+# -----------------------------------------------------------
+config:
+  project_folder:
+    type: "path"
+    label: "프로젝트 루트 폴더"
+    default: "./Projects/My_Startup_Plan"
+    required: true
+    description: "Plan.md, Template/, References/ 가 있는 루트"
+
+  plan_filename:
+    type: "string"
+    label: "사업계획서 파일명"
+    default: "Plan.md"
+    description: "단일 마크다운 문서 파일명"
+
+  references_folder:
+    type: "string"
+    label: "참고자료 폴더명"
+    default: "References"
+    description: "RAG용 업로드 자료 폴더"
+
+  template_folder:
+    type: "string"
+    label: "양식 폴더명"
+    default: "Template"
+    description: "양식 PDF/HWP 업로드 폴더"
+
+# -----------------------------------------------------------
+# Pipelines: 명세 5번 서비스 파이프라인
+# ① template-parser  ② gap-writer  ③ web-research
+# -----------------------------------------------------------
+pipelines:
+
+  # ① 템플릿 파싱: Template/ 폴더에 파일 생성 시 → 목차·가이드 추출 → Plan.md 초기화
+  - id: "flow_template_parser"
+    name: "양식 파싱 및 Plan.md 뼈대 생성"
+
+    trigger:
+      event: "E_FileCreated"
+      filter: "**/Template/**"
+      debounce: 1500
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: null
+
+    broadcast:
+      - module: "biz_planner_template_parser.TemplateParserModule"
+        id: "action_template_parser"
+        args:
+          path: "${event.path}"
+          content: "${event.content}"
+          project_folder: "${config.project_folder}"
+          plan_filename: "${config.plan_filename}"
+          template_folder: "${config.template_folder}"
+
+  # ② 갭 분석·작성: CHAT_REQUEST(작성 요청) 시 → Plan.md·References 검토 → WRITE/ASK 판단
+  - id: "flow_gap_writer"
+    name: "갭 분석 및 작성/질문 제안"
+
+    trigger:
+      event: "CHAT_REQUEST"
+      debounce: 500
+      aggregation:
+        strategy: "LATEST"
+        target: "event_bus"
+
+    broadcast:
+      - module: "biz_planner_gap_analyst.GapAnalystModule"
+        id: "action_gap_analyst"
+        args:
+          section: "${event.section}"
+          user_message: "${event.user_message}"
+          plan_path: "${event.plan_path}"
+          project_folder: "${config.project_folder}"
+          plan_filename: "${config.plan_filename}"
+          references_folder: "${config.references_folder}"
+
+  # ③ 웹 검색·보강: 사용자 검색 승인 시 → 검색·요약 → Plan.md 해당 섹션에 삽입
+  - id: "flow_web_research"
+    name: "웹 검색 및 데이터 보강"
+
+    trigger:
+      event: "WEB_SEARCH_APPROVED"
+      debounce: 500
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: null
+
+    broadcast:
+      - module: "biz_planner_web_research.WebResearchModule"
+        id: "action_web_research"
+        args:
+          query: "${event.query}"
+          section: "${event.section}"
+          plan_path: "${event.plan_path}"
+          project_folder: "${config.project_folder}"
+          plan_filename: "${config.plan_filename}"

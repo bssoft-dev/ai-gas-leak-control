@@ -1,0 +1,239 @@
+{
+  "job_id": "cfd27e45-2fad-404f-ac46-caa5c2664c94",
+  "created_at": "2026-03-25T07:02:46.036097Z",
+  "source_pdf": {
+    "file_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_uploads/cfd27e45-2fad-404f-ac46-caa5c2664c94.pdf",
+    "filename": "L1_D2603 5LP250V OIL-PAN DWG.pdf"
+  },
+  "proposal": {
+    "records": [
+      {
+        "drawing_receipt_date": "",
+        "ship_no": "SHIP",
+        "block": "",
+        "unit": "",
+        "item": "LTD.",
+        "pcs_no": "",
+        "installation_location": "",
+        "paint_code": "",
+        "dwg_no": "APPROVED",
+        "quantity": "",
+        "list_weight": "",
+        "remarks": "",
+        "revision_date_reason": "",
+        "id": "b41ae090-ccd3-438b-8728-1ab78c19f98d",
+        "created_at": "",
+        "updated_at": "2026-03-25T07:02:46.037037Z"
+      },
+      {
+        "drawing_receipt_date": "",
+        "ship_no": "SHIP",
+        "block": "",
+        "unit": "",
+        "item": "LTD.",
+        "pcs_no": "",
+        "installation_location": "",
+        "paint_code": "",
+        "dwg_no": "APPROVED",
+        "quantity": "",
+        "list_weight": "",
+        "remarks": "",
+        "revision_date_reason": "",
+        "id": "d7699139-b66b-4f1a-9e84-45ff0d66dcf4",
+        "created_at": "",
+        "updated_at": "2026-03-25T07:02:46.037055Z"
+      },
+      {
+        "drawing_receipt_date": "",
+        "ship_no": "SHIP",
+        "block": "",
+        "unit": "",
+        "item": "SHIP",
+        "pcs_no": "",
+        "installation_location": "",
+        "paint_code": "",
+        "dwg_no": "APPROVED",
+        "quantity": "",
+        "list_weight": "",
+        "remarks": "",
+        "revision_date_reason": "",
+        "id": "8912aaed-11dd-4692-8c73-6e968d57b918",
+        "created_at": "",
+        "updated_at": "2026-03-25T07:02:46.037066Z"
+      },
+      {
+        "drawing_receipt_date": "",
+        "ship_no": "SHIP",
+        "block": "",
+        "unit": "",
+        "item": "111177774444KKKK LLLLNNNNGGGG",
+        "pcs_no": "",
+        "installation_location": "",
+        "paint_code": "",
+        "dwg_no": "APPROVED",
+        "quantity": "",
+        "list_weight": "",
+        "remarks": "",
+        "revision_date_reason": "",
+        "id": "d7f48f6f-5d18-43f5-86ac-fabf0ac8010d",
+        "created_at": "",
+        "updated_at": "2026-03-25T07:02:46.037073Z"
+      },
+      {
+        "drawing_receipt_date": "",
+        "ship_no": "SHIP",
+        "block": "",
+        "unit": "",
+        "item": "▼",
+        "pcs_no": "",
+        "installation_location": "",
+        "paint_code": "",
+        "dwg_no": "APPROVED",
+        "quantity": "",
+        "list_weight": "",
+        "remarks": "",
+        "revision_date_reason": "",
+        "id": "2fb84555-b030-4f49-b775-af18711d9fbd",
+        "created_at": "",
+        "updated_at": "2026-03-25T07:02:46.037081Z"
+      },
+      {
+        "drawing_receipt_date": "",
+        "ship_no": "SHIP",
+        "block": "",
+        "unit": "",
+        "item": "▼",
+        "pcs_no": "",
+        "installation_location": "",
+        "paint_code": "",
+        "dwg_no": "APPROVED",
+        "quantity": "",
+        "list_weight": "TEL. NO.",
+        "remarks": "",
+        "revision_date_reason": "",
+        "id": "06c65332-0cfa-4707-baaf-96a3a89272f6",
+        "created_at": "",
+        "updated_at": "2026-03-25T07:02:46.037089Z"
+      },
+      {
+        "drawing_receipt_date": "",
+        "ship_no": "SHIP",
+        "block": "",
+        "unit": "",
+        "item": "SHIP",
+        "pcs_no": "",
+        "installation_location": "",
+        "paint_code": "",
+        "dwg_no": "APPROVED",
+        "quantity": "",
+        "list_weight": "",
+        "remarks": "",
+        "revision_date_reason": "",
+        "id": "e1808cc3-23d2-46af-a88c-ac38bd565859",
+        "created_at": "",
+        "updated_at": "2026-03-25T07:02:46.037097Z"
+      },
+      {
+        "drawing_receipt_date": "",
+        "ship_no": "SHIP",
+        "block": "",
+        "unit": "",
+        "item": "▼",
+        "pcs_no": "",
+        "installation_location": "",
+        "paint_code": "",
+        "dwg_no": "APPROVED",
+        "quantity": "",
+        "list_weight": "",
+        "remarks": "",
+        "revision_date_reason": "",
+        "id": "267c34de-89fc-415b-b8f3-1422e68c9dd2",
+        "created_at": "",
+        "updated_at": "2026-03-25T07:02:46.037104Z"
+      },
+      {
+        "drawing_receipt_date": "",
+        "ship_no": "SHIP",
+        "block": "",
+        "unit": "",
+        "item": "NAME OF DRAWING",
+        "pcs_no": "",
+        "installation_location": "",
+        "paint_code": "",
+        "dwg_no": "APPROVED",
+        "quantity": "",
+        "list_weight": "",
+        "remarks": "",
+        "revision_date_reason": "",
+        "id": "45e2b1cd-0bf6-491d-bc34-df4aa37fc142",
+        "created_at": "",
+        "updated_at": "2026-03-25T07:02:46.037114Z"
+      },
+      {
+        "drawing_receipt_date": "",
+        "ship_no": "SHIP",
+        "block": "",
+        "unit": "",
+        "item": "3",
+        "pcs_no": "",
+        "installation_location": "",
+        "paint_code": "",
+        "dwg_no": "APPROVED",
+        "quantity": "",
+        "list_weight": "",
+        "remarks": "",
+        "revision_date_reason": "",
+        "id": "6a40d9d5-09ed-4635-8d05-a405fe96cea9",
+        "created_at": "",
+        "updated_at": "2026-03-25T07:02:46.037124Z"
+      }
+    ],
+    "design_drawings": [
+      {
+        "drawing_id": "3b0cd057-6ed1-447b-a719-e28d40b1ac89",
+        "dwg_no": "APPROVED",
+        "filename": "L1_D2603 5LP250V OIL-PAN DWG.pdf",
+        "file_type": "pdf",
+        "file_path": "",
+        "source": {
+          "page_number": 1,
+          "kind": "design"
+        }
+      },
+      {
+        "drawing_id": "faa9aa34-a566-49fd-a354-39d8357bf9b3",
+        "dwg_no": "DWG-2",
+        "filename": "L1_D2603 5LP250V OIL-PAN DWG.pdf",
+        "file_type": "pdf",
+        "file_path": "",
+        "source": {
+          "page_number": 2,
+          "kind": "design"
+        }
+      },
+      {
+        "drawing_id": "4a16d6df-bab5-4b15-a9d9-5d489db61f3e",
+        "dwg_no": "DWG-3",
+        "filename": "L1_D2603 5LP250V OIL-PAN DWG.pdf",
+        "file_type": "pdf",
+        "file_path": "",
+        "source": {
+          "page_number": 3,
+          "kind": "design"
+        }
+      },
+      {
+        "drawing_id": "c844cce9-5484-4b41-a2b2-048f4356277b",
+        "dwg_no": "DWG-4",
+        "filename": "L1_D2603 5LP250V OIL-PAN DWG.pdf",
+        "file_type": "pdf",
+        "file_path": "",
+        "source": {
+          "page_number": 4,
+          "kind": "design"
+        }
+      }
+    ],
+    "installation_drawings": []
+  }
+}

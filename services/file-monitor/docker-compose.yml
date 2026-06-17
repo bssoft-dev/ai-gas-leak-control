@@ -1,0 +1,26 @@
+# SagoHub 단일 서비스 (이미지에 소스 COPY, 호스트 소스 마운트 없음)
+# 빌드: docker compose -f docker-compose.yml build
+# 실행: docker compose -f docker-compose.yml up -d
+# 이벤트 버스는 별도 기동 후 EVENT_BUS_URL 로 연결
+
+services:
+  app:
+    build:
+      context: ../..
+      dockerfile: services/Dockerfile.service
+      args:
+        SERVICE_NAME: file-monitor
+    image: sagohub-service-file-monitor:latest
+    container_name: sagohub-service-file-monitor
+    ports:
+      - "${SERVICE_UI_PORT:-26011}:8080"
+    environment:
+      SELECTED_SERVICE: file-monitor
+      SERVICES_DIR: /app/services
+      PIPELINES_DIR: /app/services
+      EVENT_BUS_URL: ${EVENT_BUS_URL:-http://host.docker.internal:26010}
+      EVENT_BUS_HOST: "0.0.0.0"
+      EVENT_BUS_PORT: "26010"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped

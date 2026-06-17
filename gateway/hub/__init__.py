@@ -1,0 +1,2 @@
+"""BS Message Hub (Supabase)."""
+

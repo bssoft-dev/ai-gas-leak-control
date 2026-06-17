@@ -1,1 +1,17 @@
-[]
+[
+  {
+    "at": "2026-05-15T21:15:40.781285+00:00",
+    "type": "emergency_stop",
+    "message": "AI detected high LPG (3.06%) in enc-02 - Auto Valve Closed"
+  },
+  {
+    "at": "2026-05-15T21:18:31.265859+00:00",
+    "type": "emergency_stop",
+    "message": "AI detected high LPG (3.03%) in enc-02 - Auto Valve Closed"
+  },
+  {
+    "at": "2026-05-15T21:26:18.882322+00:00",
+    "type": "emergency_stop",
+    "message": "AI detected high LPG (3.42%) in enc-02 - Auto Valve Closed"
+  }
+]

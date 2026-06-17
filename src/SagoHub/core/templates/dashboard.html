@@ -1,0 +1,2664 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Hub Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        header p {
+            opacity: 0.9;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .stat-card h3 {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+        .stat-card .value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+        .section {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .section h2 {
+            margin-bottom: 20px;
+            color: #333;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 1em;
+            color: #666;
+            transition: all 0.3s;
+        }
+        .tab.active {
+            color: #667eea;
+            border-bottom: 2px solid #667eea;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #333;
+        }
+        tr:hover {
+            background: #f8f9fa;
+        }
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #5568d3;
+        }
+        .btn-danger {
+            background: #e74c3c;
+            color: white;
+        }
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+        .btn-success {
+            background: #27ae60;
+            color: white;
+        }
+        .btn-success:hover {
+            background: #229954;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #333;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.9em;
+            background: white;
+            cursor: pointer;
+        }
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        textarea {
+            min-height: 100px;
+            font-family: 'Courier New', monospace;
+        }
+        .filters {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .filter-group label {
+            font-size: 0.85em;
+            color: #666;
+            font-weight: 600;
+        }
+        .filter-group input,
+        .filter-group select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .filter-group input:focus,
+        .filter-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .event-table-container {
+            overflow-x: auto;
+        }
+        th.sortable {
+            cursor: pointer;
+            user-select: none;
+            position: relative;
+        }
+        th.sortable:hover {
+            background: #e9ecef;
+        }
+        th.sortable::after {
+            content: ' ↕';
+            opacity: 0.5;
+            font-size: 0.8em;
+        }
+        th.sort-asc::after {
+            content: ' ↑';
+            opacity: 1;
+        }
+        th.sort-desc::after {
+            content: ' ↓';
+            opacity: 1;
+        }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .pagination button {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+        .pagination button:hover:not(:disabled) {
+            background: #f8f9fa;
+        }
+        .pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .pagination .page-info {
+            padding: 8px 12px;
+            color: #666;
+        }
+        .module-link {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s;
+            border-bottom: 1px dotted #667eea;
+        }
+        .module-link:hover {
+            color: #5568d3;
+            border-bottom-color: #5568d3;
+        }
+        .event-log {
+            max-height: 400px;
+            overflow-y: auto;
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+        }
+        .event-item {
+            margin-bottom: 10px;
+            padding: 10px;
+            background: #252526;
+            border-left: 3px solid #667eea;
+            border-radius: 4px;
+        }
+        .event-type {
+            color: #4ec9b0;
+            font-weight: bold;
+        }
+        .event-time {
+            color: #858585;
+            font-size: 0.9em;
+        }
+        /* 모달 스타일 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            overflow: auto;
+        }
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 800px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eee;
+        }
+        .modal-header h3 {
+            margin: 0;
+            color: #333;
+        }
+        .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            background: none;
+        }
+        .close:hover {
+            color: #000;
+        }
+        .modal-body {
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+        .json-viewer {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+        .badge-success {
+            background: #d4edda;
+            color: #155724;
+        }
+        .badge-danger {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .badge-info {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+        .btn-info {
+            background: #17a2b8;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 0.9em;
+        }
+        .btn-info:hover {
+            background: #138496;
+        }
+        code {
+            font-family: 'Courier New', monospace;
+        }
+        .json-view {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>BS Messsage Hub</h1>
+            <p>BS Message Hub 모니터링 및 관리 대시보드</p>
+        </header>
+
+        <div class="stats">
+            <div class="stat-card">
+                <h3>모듈</h3>
+                <div class="value" id="stat-modules">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>서비스</h3>
+                <div class="value" id="stat-services">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>파이프라인</h3>
+                <div class="value" id="stat-pipelines">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>이벤트 총계</h3>
+                <div class="value" id="stat-events">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>파이프라인</h3>
+                <div class="value" id="stat-subscribers">0</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('monitor')">📊 모니터링</button>
+                <button class="tab" onclick="switchTab('control')">🔄 로드 및 제어</button>
+                <button class="tab" onclick="switchTab('services')">🔧 서비스 관리</button>
+                <button class="tab" onclick="switchTab('modules')">📦 모듈 관리</button>
+                <button class="tab" onclick="switchTab('subscribers')">🔗 파이프라인</button>
+                <button class="tab" onclick="switchTab('test')">🧪 이벤트 테스트</button>
+            </div>
+
+            <div id="control" class="tab-content">
+                <h2>로드 및 제어</h2>
+                <p style="color: #666; margin-bottom: 20px;">모든 서비스와 모듈을 로드한 뒤, 개별 또는 일괄로 시작·종료할 수 있습니다.</p>
+                <div style="margin-bottom: 24px;">
+                    <button class="btn btn-primary" onclick="loadAllServicesAndModules()" id="btn-load-all">📥 모든 서비스·모듈 로드</button>
+                    <button class="btn btn-danger" onclick="stopAllProcesses()" style="margin-left: 8px;">⏹ 전체 종료</button>
+                    <span id="load-result" style="margin-left: 12px; font-size: 0.9em;"></span>
+                </div>
+                <p style="font-size: 0.85em; color: #666; margin-bottom: 16px;"><strong>전체 종료</strong>: 서비스 등록 해제 + 실행 중인 서비스·모듈 프로세스 모두 종료</p>
+                <div class="section" style="margin-bottom: 24px;">
+                    <h3>사용 가능한 서비스</h3>
+                    <div style="margin-bottom: 12px;">
+                        <button class="btn btn-success" onclick="startAllServices()" style="margin-right: 8px;">전체 시작</button>
+                        <button class="btn btn-danger" onclick="stopAllServices()" style="margin-right: 8px;">서비스만 종료</button>
+                        <span style="font-size: 0.85em; color: #666;">실행 중인 서비스 프로세스만 종료 (모듈·등록 유지)</span>
+                    </div>
+                    <div class="event-table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>서비스 ID</th>
+                                    <th>이름</th>
+                                    <th>상태</th>
+                                    <th>작업</th>
+                                </tr>
+                            </thead>
+                            <tbody id="available-services-body">
+                                <tr><td colspan="4" class="loading">불러오는 중...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="section">
+                    <h3>사용 가능한 모듈</h3>
+                    <div style="margin-bottom: 12px;">
+                        <button class="btn btn-success" onclick="startAllModules()" style="margin-right: 8px;">전체 시작</button>
+                        <button class="btn btn-danger" onclick="stopAllModules()" style="margin-right: 8px;">모듈만 종료</button>
+                        <span style="font-size: 0.85em; color: #666;">실행 중인 모듈 프로세스만 종료 (서비스·등록 유지)</span>
+                    </div>
+                    <div class="event-table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>모듈 키</th>
+                                    <th>이름</th>
+                                    <th>상태</th>
+                                    <th>작업</th>
+                                </tr>
+                            </thead>
+                            <tbody id="available-modules-body">
+                                <tr><td colspan="4" class="loading">불러오는 중...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="monitor" class="tab-content active">
+                <h2>이벤트 로그</h2>
+                <div class="filters">
+                    <div class="filter-group">
+                        <label>검색</label>
+                        <input type="text" id="event-search-input" placeholder="이벤트 타입, 소스/대상 모듈, 서비스 ID 검색..." style="min-width: 200px;">
+                    </div>
+                    <div class="filter-group">
+                        <label>이벤트 타입</label>
+                        <select id="event-type-filter-main">
+                            <option value="">전체</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>소스 모듈</label>
+                        <select id="event-source-filter">
+                            <option value="">전체</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>페이지당 항목</label>
+                        <select id="event-page-size">
+                            <option value="10">10</option>
+                            <option value="25" selected>25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="event-table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="sortable" data-sort="timestamp">시간</th>
+                                <th class="sortable" data-sort="type">이벤트 타입</th>
+                                <th class="sortable" data-sort="service_id">서비스 ID</th>
+                                <th class="sortable" data-sort="source_module">소스 모듈</th>
+                                <th class="sortable" data-sort="target_modules">대상 모듈</th>
+                                <th>작업</th>
+                            </tr>
+                        </thead>
+                        <tbody id="event-table-body">
+                            <tr>
+                                <td colspan="6" class="loading">이벤트 로그를 불러오는 중...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination" id="event-pagination"></div>
+            </div>
+
+            <div id="services" class="tab-content">
+                <h2>서비스 관리</h2>
+                <div class="filters">
+                    <div class="filter-group">
+                        <label>검색</label>
+                        <input type="text" id="service-search-input" placeholder="서비스 ID, 이름 검색..." style="min-width: 200px;">
+                    </div>
+                    <div class="filter-group">
+                        <label>페이지당 항목</label>
+                        <select id="service-page-size">
+                            <option value="10">10</option>
+                            <option value="25" selected>25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="event-table-container">
+                    <div id="service-list"></div>
+                </div>
+                <div class="pagination" id="service-pagination"></div>
+            </div>
+
+            <div id="modules" class="tab-content">
+                <h2>모듈 목록</h2>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <button class="btn btn-primary" onclick="showModuleForm()">+ 새 모듈</button>
+                </div>
+                <div class="filters">
+                    <div class="filter-group">
+                        <label>검색</label>
+                        <input type="text" id="module-search-input" placeholder="모듈 ID, 이름 검색..." style="min-width: 200px;">
+                    </div>
+                    <div class="filter-group">
+                        <label>상태 필터</label>
+                        <select id="module-status-filter">
+                            <option value="">전체</option>
+                            <option value="healthy">정상</option>
+                            <option value="unhealthy">비활성</option>
+                            <option value="unknown">알 수 없음</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>페이지당 항목</label>
+                        <select id="module-page-size">
+                            <option value="10">10</option>
+                            <option value="25" selected>25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="event-table-container">
+                    <div id="module-list"></div>
+                </div>
+                <div class="pagination" id="module-pagination"></div>
+            </div>
+
+            <div id="subscribers" class="tab-content">
+                <h2>파이프라인 목록</h2>
+                <p style="color: #666; margin-bottom: 20px;">이벤트 타입별 파이프라인 정보를 확인할 수 있습니다.</p>
+                <div class="filters">
+                    <div class="filter-group">
+                        <label>검색</label>
+                        <input type="text" id="subscriber-search-input" placeholder="이벤트 타입, 파이프라인 ID 검색..." style="min-width: 200px;">
+                    </div>
+                    <div class="filter-group">
+                        <label>이벤트 타입</label>
+                        <select id="subscriber-event-type-filter">
+                            <option value="">전체</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>페이지당 항목</label>
+                        <select id="subscriber-page-size">
+                            <option value="10">10</option>
+                            <option value="25" selected>25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="event-table-container">
+                    <div id="subscriber-list">
+                        <div class="loading">파이프라인 정보를 불러오는 중...</div>
+                    </div>
+                </div>
+                <div class="pagination" id="subscriber-pagination"></div>
+            </div>
+                <div id="module-form" style="display:none; margin-top:20px;">
+                    <h3>모듈 등록/수정</h3>
+                    <form id="module-form-element">
+                        <div class="form-group">
+                            <label>모듈 ID</label>
+                            <input type="text" id="module-id" required>
+                        </div>
+                        <div class="form-group">
+                            <label>이름</label>
+                            <input type="text" id="module-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>설명</label>
+                            <textarea id="module-description"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>처리 가능한 이벤트 타입 (쉼표로 구분)</label>
+                            <input type="text" id="module-capabilities" placeholder="예: E_FileCreated, E_FileModified">
+                        </div>
+                        <button type="submit" class="btn btn-success">저장</button>
+                        <button type="button" class="btn" onclick="hideModuleForm()">취소</button>
+                    </form>
+                </div>
+            </div>
+
+            <div id="test" class="tab-content">
+                <h2>이벤트 발행 테스트</h2>
+                <form id="event-test-form">
+                    <div class="form-group">
+                        <label>이벤트 타입</label>
+                        <select id="event-type" required>
+                            <option value="">-- 이벤트 타입 선택 --</option>
+                        </select>
+                        <div id="event-type-info" style="margin-top:5px; font-size:0.85em; color:#666;"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Payload (JSON)</label>
+                        <textarea id="event-payload" placeholder='{"path": "/test/file.md", "content": "test"}' required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Source Module</label>
+                        <input type="text" id="event-source" placeholder="예: TestModule">
+                    </div>
+                    <button type="submit" class="btn btn-primary">이벤트 발행</button>
+                </form>
+                <div id="test-result" style="margin-top:20px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payload 모달 -->
+    <div id="payload-modal" class="modal">
+        <div class="modal-content" style="max-width: 100vw; width: 100vw;">
+            <div class="modal-header">
+                <h3>Payload 상세 정보</h3>
+                <button class="close" onclick="closePayloadModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="json-viewer" id="payload-content"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 서비스 상세 모달 -->
+    <div id="service-detail-modal" class="modal">
+        <div class="modal-content" style="max-width: 1400px; width: 90vw;">
+            <div class="modal-header">
+                <h3 id="service-detail-title">서비스 상세 정보</h3>
+                <button class="close" onclick="closeServiceDetailModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="service-info-section" style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                    <div id="service-info-content"></div>
+                </div>
+                <div id="service-pipelines-section">
+                    <h4>파이프라인 목록</h4>
+                    <div id="service-pipelines-list"></div>
+                </div>
+                <div id="service-edit-form" style="display:none; margin-top:20px; background: #fff; padding: 20px; border-radius: 8px; border: 1px solid #ddd;">
+                    <h4>서비스 수정</h4>
+                    <form id="service-edit-form-element">
+                        <div class="form-group">
+                            <label>서비스 ID</label>
+                            <input type="text" id="edit-service-id" readonly style="background: #f5f5f5;">
+                        </div>
+                        <div class="form-group">
+                            <label>서비스 이름</label>
+                            <input type="text" id="edit-service-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>설명</label>
+                            <textarea id="edit-service-description"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>UI URL</label>
+                            <input type="text" id="edit-service-ui-url" placeholder="http://localhost:8080">
+                        </div>
+                        <button type="submit" class="btn btn-success">적용</button>
+                        <button type="button" class="btn" onclick="cancelServiceEdit()">취소</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 탭 ID와 URL 해시 매핑 (새로고침 시 해당 탭 유지)
+        const TAB_IDS = ['monitor', 'control', 'services', 'modules', 'subscribers', 'test'];
+
+        /** 현재 URL 경로 접두를 붙임 (예: /event-bus → /event-bus/api/..., / → /api/...) */
+        function RootPath(path) {
+            if (!path.startsWith('/')) path = '/' + path;
+            const prefix = window.location.pathname.replace(/\/$/, '');
+            return (prefix === '' ? '' : prefix) + path;
+        }
+        
+        function getTabFromHash() {
+            const hash = (location.hash || '').replace(/^#/, '');
+            return TAB_IDS.includes(hash) ? hash : 'monitor';
+        }
+        
+        function applyTabFromUrl() {
+            switchTab(getTabFromHash());
+        }
+        
+        // 탭 전환
+        function switchTab(tabName) {
+            if (!TAB_IDS.includes(tabName)) tabName = 'monitor';
+            // URL 해시 갱신 (새로고침/공유 시 해당 탭으로 이동)
+            location.hash = tabName;
+            
+            // 모든 탭과 콘텐츠에서 active 클래스 제거
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            // 클릭된 탭 버튼 찾아서 활성화
+            const buttons = document.querySelectorAll('.tab');
+            buttons.forEach(btn => {
+                const btnText = btn.textContent.trim();
+                if ((tabName === 'monitor' && btnText.includes('모니터링')) ||
+                    (tabName === 'control' && btnText.includes('로드 및 제어')) ||
+                    (tabName === 'services' && btnText.includes('서비스 관리')) ||
+                    (tabName === 'modules' && btnText.includes('모듈 관리')) ||
+                    (tabName === 'subscribers' && btnText.includes('파이프라인')) ||
+                    (tabName === 'test' && btnText.includes('이벤트 테스트'))) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            // 해당 탭 콘텐츠 활성화
+            const tabContent = document.getElementById(tabName);
+            if (tabContent) {
+                tabContent.classList.add('active');
+            }
+            if (tabName === 'control') {
+                refreshControlTab();
+            }
+        }
+        
+        // ----- 로드 및 제어 탭 -----
+        async function refreshControlTab() {
+            try {
+                const [servicesRes, modulesRes] = await Promise.all([
+                    fetch(RootPath('/api/available/services')),
+                    fetch(RootPath('/api/available/modules'))
+                ]);
+                const availableServices = await servicesRes.json();
+                const availableModules = await modulesRes.json();
+                
+                const servicesBody = document.getElementById('available-services-body');
+                if (availableServices.length === 0) {
+                    servicesBody.innerHTML = '<tr><td colspan="4">사용 가능한 서비스가 없습니다.</td></tr>';
+                } else {
+                    servicesBody.innerHTML = availableServices.map(s => {
+                        const status = s.running ? '실행 중' : (s.loaded ? '로드됨' : '대기');
+                        const statusClass = s.running ? 'badge-success' : (s.loaded ? 'badge-info' : 'badge');
+                        const sid = (s.id || '').replace(/"/g, '&quot;');
+                        return `<tr>
+                            <td><code style="font-size: 0.85em;">${s.id}</code></td>
+                            <td>${s.name}</td>
+                            <td><span class="badge ${statusClass}">${status}</span></td>
+                            <td>
+                                <button class="btn btn-success" data-service-id="${sid}" onclick="startService(this.getAttribute('data-service-id'))" ${s.running ? 'disabled' : ''} style="margin-right: 5px;">시작</button>
+                                <button class="btn btn-danger" data-service-id="${sid}" onclick="stopService(this.getAttribute('data-service-id'))" ${!s.running ? 'disabled' : ''} style="margin-right: 5px;">종료</button>
+                                <button class="btn btn-info" data-service-id="${sid}" onclick="restartService(this.getAttribute('data-service-id'))" style="margin-right: 5px;">재시작</button>
+                            </td>
+                        </tr>`;
+                    }).join('');
+                }
+                
+                const modulesBody = document.getElementById('available-modules-body');
+                if (availableModules.length === 0) {
+                    modulesBody.innerHTML = '<tr><td colspan="4">사용 가능한 모듈이 없습니다.</td></tr>';
+                } else {
+                    modulesBody.innerHTML = availableModules.map(m => {
+                        const status = m.running ? '실행 중' : (m.loaded ? '등록됨' : '대기');
+                        const statusClass = m.running ? 'badge-success' : (m.loaded ? 'badge-info' : 'badge');
+                        const keyEsc = (m.id || '').replace(/'/g, "\\'");
+                        return `<tr>
+                            <td><code style="font-size: 0.85em;">${m.id}</code></td>
+                            <td>${m.name}</td>
+                            <td><span class="badge ${statusClass}">${status}</span></td>
+                            <td>
+                                <button class="btn btn-success" onclick="startModuleByKey('${keyEsc}')" ${m.running ? 'disabled' : ''} style="margin-right: 5px;">시작</button>
+                                <button class="btn btn-danger" onclick="stopModuleByKey('${keyEsc}')" ${!m.running ? 'disabled' : ''}>종료</button>
+                            </td>
+                        </tr>`;
+                    }).join('');
+                }
+            } catch (e) {
+                console.error('로드 및 제어 탭 새로고침 실패:', e);
+                document.getElementById('available-services-body').innerHTML = '<tr><td colspan="4" class="error">목록을 불러올 수 없습니다.</td></tr>';
+                document.getElementById('available-modules-body').innerHTML = '<tr><td colspan="4" class="error">목록을 불러올 수 없습니다.</td></tr>';
+            }
+        }
+        
+        async function loadAllServicesAndModules() {
+            const resultEl = document.getElementById('load-result');
+            resultEl.textContent = '로드 중...';
+            resultEl.style.color = '#666';
+            try {
+                const res = await fetch(RootPath('/api/load'), { method: 'POST' });
+                const data = await res.json();
+                if (res.ok) {
+                    resultEl.textContent = `서비스 ${data.registered}개 등록됨 (총 ${data.total}개)${data.errors && data.errors.length ? '. 일부 오류: ' + data.errors.join('; ') : ''}`;
+                    resultEl.style.color = data.errors && data.errors.length ? '#856404' : '#155724';
+                } else {
+                    resultEl.textContent = '로드 실패: ' + (data.detail || res.statusText);
+                    resultEl.style.color = '#721c24';
+                }
+                refreshControlTab();
+                updateStatus();
+            } catch (e) {
+                resultEl.textContent = '오류: ' + e.message;
+                resultEl.style.color = '#721c24';
+            }
+        }
+        
+        async function startService(serviceId) {
+            try {
+                const res = await fetch(RootPath(`/api/services/${encodeURIComponent(serviceId)}/start`), { method: 'POST' });
+                const data = await res.json();
+                if (res.ok) {
+                    refreshControlTab();
+                    updateStatus();
+                } else {
+                    alert('시작 실패: ' + (data.detail || res.statusText));
+                }
+            } catch (e) {
+                alert('오류: ' + e.message);
+            }
+        }
+        
+        async function stopService(serviceId) {
+            try {
+                await fetch(RootPath(`/api/services/${encodeURIComponent(serviceId)}/stop`), { method: 'POST' });
+                refreshControlTab();
+                updateStatus();
+            } catch (e) {
+                alert('오류: ' + e.message);
+            }
+        }
+        
+        async function startAllServices() {
+            const servicesRes = await fetch(RootPath('/api/available/services'));
+            const list = await servicesRes.json();
+            for (const s of list) {
+                if (!s.running) {
+                    await fetch(RootPath(`/api/services/${encodeURIComponent(s.id)}/start`), { method: 'POST' });
+                }
+            }
+            refreshControlTab();
+            updateStatus();
+        }
+        
+        async function stopAllServices() {
+            try {
+                const res = await fetch(RootPath('/api/services/stop-all'), { method: 'POST' });
+                const data = await res.json();
+                if (res.ok) {
+                    refreshControlTab();
+                    updateStatus();
+                } else {
+                    alert('서비스만 종료 실패: ' + (data.detail || res.statusText));
+                }
+            } catch (e) {
+                alert('오류: ' + e.message);
+            }
+        }
+        
+        async function stopAllProcesses() {
+            if (!confirm('전체 종료하면 서비스 등록이 해제되고, 실행 중인 서비스·모듈 프로세스가 모두 종료됩니다. 계속하시겠습니까?')) return;
+            try {
+                const res = await fetch(RootPath('/api/stop-all'), { method: 'POST' });
+                const data = await res.json();
+                if (res.ok) {
+                    refreshControlTab();
+                    updateStatus();
+                } else {
+                    alert('전체 종료 실패: ' + (data.detail || res.statusText));
+                }
+            } catch (e) {
+                alert('오류: ' + e.message);
+            }
+        }
+        
+        async function restartService(serviceId) {
+            try {
+                const res = await fetch(RootPath(`/api/services/${encodeURIComponent(serviceId)}/restart`), { method: 'POST' });
+                const data = await res.json();
+                if (res.ok) {
+                    refreshControlTab();
+                    updateStatus();
+                } else {
+                    alert('재시작 실패: ' + (data.detail || res.statusText));
+                }
+            } catch (e) {
+                alert('오류: ' + e.message);
+            }
+        }
+        
+        async function startModuleByKey(moduleKey) {
+            try {
+                const res = await fetch(RootPath(`/api/modules/${encodeURIComponent(moduleKey)}/start`), { method: 'POST' });
+                const data = await res.json();
+                if (res.ok) {
+                    refreshControlTab();
+                    updateStatus();
+                } else {
+                    alert('시작 실패: ' + (data.detail || res.statusText));
+                }
+            } catch (e) {
+                alert('오류: ' + e.message);
+            }
+        }
+        
+        async function stopModuleByKey(moduleKey) {
+            try {
+                await fetch(RootPath(`/api/modules/${encodeURIComponent(moduleKey)}/stop`), { method: 'POST' });
+                refreshControlTab();
+                updateStatus();
+            } catch (e) {
+                alert('오류: ' + e.message);
+            }
+        }
+        
+        async function startAllModules() {
+            const modulesRes = await fetch(RootPath('/api/available/modules'));
+            const list = await modulesRes.json();
+            for (const m of list) {
+                if (!m.running) {
+                    await fetch(RootPath(`/api/modules/${encodeURIComponent(m.id)}/start`), { method: 'POST' });
+                }
+            }
+            refreshControlTab();
+            updateStatus();
+        }
+        
+        async function stopAllModules() {
+            try {
+                const res = await fetch(RootPath('/api/modules/stop-all'), { method: 'POST' });
+                const data = await res.json();
+                if (res.ok) {
+                    refreshControlTab();
+                    updateStatus();
+                } else {
+                    alert('모듈만 종료 실패: ' + (data.detail || res.statusText));
+                }
+            } catch (e) {
+                alert('오류: ' + e.message);
+            }
+        }
+
+        // 상태 업데이트
+        async function updateStatus() {
+            try {
+                const response = await fetch(RootPath('/api/status'));
+                const data = await response.json();
+                
+                document.getElementById('stat-modules').textContent = data.modules.count;
+                document.getElementById('stat-services').textContent = (data.services && data.services.count) ? data.services.count : 0;
+                document.getElementById('stat-pipelines').textContent = data.pipelines.count;
+                document.getElementById('stat-events').textContent = data.events.total;
+                
+                // 파이프라인 통계 업데이트 (pipeline_details 사용)
+                const totalPipelines = data.subscribers.pipeline_details ? data.subscribers.pipeline_details.length : 0;
+                document.getElementById('stat-subscribers').textContent = totalPipelines;
+                
+                // 모듈 목록 저장 (소스 모듈 링크 생성을 위해)
+                allModules = data.modules.list || [];
+                
+                updateEventLog(data.events.recent);
+                // 서비스 관리 탭 업데이트
+                if (data.services && data.services.list && data.services.list.length > 0) {
+                    updateServiceList(data.services.list, data.pipelines.list);
+                } else {
+                    updateServiceList([], data.pipelines.list);
+                }
+                // 모듈 목록 업데이트 (파이프라인 구독 정보 포함)
+                const pipelineSubscribers = data.subscribers && data.subscribers.pipeline_details ? data.subscribers.pipeline_details : [];
+                updateModuleList(data.modules.list, pipelineSubscribers);
+                updateEventTypeList(data.modules.list);
+                updateSubscriberList(data.subscribers);
+            } catch (error) {
+                console.error('상태 업데이트 실패:', error);
+            }
+        }
+        
+        // 소스 모듈 이름으로 모듈 찾기 (endpoint URL 반환)
+        function findModuleEndpoint(sourceModule) {
+            if (!sourceModule || sourceModule === 'N/A') return null;
+            
+            // 정확한 이름 매칭
+            let module = allModules.find(m => 
+                m.name === sourceModule || 
+                m.module_id === sourceModule ||
+                m.module_id.endsWith(sourceModule) ||
+                m.module_id.split('.').pop() === sourceModule
+            );
+            
+            if (module && module.endpoint) {
+                return module.endpoint;
+            }
+            
+            // 부분 매칭 시도
+            module = allModules.find(m => 
+                m.name?.toLowerCase().includes(sourceModule.toLowerCase()) ||
+                m.module_id?.toLowerCase().includes(sourceModule.toLowerCase())
+            );
+            
+            return module?.endpoint || null;
+        }
+        
+        // 이벤트 타입 목록 업데이트 (모듈의 capabilities에서 추출)
+        let eventTypeModulesCache = {}; // 전역 캐시
+        
+        function updateEventTypeList(modules) {
+            const eventTypeSelect = document.getElementById('event-type');
+            const currentValue = eventTypeSelect.value;
+            
+            // 모든 모듈의 capabilities에서 이벤트 타입 수집
+            const eventTypes = new Set();
+            eventTypeModulesCache = {}; // 캐시 초기화
+            
+            modules.forEach(module => {
+                if (module.capabilities && Array.isArray(module.capabilities)) {
+                    module.capabilities.forEach(eventType => {
+                        eventTypes.add(eventType);
+                        if (!eventTypeModulesCache[eventType]) {
+                            eventTypeModulesCache[eventType] = [];
+                        }
+                        eventTypeModulesCache[eventType].push(module.name || module.module_id);
+                    });
+                }
+            });
+            
+            // 기존 옵션 제거 (첫 번째 옵션 제외)
+            while (eventTypeSelect.options.length > 1) {
+                eventTypeSelect.remove(1);
+            }
+            
+            // 이벤트 타입을 정렬하여 추가
+            const sortedEventTypes = Array.from(eventTypes).sort();
+            sortedEventTypes.forEach(eventType => {
+                const option = document.createElement('option');
+                option.value = eventType;
+                const moduleNames = eventTypeModulesCache[eventType].join(', ');
+                option.textContent = `${eventType} (${moduleNames})`;
+                eventTypeSelect.appendChild(option);
+            });
+            
+            // 이전 선택값 복원
+            if (currentValue && Array.from(eventTypes).includes(currentValue)) {
+                eventTypeSelect.value = currentValue;
+                updateEventTypeInfo(currentValue);
+            }
+        }
+        
+        // 이벤트 타입 선택 시 정보 업데이트
+        function updateEventTypeInfo(eventType) {
+            const infoDiv = document.getElementById('event-type-info');
+            if (eventType && eventTypeModulesCache[eventType]) {
+                const moduleNames = eventTypeModulesCache[eventType].join(', ');
+                infoDiv.textContent = `처리 가능한 모듈: ${moduleNames}`;
+                infoDiv.style.color = '#667eea';
+            } else {
+                infoDiv.textContent = '';
+            }
+        }
+
+        // 이벤트 로그 상태
+        let allEvents = [];
+        let filteredEvents = [];
+        let currentEventPage = 1;
+        let eventPageSize = 25;
+        let eventSortColumn = 'timestamp';
+        let eventSortDirection = 'desc';
+        
+        // 모듈 목록 (소스 모듈 링크 생성을 위해 저장)
+        let allModules = [];
+
+        /** 이벤트에서 서비스 ID 추출 (metadata.service_id 우선, 없으면 payload.service_id) */
+        function getEventServiceId(ev) {
+            if (!ev) return '';
+            if (ev.service_id != null && String(ev.service_id).trim() !== '') return String(ev.service_id).trim();
+            const m = ev.metadata && ev.metadata.service_id;
+            if (m != null && String(m).trim() !== '') return String(m).trim();
+            const p = ev.payload && ev.payload.service_id;
+            if (p != null && String(p).trim() !== '') return String(p).trim();
+            return '';
+        }
+
+        /** 브로드캐스트 대상 모듈 ID 목록 (코어가 metadata.target_modules / 최상위 target_modules로 내려줌) */
+        function getEventTargetModules(ev) {
+            if (!ev) return [];
+            if (Array.isArray(ev.target_modules) && ev.target_modules.length) {
+                return ev.target_modules.map(function (x) { return String(x); });
+            }
+            const m = ev.metadata && ev.metadata.target_modules;
+            if (Array.isArray(m) && m.length) return m.map(function (x) { return String(x); });
+            return [];
+        }
+
+        function getEventTargetModulesLabel(ev) {
+            const arr = getEventTargetModules(ev);
+            return arr.length ? arr.join(', ') : '';
+        }
+
+        // 이벤트 로그 업데이트
+        function updateEventLog(events) {
+            allEvents = [...events].reverse(); // 최신순으로 저장
+            filteredEvents = [...allEvents];
+            
+            // 이벤트 타입 필터 옵션 업데이트
+            const eventTypes = [...new Set(allEvents.map(e => e.type))].sort();
+            const eventTypeFilter = document.getElementById('event-type-filter-main');
+            const currentTypeValue = eventTypeFilter.value;
+            eventTypeFilter.innerHTML = '<option value="">전체</option>';
+            eventTypes.forEach(type => {
+                const option = document.createElement('option');
+                option.value = type;
+                option.textContent = type;
+                eventTypeFilter.appendChild(option);
+            });
+            if (currentTypeValue && eventTypes.includes(currentTypeValue)) {
+                eventTypeFilter.value = currentTypeValue;
+            }
+            
+            // 소스 모듈 필터 옵션 업데이트
+            const sources = [...new Set(allEvents.map(e => e.source_module || 'N/A'))].sort();
+            const sourceFilter = document.getElementById('event-source-filter');
+            const currentSourceValue = sourceFilter.value;
+            sourceFilter.innerHTML = '<option value="">전체</option>';
+            sources.forEach(source => {
+                const option = document.createElement('option');
+                option.value = source;
+                option.textContent = source;
+                sourceFilter.appendChild(option);
+            });
+            if (currentSourceValue && sources.includes(currentSourceValue)) {
+                sourceFilter.value = currentSourceValue;
+            }
+            
+            applyEventFilters();
+        }
+
+        const EVENT_LOG_MAX = 500;
+        let eventLogEventSource = null;
+        let eventLogReconnectTimer = null;
+        let eventLogBackoffMs = 2000;
+
+        /** SSE로 들어온 이벤트를 로그 맨 앞에 반영 (실시간) */
+        function appendEventFromStream(ev) {
+            if (!ev || typeof ev !== 'object') return;
+            if (ev.type === 'SSE_CONNECTED') return;
+            const eid = ev.event_id;
+            if (eid != null && String(eid) !== '' && allEvents.some(function (x) { return x && x.event_id === eid; })) {
+                return;
+            }
+            allEvents.unshift(ev);
+            while (allEvents.length > EVENT_LOG_MAX) {
+                allEvents.pop();
+            }
+            const statEl = document.getElementById('stat-events');
+            if (statEl) {
+                const n = parseInt(statEl.textContent, 10);
+                statEl.textContent = String((isNaN(n) ? 0 : n) + 1);
+            }
+            const typeSel = document.getElementById('event-type-filter-main');
+            if (typeSel && ev.type && !Array.from(typeSel.options).some(function (o) { return o.value === ev.type; })) {
+                const opt = document.createElement('option');
+                opt.value = ev.type;
+                opt.textContent = ev.type;
+                typeSel.appendChild(opt);
+            }
+            const srcSel = document.getElementById('event-source-filter');
+            const src = ev.source_module || 'N/A';
+            if (srcSel && !Array.from(srcSel.options).some(function (o) { return o.value === src; })) {
+                const opt = document.createElement('option');
+                opt.value = src;
+                opt.textContent = src;
+                srcSel.appendChild(opt);
+            }
+            applyEventFilters({ keepPage: true });
+        }
+
+        function scheduleEventLogStreamReconnect() {
+            if (eventLogReconnectTimer) return;
+            eventLogReconnectTimer = setTimeout(function () {
+                eventLogReconnectTimer = null;
+                eventLogBackoffMs = Math.min(Math.floor(eventLogBackoffMs * 1.5), 30000);
+                connectEventLogStream();
+            }, eventLogBackoffMs);
+        }
+
+        function connectEventLogStream() {
+            if (typeof EventSource === 'undefined') return;
+            if (eventLogEventSource) {
+                try { eventLogEventSource.close(); } catch (e) {}
+                eventLogEventSource = null;
+            }
+            const path = RootPath('/api/events/stream');
+            let es;
+            try {
+                es = new EventSource(path);
+            } catch (e) {
+                scheduleEventLogStreamReconnect();
+                return;
+            }
+            eventLogEventSource = es;
+            es.onopen = function () {
+                eventLogBackoffMs = 2000;
+            };
+            es.onmessage = function (e) {
+                try {
+                    const ev = JSON.parse(e.data);
+                    appendEventFromStream(ev);
+                } catch (err) {
+                    console.warn('SSE message parse error', err);
+                }
+            };
+            es.addEventListener('sagohub.connected', function () {});
+            es.onerror = function () {
+                if (eventLogEventSource) {
+                    try { eventLogEventSource.close(); } catch (e) {}
+                    eventLogEventSource = null;
+                }
+                scheduleEventLogStreamReconnect();
+            };
+        }
+        
+        // 이벤트 필터 적용
+        function applyEventFilters(opts) {
+            const keepPage = opts && opts.keepPage;
+            const searchTerm = document.getElementById('event-search-input').value.toLowerCase();
+            const eventTypeFilter = document.getElementById('event-type-filter-main').value;
+            const sourceFilter = document.getElementById('event-source-filter').value;
+            
+            filteredEvents = allEvents.filter(event => {
+                const sid = getEventServiceId(event).toLowerCase();
+                const tgt = getEventTargetModulesLabel(event).toLowerCase();
+                const matchesSearch = !searchTerm || 
+                    event.type?.toLowerCase().includes(searchTerm) ||
+                    event.source_module?.toLowerCase().includes(searchTerm) ||
+                    sid.includes(searchTerm) ||
+                    tgt.includes(searchTerm);
+                const matchesEventType = !eventTypeFilter || event.type === eventTypeFilter;
+                const matchesSource = !sourceFilter || (event.source_module || 'N/A') === sourceFilter;
+                
+                return matchesSearch && matchesEventType && matchesSource;
+            });
+            
+            // 정렬
+            filteredEvents.sort((a, b) => {
+                let aVal, bVal;
+                if (eventSortColumn === 'timestamp') {
+                    aVal = new Date(a.timestamp || 0);
+                    bVal = new Date(b.timestamp || 0);
+                } else if (eventSortColumn === 'service_id') {
+                    aVal = getEventServiceId(a).toLowerCase();
+                    bVal = getEventServiceId(b).toLowerCase();
+                } else if (eventSortColumn === 'target_modules') {
+                    aVal = getEventTargetModulesLabel(a).toLowerCase();
+                    bVal = getEventTargetModulesLabel(b).toLowerCase();
+                } else {
+                    aVal = String(a[eventSortColumn] || '').toLowerCase();
+                    bVal = String(b[eventSortColumn] || '').toLowerCase();
+                }
+                
+                if (aVal < bVal) return eventSortDirection === 'asc' ? -1 : 1;
+                if (aVal > bVal) return eventSortDirection === 'asc' ? 1 : -1;
+                return 0;
+            });
+            
+            if (!keepPage) currentEventPage = 1;
+            renderEventTable();
+        }
+        
+        // 이벤트 테이블 렌더링
+        function renderEventTable() {
+            const tbody = document.getElementById('event-table-body');
+            const startIndex = (currentEventPage - 1) * eventPageSize;
+            const endIndex = startIndex + eventPageSize;
+            const pageEvents = filteredEvents.slice(startIndex, endIndex);
+            
+            if (pageEvents.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="loading">표시할 이벤트가 없습니다.</td></tr>';
+                document.getElementById('event-pagination').innerHTML = '';
+                return;
+            }
+            
+            tbody.innerHTML = pageEvents.map((event, index) => {
+                const timestamp = event.timestamp ? new Date(event.timestamp).toLocaleString('ko-KR') : 'N/A';
+                const hasPayload = event.payload && Object.keys(event.payload).length > 0;
+                const sourceModule = event.source_module || 'N/A';
+                const moduleEndpoint = findModuleEndpoint(sourceModule);
+                const serviceId = getEventServiceId(event);
+                const targetIds = getEventTargetModules(event);
+                
+                // 소스 모듈 표시 (링크가 있으면 클릭 가능하게)
+                let sourceModuleDisplay;
+                if (moduleEndpoint) {
+                    sourceModuleDisplay = `<a href="${moduleEndpoint}" target="_blank" class="module-link" title="모듈 대시보드로 이동">${sourceModule}</a>`;
+                } else {
+                    sourceModuleDisplay = sourceModule;
+                }
+                
+                // 대상 모듈: 등록된 모듈이면 엔드포인트 링크
+                let targetDisplay = '—';
+                if (targetIds.length) {
+                    targetDisplay = targetIds.map(function (mid) {
+                        const ep = findModuleEndpoint(mid);
+                        if (ep) {
+                            return `<a href="${ep}" target="_blank" class="module-link" title="${mid}">${mid}</a>`;
+                        }
+                        return `<span title="이벤트 버스에 등록되지 않은 모듈 ID">${mid}</span>`;
+                    }).join(', ');
+                }
+                
+                return `
+                    <tr>
+                        <td>${timestamp}</td>
+                        <td><code>${event.type || 'N/A'}</code></td>
+                        <td><code style="font-size:0.85em;">${serviceId || '—'}</code></td>
+                        <td>${sourceModuleDisplay}</td>
+                        <td style="font-size:0.85em; max-width: 28em; word-break: break-word;">${targetDisplay}</td>
+                        <td>
+                            ${hasPayload ? `<button class="btn btn-primary" onclick="showPayloadModal(${startIndex + index})">Payload 보기</button>` : '-'}
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+            
+            renderEventPagination();
+        }
+        
+        // 이벤트 페이지네이션 렌더링
+        function renderEventPagination() {
+            const totalPages = Math.ceil(filteredEvents.length / eventPageSize);
+            const pagination = document.getElementById('event-pagination');
+            
+            if (totalPages <= 1) {
+                pagination.innerHTML = '';
+                return;
+            }
+            
+            let html = `
+                <button onclick="goToEventPage(1)" ${currentEventPage === 1 ? 'disabled' : ''}>처음</button>
+                <button onclick="goToEventPage(${currentEventPage - 1})" ${currentEventPage === 1 ? 'disabled' : ''}>이전</button>
+                <span class="page-info">페이지 ${currentEventPage} / ${totalPages} (총 ${filteredEvents.length}개)</span>
+                <button onclick="goToEventPage(${currentEventPage + 1})" ${currentEventPage === totalPages ? 'disabled' : ''}>다음</button>
+                <button onclick="goToEventPage(${totalPages})" ${currentEventPage === totalPages ? 'disabled' : ''}>마지막</button>
+            `;
+            
+            pagination.innerHTML = html;
+        }
+        
+        // 이벤트 페이지 이동
+        function goToEventPage(page) {
+            const totalPages = Math.ceil(filteredEvents.length / eventPageSize);
+            if (page >= 1 && page <= totalPages) {
+                currentEventPage = page;
+                renderEventTable();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+        
+        // Payload 모달 표시
+        function showPayloadModal(index) {
+            const event = filteredEvents[(currentEventPage - 1) * eventPageSize + index];
+            if (!event || !event.payload) return;
+            
+            const modal = document.getElementById('payload-modal');
+            const content = document.getElementById('payload-content');
+            content.textContent = JSON.stringify(event.payload, null, 2);
+            modal.style.display = 'block';
+        }
+        
+        // Payload 모달 닫기
+        function closePayloadModal() {
+            document.getElementById('payload-modal').style.display = 'none';
+        }
+        
+        // ESC 키로 모달 닫기
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closePayloadModal();
+                closeServiceDetailModal();
+            }
+        });
+
+        // 서비스 목록 업데이트
+        let currentServiceDetail = null;
+        let allPipelines = [];
+        let allServices = [];
+        let filteredServices = [];
+        let currentServicePage = 1;
+        let servicePageSize = 25;
+        let serviceSortColumn = 'name';
+        let serviceSortDirection = 'asc';
+        
+        function updateServiceList(services, pipelines) {
+            allPipelines = pipelines || [];
+            allServices = services || [];
+            filteredServices = [...allServices];
+            currentServicePage = 1;
+            applyServiceFilters();
+        }
+        
+        function applyServiceFilters() {
+            const searchTerm = document.getElementById('service-search-input')?.value.toLowerCase() || '';
+            
+            filteredServices = allServices.filter(service => {
+                const matchesSearch = !searchTerm || 
+                    service.service_id?.toLowerCase().includes(searchTerm) ||
+                    service.name?.toLowerCase().includes(searchTerm);
+                return matchesSearch;
+            });
+            
+            // 정렬
+            filteredServices.sort((a, b) => {
+                let aVal = a[serviceSortColumn] || '';
+                let bVal = b[serviceSortColumn] || '';
+                
+                if (serviceSortColumn === 'pipeline_count') {
+                    aVal = (a.pipelines ? a.pipelines.length : 0);
+                    bVal = (b.pipelines ? b.pipelines.length : 0);
+                } else {
+                    aVal = String(aVal).toLowerCase();
+                    bVal = String(bVal).toLowerCase();
+                }
+                
+                if (aVal < bVal) return serviceSortDirection === 'asc' ? -1 : 1;
+                if (aVal > bVal) return serviceSortDirection === 'asc' ? 1 : -1;
+                return 0;
+            });
+            
+            updateServiceSortIndicators();
+            renderServiceTable();
+        }
+        
+        function updateServiceSortIndicators() {
+            const serviceTable = document.querySelector('#service-list table');
+            if (serviceTable) {
+                serviceTable.querySelectorAll('th.sortable').forEach(th => {
+                    th.classList.remove('sort-asc', 'sort-desc');
+                    if (th.dataset.sort === serviceSortColumn) {
+                        th.classList.add(serviceSortDirection === 'asc' ? 'sort-asc' : 'sort-desc');
+                    }
+                });
+            }
+        }
+        
+        function renderServiceTable() {
+            const list = document.getElementById('service-list');
+            const startIndex = (currentServicePage - 1) * servicePageSize;
+            const endIndex = startIndex + servicePageSize;
+            const pageServices = filteredServices.slice(startIndex, endIndex);
+            
+            if (filteredServices.length === 0) {
+                list.innerHTML = '<p>등록된 서비스가 없습니다.</p>';
+                document.getElementById('service-pagination').innerHTML = '';
+                return;
+            }
+            
+            list.innerHTML = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="sortable" data-sort="service_id">서비스 ID</th>
+                            <th class="sortable" data-sort="name">서비스 이름</th>
+                            <th class="sortable" data-sort="pipeline_count">파이프라인 수</th>
+                            <th>웹페이지</th>
+                            <th>작업</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${pageServices.map(s => {
+                            const pipelineCount = s.pipelines ? s.pipelines.length : 0;
+                            const uiButton = s.metadata.ui_server && s.metadata.ui_server.external_port 
+                                ? `<a href="http://${s.metadata.ui_server.host}:${s.metadata.ui_server.external_port}" target="_blank" class="btn btn-success" style="text-decoration: none; color: white; padding: 5px 10px; border-radius: 4px; display: inline-block;">🌐 UI 접속</a>`
+                                : `<span style="color: #999;">${s.metadata.ui_server || '-'}</span>`;
+                            
+                            return `
+                            <tr>
+                                <td><code style="font-size: 0.85em;">${s.service_id}</code></td>
+                                <td><strong>${s.name}</strong></td>
+                                <td><span class="badge badge-info">${pipelineCount}</span></td>
+                                <td>${uiButton}</td>
+                                <td>
+                                    <button class="btn btn-primary" onclick="showServiceDetail('${s.service_id}')" style="padding: 5px 10px;">상세보기</button>
+                                </td>
+                            </tr>
+                        `;
+                        }).join('')}
+                    </tbody>
+                </table>
+            `;
+            
+            renderServicePagination();
+        }
+        
+        function renderServicePagination() {
+            const totalPages = Math.ceil(filteredServices.length / servicePageSize);
+            const pagination = document.getElementById('service-pagination');
+            
+            if (totalPages <= 1) {
+                pagination.innerHTML = '';
+                return;
+            }
+            
+            let html = `
+                <button onclick="goToServicePage(1)" ${currentServicePage === 1 ? 'disabled' : ''}>처음</button>
+                <button onclick="goToServicePage(${currentServicePage - 1})" ${currentServicePage === 1 ? 'disabled' : ''}>이전</button>
+                <span class="page-info">페이지 ${currentServicePage} / ${totalPages} (총 ${filteredServices.length}개)</span>
+                <button onclick="goToServicePage(${currentServicePage + 1})" ${currentServicePage === totalPages ? 'disabled' : ''}>다음</button>
+                <button onclick="goToServicePage(${totalPages})" ${currentServicePage === totalPages ? 'disabled' : ''}>마지막</button>
+            `;
+            
+            pagination.innerHTML = html;
+        }
+        
+        function goToServicePage(page) {
+            const totalPages = Math.ceil(filteredServices.length / servicePageSize);
+            if (page >= 1 && page <= totalPages) {
+                currentServicePage = page;
+                renderServiceTable();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+        
+        // 서비스 상세 정보 표시 (모달)
+        async function showServiceDetail(serviceId) {
+            currentServiceDetail = serviceId;
+            const modal = document.getElementById('service-detail-modal');
+            
+            // 서비스 정보 가져오기
+            const statusResponse = await fetch(RootPath('/api/status'));
+            const statusData = await statusResponse.json();
+            
+            const service = statusData.services.list.find(s => s.service_id === serviceId);
+            if (!service) {
+                alert('서비스를 찾을 수 없습니다.');
+                return;
+            }
+            
+            // 해당 서비스의 파이프라인 목록: API의 pipeline_details 우선 사용
+            const servicePipelines = (service.pipelines && service.pipelines.length > 0)
+                ? service.pipelines
+                : allPipelines.filter(p => {
+                    const pServiceId = p.service_id || (p.pipeline_id && p.pipeline_id.includes('.') ? p.pipeline_id.split('.').slice(0, 2).join('.') : p.pipeline_id);
+                    return pServiceId === serviceId;
+                });
+            
+            // 서비스 정보 표시
+            document.getElementById('service-detail-title').textContent = `${service.name} 상세 정보`;
+            document.getElementById('service-info-content').innerHTML = `
+                <table style="width: 100%;">
+                    <tr>
+                        <td style="width: 150px; font-weight: 600; padding: 8px 0;">서비스 ID:</td>
+                        <td style="padding: 8px 0;"><code>${service.service_id}</code></td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: 600; padding: 8px 0;">서비스 이름:</td>
+                        <td style="padding: 8px 0;"><strong>${service.name}</strong></td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: 600; padding: 8px 0;">설명:</td>
+                        <td style="padding: 8px 0;">${service.metadata.description || '<span style="color: #999;">설명 없음</span>'}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: 600; padding: 8px 0;">UI URL:</td>
+                        <td style="padding: 8px 0;">${service.metadata.ui_server ? `<a href="http://${service.metadata.ui_server.host}:${service.metadata.ui_server.external_port}" target="_blank">http://${service.metadata.ui_server.host}:${service.metadata.ui_server.external_port}</a>` : '<span style="color: #999;">설정되지 않음</span>'}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: 600; padding: 8px 0;">파이프라인 수:</td>
+                        <td style="padding: 8px 0;"><span class="badge badge-info">${servicePipelines.length}</span></td>
+                    </tr>
+                </table>
+            `;
+            
+            // 파이프라인 목록 표시
+            if (servicePipelines.length === 0) {
+                document.getElementById('service-pipelines-list').innerHTML = '<p>등록된 파이프라인이 없습니다.</p>';
+            } else {
+                document.getElementById('service-pipelines-list').innerHTML = `
+                    <table style="width: 100%; margin-top: 10px;">
+                        <thead>
+                            <tr>
+                                <th>파이프라인 ID</th>
+                                <th>이름</th>
+                                <th>트리거</th>
+                                <th>브로드캐스트 대상</th>
+                                <th>집계 전략</th>
+                                <th>상태</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${servicePipelines.map(p => {
+                                const broadcastTargets = p.broadcast && p.broadcast.length > 0 
+                                    ? p.broadcast.map(b => b.module).join(', ') 
+                                    : '-';
+                                
+                                return `
+                                <tr>
+                                    <td><code style="font-size: 0.85em;">${p.id}</code></td>
+                                    <td>${p.name}</td>
+                                    <td><span class="badge badge-info">${p.trigger.event || '-'}</span></td>
+                                    <td>${broadcastTargets}</td>
+                                    <td>${p.trigger.aggregation.strategy || '-'}</td>
+                                    <td><span class="badge ${service.active ? 'badge-success' : 'badge-danger'}">${service.active ? '활성' : '비활성'}</span></td>
+                                </tr>
+                            `;
+                            }).join('')}
+                        </tbody>
+                    </table>
+                `;
+            }
+            
+            // 모달 표시
+            modal.style.display = 'block';
+        }
+        
+        // 서비스 상세 모달 닫기
+        function closeServiceDetailModal() {
+            document.getElementById('service-detail-modal').style.display = 'none';
+            document.getElementById('service-edit-form').style.display = 'none';
+            currentServiceDetail = null;
+        }
+        
+        // 서비스 수정 폼 표시
+        async function showServiceEditForm(serviceId) {
+            const statusResponse = await fetch(RootPath('/api/status'));
+            const statusData = await statusResponse.json();
+            const service = statusData.services.list.find(s => s.service_id === serviceId);
+            
+            if (!service) return;
+            
+            document.getElementById('edit-service-id').value = service.service_id;
+            document.getElementById('edit-service-name').value = service.name;
+            document.getElementById('edit-service-description').value = service.description || '';
+            document.getElementById('edit-service-ui-url').value = service.ui_url || '';
+            
+            document.getElementById('service-edit-form').style.display = 'block';
+        }
+        
+        // 서비스 수정 취소
+        function cancelServiceEdit() {
+            document.getElementById('service-edit-form').style.display = 'none';
+        }
+        
+        // 서비스 수정 적용 (이벤트 리스너는 DOM 로드 후 등록)
+        function setupServiceEditForm() {
+            const form = document.getElementById('service-edit-form-element');
+            if (!form) return;
+            
+            // 기존 리스너 제거 후 새로 등록
+            const newForm = form.cloneNode(true);
+            form.parentNode.replaceChild(newForm, form);
+            
+            newForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const serviceId = document.getElementById('edit-service-id').value;
+                const serviceName = document.getElementById('edit-service-name').value;
+                const serviceDescription = document.getElementById('edit-service-description').value;
+                const serviceUiUrl = document.getElementById('edit-service-ui-url').value;
+                
+                try {
+                    // 서비스에 속한 파이프라인 찾기
+                    const servicePipelines = allPipelines.filter(p => {
+                        const pServiceId = p.service_id || (p.pipeline_id.includes('.') ? p.pipeline_id.split('.').slice(0, 2).join('.') : p.pipeline_id);
+                        return pServiceId === serviceId;
+                    });
+                    
+                    if (servicePipelines.length === 0) {
+                        alert('서비스에 속한 파이프라인이 없습니다.');
+                        return;
+                    }
+                    
+                    // 각 파이프라인 업데이트
+                    let successCount = 0;
+                    let failCount = 0;
+                    
+                    for (const pipeline of servicePipelines) {
+                        const updatedPipeline = {
+                            ...pipeline,
+                            name: serviceName,
+                            description: serviceDescription,
+                            ui_url: serviceUiUrl,
+                            service_id: serviceId
+                        };
+                        
+                        try {
+                            const response = await fetch(RootPath(`/pipelines/${pipeline.pipeline_id}`), {
+                                method: 'PUT',
+                                headers: {'Content-Type': 'application/json'},
+                                body: JSON.stringify(updatedPipeline)
+                            });
+                            
+                            if (!response.ok) {
+                                const error = await response.json();
+                                throw new Error(error.detail || '업데이트 실패');
+                            }
+                            successCount++;
+                        } catch (error) {
+                            console.error(`파이프라인 ${pipeline.pipeline_id} 업데이트 실패:`, error);
+                            failCount++;
+                        }
+                    }
+                    
+                    if (successCount > 0) {
+                        alert(`서비스 정보가 업데이트되었습니다. (성공: ${successCount}개${failCount > 0 ? ', 실패: ' + failCount + '개' : ''})`);
+                        cancelServiceEdit();
+                        updateStatus();
+                        if (currentServiceDetail) {
+                            showServiceDetail(currentServiceDetail);
+                        }
+                    } else {
+                        alert('모든 파이프라인 업데이트에 실패했습니다.');
+                    }
+                } catch (error) {
+                    alert('오류: ' + error.message);
+                }
+            });
+        }
+        
+        // DOM 로드 후 이벤트 리스너 등록
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', setupServiceEditForm);
+        } else {
+            setupServiceEditForm();
+        }
+
+        // 파이프라인 목록 상태
+        let allPipelinesSubscribers = [];
+        let filteredPipelinesSubscribers = [];
+        let currentSubscriberPage = 1;
+        let subscriberPageSize = 25;
+        let subscriberSortColumn = 'event_type';
+        let subscriberSortDirection = 'asc';
+        
+        // 파이프라인 목록 업데이트
+        function updateSubscriberList(subscribers) {
+            // pipeline_details를 우선 사용, 없으면 기존 details 사용
+            console.log('updateSubscriberList called with:', subscribers);
+            allPipelinesSubscribers = (subscribers && subscribers.pipeline_details) 
+                ? subscribers.pipeline_details 
+                : [];
+            console.log('allPipelinesSubscribers:', allPipelinesSubscribers);
+            filteredPipelinesSubscribers = [...allPipelinesSubscribers];
+            currentSubscriberPage = 1;
+            
+            // 이벤트 타입 필터 옵션 업데이트
+            const eventTypes = [...new Set(allPipelinesSubscribers.map(s => s.event_type).filter(Boolean))].sort();
+            const eventTypeFilter = document.getElementById('subscriber-event-type-filter');
+            if (eventTypeFilter) {
+                const currentValue = eventTypeFilter.value;
+                eventTypeFilter.innerHTML = '<option value="">전체</option>';
+                eventTypes.forEach(type => {
+                    const option = document.createElement('option');
+                    option.value = type;
+                    option.textContent = type;
+                    eventTypeFilter.appendChild(option);
+                });
+                if (currentValue && eventTypes.includes(currentValue)) {
+                    eventTypeFilter.value = currentValue;
+                }
+            }
+            
+            applySubscriberFilters();
+        }
+        
+        function applySubscriberFilters() {
+            const searchTerm = document.getElementById('subscriber-search-input')?.value.toLowerCase() || '';
+            const eventTypeFilter = document.getElementById('subscriber-event-type-filter')?.value || '';
+            
+            filteredPipelinesSubscribers = allPipelinesSubscribers.filter(pipeline => {
+                const matchesSearch = !searchTerm || 
+                    pipeline.event_type?.toLowerCase().includes(searchTerm) ||
+                    pipeline.pipeline_id?.toLowerCase().includes(searchTerm) ||
+                    pipeline.pipeline_name?.toLowerCase().includes(searchTerm) ||
+                    pipeline.service_name?.toLowerCase().includes(searchTerm) ||
+                    pipeline.module_name?.toLowerCase().includes(searchTerm);
+                const matchesEventType = !eventTypeFilter || pipeline.event_type === eventTypeFilter;
+                
+                return matchesSearch && matchesEventType;
+            });
+            
+            // 정렬
+            filteredPipelinesSubscribers.sort((a, b) => {
+                let aVal = a[subscriberSortColumn] || '';
+                let bVal = b[subscriberSortColumn] || '';
+                
+                aVal = String(aVal).toLowerCase();
+                bVal = String(bVal).toLowerCase();
+                
+                if (aVal < bVal) return subscriberSortDirection === 'asc' ? -1 : 1;
+                if (aVal > bVal) return subscriberSortDirection === 'asc' ? 1 : -1;
+                return 0;
+            });
+            
+            updateSubscriberSortIndicators();
+            renderSubscriberTable();
+        }
+        
+        function updateSubscriberSortIndicators() {
+            const subscriberTable = document.querySelector('#subscriber-list table');
+            if (subscriberTable) {
+                subscriberTable.querySelectorAll('th.sortable').forEach(th => {
+                    th.classList.remove('sort-asc', 'sort-desc');
+                    if (th.dataset.sort === subscriberSortColumn) {
+                        th.classList.add(subscriberSortDirection === 'asc' ? 'sort-asc' : 'sort-desc');
+                    }
+                });
+            }
+        }
+        
+        function renderSubscriberTable() {
+            const list = document.getElementById('subscriber-list');
+            const startIndex = (currentSubscriberPage - 1) * subscriberPageSize;
+            const endIndex = startIndex + subscriberPageSize;
+            const pagePipelines = filteredPipelinesSubscribers.slice(startIndex, endIndex);
+            
+            console.log('renderSubscriberTable - filteredPipelinesSubscribers:', filteredPipelinesSubscribers.length, 'pagePipelines:', pagePipelines.length);
+            
+            if (filteredPipelinesSubscribers.length === 0) {
+                if (allPipelinesSubscribers.length === 0) {
+                    list.innerHTML = '<p style="padding: 20px; text-align: center; color: #666;">등록된 파이프라인이 없습니다.<br><small>서비스를 등록하면 파이프라인이 표시됩니다.</small></p>';
+                } else {
+                    list.innerHTML = '<p style="padding: 20px; text-align: center; color: #666;">필터 조건에 맞는 파이프라인이 없습니다.</p>';
+                }
+                document.getElementById('subscriber-pagination').innerHTML = '';
+                return;
+            }
+            
+            let html = '<table>';
+            html += '<thead>';
+            html += '<tr>';
+            html += '<th class="sortable" data-sort="event_type">이벤트 타입</th>';
+            html += '<th class="sortable" data-sort="pipeline_name">파이프라인</th>';
+            html += '<th class="sortable" data-sort="service_name">서비스</th>';
+            html += '<th class="sortable" data-sort="module_name">모듈</th>';
+            html += '</tr>';
+            html += '</thead>';
+            html += '<tbody>';
+            
+            pagePipelines.forEach(pipeline => {
+                // 서비스 링크
+                let serviceDisplay = '-';
+                if (pipeline.service_id && pipeline.service_name) {
+                    if (pipeline.service_ui_url) {
+                        serviceDisplay = `<a href="${pipeline.service_ui_url}" target="_blank" class="module-link" title="서비스 UI로 이동">${pipeline.service_name}</a>`;
+                    } else {
+                        serviceDisplay = pipeline.service_name;
+                    }
+                }
+                
+                // 모듈 링크
+                let moduleDisplay = '-';
+                if (pipeline.module_id && pipeline.module_name) {
+                    if (pipeline.module_endpoint) {
+                        moduleDisplay = `<a href="${pipeline.module_endpoint}" target="_blank" class="module-link" title="모듈 대시보드로 이동">${pipeline.module_name}</a>`;
+                    } else {
+                        moduleDisplay = pipeline.module_name;
+                    }
+                }
+                
+                html += `<tr>`;
+                html += `<td><span class="badge badge-info">${pipeline.event_type}</span></td>`;
+                html += `<td><code style="font-size: 0.85em;">${pipeline.pipeline_id}</code><br><small style="color: #666;">${pipeline.pipeline_name || ''}</small></td>`;
+                html += `<td>${serviceDisplay}</td>`;
+                html += `<td>${moduleDisplay}</td>`;
+                html += `</tr>`;
+            });
+            
+            html += '</tbody></table>';
+            list.innerHTML = html;
+            
+            renderSubscriberPagination();
+        }
+        
+        function renderSubscriberPagination() {
+            const totalPages = Math.ceil(filteredPipelinesSubscribers.length / subscriberPageSize);
+            const pagination = document.getElementById('subscriber-pagination');
+            
+            if (totalPages <= 1) {
+                pagination.innerHTML = '';
+                return;
+            }
+            
+            let html = `
+                <button onclick="goToSubscriberPage(1)" ${currentSubscriberPage === 1 ? 'disabled' : ''}>처음</button>
+                <button onclick="goToSubscriberPage(${currentSubscriberPage - 1})" ${currentSubscriberPage === 1 ? 'disabled' : ''}>이전</button>
+                <span class="page-info">페이지 ${currentSubscriberPage} / ${totalPages} (총 ${filteredPipelinesSubscribers.length}개)</span>
+                <button onclick="goToSubscriberPage(${currentSubscriberPage + 1})" ${currentSubscriberPage === totalPages ? 'disabled' : ''}>다음</button>
+                <button onclick="goToSubscriberPage(${totalPages})" ${currentSubscriberPage === totalPages ? 'disabled' : ''}>마지막</button>
+            `;
+            
+            pagination.innerHTML = html;
+        }
+        
+        function goToSubscriberPage(page) {
+            const totalPages = Math.ceil(filteredPipelinesSubscribers.length / subscriberPageSize);
+            if (page >= 1 && page <= totalPages) {
+                currentSubscriberPage = page;
+                renderSubscriberTable();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        // 모듈 목록 상태
+        let allModulesList = [];
+        let filteredModules = [];
+        let currentModulePage = 1;
+        let modulePageSize = 25;
+        let moduleSortColumn = 'name';
+        let moduleSortDirection = 'asc';
+        let allPipelineSubscribers = []; // 파이프라인 구독 정보 저장
+        
+        // 모듈 목록 업데이트
+        function updateModuleList(modules, pipelineSubscribers) {
+            allModulesList = modules || [];
+            allPipelineSubscribers = pipelineSubscribers || [];
+            filteredModules = [...allModulesList];
+            currentModulePage = 1;
+            applyModuleFilters();
+        }
+        
+        // 모듈이 구독 중인 이벤트 타입 가져오기
+        function getSubscribedEvents(moduleId) {
+            return allPipelineSubscribers
+                .filter(p => p.module_id === moduleId)
+                .map(p => p.event_type)
+                .filter((v, i, a) => a.indexOf(v) === i); // 중복 제거
+        }
+        
+        function applyModuleFilters() {
+            const searchTerm = document.getElementById('module-search-input')?.value.toLowerCase() || '';
+            const statusFilter = document.getElementById('module-status-filter')?.value || '';
+            
+            filteredModules = allModulesList.filter(module => {
+                const matchesSearch = !searchTerm || 
+                    module.module_id?.toLowerCase().includes(searchTerm) ||
+                    module.name?.toLowerCase().includes(searchTerm) ||
+                    (module.description && module.description.toLowerCase().includes(searchTerm));
+                const matchesStatus = !statusFilter || module.health_status === statusFilter;
+                
+                return matchesSearch && matchesStatus;
+            });
+            
+            // 정렬
+            filteredModules.sort((a, b) => {
+                let aVal = a[moduleSortColumn] || '';
+                let bVal = b[moduleSortColumn] || '';
+                
+                if (moduleSortColumn === 'capabilities') {
+                    aVal = (a.capabilities || []).join(', ');
+                    bVal = (b.capabilities || []).join(', ');
+                }
+                
+                aVal = String(aVal).toLowerCase();
+                bVal = String(bVal).toLowerCase();
+                
+                if (aVal < bVal) return moduleSortDirection === 'asc' ? -1 : 1;
+                if (aVal > bVal) return moduleSortDirection === 'asc' ? 1 : -1;
+                return 0;
+            });
+            
+            updateModuleSortIndicators();
+            renderModuleTable();
+        }
+        
+        function updateModuleSortIndicators() {
+            const moduleTable = document.querySelector('#module-list table');
+            if (moduleTable) {
+                moduleTable.querySelectorAll('th.sortable').forEach(th => {
+                    th.classList.remove('sort-asc', 'sort-desc');
+                    if (th.dataset.sort === moduleSortColumn) {
+                        th.classList.add(moduleSortDirection === 'asc' ? 'sort-asc' : 'sort-desc');
+                    }
+                });
+            }
+        }
+        
+        function renderModuleTable() {
+            const list = document.getElementById('module-list');
+            const startIndex = (currentModulePage - 1) * modulePageSize;
+            const endIndex = startIndex + modulePageSize;
+            const pageModules = filteredModules.slice(startIndex, endIndex);
+            
+            if (filteredModules.length === 0) {
+                list.innerHTML = '<p>등록된 모듈이 없습니다.</p>';
+                document.getElementById('module-pagination').innerHTML = '';
+                return;
+            }
+            
+            list.innerHTML = `
+                <table style="table-layout: fixed; width: 100%;">
+                    <colgroup>
+                        <col style="width: 12%;">
+                        <col style="width: 10%;">
+                        <col style="width: 20%;">
+                        <col style="width: 15%;">
+                        <col style="width: 8%;">
+                        <col style="width: 20%;">
+                        <col style="width: 15%;">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th class="sortable" data-sort="module_id">ID</th>
+                            <th class="sortable" data-sort="name">이름</th>
+                            <th class="sortable" data-sort="description">설명</th>
+                            <th class="sortable" data-sort="endpoint">엔드포인트</th>
+                            <th class="sortable" data-sort="health_status">상태</th>
+                            <th class="sortable" data-sort="capabilities">처리 가능 이벤트</th>
+                            <th>작업</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${pageModules.map(m => {
+                            const endpoint = m.endpoint || '-';
+                            const healthStatus = m.health_status || 'unknown';
+                            const statusBadge = healthStatus === 'healthy' 
+                                ? '<span class="badge badge-success">정상</span>'
+                                : healthStatus === 'unhealthy'
+                                ? '<span class="badge badge-danger">비활성</span>'
+                                : '<span class="badge badge-info">알 수 없음</span>';
+                            
+                            const moduleAccessUrl = `/module/${m.module_id}/`;
+                            const endpointButton = endpoint !== '-'
+                                ? `<a href="${moduleAccessUrl}" class="btn btn-info" style="margin-right: 5px; font-size: 0.85em; padding: 4px 8px;" target="_blank" rel="noopener noreferrer">대시보드</a>`
+                                : '';
+                            
+                            // 처리가능 이벤트와 구독 중인 이벤트 표시
+                            const capabilities = m.capabilities || [];
+                            const subscribedEvents = getSubscribedEvents(m.module_id);
+                            let capabilitiesText = '';
+                            if (capabilities.length > 0) {
+                                capabilitiesText = capabilities.map(cap => {
+                                    const isSubscribed = subscribedEvents.includes(cap);
+                                    return isSubscribed 
+                                        ? `<span style="color: #28a745; font-weight: 600;">${cap} ✓</span>`
+                                        : cap;
+                                }).join(', ');
+                            } else {
+                                capabilitiesText = '-';
+                            }
+                            
+                            // 시작/재시작 버튼 (상태에 따라)
+                            let startRestartButton = '';
+                            if (healthStatus === 'healthy' && endpoint !== '-') {
+                                startRestartButton = `<button class="btn btn-warning" onclick="restartModule('${m.module_id}')" style="font-size: 0.85em; padding: 4px 8px; margin-right: 5px;">재시작</button>`;
+                            } else if (healthStatus !== 'healthy' || endpoint === '-') {
+                                startRestartButton = `<button class="btn btn-success" onclick="startModule('${m.module_id}')" style="font-size: 0.85em; padding: 4px 8px; margin-right: 5px;">시작</button>`;
+                            }
+                            
+                            return `
+                            <tr>
+                                <td style="overflow: hidden; text-overflow: ellipsis;"><code style="font-size: 0.85em;">${m.module_id}</code></td>
+                                <td>${m.name}</td>
+                                <td style="overflow: hidden; text-overflow: ellipsis;">${m.description || '-'}</td>
+                                <td style="overflow: hidden; text-overflow: ellipsis;">
+                                    ${endpoint !== '-' 
+                                        ? `<code style="background: #f5f5f5; padding: 2px 6px; border-radius: 3px; font-size: 0.85em;">${endpoint}</code>`
+                                        : '<span style="color: #999;">-</span>'}
+                                </td>
+                                <td>${statusBadge}</td>
+                                <td style="font-size: 0.85em; overflow: hidden; text-overflow: ellipsis;">${capabilitiesText}</td>
+                                <td style="white-space: nowrap;">
+                                    ${endpointButton}
+                                    ${startRestartButton}
+                                    <button class="btn btn-danger" onclick="deleteModule('${m.module_id}')" style="font-size: 0.85em; padding: 4px 8px;">삭제</button>
+                                </td>
+                            </tr>
+                        `;
+                        }).join('')}
+                    </tbody>
+                </table>
+            `;
+            
+            renderModulePagination();
+        }
+        
+        function renderModulePagination() {
+            const totalPages = Math.ceil(filteredModules.length / modulePageSize);
+            const pagination = document.getElementById('module-pagination');
+            
+            if (totalPages <= 1) {
+                pagination.innerHTML = '';
+                return;
+            }
+            
+            let html = `
+                <button onclick="goToModulePage(1)" ${currentModulePage === 1 ? 'disabled' : ''}>처음</button>
+                <button onclick="goToModulePage(${currentModulePage - 1})" ${currentModulePage === 1 ? 'disabled' : ''}>이전</button>
+                <span class="page-info">페이지 ${currentModulePage} / ${totalPages} (총 ${filteredModules.length}개)</span>
+                <button onclick="goToModulePage(${currentModulePage + 1})" ${currentModulePage === totalPages ? 'disabled' : ''}>다음</button>
+                <button onclick="goToModulePage(${totalPages})" ${currentModulePage === totalPages ? 'disabled' : ''}>마지막</button>
+            `;
+            
+            pagination.innerHTML = html;
+        }
+        
+        function goToModulePage(page) {
+            const totalPages = Math.ceil(filteredModules.length / modulePageSize);
+            if (page >= 1 && page <= totalPages) {
+                currentModulePage = page;
+                renderModuleTable();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        // 파이프라인 폼 표시 (요소가 존재할 때만)
+        function showPipelineForm() {
+            const pipelineForm = document.getElementById('pipeline-form');
+            const pipelineFormElement = document.getElementById('pipeline-form-element');
+            if (pipelineForm) {
+                pipelineForm.style.display = 'block';
+            }
+            if (pipelineFormElement) {
+                pipelineFormElement.reset();
+            }
+        }
+
+        function hidePipelineForm() {
+            const pipelineForm = document.getElementById('pipeline-form');
+            if (pipelineForm) {
+                pipelineForm.style.display = 'none';
+            }
+        }
+
+        // 모듈 폼 표시 (요소가 존재할 때만)
+        function showModuleForm() {
+            const moduleForm = document.getElementById('module-form');
+            const moduleFormElement = document.getElementById('module-form-element');
+            if (moduleForm) {
+                moduleForm.style.display = 'block';
+            }
+            if (moduleFormElement) {
+                moduleFormElement.reset();
+            }
+        }
+
+        function hideModuleForm() {
+            const moduleForm = document.getElementById('module-form');
+            if (moduleForm) {
+                moduleForm.style.display = 'none';
+            }
+        }
+
+        // 파이프라인 저장 (요소가 존재할 때만 이벤트 리스너 등록)
+        const pipelineFormElement = document.getElementById('pipeline-form-element');
+        if (pipelineFormElement) {
+            pipelineFormElement.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const pipeline = {
+                    pipeline_id: document.getElementById('pipeline-id').value,
+                    name: document.getElementById('pipeline-name').value,
+                    description: document.getElementById('pipeline-description').value,
+                    trigger_event: document.getElementById('pipeline-trigger').value,
+                    steps: JSON.parse(document.getElementById('pipeline-steps').value),
+                    active: true
+                };
+                
+                try {
+                    const response = await fetch(RootPath('/pipelines'), {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify(pipeline)
+                    });
+                    if (response.ok) {
+                        alert('파이프라인이 등록되었습니다.');
+                        hidePipelineForm();
+                        updateStatus();
+                    } else {
+                        const error = await response.json();
+                        alert('오류: ' + error.detail);
+                    }
+                } catch (error) {
+                    alert('오류: ' + error.message);
+                }
+            });
+        }
+
+        // 모듈 저장 (요소가 존재할 때만 이벤트 리스너 등록)
+        const moduleFormElement = document.getElementById('module-form-element');
+        if (moduleFormElement) {
+            moduleFormElement.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const module = {
+                module_id: document.getElementById('module-id').value,
+                name: document.getElementById('module-name').value,
+                description: document.getElementById('module-description').value,
+                capabilities: document.getElementById('module-capabilities').value.split(',').map(s => s.trim()).filter(s => s),
+                config: {}
+            };
+            
+            try {
+                const response = await fetch(RootPath('/modules'), {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(module)
+                });
+                if (response.ok) {
+                    alert('모듈이 등록되었습니다.');
+                    hideModuleForm();
+                    updateStatus();
+                } else {
+                    const error = await response.json();
+                    alert('오류: ' + error.detail);
+                }
+            } catch (error) {
+                alert('오류: ' + error.message);
+            }
+            });
+        }
+
+        // 파이프라인 삭제
+        async function deletePipeline(id) {
+            if (!confirm(`파이프라인 "${id}"를 삭제하시겠습니까?`)) return;
+            try {
+                const response = await fetch(RootPath(`/pipelines/${id}`), {method: 'DELETE'});
+                if (response.ok) {
+                    alert('파이프라인이 삭제되었습니다.');
+                    updateStatus();
+                } else {
+                    const error = await response.json();
+                    alert('오류: ' + error.detail);
+                }
+            } catch (error) {
+                alert('오류: ' + error.message);
+            }
+        }
+
+        // 모듈 시작
+        async function startModule(moduleId) {
+            try {
+                // 모듈 정보 가져오기
+                const moduleResponse = await fetch(RootPath(`/modules/${moduleId}`));
+                if (!moduleResponse.ok) {
+                    alert('모듈을 찾을 수 없습니다.');
+                    return;
+                }
+                const module = await moduleResponse.json();
+                
+                // 모듈의 endpoint가 있으면 health check 수행
+                if (module.endpoint) {
+                    try {
+                        const healthResponse = await fetch(`${module.endpoint}/health`);
+                        if (healthResponse.ok) {
+                            // 모듈이 이미 실행 중이면 상태 업데이트
+                            const updatedModule = {
+                                ...module,
+                                health_status: 'healthy',
+                                last_heartbeat: new Date().toISOString(),
+                                failure_count: 0
+                            };
+                            const updateResponse = await fetch(RootPath(`/modules/${moduleId}`), {
+                                method: 'PUT',
+                                headers: {'Content-Type': 'application/json'},
+                                body: JSON.stringify(updatedModule)
+                            });
+                            if (updateResponse.ok) {
+                                alert('모듈 상태가 업데이트되었습니다.');
+                                updateStatus();
+                            } else {
+                                const error = await updateResponse.json();
+                                alert('오류: ' + (error.detail || '상태 업데이트 실패'));
+                            }
+                        } else {
+                            alert('모듈이 응답하지 않습니다. 모듈이 실행 중인지 확인해주세요.');
+                        }
+                    } catch (error) {
+                        alert('모듈에 연결할 수 없습니다. 모듈이 실행 중인지 확인해주세요.');
+                    }
+                } else {
+                    alert('모듈의 엔드포인트가 없습니다.');
+                }
+            } catch (error) {
+                alert('오류: ' + error.message);
+            }
+        }
+        
+        // 모듈 재시작
+        async function restartModule(moduleId) {
+            if (!confirm(`모듈 "${moduleId}"를 재시작하시겠습니까?`)) return;
+            try {
+                // 모듈 정보 가져오기
+                const moduleResponse = await fetch(RootPath(`/modules/${moduleId}`));
+                if (!moduleResponse.ok) {
+                    alert('모듈을 찾을 수 없습니다.');
+                    return;
+                }
+                const module = await moduleResponse.json();
+                
+                // 모듈의 endpoint가 있으면 health check 수행
+                if (module.endpoint) {
+                    try {
+                        // 먼저 상태를 unhealthy로 변경
+                        const unhealthyModule = {
+                            ...module,
+                            health_status: 'unhealthy'
+                        };
+                        await fetch(RootPath(`/modules/${moduleId}`), {
+                            method: 'PUT',
+                            headers: {'Content-Type': 'application/json'},
+                            body: JSON.stringify(unhealthyModule)
+                        });
+                        
+                        // 잠시 대기 후 health check
+                        setTimeout(async () => {
+                            try {
+                                const healthResponse = await fetch(`${module.endpoint}/health`);
+                                if (healthResponse.ok) {
+                                    const healthyModule = {
+                                        ...module,
+                                        health_status: 'healthy',
+                                        last_heartbeat: new Date().toISOString(),
+                                        failure_count: 0
+                                    };
+                                    const finalUpdateResponse = await fetch(RootPath(`/modules/${moduleId}`), {
+                                        method: 'PUT',
+                                        headers: {'Content-Type': 'application/json'},
+                                        body: JSON.stringify(healthyModule)
+                                    });
+                                    if (finalUpdateResponse.ok) {
+                                        alert('모듈이 재시작되었습니다.');
+                                        updateStatus();
+                                    } else {
+                                        const error = await finalUpdateResponse.json();
+                                        alert('오류: ' + (error.detail || '상태 업데이트 실패'));
+                                        updateStatus();
+                                    }
+                                } else {
+                                    alert('모듈이 응답하지 않습니다. 모듈이 실행 중인지 확인해주세요.');
+                                    updateStatus();
+                                }
+                            } catch (error) {
+                                alert('모듈에 연결할 수 없습니다. 모듈이 실행 중인지 확인해주세요.');
+                                updateStatus();
+                            }
+                        }, 1000);
+                    } catch (error) {
+                        alert('오류: ' + error.message);
+                    }
+                } else {
+                    alert('모듈의 엔드포인트가 없습니다.');
+                }
+            } catch (error) {
+                alert('오류: ' + error.message);
+            }
+        }
+        
+        // 모듈 삭제
+        async function deleteModule(id) {
+            if (!confirm(`모듈 "${id}"를 삭제하시겠습니까?`)) return;
+            try {
+                const response = await fetch(RootPath(`/modules/${id}`), {method: 'DELETE'});
+                if (response.ok) {
+                    alert('모듈이 삭제되었습니다.');
+                    updateStatus();
+                } else {
+                    const error = await response.json();
+                    alert('오류: ' + error.detail);
+                }
+            } catch (error) {
+                alert('오류: ' + error.message);
+            }
+        }
+
+        // 이벤트 발행 테스트
+        // 이벤트 테스트 폼 (요소가 존재할 때만 이벤트 리스너 등록)
+        const eventTestForm = document.getElementById('event-test-form');
+        if (eventTestForm) {
+            eventTestForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const resultDiv = document.getElementById('test-result');
+            const event = {
+                type: document.getElementById('event-type').value,
+                payload: JSON.parse(document.getElementById('event-payload').value),
+                source_module: document.getElementById('event-source').value || 'TestModule'
+            };
+            
+            try {
+                const response = await fetch(RootPath('/publish'), {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(event)
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <div class="success">이벤트가 성공적으로 발행되었습니다!</div>
+                        <div class="json-view">${JSON.stringify(data, null, 2)}</div>
+                    `;
+                    updateStatus();
+                } else {
+                    resultDiv.innerHTML = `<div class="error">오류: ${data.detail}</div>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="error">오류: ${error.message}</div>`;
+            }
+            });
+        }
+
+
+        // 이벤트 타입 선택 이벤트 리스너 등록
+        const eventTypeSelect = document.getElementById('event-type');
+        if (eventTypeSelect) {
+            eventTypeSelect.addEventListener('change', function() {
+                updateEventTypeInfo(this.value);
+            });
+        }
+        
+        // 이벤트 필터 이벤트 리스너 등록
+        document.addEventListener('DOMContentLoaded', function() {
+            // 이벤트 로그 필터
+            const searchInput = document.getElementById('event-search-input');
+            const eventTypeFilter = document.getElementById('event-type-filter-main');
+            const sourceFilter = document.getElementById('event-source-filter');
+            const pageSizeSelect = document.getElementById('event-page-size');
+            
+            if (searchInput) {
+                searchInput.addEventListener('input', applyEventFilters);
+            }
+            if (eventTypeFilter) {
+                eventTypeFilter.addEventListener('change', applyEventFilters);
+            }
+            if (sourceFilter) {
+                sourceFilter.addEventListener('change', applyEventFilters);
+            }
+            if (pageSizeSelect) {
+                pageSizeSelect.addEventListener('change', (e) => {
+                    eventPageSize = parseInt(e.target.value);
+                    currentEventPage = 1;
+                    applyEventFilters();
+                });
+            }
+            
+            // 서비스 필터
+            const serviceSearchInput = document.getElementById('service-search-input');
+            const servicePageSizeSelect = document.getElementById('service-page-size');
+            
+            if (serviceSearchInput) {
+                serviceSearchInput.addEventListener('input', applyServiceFilters);
+            }
+            if (servicePageSizeSelect) {
+                servicePageSizeSelect.addEventListener('change', (e) => {
+                    servicePageSize = parseInt(e.target.value);
+                    currentServicePage = 1;
+                    applyServiceFilters();
+                });
+            }
+            
+            // 모듈 필터
+            const moduleSearchInput = document.getElementById('module-search-input');
+            const moduleStatusFilter = document.getElementById('module-status-filter');
+            const modulePageSizeSelect = document.getElementById('module-page-size');
+            
+            if (moduleSearchInput) {
+                moduleSearchInput.addEventListener('input', applyModuleFilters);
+            }
+            if (moduleStatusFilter) {
+                moduleStatusFilter.addEventListener('change', applyModuleFilters);
+            }
+            if (modulePageSizeSelect) {
+                modulePageSizeSelect.addEventListener('change', (e) => {
+                    modulePageSize = parseInt(e.target.value);
+                    currentModulePage = 1;
+                    applyModuleFilters();
+                });
+            }
+            
+            // 파이프라인 필터
+            const subscriberSearchInput = document.getElementById('subscriber-search-input');
+            const subscriberEventTypeFilter = document.getElementById('subscriber-event-type-filter');
+            const subscriberPageSizeSelect = document.getElementById('subscriber-page-size');
+            
+            if (subscriberSearchInput) {
+                subscriberSearchInput.addEventListener('input', applySubscriberFilters);
+            }
+            if (subscriberEventTypeFilter) {
+                subscriberEventTypeFilter.addEventListener('change', applySubscriberFilters);
+            }
+            if (subscriberPageSizeSelect) {
+                subscriberPageSizeSelect.addEventListener('change', (e) => {
+                    subscriberPageSize = parseInt(e.target.value);
+                    currentSubscriberPage = 1;
+                    applySubscriberFilters();
+                });
+            }
+            
+            // 테이블 헤더 클릭 이벤트 (동적으로 추가되는 테이블을 위해 이벤트 위임 사용)
+            document.addEventListener('click', (e) => {
+                if (e.target.closest('th.sortable')) {
+                    const th = e.target.closest('th.sortable');
+                    const column = th.dataset.sort;
+                    const tableId = th.closest('table')?.closest('.event-table-container')?.previousElementSibling?.id || 
+                                   th.closest('table')?.parentElement?.id;
+                    
+                    // 어떤 테이블인지 확인
+                    if (tableId === 'service-list' || th.closest('#service-list')) {
+                        if (serviceSortColumn === column) {
+                            serviceSortDirection = serviceSortDirection === 'asc' ? 'desc' : 'asc';
+                        } else {
+                            serviceSortColumn = column;
+                            serviceSortDirection = 'asc';
+                        }
+                        updateServiceSortIndicators();
+                        applyServiceFilters();
+                    } else if (tableId === 'module-list' || th.closest('#module-list')) {
+                        if (moduleSortColumn === column) {
+                            moduleSortDirection = moduleSortDirection === 'asc' ? 'desc' : 'asc';
+                        } else {
+                            moduleSortColumn = column;
+                            moduleSortDirection = 'asc';
+                        }
+                        updateModuleSortIndicators();
+                        applyModuleFilters();
+                    } else if (tableId === 'subscriber-list' || th.closest('#subscriber-list')) {
+                        if (subscriberSortColumn === column) {
+                            subscriberSortDirection = subscriberSortDirection === 'asc' ? 'desc' : 'asc';
+                        } else {
+                            subscriberSortColumn = column;
+                            subscriberSortDirection = 'asc';
+                        }
+                        updateSubscriberSortIndicators();
+                        applySubscriberFilters();
+                    } else {
+                        // 이벤트 로그 테이블
+                        if (eventSortColumn === column) {
+                            eventSortDirection = eventSortDirection === 'asc' ? 'desc' : 'asc';
+                        } else {
+                            eventSortColumn = column;
+                            eventSortDirection = 'asc';
+                        }
+                        updateEventSortIndicators();
+                        applyEventFilters();
+                    }
+                }
+            });
+            
+            // 모달 외부 클릭 시 닫기
+            const payloadModal = document.getElementById('payload-modal');
+            if (payloadModal) {
+                payloadModal.addEventListener('click', (e) => {
+                    if (e.target.id === 'payload-modal') {
+                        closePayloadModal();
+                    }
+                });
+            }
+            
+            const serviceDetailModal = document.getElementById('service-detail-modal');
+            if (serviceDetailModal) {
+                serviceDetailModal.addEventListener('click', (e) => {
+                    if (e.target.id === 'service-detail-modal') {
+                        closeServiceDetailModal();
+                    }
+                });
+            }
+        });
+        
+        // 이벤트 정렬 표시 업데이트
+        function updateEventSortIndicators() {
+            document.querySelectorAll('th.sortable').forEach(th => {
+                th.classList.remove('sort-asc', 'sort-desc');
+                if (th.dataset.sort === eventSortColumn) {
+                    th.classList.add(eventSortDirection === 'asc' ? 'sort-asc' : 'sort-desc');
+                }
+            });
+        }
+        
+        // 초기화 (DOM 로드 완료 후 실행)
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function() {
+                applyTabFromUrl();
+                updateStatus();
+                connectEventLogStream();
+            });
+        } else {
+            applyTabFromUrl();
+            updateStatus();
+            connectEventLogStream();
+        }
+        window.addEventListener('hashchange', applyTabFromUrl);
+        window.addEventListener('beforeunload', function () {
+            if (eventLogReconnectTimer) {
+                clearTimeout(eventLogReconnectTimer);
+                eventLogReconnectTimer = null;
+            }
+            if (eventLogEventSource) {
+                try { eventLogEventSource.close(); } catch (e) {}
+                eventLogEventSource = null;
+            }
+        });
+    </script>
+</body>
+</html>

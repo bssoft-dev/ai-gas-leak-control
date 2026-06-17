@@ -1,0 +1,277 @@
+# SagoHub Service: 자재 및 다계층 추적 (Equipment Traceability)
+# - 13대 필드 자재 관리
+# - QR코드 기반 PCS No + 설치위치 + 자재 + 도면 + ERP 링크 연동
+# - 도면-자재-부품-설치위치 추적성
+
+service:
+  id: "com.SagoHub.equipment-traceability"
+  version: "1.0.0"
+  name: "블루에스피 자재 관리 시스템"
+  description: "도면-자재-부품-설치위치 추적, 13대 필드 자재, QR코드 연동"
+  author: "SagoHub Team"
+  icon: "icon.png"
+  category: "manufacturing"
+  domain: "traceability.bs-soft.co.kr"
+
+  ui_server:
+    host: "0.0.0.0"
+    port: 8080
+    external_port: 26020
+    event_bus_url: "http://event-bus:8000"
+
+interface:
+  - type: "react-ui"
+    id: "main_dashboard"
+    label: "자재 관리"
+    description: "자재 등록, 자재 목록 업로드, 목록 조회, QR코드 생성/조회, 도면 관리"
+    component: "EquipmentTraceabilityWidget"
+    binding: "./services/equipment-traceability/frontend"
+    props: {}
+    events:
+      onSaveRecord: "TRACEABILITY_RECORD_SAVE"
+      onQueryRecord: "TRACEABILITY_RECORD_QUERY"
+      onListRecords: "TRACEABILITY_RECORD_LIST"
+      onDeleteRecords: "TRACEABILITY_RECORD_DELETE"
+      onGenerateQR: "QR_CODE_GENERATE"
+      onParseQR: "QR_CODE_PARSE"
+      onImportExcel: "TRACEABILITY_IMPORT_EXCEL"
+      onUploadDrawing: "INSTALLATION_DRAWING_UPLOAD"
+      onDrawingList: "INSTALLATION_DRAWING_LIST"
+      onDrawingGet: "INSTALLATION_DRAWING_GET"
+      onPointsSave: "INSTALLATION_POINTS_SAVE"
+      onDeleteDrawing: "INSTALLATION_DRAWING_DELETE"
+      onUploadPdf: "TRACEABILITY_PDF_VISION_UPLOAD"
+      onCommitPdf: "TRACEABILITY_PDF_COMMIT"
+      subscribe:
+        - "TRACEABILITY_RECORD_SAVED"
+        - "TRACEABILITY_RECORD_RESULT"
+        - "TRACEABILITY_RECORD_LIST_RESULT"
+        - "TRACEABILITY_RECORD_DELETED"
+        - "QR_CODE_PAYLOAD_READY"
+        - "QR_CODE_PARSED"
+        - "TRACEABILITY_IMPORT_DONE"
+        - "TRACEABILITY_PDF_INGESTED"
+        - "TRACEABILITY_PDF_REVIEW_READY"
+        - "TRACEABILITY_PDF_COMMIT_DONE"
+        - "TRACEABILITY_PDF_VISION_READY"
+        - "TRACEABILITY_PDF_VISION_FAILED"
+        - "INSTALLATION_DRAWING_UPLOADED"
+        - "INSTALLATION_DRAWING_LIST_RESULT"
+        - "INSTALLATION_DRAWING_GET_RESULT"
+        - "INSTALLATION_POINTS_SAVED"
+        - "INSTALLATION_DRAWING_DELETED"
+
+config: {}
+
+# Pipelines: 이벤트 → 모듈 브로드캐스트
+pipelines:
+  - id: "flow_traceability_save"
+    name: "자재 13대 필드 저장"
+    trigger:
+      event: "TRACEABILITY_RECORD_SAVE"
+      debounce: 0
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    broadcast:
+      - module: "traceability_record.TraceabilityRecordModule"
+        id: "action_save"
+        args: {}
+
+  - id: "flow_traceability_query"
+    name: "자재 조회 (PCS No / ID)"
+    trigger:
+      event: "TRACEABILITY_RECORD_QUERY"
+      debounce: 0
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    broadcast:
+      - module: "traceability_record.TraceabilityRecordModule"
+        id: "action_query"
+        args: {}
+
+  - id: "flow_traceability_list"
+    name: "자재 목록 (호선/BLOCK/UNIT 필터)"
+    trigger:
+      event: "TRACEABILITY_RECORD_LIST"
+      debounce: 0
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    broadcast:
+      - module: "traceability_record.TraceabilityRecordModule"
+        id: "action_list"
+        args: {}
+
+  - id: "flow_traceability_delete"
+    name: "자재 삭제"
+    trigger:
+      event: "TRACEABILITY_RECORD_DELETE"
+      debounce: 0
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    broadcast:
+      - module: "traceability_record.TraceabilityRecordModule"
+        id: "action_delete"
+        args: {}
+
+  - id: "flow_qr_generate"
+    name: "QR코드 페이로드 생성"
+    trigger:
+      event: "QR_CODE_GENERATE"
+      debounce: 0
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    broadcast:
+      - module: "qr_traceability.QRTraceabilityModule"
+        id: "action_qr_generate"
+        args: {}
+
+  - id: "flow_qr_parse"
+    name: "QR코드 페이로드 파싱"
+    trigger:
+      event: "QR_CODE_PARSE"
+      debounce: 0
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    broadcast:
+      - module: "qr_traceability.QRTraceabilityModule"
+        id: "action_qr_parse"
+        args: {}
+
+  - id: "flow_import_excel"
+    name: "기초데이터 엑셀 불러오기"
+    trigger:
+      event: "TRACEABILITY_IMPORT_EXCEL"
+      debounce: 0
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    broadcast:
+      - module: "traceability_record.TraceabilityRecordModule"
+        id: "action_import_excel"
+        args: {}
+
+  - id: "flow_traceability_pdf_upload"
+    name: "PDF 업로드 -> 분석 파이프라인 진입"
+    trigger:
+      event: "TRACEABILITY_PDF_VISION_UPLOAD"
+      debounce: 0
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    broadcast:
+      - module: "traceability_pdf_vision.TraceabilityPdfVisionModule"
+        id: "action_pdf_vision_upload"
+        args: {}
+
+  - id: "flow_pdf_analyze"
+    name: "EVT_PDF_FOUND -> PDF Reader 분석"
+    trigger:
+      event: "EVT_PDF_FOUND"
+      debounce: 0
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    broadcast:
+      - module: "pdf_reader.PdfReaderModule"
+        id: "action_pdf_reader"
+        args: {}
+
+  - id: "flow_traceability_pdf_review"
+    name: "EVT_PDF_ANALYZED -> Traceability PDF Review"
+    trigger:
+      event: "EVT_PDF_ANALYZED"
+      debounce: 0
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    broadcast:
+      - module: "traceability_pdf_vision.TraceabilityPdfVisionModule"
+        id: "action_pdf_vision_classify"
+        args: {}
+      - module: "traceability_pdf_analyzer.TraceabilityPdfAnalyzerModule"
+        id: "action_pdf_analyze"
+        args: {}
+
+  - id: "flow_traceability_pdf_commit"
+    name: "TRACEABILITY_PDF_COMMIT -> Traceability Commit"
+    trigger:
+      event: "TRACEABILITY_PDF_COMMIT"
+      debounce: 0
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    broadcast:
+      - module: "traceability_pdf_analyzer.TraceabilityPdfAnalyzerModule"
+        id: "action_pdf_commit"
+        args: {}
+
+  - id: "flow_installation_drawing_upload"
+    name: "도면 관리 도면 업로드"
+    trigger:
+      event: "INSTALLATION_DRAWING_UPLOAD"
+      debounce: 0
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    broadcast:
+      - module: "installation_location.InstallationLocationModule"
+        id: "action_upload"
+        args: {}
+
+  - id: "flow_installation_drawing_list"
+    name: "도면 관리 목록"
+    trigger:
+      event: "INSTALLATION_DRAWING_LIST"
+      debounce: 0
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    broadcast:
+      - module: "installation_location.InstallationLocationModule"
+        id: "action_list"
+        args: {}
+
+  - id: "flow_installation_drawing_get"
+    name: "도면 관리 상세"
+    trigger:
+      event: "INSTALLATION_DRAWING_GET"
+      debounce: 0
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    broadcast:
+      - module: "installation_location.InstallationLocationModule"
+        id: "action_get"
+        args: {}
+
+  - id: "flow_installation_points_save"
+    name: "설치 위치 포인트 저장"
+    trigger:
+      event: "INSTALLATION_POINTS_SAVE"
+      debounce: 0
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    broadcast:
+      - module: "installation_location.InstallationLocationModule"
+        id: "action_points_save"
+        args: {}
+
+  - id: "flow_installation_drawing_delete"
+    name: "도면 관리 도면 삭제"
+    trigger:
+      event: "INSTALLATION_DRAWING_DELETE"
+      debounce: 0
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    broadcast:
+      - module: "installation_location.InstallationLocationModule"
+        id: "action_delete"
+        args: {}

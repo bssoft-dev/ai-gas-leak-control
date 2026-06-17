@@ -1,0 +1,56 @@
+[
+  {
+    "id": "0da12698-826e-4f35-9058-ba181486f88c",
+    "dwg_no": "TEST",
+    "filename": "샘플도면.png",
+    "file_type": "image",
+    "file_path": "uploads/0da12698-826e-4f35-9058-ba181486f88c.png",
+    "created_at": "2026-03-11T02:32:58.599423Z",
+    "updated_at": "2026-03-25T07:42:45.455642Z"
+  },
+  {
+    "id": "0b29423f-a6f5-4c19-ae7b-8937fae0b8ab",
+    "dwg_no": "TEST",
+    "filename": "샘플도면.png",
+    "file_type": "image",
+    "file_path": "uploads/0b29423f-a6f5-4c19-ae7b-8937fae0b8ab.png",
+    "created_at": "2026-03-11T02:32:59.629555Z",
+    "updated_at": "2026-03-11T02:32:59.629555Z"
+  },
+  {
+    "id": "18dbd73b-0ece-4607-ad34-29565cc0f738",
+    "dwg_no": "TEST",
+    "filename": "샘플도면.png",
+    "file_type": "image",
+    "file_path": "uploads/18dbd73b-0ece-4607-ad34-29565cc0f738.png",
+    "created_at": "2026-03-11T02:33:00.278666Z",
+    "updated_at": "2026-03-11T02:33:00.278666Z"
+  },
+  {
+    "id": "b9384817-fd79-4af6-9ed9-471da9d5bc67",
+    "dwg_no": "샘플도면.png",
+    "filename": "샘플도면.png",
+    "file_type": "image",
+    "file_path": "uploads/b9384817-fd79-4af6-9ed9-471da9d5bc67.png",
+    "created_at": "2026-03-25T06:54:16.779385Z",
+    "updated_at": "2026-03-25T06:54:16.779385Z"
+  },
+  {
+    "id": "e36490b1-ca76-41f3-b529-5ed138086d0b",
+    "dwg_no": "샘플도면.png",
+    "filename": "샘플도면.png",
+    "file_type": "image",
+    "file_path": "uploads/e36490b1-ca76-41f3-b529-5ed138086d0b.png",
+    "created_at": "2026-03-25T06:54:52.835898Z",
+    "updated_at": "2026-03-25T06:54:52.835898Z"
+  },
+  {
+    "id": "5e121bb3-b6c6-4698-88ed-bdb42dff7028",
+    "dwg_no": "샘플도면.png",
+    "filename": "샘플도면.png",
+    "file_type": "image",
+    "file_path": "uploads/5e121bb3-b6c6-4698-88ed-bdb42dff7028.png",
+    "created_at": "2026-03-25T06:58:27.799939Z",
+    "updated_at": "2026-03-25T06:58:27.799939Z"
+  }
+]

@@ -1,0 +1,248 @@
+# SagoHub Service: ThinkingOS 보충 정보 자동 생성 (모듈 조합 버전)
+# 재사용 가능한 모듈들을 조합하여 서비스 구성
+
+service:
+  id: "com.SagoHub.thinkingos-supplement"
+  version: "2.0.0"
+  name: "ThinkingOS 보충 정보"
+  description: "Obsidian 노트를 모니터링해 요청사항을 추출하고, LLM으로 보충 정보를 생성해 별도 파일로 관리합니다."
+  author: "SagoHub Team"
+  icon: "icon.png"
+  category: "productivity"
+
+  ui_server:
+    host: "0.0.0.0"
+    port: 8080
+    external_port: 26013
+
+# -----------------------------------------------------------
+# Interface: ThinkingOS 전용 UI
+# -----------------------------------------------------------
+interface:
+  - type: "react-ui"
+    id: "main_dashboard"
+    label: "ThinkingOS 보충 정보 대시보드"
+    description: "Obsidian 폴더를 설정하고 '모니터링 시작'을 누르면 자동으로 요청사항을 추출하고 보충 정보를 생성합니다."
+    binding: "./services/thinkingos-supplement/frontend"
+
+    props:
+      target_folder: "${config.target_folder}"
+      watch_pattern: "${config.watch_pattern}"
+
+    events:
+      onSave: "PATH_SET"
+      subscribe: [
+        "E_FileCreated",
+        "E_OriginalFileDetected",
+        "E_SupplementFileDetected",
+        "E_RequestExtracted",
+        "E_SupplementFileCreated",
+        "E_QuestionDetected",
+        "E_QuestionAnswered",
+        "E_SupplementApplied",
+        "E_SupplementFileDeleted"
+      ]
+
+# -----------------------------------------------------------
+# Config
+# -----------------------------------------------------------
+config:
+  target_folder:
+    type: "path"
+    label: "Obsidian 폴더"
+    default: "~/obsidian"
+    required: true
+    description: "감시할 Obsidian 루트 폴더"
+
+  watch_pattern:
+    type: "string"
+    label: "파일 패턴 (Glob)"
+    default: "**/*.md"
+    description: "감시할 파일 패턴 (기본: **/*.md)"
+
+# -----------------------------------------------------------
+# Pipelines: 재사용 가능한 모듈들을 조합
+# -----------------------------------------------------------
+pipelines:
+
+  # [Pipeline 1] 파일 감시 시작
+  - id: "flow_file_watcher"
+    name: "Obsidian 폴더 감시 시작"
+
+    trigger:
+      event: "PATH_SET"
+      filter: "${config.target_folder}"
+      debounce: 1000
+      aggregation:
+        strategy: "INDEPENDENT"
+
+    broadcast:
+      - module: "file_watcher.FileWatcherModule"
+        id: "action_file_watcher"
+        args:
+          path: "${event.path}"
+
+  # [Pipeline 2] 파일 타입 감지 (원본/보충 구분)
+  - id: "flow_file_type_detection"
+    name: "파일 타입 감지"
+
+    trigger:
+      event: "E_FileCreated"
+      filter: "${config.target_folder}/${config.watch_pattern}"
+      debounce: 1000
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: null
+
+    broadcast:
+      - module: "file_type_detector.FileTypeDetectorModule"
+        id: "action_file_type_detector"
+        args:
+          target_folder: "${config.target_folder}"
+
+  # [Pipeline 3] 원본 파일 처리: 요청 추출 → 보충 파일 생성 → 인덱스 갱신
+  - id: "flow_original_file_processing"
+    name: "원본 파일 처리 (요청 추출 → 보충 생성)"
+
+    trigger:
+      event: "E_OriginalFileDetected"
+      debounce: 1000
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: null
+
+    broadcast:
+      # 1) 요청사항 추출
+      - module: "llm_request_extractor.LLMRequestExtractorModule"
+        id: "action_request_extractor"
+        args:
+          target_folder: "${config.target_folder}"
+
+  # [Pipeline 4] 요청 추출 완료 → 보충 파일 생성
+  - id: "flow_supplement_file_creation"
+    name: "보충 파일 생성"
+
+    trigger:
+      event: "E_RequestExtracted"
+      debounce: 500
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: null
+
+    broadcast:
+      # 1) 보충 파일 생성
+      - module: "supplement_file_manager.SupplementFileManagerModule"
+        id: "action_supplement_file_manager"
+        args:
+          target_folder: "${config.target_folder}"
+
+  # [Pipeline 5] 보충 파일 생성 완료 → 인덱스 갱신
+  - id: "flow_supplement_index_update"
+    name: "보충 파일 인덱스 갱신"
+
+    trigger:
+      event: "E_SupplementFileCreated"
+      debounce: 500
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: null
+
+    broadcast:
+      - module: "supplement_index_manager.SupplementIndexManagerModule"
+        id: "action_index_manager"
+
+  # [Pipeline 6] 보충 파일 처리: 액션 감지 (반영/삭제) 또는 질문 추출
+  - id: "flow_supplement_file_processing"
+    name: "보충 파일 처리 (반영/삭제/질문)"
+
+    trigger:
+      event: "E_SupplementFileDetected"
+      debounce: 1000
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: null
+
+    broadcast:
+      # 1) 반영/삭제 액션 감지
+      - module: "supplement_action_detector.SupplementActionDetectorModule"
+        id: "action_action_detector"
+      # 2) 질문 추출
+      - module: "question_extractor.QuestionExtractorModule"
+        id: "action_question_extractor"
+
+  # [Pipeline 7] 반영 요청 처리
+  - id: "flow_supplement_apply"
+    name: "보충 정보 반영"
+
+    trigger:
+      event: "E_SupplementApplyRequest"
+      debounce: 500
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: null
+
+    broadcast:
+      - module: "supplement_apply_handler.SupplementApplyHandlerModule"
+        id: "action_apply_handler"
+
+  # [Pipeline 8] 반영 완료 → 보충 파일 삭제 및 인덱스 갱신
+  - id: "flow_supplement_apply_cleanup"
+    name: "반영 완료 후 정리"
+
+    trigger:
+      event: "E_SupplementApplied"
+      debounce: 500
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: null
+
+    broadcast:
+      # 1) 보충 파일 삭제
+      - module: "supplement_file_manager.SupplementFileManagerModule"
+        id: "action_delete_supplement"
+
+  # [Pipeline 9] 삭제 요청 처리
+  - id: "flow_supplement_delete"
+    name: "보충 파일 삭제"
+
+    trigger:
+      event: "E_SupplementDeleteRequest"
+      debounce: 500
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: null
+
+    broadcast:
+      # 1) 보충 파일 삭제
+      - module: "supplement_file_manager.SupplementFileManagerModule"
+        id: "action_delete_manager"
+
+  # [Pipeline 10] 삭제 완료 → 인덱스 갱신
+  - id: "flow_supplement_delete_cleanup"
+    name: "삭제 완료 후 인덱스 갱신"
+
+    trigger:
+      event: "E_SupplementFileDeleted"
+      debounce: 500
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: null
+
+    broadcast:
+      - module: "supplement_index_manager.SupplementIndexManagerModule"
+        id: "action_index_cleanup"
+
+  # [Pipeline 11] 질문 답변 생성
+  - id: "flow_question_answer"
+    name: "질문 답변 생성"
+
+    trigger:
+      event: "E_QuestionDetected"
+      debounce: 500
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: null
+
+    broadcast:
+      - module: "llm_question_answerer.LLMQuestionAnswererModule"
+        id: "action_question_answerer"

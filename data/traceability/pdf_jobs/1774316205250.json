@@ -1,0 +1,58 @@
+{
+  "job_id": "1774316205250",
+  "created_at": "2026-03-24T01:36:50.230417Z",
+  "source_pdf": {
+    "file_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_uploads/1774316205250.pdf",
+    "filename": "L1_D2603 5LP250V OIL-PAN DWG.pdf"
+  },
+  "proposal": {
+    "records": [],
+    "design_drawings": [
+      {
+        "drawing_id": "f2f89e62-3fa0-46a0-ab50-f3813babb541",
+        "dwg_no": "APPROVED",
+        "filename": "L1_D2603 5LP250V OIL-PAN DWG.pdf",
+        "file_type": "pdf",
+        "file_path": "",
+        "source": {
+          "page_number": 1,
+          "kind": "design"
+        }
+      },
+      {
+        "drawing_id": "8afd1b2c-bf11-4c16-b172-79092de974e1",
+        "dwg_no": "DWG-2",
+        "filename": "L1_D2603 5LP250V OIL-PAN DWG.pdf",
+        "file_type": "pdf",
+        "file_path": "",
+        "source": {
+          "page_number": 2,
+          "kind": "design"
+        }
+      },
+      {
+        "drawing_id": "d65f6f9c-33d3-44ca-be35-b4941aefafe4",
+        "dwg_no": "DWG-3",
+        "filename": "L1_D2603 5LP250V OIL-PAN DWG.pdf",
+        "file_type": "pdf",
+        "file_path": "",
+        "source": {
+          "page_number": 3,
+          "kind": "design"
+        }
+      },
+      {
+        "drawing_id": "71ece032-5bfc-4fe6-887f-ce33f2dfb84d",
+        "dwg_no": "DWG-4",
+        "filename": "L1_D2603 5LP250V OIL-PAN DWG.pdf",
+        "file_type": "pdf",
+        "file_path": "",
+        "source": {
+          "page_number": 4,
+          "kind": "design"
+        }
+      }
+    ],
+    "installation_drawings": []
+  }
+}

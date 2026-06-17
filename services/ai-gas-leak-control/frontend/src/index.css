@@ -1,0 +1,111 @@
+@import "tailwindcss";
+
+@source "../index.html";
+@source "./**/*.{js,ts,jsx,tsx}";
+
+:root {
+  --gl-bg-page: #ffffff;
+  --gl-bg-card: #ffffff;
+  --gl-bg-panel: #f8fafc;
+  --gl-border: #e2e8f0;
+  --gl-text: #0b1828;
+  --gl-text-muted: #7a89a1;
+  --gl-primary: #61a0e1;
+  --gl-success: #22c55e;
+  --gl-warning: #d29922;
+  --gl-danger: #ef4444;
+  --gl-emergency: #ef4444;
+  --gl-radius: 8px;
+  --gl-font: 'Pretendard', 'Noto Sans KR', system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--gl-font);
+  font-size: 14px;
+  line-height: 1.5;
+  background: var(--gl-bg-page);
+  color: var(--gl-text);
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.material-symbols-rounded {
+  font-family: 'Material Symbols Rounded';
+  font-weight: 400;
+  font-style: normal;
+  font-size: 20px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24;
+}
+
+.material-symbols-rounded.sidebar-icon {
+  font-variation-settings:
+    'FILL' 0,
+    'wght' 170,
+    'GRAD' 0,
+    'opsz' 24;
+}
+
+:focus-visible {
+  outline: 2px solid var(--gl-primary);
+  outline-offset: 2px;
+}
+
+/* History filters: disable browser focus outline */
+.no-focus-outline :focus-visible {
+  outline: none !important;
+  outline-offset: 0 !important;
+}
+
+/* Notion-like scrollbar (scoped opt-in) */
+.notion-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(55, 53, 47, 0.35) transparent;
+}
+
+.notion-scrollbar::-webkit-scrollbar {
+  width: 10px;
+}
+
+.notion-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.notion-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(55, 53, 47, 0.28);
+  border-radius: 9999px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+
+.notion-scrollbar:hover::-webkit-scrollbar-thumb {
+  background-color: rgba(55, 53, 47, 0.4);
+}

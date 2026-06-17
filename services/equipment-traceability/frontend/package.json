@@ -1,0 +1,24 @@
+{
+  "name": "equipment-traceability-ui",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "자재 관리 서비스 UI",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "html5-qrcode": "^2.3.8",
+    "jsbarcode": "^3.11.6",
+    "qrcode": "^1.5.4",
+    "qrcode.react": "^3.1.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-jsbarcode": "^1.1.4"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.2.0",
+    "vite": "^5.0.0"
+  }
+}

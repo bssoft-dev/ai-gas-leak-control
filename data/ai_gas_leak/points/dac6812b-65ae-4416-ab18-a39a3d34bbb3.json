@@ -2,46 +2,64 @@
   {
     "id": "S1773289494634",
     "label": "S1773289494634",
-    "zone_id": "zone1",
-    "x": 0.38857142857142857,
-    "y": 0.289609375,
+    "zone_id": "zone-1",
+    "x": 0.388571,
+    "y": 0.289609,
     "unit": "MPa",
     "sensor_type": "pressure"
   },
   {
     "id": "S1773289497249",
     "label": "S1773289497249",
-    "zone_id": "zone1",
-    "x": 0.5628571428571428,
-    "y": 0.589609375,
+    "zone_id": "zone-1",
+    "x": 0.562857,
+    "y": 0.589609,
     "unit": "MPa",
     "sensor_type": "pressure"
   },
   {
     "id": "S1773289499163",
     "label": "S1773289499163",
-    "zone_id": "zone1",
-    "x": 0.4442857142857143,
-    "y": 0.687109375,
+    "zone_id": "zone-1",
+    "x": 0.444286,
+    "y": 0.687109,
     "unit": "MPa",
     "sensor_type": "pressure"
   },
   {
     "id": "S1773289744252",
     "label": "S1773289744252",
-    "zone_id": "zone1",
-    "x": 0.6342857142857142,
-    "y": 0.309609375,
+    "zone_id": "zone-1",
+    "x": 0.634286,
+    "y": 0.309609,
     "unit": "MPa",
     "sensor_type": "pressure"
   },
   {
-    "id": "S1773289757396",
-    "label": "S1773289757396",
-    "zone_id": "zone1",
-    "x": 0.5071428571428571,
-    "y": 0.224609375,
+    "id": "S1778879723001",
+    "label": "1212",
+    "zone_id": "zone-1",
+    "x": 0.648018,
+    "y": 0.358899,
     "unit": "MPa",
-    "sensor_type": "flow"
+    "sensor_type": "pressure"
+  },
+  {
+    "id": "S1778879899326",
+    "label": "S1_Pressure",
+    "zone_id": "zone-1",
+    "x": 0.763436,
+    "y": 0.259213,
+    "unit": "MPa",
+    "sensor_type": "pressure"
+  },
+  {
+    "id": "S1778880254828",
+    "label": "S3_LPG",
+    "zone_id": "zone-1",
+    "x": 0.804405,
+    "y": 0.219323,
+    "unit": "MPa",
+    "sensor_type": "pressure"
   }
 ]

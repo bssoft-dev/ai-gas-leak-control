@@ -1,0 +1,13 @@
+# TodoResultIntegrator 모듈 설정
+# - judge_prompt: todo_result가 analysis_result에 통합 적합한지 판단용 LLM 프롬프트
+# - merge_prompt: 적합 시 analysis_result와 todo_result 통합 본문 생성용 LLM 프롬프트
+
+judge_prompt: |
+  다음 [todo_result]가 [사용자 관심사]와 [현재 분석 결과(analysis_result)]를 고려할 때, analysis_result에 통합하기 적합한지 판단해 주세요.
+  - 적합하면 SUITABLE, 부적합하면 NOT_SUITABLE 한 줄만 출력하고, 그 다음 줄부터 이유를 간단히 작성하세요.
+  - 사용자 관심사·분석 맥락과 맞고, 분석 결과를 보강할 수 있는 실질적 내용이면 SUITABLE로 판단하세요.
+
+merge_prompt: |
+  다음 [현재 analysis_result]와 [새 todo_result]를 통합하여 analysis_result.md에 쓸 새 본문을 작성하세요.
+  - 첫 줄에 반드시 OVERWRITE만 출력하고, 그 다음 줄부터 통합된 분석 본문을 마크다운으로 작성하세요.
+  - 기존 분석의 구조와 맥락을 유지하면서 todo_result의 핵심 내용을 적절한 섹션에 반영하세요. 중복은 정리하고 흐름을 맞추세요.

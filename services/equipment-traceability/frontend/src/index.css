@@ -1,0 +1,59 @@
+/* Design tokens - 밝은색 기업 현장용 전문 테마 */
+:root {
+  --et-bg-page: #f0f2f5;
+  --et-bg-card: #ffffff;
+  --et-bg-muted: #f5f6f8;
+  --et-bg-input: #ffffff;
+  --et-border: #e1e4e8;
+  --et-border-focus: #2563eb;
+  --et-text: #1f2937;
+  --et-text-muted: #6b7280;
+  --et-primary: #2563eb;
+  --et-primary-hover: #1d4ed8;
+  --et-secondary: #f3f4f6;
+  --et-secondary-hover: #e5e7eb;
+  --et-accent: #0ea5e9;
+  --et-accent-hover: #0284c7;
+  --et-danger: #dc2626;
+  --et-danger-hover: #b91c1c;
+  --et-danger-bg: #fef2f2;
+  --et-success-bg: #f0fdf4;
+  --et-radius: 8px;
+  --et-radius-sm: 6px;
+  --et-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --et-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --et-font: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Malgun Gothic', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--et-font);
+  font-size: 14px;
+  line-height: 1.5;
+  background: var(--et-bg-page);
+  color: var(--et-text);
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+input, textarea, select {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--et-border-focus);
+  outline-offset: 2px;
+}

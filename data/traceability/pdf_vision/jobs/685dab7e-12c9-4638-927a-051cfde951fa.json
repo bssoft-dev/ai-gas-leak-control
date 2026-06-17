@@ -1,0 +1,30 @@
+{
+  "job_id": "685dab7e-12c9-4638-927a-051cfde951fa",
+  "filename": "L1_D2603 5LP250V OIL-BIN DWG 260316.pdf",
+  "pdf_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_uploads/685dab7e-12c9-4638-927a-051cfde951fa.pdf",
+  "created_at": "2026-03-25T05:21:10.345891Z",
+  "pages": [
+    {
+      "page_number": 1,
+      "image_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_vision/pages/685dab7e-12c9-4638-927a-051cfde951fa/page-1.png",
+      "image_data_url": "/api/traceability/pdf_vision/jobs/685dab7e-12c9-4638-927a-051cfde951fa/pages/1/file",
+      "classification_vision": "",
+      "confidence_vision": null,
+      "text_vision": null,
+      "text_pdf": "SUS316L \nPLATE 9T로 절곡 \n2EA\nSUS316L \nPLATE 3T로 절곡 \n4EA\n2포인트로 절곡.",
+      "classification": "design",
+      "source": "text",
+      "overlay_boxes": [
+        {
+          "type": "table",
+          "x": 0.008385756676557863,
+          "y": 0.012005033557046935,
+          "w": 0.9832166172106823,
+          "h": 0.9699664429530198,
+          "text": "table_1"
+        }
+      ]
+    }
+  ],
+  "updated_at": "2026-03-25T05:21:13.318590Z"
+}

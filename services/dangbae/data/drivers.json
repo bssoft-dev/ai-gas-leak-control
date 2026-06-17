@@ -1,0 +1,22 @@
+[
+  {
+    "id": "ba35a1aa",
+    "name": "장범석",
+    "phone": "010-8776-8703",
+    "status": "agreed",
+    "situation": "waiting",
+    "kakao_code": "sQG3YFIzhAyLRekPkBvvr9G1KLUZ-rlqBX7aD7QL6HGwO7HwfpZTHAAAAAQKDRlTAAABnLxtCOCnsOtctwzlGQ",
+    "kakao_access_token": "G7P6aI3_YF8Zzue0HaY4iXJgTKoyRgiCAAAAAQoXNVcAAAGd0aeluPoXDHwO3UaB",
+    "kakao_refresh_token": "4luQ-eDCE1mVQIeOE-chnUT2AD9JVnqhAAAAAgoNDF4AAAGdaCFgr_oXDHwO3UaB"
+  },
+  {
+    "id": "f5f9a4c8",
+    "name": "반성훈",
+    "phone": "010-8831-1587",
+    "status": "agreed",
+    "situation": "waiting",
+    "kakao_code": "3SXdYekysoGZibrHTPl_mexMiHUtBDMMQKMZvaR11aLmf7lst7DaPwAAAAQKFwAnAAABnLy5yTtb9Pmr5eg_ZA",
+    "kakao_access_token": "IFSk9vVyckX5_rzJRJJRRd0JdGHLG09KAAAAAQoXBi4AAAGd0ad_8Fv0-avl6D9k",
+    "kakao_refresh_token": "091FjbIQyZyfdflEjfp-bb3ClCaIieyfAAAAAgoXBi4AAAGd0ad_6Fv0-avl6D9k"
+  }
+]

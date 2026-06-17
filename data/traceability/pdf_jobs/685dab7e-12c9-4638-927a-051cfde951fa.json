@@ -1,0 +1,25 @@
+{
+  "job_id": "685dab7e-12c9-4638-927a-051cfde951fa",
+  "created_at": "2026-03-25T05:21:13.334326Z",
+  "source_pdf": {
+    "file_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_uploads/685dab7e-12c9-4638-927a-051cfde951fa.pdf",
+    "filename": "L1_D2603 5LP250V OIL-BIN DWG 260316.pdf"
+  },
+  "proposal": {
+    "records": [],
+    "design_drawings": [
+      {
+        "drawing_id": "957b7913-7231-4908-9d56-e1f4f06ebf49",
+        "dwg_no": "DWG-1",
+        "filename": "L1_D2603 5LP250V OIL-BIN DWG 260316.pdf",
+        "file_type": "pdf",
+        "file_path": "",
+        "source": {
+          "page_number": 1,
+          "kind": "design"
+        }
+      }
+    ],
+    "installation_drawings": []
+  }
+}

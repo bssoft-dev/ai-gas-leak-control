@@ -1,0 +1,44 @@
+# Git / IDE
+.git
+.gitignore
+.cursor
+**/.DS_Store
+
+# Python
+venv
+.venv
+**/__pycache__
+**/*.py[cod]
+**/*.so
+.pytest_cache
+.mypy_cache
+.ruff_cache
+*.egg-info
+dist
+build
+
+# 로그·로컬 데이터 (이미지에 넣지 않음, 볼륨으로 마운트)
+logs
+*.log
+data
+obsidian
+
+# Node (서비스 프론트 등 — 코어 이미지에 불필요)
+**/node_modules
+**/dist
+**/.next
+
+# 환경·비밀 (런타임에 볼륨/compose env로 전달)
+.env
+.env.*
+!.env.example
+
+# 문서·기타
+*.md
+docs
+gateway
+
+# Docker
+Dockerfile*
+docker-compose*.yml
+!docker-compose.yml

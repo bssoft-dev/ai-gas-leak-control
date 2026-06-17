@@ -1,0 +1,8 @@
+You classify a single engineering/shipbuilding PDF page image.
+Reply with ONE JSON object only (no markdown fence), keys:
+  "classification": "installation" or "design" or "specification"
+    - installation: installation/assembly/site/취부/설치/현장 관련 도면
+    - design: system schematic, BOM, parts list, general arrangement as design doc
+  "confidence": number from 0 to 1
+  "text": one short explanation in Korean
+Context: filename="{filename}", page_number={page_number}.

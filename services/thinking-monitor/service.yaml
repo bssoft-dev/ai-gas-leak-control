@@ -1,0 +1,75 @@
+# SagoHub Service: 사고 과정 모니터링
+# 컨텍스트/시스템 프롬프트 입력, 사용자 프롬프트 + 파일 첨부 → LLM 응답 마크다운 표시
+
+service:
+  id: "com.SagoHub.thinking-monitor"
+  version: "1.0.0"
+  name: "사고 과정 모니터링"
+  description: "컨텍스트·시스템 프롬프트와 사용자 프롬프트(파일 첨부)로 LLM 응답을 모니터링합니다."
+  author: "SagoHub Team"
+  icon: "icon.png"
+  category: "productivity"
+
+  ui_server:
+    host: "0.0.0.0"
+    port: 8081
+    external_port: 26013
+
+interface:
+  - type: "react-ui"
+    id: "main_dashboard"
+    label: "사고 과정 모니터링"
+    description: "상단: 컨텍스트(왼쪽) / 시스템 프롬프트(오른쪽), 하단: 프롬프트 입력+파일첨부(왼쪽) / 응답 마크다운(오른쪽)"
+    binding: "./services/thinking-monitor/frontend"
+
+    props: {}
+
+    events:
+      onPrompt: "LLM_PROMPT"
+      onPromptWithAttachments: "EVT_PROMPT_WITH_ATTACHMENTS"
+      subscribe: ["LLM_PROMPT_RESPONSE"]
+
+config: {}
+
+pipelines:
+  # 첨부 파일 포함 프롬프트 → 파일첨부 모듈이 context 병합 후 LLM_PROMPT 발행
+  - id: "flow_prompt_with_attachments"
+    name: "Prompt with Attachments → FileAttachment → LLM_PROMPT"
+
+    trigger:
+      event: "EVT_PROMPT_WITH_ATTACHMENTS"
+      debounce: 0
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+
+    broadcast:
+      - module: "file_attachment.FileAttachmentModule"
+        id: "action_merge_attachments"
+        args:
+          context: "${event.context}"
+          system_prompt: "${event.system_prompt}"
+          prompt: "${event.prompt}"
+          attachments: "${event.attachments}"
+          model: "${event.model}"
+          intent: "${event.intent}"
+
+  # LLM_PROMPT → llm_prompt 모듈
+  - id: "flow_llm_prompt"
+    name: "LLM Prompt Pipeline"
+
+    trigger:
+      event: "LLM_PROMPT"
+      debounce: 0
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+
+    broadcast:
+      - module: "llm_prompt.LLMPromptModule"
+        id: "action_llm"
+        args:
+          context: "${event.context}"
+          prompt: "${event.prompt}"
+          model: "${event.model}"
+          intent: "${event.intent}"

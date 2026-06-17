@@ -1,0 +1,30 @@
+{
+  "job_id": "34c36a0c-f351-4a4f-9cec-57065171c205",
+  "filename": "L1_D2603 5LP250V OIL-BIN DWG.pdf",
+  "pdf_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_uploads/34c36a0c-f351-4a4f-9cec-57065171c205.pdf",
+  "created_at": "2026-03-20T11:45:27.876033Z",
+  "pages": [
+    {
+      "page_number": 1,
+      "image_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_vision/pages/34c36a0c-f351-4a4f-9cec-57065171c205/page-1.png",
+      "image_data_url": "/api/traceability/pdf_vision/jobs/34c36a0c-f351-4a4f-9cec-57065171c205/pages/1/file",
+      "classification_vision": "",
+      "confidence_vision": null,
+      "text_vision": null,
+      "text_pdf": "",
+      "classification": "unknown",
+      "source": "vision-pending-text"
+    },
+    {
+      "page_number": 2,
+      "image_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_vision/pages/34c36a0c-f351-4a4f-9cec-57065171c205/page-2.png",
+      "image_data_url": "/api/traceability/pdf_vision/jobs/34c36a0c-f351-4a4f-9cec-57065171c205/pages/2/file",
+      "classification_vision": "",
+      "confidence_vision": null,
+      "text_vision": null,
+      "text_pdf": "",
+      "classification": "unknown",
+      "source": "vision-pending-text"
+    }
+  ]
+}

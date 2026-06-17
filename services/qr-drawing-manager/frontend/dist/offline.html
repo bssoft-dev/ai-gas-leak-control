@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>오프라인 모드 | QR기반 도면 관리</title>
+    <style>
+      :root {
+        color-scheme: light;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        background: #eef2f7;
+        color: #111827;
+        font-family: "Noto Sans KR", system-ui, sans-serif;
+      }
+      .card {
+        width: min(560px, calc(100% - 32px));
+        background: #fff;
+        border: 1px solid #dbe2ea;
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+      }
+      h1 {
+        font-size: 1.2rem;
+        margin: 0 0 8px;
+      }
+      p {
+        margin: 0;
+        line-height: 1.6;
+        color: #4b5563;
+      }
+    </style>
+  </head>
+  <body>
+    <section class="card">
+      <h1>오프라인 기능 모드</h1>
+      <p>현재 네트워크 연결이 없습니다. 이전에 조회한 프로젝트/도면 데이터는 로컬 저장소(IndexedDB)에서 계속 확인할 수 있습니다.</p>
+    </section>
+  </body>
+</html>

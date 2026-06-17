@@ -1,0 +1,52 @@
+[
+  {
+    "id": "drawing-11",
+    "name": "도면 11",
+    "is_active": false,
+    "filename": "map_11.png",
+    "file_type": "image/png",
+    "file_path": "mock-drawings/map_11.png",
+    "created_at": "2026-03-12T04:24:47.405534Z",
+    "updated_at": "2026-04-26T19:00:00.000000Z"
+  },
+  {
+    "id": "drawing-12",
+    "name": "도면 12",
+    "is_active": false,
+    "filename": "map_12.png",
+    "file_type": "image/png",
+    "file_path": "mock-drawings/map_12.png",
+    "created_at": "2026-03-12T04:24:47.405534Z",
+    "updated_at": "2026-04-26T19:00:00.000000Z"
+  },
+  {
+    "id": "drawing-13",
+    "name": "도면 13",
+    "is_active": false,
+    "filename": "map_13.png",
+    "file_type": "image/png",
+    "file_path": "mock-drawings/map_13.png",
+    "created_at": "2026-03-12T04:24:47.405534Z",
+    "updated_at": "2026-04-26T19:00:00.000000Z"
+  },
+  {
+    "id": "drawing-14",
+    "name": "도면 14",
+    "is_active": false,
+    "filename": "map_14.png",
+    "file_type": "image/png",
+    "file_path": "mock-drawings/map_14.png",
+    "created_at": "2026-03-12T04:24:47.405534Z",
+    "updated_at": "2026-04-26T19:00:00.000000Z"
+  },
+  {
+    "id": "drawing-15",
+    "name": "도면 15",
+    "is_active": false,
+    "filename": "map_15.png",
+    "file_type": "image/png",
+    "file_path": "mock-drawings/map_15.png",
+    "created_at": "2026-03-12T04:24:47.405534Z",
+    "updated_at": "2026-04-26T19:00:00.000000Z"
+  }
+]

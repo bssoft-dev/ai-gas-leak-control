@@ -67,23 +67,48 @@ def _save_drawings(drawings: List[Dict[str, Any]]) -> None:
         json.dump(drawings, f, ensure_ascii=False, indent=2)
 
 
+def _parse_points_file(data: Any) -> Dict[str, List[Dict[str, Any]]]:
+    """points JSON: 배열(센서만) 또는 {sensors, valves} 객체."""
+    if isinstance(data, dict):
+        sensors = data.get("sensors") if isinstance(data.get("sensors"), list) else []
+        valves = data.get("valves") if isinstance(data.get("valves"), list) else []
+        return {"sensors": sensors, "valves": valves}
+    if isinstance(data, list):
+        return {"sensors": data, "valves": []}
+    return {"sensors": [], "valves": []}
+
+
 def _load_points(drawing_id: str) -> List[Dict[str, Any]]:
     path = _points_path(drawing_id)
     if path.exists():
         try:
             with open(path, "r", encoding="utf-8") as f:
-                data = json.load(f)
-                return data if isinstance(data, list) else []
+                return _parse_points_file(json.load(f))["sensors"]
         except (json.JSONDecodeError, IOError):
             pass
     return []
 
 
-def _save_points(drawing_id: str, points: List[Dict[str, Any]]) -> None:
+def _load_points_doc(drawing_id: str) -> Dict[str, List[Dict[str, Any]]]:
+    path = _points_path(drawing_id)
+    if path.exists():
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                return _parse_points_file(json.load(f))
+        except (json.JSONDecodeError, IOError):
+            pass
+    return {"sensors": [], "valves": []}
+
+
+def _save_points(drawing_id: str, points: Any) -> None:
     path = _points_path(drawing_id)
     path.parent.mkdir(parents=True, exist_ok=True)
+    if isinstance(points, dict) and ("sensors" in points or "valves" in points):
+        doc = {"sensors": points.get("sensors") or [], "valves": points.get("valves") or []}
+    else:
+        doc = points if isinstance(points, list) else []
     with open(path, "w", encoding="utf-8") as f:
-        json.dump(points, f, ensure_ascii=False, indent=2)
+        json.dump(doc, f, ensure_ascii=False, indent=2)
 
 
 def _load_sensors() -> List[Dict[str, Any]]:
@@ -247,11 +272,16 @@ class GasLeakPlantModule(Module):
                     source_module=self.name,
                 )
             ]
-        points = _load_points(drawing_id)
+        doc = _load_points_doc(drawing_id)
         return [
             Event(
                 type="GAS_LEAK_DRAWING_GET_RESULT",
-                payload={"success": True, "drawing": drawing, "sensors": points},
+                payload={
+                    "success": True,
+                    "drawing": drawing,
+                    "sensors": doc["sensors"],
+                    "valves": doc["valves"],
+                },
                 source_module=self.name,
             )
         ]
@@ -315,6 +345,7 @@ class GasLeakPlantModule(Module):
         raw_id = payload.get("drawing_id")
         drawing_id = str(raw_id).strip() if raw_id is not None else ""
         sensors = payload.get("sensors")
+        valves = payload.get("valves")
         if not drawing_id or not isinstance(sensors, list):
             return [
                 Event(
@@ -364,8 +395,24 @@ class GasLeakPlantModule(Module):
                 "sensor_type": st,
             }
             normalized.append(pt)
+        normalized_valves = []
+        if isinstance(valves, list):
+            for i, v in enumerate(valves):
+                if not isinstance(v, dict):
+                    continue
+                vid = (v.get("id") or str(uuid.uuid4())).strip()
+                normalized_valves.append(
+                    {
+                        "id": vid,
+                        "label": (v.get("label") or "").strip() or f"V{i+1}",
+                        "x": float(v.get("x", 0)),
+                        "y": float(v.get("y", 0)),
+                        "spec": v.get("spec") or {},
+                        "zone_id": (v.get("zone_id") or "zone1").strip(),
+                    }
+                )
         now = datetime.utcnow().isoformat() + "Z"
-        _save_points(drawing_id, normalized)
+        _save_points(drawing_id, {"sensors": normalized, "valves": normalized_valves})
         drawing["updated_at"] = now
         idx = next((i for i, d in enumerate(drawings) if d.get("id") == drawing_id), None)
         if idx is not None:

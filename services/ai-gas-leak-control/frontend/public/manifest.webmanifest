@@ -1,0 +1,39 @@
+{
+  "name": "SagoHub 가스누출 모바일",
+  "short_name": "가스누출",
+  "description": "AI 가스 누출 실시간 모니터링·비상 제어",
+  "start_url": "/?utm_source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0b1828",
+  "theme_color": "#61a0e1",
+  "lang": "ko",
+  "categories": ["utilities", "business"],
+  "icons": [
+    {
+      "src": "/icons/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "현황",
+      "url": "/#/mobile/home",
+      "description": "실시간 센서 현황"
+    },
+    {
+      "name": "비상 제어",
+      "url": "/#/mobile/control",
+      "description": "밸브 차단·해제"
+    }
+  ]
+}

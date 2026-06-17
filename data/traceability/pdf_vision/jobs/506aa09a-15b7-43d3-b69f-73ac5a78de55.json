@@ -1,0 +1,464 @@
+{
+  "job_id": "506aa09a-15b7-43d3-b69f-73ac5a78de55",
+  "filename": "L2_D2603 5LP250V H-RAIL DWG.pdf",
+  "pdf_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_uploads/506aa09a-15b7-43d3-b69f-73ac5a78de55.pdf",
+  "created_at": "2026-03-25T06:20:58.853939Z",
+  "pages": [
+    {
+      "page_number": 1,
+      "image_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_vision/pages/506aa09a-15b7-43d3-b69f-73ac5a78de55/page-01.png",
+      "image_data_url": "/api/traceability/pdf_vision/jobs/506aa09a-15b7-43d3-b69f-73ac5a78de55/pages/1/file",
+      "classification_vision": "",
+      "confidence_vision": null,
+      "text_vision": null,
+      "text_pdf": "REV\nADD\nCAN\nSUM\nD2581/2\n김갑진\n-\n임우택\nD2602\n진호련 김갑진 인진태\nD2603\n진호련 김갑진 인진태\n* 총중량\n총중량\n총중량\n총중량(KG/SHIP) :\nA : 485kg, B:453kg\nNOTE\n1. 의문사항은 임의 제작치 마시고 설계부로 문의 후 작업 바랍니다.\n2. 한 호선당 본 도면으로 2SET 제작 바랍니다.\n3. 본 도면의 H/RAIL만 제작 바랍니다.\n4. 제작 수량에 주의바라며, 호선당 A/B SET 구분하여 용접타입은 설치 입고(BOLT'G TYPE LOOSE 입고)\n5. PAINT SPEC. : BCX_1 (FINAL COLOR : RAL1018)\nTHIS DRAWING OR DOCUMENT IS THE PROPERTY OF SUNBO INDUSTRIES CO., LTD.\nAND IT MUST NOT BE PARTIALLY OR WHOLLY COPIED OR USED FOR ANY OTHER PURPOSE\nWITHOUT PRIOR WRITTEN PERMISSION OF SUNBO INDUSTRIES CO., LTD.\nMACH. OUTFITTING DESIGN DEP'T\nSHIP\n구매부\n▼\nTYPE\n생산부\n▼\nSHIP NO.  \nSHIP NO.  \nSHIP NO.  \nSHIP NO.  \nSHIP\nQC\n▼\nNAME\nNAME OF DRAWING\nAPPROVED\n인진태\nCHECKED\n김갑진\nDRAWN\n진호련\nTOTAL\n3\nQF041-21\n-1-\nA4 (210mm x 297mm)\nP L A N   H I S T O R Y\nDATE\nREV.\nNO\nPROJ.\n NO.\nDESCRIPTION\nWEIGHT(Kg)\nTOTAL\nPAGES\nDWN\nCHK\nAPP\n2025.06.18\n0\nD2581/2 5LP250V 호선용으로 출도함(2SET)\n2025.09.26\nD2602 5LP250V 호선용으로 출도함\n2026.01.09\nD2603 5LP250V 호선용으로 출도함\nCAUTION\n도면배포처\nSEC NO.\n174K LNG\n174K LNG\n174K LNG\n174K LNG\n        DESIGN 5 TEAM\nTEL. NO.\n051-260-5638\nD2581/2/2602/2603 5LP250V\nD2581/2/2602/2603 5LP250V\nD2581/2/2602/2603 5LP250V\nD2581/2/2602/2603 5LP250V\nDATE\n2025.09.26\nHAND RAIL DWG FOR\nHP COMPRESSOR\nPACKAGE (5LP250V)\n  DRAWING NO.\nSCALE\nSB - 0\nNONE\nCLASS\nUNIT\nCONSOLIDATED\n0\nmm",
+      "classification": "installation",
+      "source": "text",
+      "overlay_boxes": [
+        {
+          "type": "table",
+          "x": 0.07240216033613445,
+          "y": 0.05116227387173402,
+          "w": 0.8954629915966387,
+          "h": 0.8893117339667457,
+          "text": "table_1"
+        }
+      ]
+    },
+    {
+      "page_number": 2,
+      "image_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_vision/pages/506aa09a-15b7-43d3-b69f-73ac5a78de55/page-02.png",
+      "image_data_url": "/api/traceability/pdf_vision/jobs/506aa09a-15b7-43d3-b69f-73ac5a78de55/pages/2/file",
+      "classification_vision": "",
+      "confidence_vision": null,
+      "text_vision": null,
+      "text_pdf": "도면 및 중량 LIST\nDWG NO\nPART NO\nSET당\n제작수량\n호선당\n제작수량\n중량(kg)\n비고\nRAILING 1(M2T-1)\n2EA\n4EA\nRAILING 2(M2T-2)\n1EA\n2EA\nRAILING 3(M2T-3)\n1EA\n2EA\nRAILING 4(M2T-4)\n1EA\n2EA\nRAILING 5(M2T-5)\n1EA\n2EA\nRAILING 6(M2T-6)\n1EA\n2EA\nRAILING 7(M2T-7)\n1EA\n2EA\nRAILING 1(M3T-1)\n1EA\n2EA\nRAILING 2(M3T-2)\n1EA\n2EA\nRAILING 3(M3T-3)\n1EA\n2EA\nRAILING 4(M3T-4)\n1EA\n2EA\nRAILING 5(M3T-5)\n1EA\n2EA\nRAILING 6(M3T-6)\n1EA\n2EA\nRAILING 7(M3T-7)\n1EA\n2EA\nRAILING 8(M3T-8)\n1EA\n2EA\n125.619.980\n(BRIDGE MOTOR) RAILING(MOT-1)\n1EA\n2EA\n29\n삭제(D2537~)\n125.619.981\n(BRIDGE PUMP)\nRAILING(PUMP-1)\n1EA\n2EA\n29\n삭제(D2537~)\n125.619.982\n(BRIDGE COMP)\nRAILING(COMP-1)\n2EA\n4EA\n62\n삭제(D2537~)\nLOOSE-1\n1EA\n2EA\nLOOSE-2\n2EA\n4EA\n125.622.142\nLOOSE-3\n1EA\n32\n호선당 1EA 제작\n365\n333 LOOSE-3 제외\n148\n176\n9\nA SET 중량\nB SET 중량\n125.619.977\n(M3T)\n125.619.962\n(M2T)\n125.619.985",
+      "classification": "design",
+      "source": "text",
+      "overlay_boxes": [
+        {
+          "type": "table",
+          "x": 0.08546663936878256,
+          "y": 0.09278790330127161,
+          "w": 0.7816972376615575,
+          "h": 0.5253705661314926,
+          "text": "table_1"
+        }
+      ]
+    },
+    {
+      "page_number": 3,
+      "image_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_vision/pages/506aa09a-15b7-43d3-b69f-73ac5a78de55/page-03.png",
+      "image_data_url": "/api/traceability/pdf_vision/jobs/506aa09a-15b7-43d3-b69f-73ac5a78de55/pages/3/file",
+      "classification_vision": "",
+      "confidence_vision": null,
+      "text_vision": null,
+      "text_pdf": "Painting Spezifikation  \nFür C-Stahl, Grau-, Sphäroguss < +120°C \nPainting specification for carbon steel, grey-, nodular cast \nC5-M (ISO 12944-5)  \n(TSP)  \nBCX_PAINT_\nSYST_01 \nRevision \n \n \nRev. \nDat. \nSig. \nErsatz für  \n \nSeite 3 von 5 \n \nErstellt / Prepared \n \n28.12.2021 \nRIEDENER_T \nReplacement for \n \n \nÜberprüft / Reviewed \n03.01.2022 \nBERNHARD_M \nRevision \n \nPage 3 of 5 \n \nFreigabe / Approval DVS \n03.01.2022 \nRIEDENER_T \nvom / date \n \n \n \n6. \nFarbaufbau/ Coating system \nBurckhardt Compression Farbaufbau \nauf Kohlenstoffstahl, Grau- und Sphäroguss \nfür Betriebstemperaturen < +120C° \n \nBurckhardt Compression painting system \nfor carbon steel, cast-iron and nodular cast \nfor service temperatures < +120C° \n \n \nGrundierung / Primer \n2-K Epoxy – Zinkstaubgrundierung \n \n2-Pack Epoxy – zinc rich primer  \nINTERZINC 52 \nTDO 2039235 \n \nZwischenbeschichtung / Interlayer \n2-K Epoxy / Polyamid Glimmerfarbe \n \n2-Pack Epoxy / Polyamide Mio paint \nINTERGARD 475 HS \nTDO 2039236 \n \nDecklack / Top coat \n2-K Polyurethan - Acrylat  \n \n2-Pack Acrylic - Polyurethane \nINTERTHANE 990 \nTDO 2039237 \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \nProduktspezifische Details entnehmen Sie  \nbitte den technischen Merkblättern (TDO) \n \nFor product details please refer to \nmanufacturer data sheets (TDO) \n \nGrundierung 80 µm \nPrimer 80 µm \nCS \n240 µm \nINTERZINC 52 \nDecklack 60 µm \nTop coat 60 µm \nINTERGARD 475 HS \nZwischenschicht 100 µm \nInterlayer 100 µm \nINTERTHANE 990 \nFINAL COLOR : RAL1018(YELLOW)",
+      "classification": "design",
+      "source": "text",
+      "overlay_boxes": [
+        {
+          "type": "table",
+          "x": 0.08566821100004583,
+          "y": 0.03406499499021925,
+          "w": 0.881273900667468,
+          "h": 0.08582763382124292,
+          "text": "table_1"
+        },
+        {
+          "type": "table",
+          "x": 0.1245548597186941,
+          "y": 0.63998107668191,
+          "w": 0.3840791459835388,
+          "h": 0.14900126544511505,
+          "text": "table_2"
+        },
+        {
+          "type": "table",
+          "x": 0.08566821100004583,
+          "y": 0.907753706425039,
+          "w": 0.881273900667468,
+          "h": 0.0568985188288518,
+          "text": "table_3"
+        }
+      ]
+    },
+    {
+      "page_number": 4,
+      "image_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_vision/pages/506aa09a-15b7-43d3-b69f-73ac5a78de55/page-04.png",
+      "image_data_url": "/api/traceability/pdf_vision/jobs/506aa09a-15b7-43d3-b69f-73ac5a78de55/pages/4/file",
+      "classification_vision": "",
+      "confidence_vision": null,
+      "text_vision": null,
+      "text_pdf": "",
+      "classification": "design",
+      "source": "text",
+      "overlay_boxes": [
+        {
+          "type": "table",
+          "x": 0.008385756676557863,
+          "y": 0.012005033557046935,
+          "w": 0.8991932726577702,
+          "h": 0.9698939005132251,
+          "text": "table_1"
+        }
+      ]
+    },
+    {
+      "page_number": 5,
+      "image_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_vision/pages/506aa09a-15b7-43d3-b69f-73ac5a78de55/page-05.png",
+      "image_data_url": "/api/traceability/pdf_vision/jobs/506aa09a-15b7-43d3-b69f-73ac5a78de55/pages/5/file",
+      "classification_vision": "",
+      "confidence_vision": null,
+      "text_vision": null,
+      "text_pdf": "",
+      "classification": "design",
+      "source": "text",
+      "overlay_boxes": [
+        {
+          "type": "table",
+          "x": 0.623570075779966,
+          "y": 0.04575143815915624,
+          "w": 0.07930861160003043,
+          "h": 0.02340963566634716,
+          "text": "table_1"
+        },
+        {
+          "type": "table",
+          "x": 0.13364063682723565,
+          "y": 0.12035947195137377,
+          "w": 0.0635166699499184,
+          "h": 0.22476696779726033,
+          "text": "table_2"
+        },
+        {
+          "type": "table",
+          "x": 0.5080923837784377,
+          "y": 0.17798095538302675,
+          "w": 0.02177765088231111,
+          "h": 0.05635757947127397,
+          "text": "table_3"
+        },
+        {
+          "type": "table",
+          "x": 0.2730932099842903,
+          "y": 0.17798095538302675,
+          "w": 0.4209682318031068,
+          "h": 0.22144094821672883,
+          "text": "table_4"
+        },
+        {
+          "type": "table",
+          "x": 0.584948495125053,
+          "y": 0.4091073825503355,
+          "w": 0.014480153377778856,
+          "h": 0.024508389261745013,
+          "text": "table_5"
+        },
+        {
+          "type": "table",
+          "x": 0.13364063682723565,
+          "y": 0.7088923777564717,
+          "w": 0.6181334865589724,
+          "h": 0.1347142293158876,
+          "text": "table_6"
+        },
+        {
+          "type": "table",
+          "x": 0.8360118694362016,
+          "y": 0.8780436241610737,
+          "w": 0.1487886519315563,
+          "h": 0.10377006969540487,
+          "text": "table_7"
+        }
+      ]
+    },
+    {
+      "page_number": 6,
+      "image_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_vision/pages/506aa09a-15b7-43d3-b69f-73ac5a78de55/page-06.png",
+      "image_data_url": "/api/traceability/pdf_vision/jobs/506aa09a-15b7-43d3-b69f-73ac5a78de55/pages/6/file",
+      "classification_vision": "",
+      "confidence_vision": null,
+      "text_vision": null,
+      "text_pdf": "",
+      "classification": "design",
+      "source": "text",
+      "overlay_boxes": [
+        {
+          "type": "table",
+          "x": 0.3876876854599406,
+          "y": 0.0799656040268456,
+          "w": 0.12500247498752626,
+          "h": 0.11672063758389278,
+          "text": "table_1"
+        },
+        {
+          "type": "table",
+          "x": 0.22867306061890638,
+          "y": 0.0826658785845028,
+          "w": 0.0676436506787704,
+          "h": 0.11402036302623558,
+          "text": "table_2"
+        },
+        {
+          "type": "table",
+          "x": 0.5634480712166172,
+          "y": 0.0826658785845028,
+          "w": 0.015275964391691333,
+          "h": 0.0861463006496069,
+          "text": "table_3"
+        },
+        {
+          "type": "table",
+          "x": 0.5592114917723225,
+          "y": 0.1688121792341097,
+          "w": 0.018337469652009768,
+          "h": 0.027874062376628664,
+          "text": "table_4"
+        },
+        {
+          "type": "table",
+          "x": 0.668356432187118,
+          "y": 0.39388213087248325,
+          "w": 0.006990748821784025,
+          "h": 0.004049153447223715,
+          "text": "table_5"
+        },
+        {
+          "type": "table",
+          "x": 0.054575604982077607,
+          "y": 0.4070378715244482,
+          "w": 0.0633923475401775,
+          "h": 0.08695002396931947,
+          "text": "table_6"
+        },
+        {
+          "type": "table",
+          "x": 0.27844860748632505,
+          "y": 0.4070378715244482,
+          "w": 0.06309868580102727,
+          "h": 0.0639826118522055,
+          "text": "table_7"
+        },
+        {
+          "type": "table",
+          "x": 0.5413155998304369,
+          "y": 0.4109899328859061,
+          "w": 0.0025987706655359673,
+          "h": 0.08299796260786162,
+          "text": "table_8"
+        },
+        {
+          "type": "table",
+          "x": 0.1778868694362018,
+          "y": 0.4939878954937677,
+          "w": 0.02528701780415428,
+          "h": 0.026452863411756348,
+          "text": "table_9"
+        },
+        {
+          "type": "table",
+          "x": 0.8360118694362016,
+          "y": 0.8780436241610737,
+          "w": 0.1487586547972302,
+          "h": 0.10381887339545148,
+          "text": "table_10"
+        }
+      ]
+    },
+    {
+      "page_number": 7,
+      "image_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_vision/pages/506aa09a-15b7-43d3-b69f-73ac5a78de55/page-07.png",
+      "image_data_url": "/api/traceability/pdf_vision/jobs/506aa09a-15b7-43d3-b69f-73ac5a78de55/pages/7/file",
+      "classification_vision": "",
+      "confidence_vision": null,
+      "text_vision": null,
+      "text_pdf": "",
+      "classification": "design",
+      "source": "text",
+      "overlay_boxes": [
+        {
+          "type": "table",
+          "x": 0.8360118694362016,
+          "y": 0.902491610738255,
+          "w": 0.07150309730083118,
+          "h": 0.07937995729103065,
+          "text": "table_1"
+        }
+      ]
+    },
+    {
+      "page_number": 8,
+      "image_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_vision/pages/506aa09a-15b7-43d3-b69f-73ac5a78de55/page-08.png",
+      "image_data_url": "/api/traceability/pdf_vision/jobs/506aa09a-15b7-43d3-b69f-73ac5a78de55/pages/8/file",
+      "classification_vision": "",
+      "confidence_vision": null,
+      "text_vision": null,
+      "text_pdf": "",
+      "classification": "design",
+      "source": "text",
+      "overlay_boxes": [
+        {
+          "type": "table",
+          "x": 0.12056783301072035,
+          "y": 0.15495169551395255,
+          "w": 0.6520434429536713,
+          "h": 0.270132197103497,
+          "text": "table_1"
+        },
+        {
+          "type": "table",
+          "x": 0.5740654067210971,
+          "y": 0.48035234899328855,
+          "w": 0.02938635499249088,
+          "h": 0.010268456375838933,
+          "text": "table_2"
+        },
+        {
+          "type": "table",
+          "x": 0.12056783301072035,
+          "y": 0.6456208053691249,
+          "w": 0.6331889707196755,
+          "h": 0.21708053691275234,
+          "text": "table_3"
+        },
+        {
+          "type": "table",
+          "x": 0.8360118694362016,
+          "y": 0.8780436241610737,
+          "w": 0.1487969247369838,
+          "h": 0.10374071366868177,
+          "text": "table_4"
+        }
+      ]
+    },
+    {
+      "page_number": 9,
+      "image_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_vision/pages/506aa09a-15b7-43d3-b69f-73ac5a78de55/page-09.png",
+      "image_data_url": "/api/traceability/pdf_vision/jobs/506aa09a-15b7-43d3-b69f-73ac5a78de55/pages/9/file",
+      "classification_vision": "",
+      "confidence_vision": null,
+      "text_vision": null,
+      "text_pdf": "",
+      "classification": "design",
+      "source": "text",
+      "overlay_boxes": [
+        {
+          "type": "table",
+          "x": 0.06163557425694416,
+          "y": 0.08174767041987915,
+          "w": 0.07797529574953169,
+          "h": 0.11502917521770471,
+          "text": "table_1"
+        },
+        {
+          "type": "table",
+          "x": 0.3788919881305638,
+          "y": 0.40744296428088844,
+          "w": 0.0701546071926015,
+          "h": 0.07895032134006479,
+          "text": "table_2"
+        },
+        {
+          "type": "table",
+          "x": 0.7319821958456976,
+          "y": 0.40744296428088844,
+          "w": 0.02424242916954494,
+          "h": 0.08676134650899252,
+          "text": "table_3"
+        },
+        {
+          "type": "table",
+          "x": 0.8643393110566396,
+          "y": 0.8779942037827938,
+          "w": 0.1204402221858013,
+          "h": 0.10384010829774266,
+          "text": "table_4"
+        }
+      ]
+    },
+    {
+      "page_number": 10,
+      "image_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_vision/pages/506aa09a-15b7-43d3-b69f-73ac5a78de55/page-10.png",
+      "image_data_url": "/api/traceability/pdf_vision/jobs/506aa09a-15b7-43d3-b69f-73ac5a78de55/pages/10/file",
+      "classification_vision": "",
+      "confidence_vision": null,
+      "text_vision": null,
+      "text_pdf": "",
+      "classification": "design",
+      "source": "text",
+      "overlay_boxes": [
+        {
+          "type": "table",
+          "x": 0.01688836104513064,
+          "y": 0.024030226700251796,
+          "w": 0.9662707838479807,
+          "h": 0.9397774979009237,
+          "text": "table_1"
+        },
+        {
+          "type": "table",
+          "x": 0.6000129561649752,
+          "y": 0.12888939775589645,
+          "w": 0.03506424098466845,
+          "h": 0.006733033637448416,
+          "text": "table_2"
+        },
+        {
+          "type": "table",
+          "x": 0.19600554235946166,
+          "y": 0.18815176322418142,
+          "w": 0.03301734686532774,
+          "h": 0.006725030117183175,
+          "text": "table_3"
+        },
+        {
+          "type": "table",
+          "x": 0.3258421976660126,
+          "y": 0.3915487367376534,
+          "w": 0.3347897563282366,
+          "h": 0.07428069831092517,
+          "text": "table_4"
+        }
+      ]
+    },
+    {
+      "page_number": 11,
+      "image_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_vision/pages/506aa09a-15b7-43d3-b69f-73ac5a78de55/page-11.png",
+      "image_data_url": "/api/traceability/pdf_vision/jobs/506aa09a-15b7-43d3-b69f-73ac5a78de55/pages/11/file",
+      "classification_vision": "",
+      "confidence_vision": null,
+      "text_vision": null,
+      "text_pdf": "",
+      "classification": "design",
+      "source": "text",
+      "overlay_boxes": [
+        {
+          "type": "table",
+          "x": 0.8082656203548766,
+          "y": 0.024030226700251796,
+          "w": 0.17489352453823478,
+          "h": 0.2376120906801009,
+          "text": "table_1"
+        },
+        {
+          "type": "table",
+          "x": 0.4460184085510689,
+          "y": 0.3958942065491184,
+          "w": 0.010858076009501168,
+          "h": 0.007858942065491195,
+          "text": "table_2"
+        },
+        {
+          "type": "table",
+          "x": 0.6717933491686461,
+          "y": 0.7559093198992445,
+          "w": 0.3113657957244654,
+          "h": 0.207980145206697,
+          "text": "table_3"
+        }
+      ]
+    }
+  ],
+  "updated_at": "2026-03-25T06:21:53.860725Z"
+}

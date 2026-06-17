@@ -1,0 +1,57 @@
+{
+  "job_id": "b3070d4c-63c5-493b-b619-268239d03b03",
+  "filename": "L1_D2603 5LP250V OIL-BIN DWG 260316.pdf",
+  "pdf_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_uploads/b3070d4c-63c5-493b-b619-268239d03b03.pdf",
+  "created_at": "2026-03-20T06:30:44.210374Z",
+  "pages": [
+    {
+      "page_number": 1,
+      "image_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_vision/pages/b3070d4c-63c5-493b-b619-268239d03b03/page-1.png",
+      "image_data_url": "/api/traceability/pdf_vision/jobs/b3070d4c-63c5-493b-b619-268239d03b03/pages/1/file",
+      "classification_vision": "",
+      "confidence_vision": null,
+      "text_vision": null,
+      "text_pdf": "SUS316L \nPLATE 9T로 절곡 \n2EA\nSUS316L \nPLATE 3T로 절곡 \n4EA\n2포인트로 절곡.",
+      "classification": "design",
+      "source": "text",
+      "overlay_boxes": [
+        {
+          "type": "heading",
+          "x": 0.14516943866492024,
+          "y": 0.2275561902347027,
+          "w": 0.08708751463394844,
+          "h": 0.05803859633887374,
+          "text": "SUS316L  PLATE 9T 로   절곡  2EA",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.2686281832460126,
+          "y": 0.289757594166186,
+          "w": 0.08708749652262611,
+          "h": 0.05803857073687867,
+          "text": "SUS316L  PLATE 3T 로   절곡  4EA",
+          "confidence": 0.8
+        },
+        {
+          "type": "paragraph",
+          "x": 0.26873293913436574,
+          "y": 0.22183470758015678,
+          "w": 0.07597359224313799,
+          "h": 0.020748317641699873,
+          "text": "2 포인트로   절곡 .",
+          "confidence": 0.8
+        },
+        {
+          "type": "table",
+          "x": 0.008385756676557863,
+          "y": 0.012005033557046935,
+          "w": 0.9832166172106823,
+          "h": 0.9699664429530198,
+          "text": "table_1"
+        }
+      ]
+    }
+  ],
+  "updated_at": "2026-03-20T06:30:47.212554Z"
+}

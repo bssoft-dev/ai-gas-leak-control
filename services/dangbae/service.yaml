@@ -1,0 +1,651 @@
+# SagoHub Service: 당배 (당신의 배송) v3.1 - 알뜰배송
+# 핵심 가치: 알뜰배송 (중고거래 맞춤, 묶음 배송으로 저렴한 단가, 1:1 대비 약 60% 수준)
+# - map_service: 위치 검색, 경로 계산
+# - llm_item_estimator: 물품 크기·무게·배송 조건 추정
+# - alttul_fare: 알뜰 견적 (1:1 기준 할인)
+# - order_manager: 주문 관리
+# - 1일치 배송을 묶어 단일 배송원에게 배정 → 견적과 배송 비용 차로 수익
+
+service:
+  id: "com.SagoHub.dangbae"
+  version: "3.1.0"
+  name: "당배"
+  description: "알뜰배송 - 중고거래 맞춤, 묶음 배송으로 저렴하게. 출발·도착·물품만 입력하면 1:1 대비 약 40% 절감 견적"
+  author: "SagoHub Team"
+  icon: "icon.png"
+  category: "productivity"
+
+  ui_server:
+    host: "0.0.0.0"
+    port: 8080
+    external_port: 26015
+    # mode: publish (기본, npm run build 후 정적 서빙) | dev (npm run dev + HMR, 같은 포트에서 프록시)
+
+# -----------------------------------------------------------
+# Interface: React UI
+# -----------------------------------------------------------
+interface:
+  - type: "react-ui"
+    id: "main_dashboard"
+    label: "당배 대시보드"
+    description: "알뜰배송 - 출발·목적지·물품 입력 후 자동 견적, 묶음 배송으로 저렴"
+    binding: "./services/dangbae/frontend"
+
+    props:
+      default_item_size: "${config.default_item_size}"
+      kakao_map_appkey: "${config.kakao_map_appkey}"
+
+    events:
+      onLocationSearch: "LOCATION_SEARCH"
+      onGetMyLocation: "GET_MY_LOCATION"
+      onRouteCalculate: "ROUTE_CALCULATE"
+      onImageAnalyze: "IMAGE_ANALYZE"
+      onItemEstimate: "ITEM_DESCRIPTION_ESTIMATE"
+      onWebScrape: "WEB_SCRAPE"
+      onFareCalculate: "FARE_CALCULATE"
+      onDeliveryRequest: "ORDER_CREATE"
+      onMyOrdersQuery: "ORDER_QUERY"
+      onOrderAccept: "DANGBAE_ORDER_ACCEPTED"
+      onPickupDone: "DANGBAE_PICKUP_DONE"
+      onDeliveryDone: "DANGBAE_DELIVERY_DONE"
+      onAdminAuth: "ADMIN_AUTH"
+      onAdminDriverList: "ADMIN_DRIVER_LIST"
+      onAdminDriverSave: "ADMIN_DRIVER_SAVE"
+      onAdminDriverDelete: "ADMIN_DRIVER_DELETE"
+      onOrderUpdate: "ORDER_UPDATE"
+      onAdminOrdersQuery: "ORDER_QUERY"
+      onSaveKakaoCode: "ADMIN_SAVE_KAKAO_CODE"
+      onAuthSignUp: "AUTH_SIGN_UP"
+      onAuthSignIn: "AUTH_SIGN_IN"
+      onAuthOAuthUrl: "AUTH_OAUTH_URL"
+      onAuthGetUser: "AUTH_GET_USER"
+      onAuthUpdateUser: "AUTH_UPDATE_USER"
+      onPaymentPrepare: "PAYMENT_PREPARE"
+      onPaymentConfirm: "PAYMENT_CONFIRM"
+      subscribe:
+        - "LOCATION_SEARCH_RESULT"
+        - "MY_LOCATION_RESULT"
+        - "ROUTE_CALCULATED"
+        - "IMAGE_ANALYZE_RESULT"
+        - "ITEM_ESTIMATE_RESULT"
+        - "WEB_SCRAPE_RESULT"
+        - "FARE_CALCULATED"
+        - "DANGBAE_ORDER_CREATED"
+        - "ORDER_QUERIED"
+        - "DANGBAE_DRIVER_ASSIGNED"
+        - "DANGBAE_PICKUP_CONFIRMED"
+        - "DANGBAE_DELIVERY_CONFIRMED"
+        - "ADMIN_AUTH_RESULT"
+        - "ADMIN_DRIVER_LIST_RESULT"
+        - "ADMIN_DRIVER_SAVED"
+        - "ADMIN_DRIVER_DELETED"
+        - "ADMIN_KAKAO_CODE_SAVED"
+        - "AUTH_SIGN_UP_RESULT"
+        - "AUTH_SIGN_IN_RESULT"
+        - "AUTH_OAUTH_URL_RESULT"
+        - "AUTH_GET_USER_RESULT"
+        - "AUTH_UPDATE_USER_RESULT"
+        - "PAYMENT_PREPARE_RESULT"
+        - "PAYMENT_CONFIRM_RESULT"
+        - "ORDER_UPDATE_REJECTED"
+        - "ORDER_UPDATED"
+
+# -----------------------------------------------------------
+# Config
+# -----------------------------------------------------------
+config:
+  kakao_map_appkey:
+    type: "string"
+    label: "카카오맵 JavaScript 키"
+    default: "02ff36236dab959f416b24f19b4c4d4f"
+    description: "웹 페이지 지도 SDK용 JavaScript 키 (카카오 개발자 콘솔). REST API 키·네이티브 앱키와 별도입니다."
+  # 오토바이 (무게<=20kg, 부피<=0.1m³)
+  motorcycle_base:
+    type: "number"
+    label: "오토바이 기본료 (원)"
+    default: 5000
+    description: "오토바이 배정 시 기본 요금"
+  motorcycle_per_km:
+    type: "number"
+    label: "오토바이 km당 (원)"
+    default: 900
+    description: "오토바이 거리당 요금"
+  motorcycle_per_min:
+    type: "number"
+    label: "오토바이 분당 (원)"
+    default: 50
+    description: "오토바이 소요시간당 요금"
+  # 차량 (그 외)
+  vehicle_base:
+    type: "number"
+    label: "차량 기본료 (원)"
+    default: 15000
+    description: "차량 배정 시 기본 요금"
+  vehicle_per_km:
+    type: "number"
+    label: "차량 km당 (원)"
+    default: 1800
+    description: "차량 거리당 요금"
+  vehicle_per_min:
+    type: "number"
+    label: "차량 분당 (원)"
+    default: 500
+    description: "차량 소요시간당 요금"
+  worker_fee:
+    type: "number"
+    label: "추가 인부 요금 (원)"
+    default: 20000
+    description: "무게>=50kg 또는 부피>=0.5m³ 시 추가"
+  min_total:
+    type: "number"
+    label: "최소 요금 (원)"
+    default: 7000
+    description: "적자 방지 최소 금액"
+  floor_fee:
+    type: "number"
+    label: "층당 요금 (원, 엘리베이터 없을 때)"
+    default: 3000
+    description: "층당 추가 요금"
+  urgent_fee:
+    type: "number"
+    label: "긴급 요금 (원)"
+    default: 5000
+    description: "긴급 배송 시 추가"
+  default_item_size:
+    type: "select"
+    label: "기본 물품 크기"
+    options: ["", "small", "medium", "large"]
+    default: ""
+    description: "선택/소/중/대"
+
+# -----------------------------------------------------------
+# Pipelines: 재활용 가능한 모듈 조합
+# -----------------------------------------------------------
+pipelines:
+
+  # 1. 위치 검색 요청
+  - id: "flow_location_search"
+    name: "위치 검색"
+
+    trigger:
+      event: "LOCATION_SEARCH"
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: null
+
+    broadcast:
+      - module: "map_service.MapServiceModule"
+        id: "action_search_location"
+        args:
+          query: "${event.query}"
+
+  # 2. 현재 위치 조회
+  - id: "flow_get_my_location"
+    name: "현재 위치 조회"
+
+    trigger:
+      event: "GET_MY_LOCATION"
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: null
+
+    broadcast:
+      - module: "map_service.MapServiceModule"
+        id: "action_get_location"
+        args:
+          ip: "${event.ip}"
+
+  # 3. 경로(이동 거리) 계산 (카카오 맵 API)
+  - id: "flow_route_calculate"
+    name: "경로 및 거리 계산"
+
+    trigger:
+      event: "ROUTE_CALCULATE"
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: null
+
+    broadcast:
+      - module: "map_service.MapServiceModule"
+        id: "action_route_calculate"
+        args:
+          origin_lat: "${event.origin_lat}"
+          origin_lng: "${event.origin_lng}"
+          dest_lat: "${event.dest_lat}"
+          dest_lng: "${event.dest_lng}"
+
+  # 4. 이미지 분석 (NIM VLM 기반 배송 물품 크기·무게 추정)
+  # 환경: VLM_API_BASE(기본 LLM_API_BASE), VLM_NIM_MODEL, VLM_API_KEY
+  - id: "flow_image_analyze"
+    name: "이미지 분석 및 물품 추론 (VLM)"
+
+    trigger:
+      event: "IMAGE_ANALYZE"
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: null
+
+    broadcast:
+      - module: "vlm_package_image_estimator.VLMPackageImageEstimatorModule"
+        id: "action_vlm_analyze_image"
+        args:
+          image_url: "${event.image_url}"
+          image_base64: "${event.image_base64}"
+
+  # 4-2. 물품명(텍스트) 기반 AI 크기·무게 추정
+  - id: "flow_item_estimate"
+    name: "물품 설명 기반 크기·무게 추정"
+
+    trigger:
+      event: "ITEM_DESCRIPTION_ESTIMATE"
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: null
+
+    broadcast:
+      - module: "llm_item_estimator.LLMItemEstimatorModule"
+        id: "action_estimate_item"
+        args:
+          item_title: "${event.item_title}"
+
+  # 5. 웹 크롤링 (당근/중고나라)
+  - id: "flow_web_scrape"
+    name: "웹 크롤링"
+
+    trigger:
+      event: "WEB_SCRAPE"
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: null
+
+    broadcast:
+      - module: "web_scraper.WebScraperModule"
+        id: "action_scrape"
+        args:
+          url: "${event.url}"
+
+  # 6. 알뜰 견적 (1:1 기준 요금에 묶음 배송 할인 적용)
+  - id: "flow_fare_calculate"
+    name: "알뜰 배송비 견적"
+
+    trigger:
+      event: "FARE_CALCULATE"
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: null
+
+    broadcast:
+      - module: "alttul_fare.AlttulFareModule"
+        id: "action_alttul_fare"
+        args:
+          distance_km: "${event.distance_km}"
+          duration_sec: "${event.duration_sec}"
+          item_size: "${event.item_size}"
+          item_weight_kg: "${event.item_weight_kg}"
+          volume_m3: "${event.volume_m3}"
+          width_m: "${event.width_m}"
+          height_m: "${event.height_m}"
+          depth_m: "${event.depth_m}"
+          floor_count: "${event.floor_count}"
+          has_elevator: "${event.has_elevator}"
+          is_urgent: "${event.is_urgent}"
+          recipient_helps: "${event.recipient_helps}"
+          express_1to1: "${event.express_1to1}"
+
+  # 7. 배송 요청 접수 → 주문 생성
+  - id: "flow_delivery_request"
+    name: "배송 요청 접수 및 주문 생성"
+
+    trigger:
+      event: "ORDER_CREATE"
+      debounce: 300
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: null
+
+    broadcast:
+      - module: "order_manager.OrderManagerModule"
+        id: "action_create_order"
+        args:
+          order_id: null
+          status: "payment_pending"
+          custom_event_type: "DANGBAE_ORDER_CREATED"
+          origin_address: "${event.origin_address}"
+          origin_lat: "${event.origin_lat}"
+          origin_lng: "${event.origin_lng}"
+          origin_detail: "${event.origin_detail}"
+          dest_address: "${event.dest_address}"
+          dest_lat: "${event.dest_lat}"
+          dest_lng: "${event.dest_lng}"
+          dest_detail: "${event.dest_detail}"
+          item_title: "${event.item_title}"
+          item_size: "${event.item_size}"
+          item_weight_kg: "${event.item_weight_kg}"
+          item_images: "${event.item_images}"
+          estimated_km: "${event.estimated_km}"
+          estimated_fare: "${event.estimated_fare}"
+          user_email: "${event.user_email}"
+          user_phone: "${event.user_phone}"
+          order_access_pin: "${event.order_access_pin}"
+          delivery_mode: "${event.delivery_mode}"
+          want_alttul: "${event.want_alttul}"
+          want_express: "${event.want_express}"
+
+  # 7-2. 주문 생성 시 Supabase에 저장 (order_manager → DANGBAE_ORDER_CREATED → supabase)
+  - id: "flow_order_save_supabase"
+    name: "주문 Supabase 저장"
+
+    trigger:
+      event: "DANGBAE_ORDER_CREATED"
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: null
+
+    broadcast:
+      - module: "supabase.SupabaseModule"
+        id: "action_save_order"
+        args: {}
+
+  # 7-2-2. 신규 배송 등록 시 카카오톡 알림 (대기·동의 배송원들에게)
+  - id: "flow_kakao_order_created"
+    name: "카카오 알림 - 신규 배송 등록"
+    trigger:
+      event: "DANGBAE_ORDER_CREATED"
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: null
+    broadcast:
+      - module: "kakao_alarm.KakaoAlarmModule"
+        id: "action_kakao_new_order"
+        args: {}
+
+  # 7-3. 내 배송 현황 조회 (핸드폰 번호로 order_manager _load_orders 기반 조회)
+  - id: "flow_my_orders_query"
+    name: "내 배송 현황 조회"
+
+    trigger:
+      event: "ORDER_QUERY"
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: null
+
+    broadcast:
+      - module: "order_manager.OrderManagerModule"
+        id: "action_query_my_orders"
+        args:
+          user_phone: "${event.user_phone}"
+          user_pin: "${event.user_pin}"
+          user_token: "${event.user_token}"
+
+  # 7-4. 관리자: 비밀번호 인증
+  - id: "flow_admin_auth"
+    name: "관리자 인증"
+    trigger:
+      event: "ADMIN_AUTH"
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: null
+    broadcast:
+      - module: "dangbae_admin.DangbaeAdminModule"
+        id: "action_admin_auth"
+        args: {}
+
+  # 7-5. 관리자: 배송원 목록
+  - id: "flow_admin_driver_list"
+    name: "관리자 배송원 목록"
+    trigger:
+      event: "ADMIN_DRIVER_LIST"
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: null
+    broadcast:
+      - module: "dangbae_admin.DangbaeAdminModule"
+        id: "action_driver_list"
+        args: {}
+
+  # 7-6. 관리자: 배송원 등록/수정
+  - id: "flow_admin_driver_save"
+    name: "관리자 배송원 저장"
+    trigger:
+      event: "ADMIN_DRIVER_SAVE"
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: null
+    broadcast:
+      - module: "dangbae_admin.DangbaeAdminModule"
+        id: "action_driver_save"
+        args: {}
+
+  # 7-7. 관리자: 배송원 삭제
+  - id: "flow_admin_driver_delete"
+    name: "관리자 배송원 삭제"
+    trigger:
+      event: "ADMIN_DRIVER_DELETE"
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: null
+    broadcast:
+      - module: "dangbae_admin.DangbaeAdminModule"
+        id: "action_driver_delete"
+        args: {}
+
+  # 7-7-2. 카카오 동의 후 인증 코드 저장 (리다이렉트 code + state=driver_id)
+  - id: "flow_admin_save_kakao_code"
+    name: "카카오 인증 코드 저장"
+    trigger:
+      event: "ADMIN_SAVE_KAKAO_CODE"
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: null
+    broadcast:
+      - module: "dangbae_admin.DangbaeAdminModule"
+        id: "action_save_kakao_code"
+        args: {}
+
+  # 7-8. 주문 업데이트 (관리자 배정/완료 포함)
+  - id: "flow_order_update"
+    name: "주문 업데이트"
+    trigger:
+      event: "ORDER_UPDATE"
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: null
+    broadcast:
+      - module: "order_manager.OrderManagerModule"
+        id: "action_order_update"
+        args: {}
+
+  # 8. 배송원 수락 → 배송원 배정
+  # 8-2. 배송 할당 시 해당 배송원에게 카카오톡 알림
+  - id: "flow_kakao_driver_assigned"
+    name: "카카오 알림 - 배송 할당"
+    trigger:
+      event: "DANGBAE_DRIVER_ASSIGNED"
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: null
+    broadcast:
+      - module: "kakao_alarm.KakaoAlarmModule"
+        id: "action_kakao_driver_assigned"
+        args: {}
+
+  - id: "flow_order_accepted"
+    name: "배송원 수락 및 배정"
+
+    trigger:
+      event: "DANGBAE_ORDER_ACCEPTED"
+      debounce: 300
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: null
+
+    broadcast:
+      - module: "driver_assignment.DriverAssignmentModule"
+        id: "action_assign_driver"
+        args:
+          order_id: "${event.order_id}"
+          driver_id: "${event.driver_id}"
+          driver_info:
+            driver_account_msg: "${event.driver_account_msg}"
+          custom_event_type: "DANGBAE_DRIVER_ASSIGNED"
+          notification:
+            to: "${event.user_email}"
+            subject: "[당배] 배송원이 배정되었습니다"
+            body: |
+              배송원이 배정되었습니다.
+
+              주문번호: ${event.order_id}
+              출발지: ${event.origin_address} ${event.origin_detail}
+              도착지: ${event.dest_address} ${event.dest_detail}
+              예상 요금: ${event.estimated_fare}원
+
+              배송원 계좌 정보 (입금 후 배송원에게 연락해 주세요):
+              ${event.driver_account_msg}
+
+  # 8-3. 배송 완료 시 해당 배송원에게 카카오톡 알림 (order_manager가 DANGBAE_DELIVERY_CONFIRMED 발행 후)
+  - id: "flow_kakao_delivery_confirmed"
+    name: "카카오 알림 - 배송 완료"
+    trigger:
+      event: "DANGBAE_DELIVERY_CONFIRMED"
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: null
+    broadcast:
+      - module: "kakao_alarm.KakaoAlarmModule"
+        id: "action_kakao_delivery_confirmed"
+        args: {}
+
+  # 9. 픽업 완료
+  - id: "flow_pickup_done"
+    name: "픽업 완료 처리"
+
+    trigger:
+      event: "DANGBAE_PICKUP_DONE"
+      debounce: 300
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: null
+
+    broadcast:
+      - module: "order_manager.OrderManagerModule"
+        id: "action_update_pickup"
+        args:
+          order_id: "${event.order_id}"
+          status: "picked_up"
+          custom_event_type: "DANGBAE_PICKUP_CONFIRMED"
+          pickup_photo_url: "${event.pickup_photo_url}"
+
+  # 10. 배송 완료
+  - id: "flow_delivery_done"
+    name: "배송 완료 처리"
+
+    trigger:
+      event: "DANGBAE_DELIVERY_DONE"
+      debounce: 300
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: null
+
+    broadcast:
+      - module: "order_manager.OrderManagerModule"
+        id: "action_update_delivery"
+        args:
+          order_id: "${event.order_id}"
+          status: "delivered"
+          custom_event_type: "DANGBAE_DELIVERY_CONFIRMED"
+          delivery_photo_url: "${event.delivery_photo_url}"
+      - module: "mailer.MailerModule"
+        id: "action_send_delivery_notification"
+        condition: "${event.user_email} != ''"
+        args:
+          to: "${event.user_email}"
+          subject: "[당배] 배송이 완료되었습니다"
+          body: "주문번호 ${event.order_id} 배송이 완료되었습니다."
+          path: ""
+          content: ""
+
+  # 11. 회원가입·로그인 (Supabase Auth)
+  - id: "flow_auth_signup"
+    name: "회원가입"
+    trigger:
+      event: "AUTH_SIGN_UP"
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: null
+    broadcast:
+      - module: "supabase_auth.SupabaseAuthModule"
+        id: "action_dangbae_auth_signup"
+        args: {}
+
+  - id: "flow_auth_signin"
+    name: "로그인"
+    trigger:
+      event: "AUTH_SIGN_IN"
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: null
+    broadcast:
+      - module: "supabase_auth.SupabaseAuthModule"
+        id: "action_dangbae_auth_signin"
+        args: {}
+
+  - id: "flow_auth_oauth"
+    name: "OAuth URL"
+    trigger:
+      event: "AUTH_OAUTH_URL"
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: null
+    broadcast:
+      - module: "supabase_auth.SupabaseAuthModule"
+        id: "action_dangbae_auth_oauth"
+        args: {}
+
+  - id: "flow_auth_get_user"
+    name: "사용자 정보 조회"
+    trigger:
+      event: "AUTH_GET_USER"
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: null
+    broadcast:
+      - module: "supabase_auth.SupabaseAuthModule"
+        id: "action_dangbae_auth_get_user"
+        args: {}
+
+  - id: "flow_auth_update_user"
+    name: "사용자 정보 수정"
+    trigger:
+      event: "AUTH_UPDATE_USER"
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: null
+    broadcast:
+      - module: "supabase_auth.SupabaseAuthModule"
+        id: "action_dangbae_auth_update_user"
+        args: {}
+
+  # 12. 결제 준비·확인
+  - id: "flow_payment_prepare"
+    name: "결제 준비"
+    trigger:
+      event: "PAYMENT_PREPARE"
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: null
+    broadcast:
+      - module: "payment_hub.PaymentHubModule"
+        id: "action_dangbae_payment_prepare"
+        args: {}
+
+  - id: "flow_payment_confirm"
+    name: "결제 확인"
+    trigger:
+      event: "PAYMENT_CONFIRM"
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: null
+    broadcast:
+      - module: "payment_hub.PaymentHubModule"
+        id: "action_dangbae_payment_confirm"
+        args: {}

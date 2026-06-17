@@ -1,0 +1,2283 @@
+{
+  "job_id": "9bab8f1c-c96c-401b-b7ba-2ea80b54132c",
+  "filename": "L2_D2603 5LP250V 사외제작 철의장품 DWG.pdf",
+  "pdf_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_uploads/9bab8f1c-c96c-401b-b7ba-2ea80b54132c.pdf",
+  "created_at": "2026-03-25T06:49:36.490345Z",
+  "pages": [
+    {
+      "page_number": 1,
+      "image_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_vision/pages/9bab8f1c-c96c-401b-b7ba-2ea80b54132c/page-01.png",
+      "image_data_url": "/api/traceability/pdf_vision/jobs/9bab8f1c-c96c-401b-b7ba-2ea80b54132c/pages/1/file",
+      "classification_vision": "installation",
+      "confidence_vision": 0.98,
+      "text_vision": "HP COMPRESSOR PACKAGE(5LP250V) 관련 설치/조립 도면",
+      "text_pdf": "REV\nADD\nCAN\nSUM\nD2581/2\n김갑진\n-\n임우택\nD2602\n진호련 김갑진 인진태\nD2603\n진호련 김갑진 인진태\n* 총중량\n총중량\n총중량\n총중량(KG/SHIP) :\nNOTE\n1. 의문사항은 임의 제작치 마시고 설계부로 문의 후 작업 바랍니다.\n2. 제작 수량 주의바랍니다.(도면 및 중량 LIST 확인 후 작업바랍니다.)\n3. 제작에 사용된 자재에 대한 MILL SHEET 제출 바랍니다.(국산, KS 규격 사용)\n4. OPEN GRAT'G 과 설치재(BOLT, NUT, WASHER)는 제작 SCOPE가 아닙니다.\n5. PAINT : FRAME - BCX-18\nH/RAIL  - BCX-1\nTHIS DRAWING OR DOCUMENT IS THE PROPERTY OF SUNBO INDUSTRIES CO., LTD.\nAND IT MUST NOT BE PARTIALLY OR WHOLLY COPIED OR USED FOR ANY OTHER PURPOSE\nWITHOUT PRIOR WRITTEN PERMISSION OF SUNBO INDUSTRIES CO., LTD.\nMACH. OUTFITTING DESIGN DEP'T\nSHIP\n구매부\n▼\nTYPE\n생산부\n▼\nSHIP NO.  \nSHIP NO.  \nSHIP NO.  \nSHIP NO.  \nSHIP\nQC\n▼\nNAME\nNAME OF DRAWING\nAPPROVED\n인진태\nCHECKED\n김갑진\nDRAWN\n진호련\nTOTAL\n3\nQF041-21\n-1-\nA4 (210mm x 297mm)\nP L A N   H I S T O R Y\nDATE\nREV.\nNO\nPROJ.\n NO.\nDESCRIPTION\nWEIGHT(Kg)\nTOTAL\nPAGES\nDWN\nCHK\nAPP\n2025.06.18\n0\nD2581/2 5LP250V 호선용으로 출도함(2SET)\n2025.09.26\nD2602 5LP250V 호선용으로 출도함\n2026.02.26\nD2603 5LP250V 호선용으로 출도함\n6. LOOSE품(SHIM PLATE) 고박 입고바랍니다.\nA-SET : 2,020kg  B-SET : 1,579kg \nCAUTION\n도면배포처\nSEC NO.\n174K LNG\n174K LNG\n174K LNG\n174K LNG\n        DESIGN 8 TEAM\nTEL. NO.\n051-260-5638\nD2581/2/2602/2603 5LP250V\nD2581/2/2602/2603 5LP250V\nD2581/2/2602/2603 5LP250V\nD2581/2/2602/2603 5LP250V\nDATE\n2025.09.26\n사외제작철의장품 FOR\nHP COMPRESSOR\nPACKAGE (5LP250V)\n  DRAWING NO.\nSCALE\nSB - 0\nNONE\nCLASS\nUNIT\nCONSOLIDATED\n0\nmm",
+      "classification": "installation",
+      "source": "vision",
+      "overlay_boxes": [
+        {
+          "type": "heading",
+          "x": 0.5766047629989496,
+          "y": 0.12641250719084027,
+          "w": 0.1579396993172269,
+          "h": 0.1428865265110043,
+          "text": "REV ADD CAN SUM",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.21055453003955488,
+          "y": 0.13533095226151926,
+          "w": 0.7527136922884388,
+          "h": 0.15406307302008332,
+          "text": "D2581/2 김갑진 - 임우택",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.2172099906857274,
+          "y": 0.15542600726854772,
+          "w": 0.7460581290621717,
+          "h": 0.15406300959281288,
+          "text": "D2602 진호련 김갑진 인진태",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.2172099906857274,
+          "y": 0.17552099884830574,
+          "w": 0.7460581290621717,
+          "h": 0.15406300959281288,
+          "text": "D2603 진호련 김갑진 인진태",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.11515877347032563,
+          "y": 0.29550667443354733,
+          "w": 0.2208856406332064,
+          "h": 0.03936919803574079,
+          "text": "*  총중량 총중량 총중량 총중량 (KG/SHIP) : NOTE",
+          "confidence": 0.8
+        },
+        {
+          "type": "list",
+          "x": 0.13008313860212053,
+          "y": 0.34214065080583805,
+          "w": 0.4876997875566242,
+          "h": 0.1517663806181339,
+          "text": "1.  의문사항은   임의   제작치   마시고   설계부로   문의   후   작업   바랍니다 .",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.1298819918592437,
+          "y": 0.35993903153299434,
+          "w": 0.4941309824711134,
+          "h": 0.15320784688845382,
+          "text": "2.  제작 수량 주의바랍니다.(도면 및 중량 LIST 확인 후 작업바랍니다.)",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.1298814661362592,
+          "y": 0.38003402311275236,
+          "w": 0.563913771685432,
+          "h": 0.15320791937676292,
+          "text": "3.  제작에 사용된 자재에 대한  MILL SHEET  제출 바랍니다.(국산, KS 규격 사용)",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.1298814661362592,
+          "y": 0.4001289784483559,
+          "w": 0.5794406025349593,
+          "h": 0.15320791937676292,
+          "text": "4. OPEN GRAT'G  과 설치재(BOLT, NUT, WASHER)는 제작 SCOPE가 아닙니다.",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.1298814661362592,
+          "y": 0.4202240062722684,
+          "w": 0.20600323076007745,
+          "h": 0.012737500695887766,
+          "text": "5. PAINT : FRAME - BCX-18",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.21095702868549765,
+          "y": 0.44031899785202644,
+          "w": 0.11826109044692096,
+          "h": 0.012737500695887766,
+          "text": "H/RAIL  - BCX-1",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.15892348089137998,
+          "y": 0.5809840476427962,
+          "w": 0.6625563292944131,
+          "h": 0.012737500695887766,
+          "text": "THIS DRAWING OR DOCUMENT IS THE PROPERTY OF SUNBO INDUSTRIES CO., LTD.",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.15893189245913208,
+          "y": 0.6010790754667087,
+          "w": 0.7236682667451746,
+          "h": 0.012737500695887766,
+          "text": "AND IT MUST NOT BE PARTIALLY OR WHOLLY COPIED OR USED FOR ANY OTHER PURPOSE",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.15892348089137998,
+          "y": 0.6211740670464667,
+          "w": 0.5822932523839613,
+          "h": 0.012737500695887766,
+          "text": "WITHOUT PRIOR WRITTEN PERMISSION OF SUNBO INDUSTRIES CO., LTD.",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.2748906496192227,
+          "y": 0.6725405151657141,
+          "w": 0.3263532366071429,
+          "h": 0.14288649026684977,
+          "text": "MACH. OUTFITTING DESIGN DEP'T SHIP",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.07522684946781447,
+          "y": 0.6926355067454721,
+          "w": 0.5260038039263557,
+          "h": 0.14288649026684977,
+          "text": "구매부 ▼ TYPE",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.0752268751128381,
+          "y": 0.7127305708135392,
+          "w": 0.5260036757012375,
+          "h": 0.1431709343917013,
+          "text": "생산부 ▼ SHIP NO.   SHIP NO.   SHIP NO.   SHIP NO.   SHIP",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.07522677253274357,
+          "y": 0.7328254899049881,
+          "w": 0.526003778281332,
+          "h": 0.14288649026684977,
+          "text": "QC ▼ NAME",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.5689408502658876,
+          "y": 0.7529205539730552,
+          "w": 0.1210289193802521,
+          "h": 0.14288649026684977,
+          "text": "NAME OF DRAWING",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.2748905726841518,
+          "y": 0.7735855936154618,
+          "w": 0.21644587156151524,
+          "h": 0.14288649026684977,
+          "text": "APPROVED 인진태",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.2748905726841518,
+          "y": 0.8160558415138807,
+          "w": 0.21644587156151524,
+          "h": 0.14288649026684977,
+          "text": "CHECKED 김갑진",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.2748905726841518,
+          "y": 0.8568159452243542,
+          "w": 0.2164451022108062,
+          "h": 0.14288649026684977,
+          "text": "DRAWN 진호련",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.07966374629685859,
+          "y": 0.9361983274337515,
+          "w": 0.06899645508838301,
+          "h": 0.14288649026684977,
+          "text": "TOTAL 3",
+          "confidence": 0.8
+        },
+        {
+          "type": "list",
+          "x": 0.07482265825031184,
+          "y": 0.9501655922932749,
+          "w": 0.890626827207934,
+          "h": 0.14265800711661222,
+          "text": "QF041-21 -1- A4 (210mm x 297mm)",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.3702855727251838,
+          "y": 0.05937786510041661,
+          "w": 0.30172108882615545,
+          "h": 0.022927544745583433,
+          "text": "P L A N   H I S T O R Y",
+          "confidence": 0.8
+        },
+        {
+          "type": "paragraph",
+          "x": 0.09640248402827928,
+          "y": 0.0945708485510457,
+          "w": 0.6083887757373457,
+          "h": 0.027361228743528244,
+          "text": "DATE REV. NO PROJ.  NO. DESCRIPTION WEIGHT(Kg)",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.7504172445345325,
+          "y": 0.09364828984131439,
+          "w": 0.034575646664915964,
+          "h": 0.03532950611975301,
+          "text": "TOTAL PAGES",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.8006718996192227,
+          "y": 0.10468963659291029,
+          "w": 0.15431892972032563,
+          "h": 0.012737527879003674,
+          "text": "DWN CHK APP",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.07805090511546416,
+          "y": 0.1347609041988708,
+          "w": 0.479785085726185,
+          "h": 0.15287687433020802,
+          "text": "2025.06.18 0 D2581/2 5LP250V 호선용으로 출도함(2SET)",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.07804954592921153,
+          "y": 0.15485588671759018,
+          "w": 0.42169082385151324,
+          "h": 0.15287688339124667,
+          "text": "2025.09.26 D2602 5LP250V 호선용으로 출도함",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.07804954592921153,
+          "y": 0.17495095078565728,
+          "w": 0.42169082385151324,
+          "h": 0.15287688339124667,
+          "text": "2026.02.26 D2603 5LP250V 호선용으로 출도함",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.1302848238904937,
+          "y": 0.45923931638305376,
+          "w": 0.3723042976956408,
+          "h": 0.15390326348166566,
+          "text": "6. LOOSE 품( SHIM PLATE)  고박 입고바랍니다.",
+          "confidence": 0.8
+        },
+        {
+          "type": "list",
+          "x": 0.4039762865595457,
+          "y": 0.2946702680791642,
+          "w": 0.3499206799418986,
+          "h": 0.0178325227207356,
+          "text": "A-SET : 2,020kg  B-SET : 1,579kg",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.47818465032497376,
+          "y": 0.559856858785815,
+          "w": 0.0803422174533876,
+          "h": 0.014011301507292904,
+          "text": "CAUTION",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.07764618817497702,
+          "y": 0.6719704671030656,
+          "w": 0.7511862041569558,
+          "h": 0.16298148184660777,
+          "text": "도면배포처 SEC NO. 174K LNG 174K LNG 174K LNG 174K LNG         DESIGN 8 TEAM",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.1855460671817555,
+          "y": 0.7121604502625817,
+          "w": 0.06455869273979123,
+          "h": 0.14288649026684977,
+          "text": "TEL. NO.",
+          "confidence": 0.8
+        },
+        {
+          "type": "list",
+          "x": 0.16941161596474527,
+          "y": 0.7322554418423397,
+          "w": 0.3539771584903493,
+          "h": 0.1431709343917013,
+          "text": "051-260-5638 D2581/2/2602/2603 5LP250V D2581/2/2602/2603 5LP250V D2581/2/2602/2603 5LP250V D2581/2/2602/2603 5LP250V",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.18917626132484244,
+          "y": 0.8085052417746066,
+          "w": 0.0631468957211791,
+          "h": 0.19419009102211995,
+          "text": "D ATE 2 025.09.26",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.6211762756860557,
+          "y": 0.7599364074562055,
+          "w": 0.29161289760044645,
+          "h": 0.06125588315116538,
+          "text": "사외제작철의장품 FOR HP COMPRESSOR PACKAGE (5LP250V)",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.5689409015559349,
+          "y": 0.8361509055819477,
+          "w": 0.3606278106945903,
+          "h": 0.14288649026684977,
+          "text": "DRAWING NO. SCALE",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.610083777163209,
+          "y": 0.8662221731879083,
+          "w": 0.3154505625492384,
+          "h": 0.14288649026684977,
+          "text": "SB - 0 NONE",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.5903190548680409,
+          "y": 0.8964359528095309,
+          "w": 0.3160540412454044,
+          "h": 0.14288649026684977,
+          "text": "CLASS UNIT CONSOLIDATED",
+          "confidence": 0.8
+        },
+        {
+          "type": "paragraph",
+          "x": 0.606453518907563,
+          "y": 0.9128209927302925,
+          "w": 0.10468329421612395,
+          "h": 0.15571757336976694,
+          "text": "0 mm",
+          "confidence": 0.8
+        },
+        {
+          "type": "image",
+          "x": 0.24584873744419644,
+          "y": 0.8927313652854068,
+          "w": 0.31119328346573005,
+          "h": 0.023087888885280582,
+          "text": "",
+          "confidence": 0.9
+        },
+        {
+          "type": "image",
+          "x": 0.16376388934480043,
+          "y": 0.8794772404106665,
+          "w": 0.07563025210084033,
+          "h": 0.07596202134519744,
+          "text": "",
+          "confidence": 0.9
+        },
+        {
+          "type": "image",
+          "x": 0.10890674751345851,
+          "y": 0.5132061738582802,
+          "w": 0.8337479022370667,
+          "h": 0.037197158342302555,
+          "text": "",
+          "confidence": 0.9
+        },
+        {
+          "type": "image",
+          "x": 0.10769666142824318,
+          "y": 0.48042706922227585,
+          "w": 0.8319327987542673,
+          "h": 0.03619953798851321,
+          "text": "",
+          "confidence": 0.9
+        },
+        {
+          "type": "table",
+          "x": 0.07240216033613445,
+          "y": 0.05116227387173402,
+          "w": 0.8954629915966387,
+          "h": 0.917958106175772,
+          "text": "table_1"
+        }
+      ]
+    },
+    {
+      "page_number": 2,
+      "image_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_vision/pages/9bab8f1c-c96c-401b-b7ba-2ea80b54132c/page-02.png",
+      "image_data_url": "/api/traceability/pdf_vision/jobs/9bab8f1c-c96c-401b-b7ba-2ea80b54132c/pages/2/file",
+      "classification_vision": "",
+      "confidence_vision": 0.98,
+      "text_vision": "{\"classification\": \"specification\", \"confidence\": 0.98, \"text\": \"부품 리스트 및 무게 정보가 포함된 사양서/도면 리스트 페이지로 보임.\"}",
+      "text_pdf": "도면 및 중량 LIST\nDWG NO\nPART NO\nA SET\n제작수량\nB SET\n제작수량\n중량(kg)\n비고\n125.619.980\nBRIDGE MOTOR SIDE\n1EA\n1EA\n399\n125.619.981\nBRIDGE PUMP SIDE\n1EA\n1EA\n385\n125.619.982\nBRIDGE COMP/MOTOR\n2EA\n2EA\n564\n125.622.368\nBALCONY M2\n1EA\n-\n371\nA SET만 제작\n125.619.983\nSTIFFNER\n1EA\n1EA\n155\n125.623.891\nBRIDGE OVER PIPE\n2EA\n2EA\n76\n125.619.994\nLIFTING DEVICE M3\n1EA\n-\n70\nA SET만 제작\n2,020\n1,579\nA SET 중량\nB SET 중량",
+      "classification": "design",
+      "source": "text",
+      "overlay_boxes": [
+        {
+          "type": "heading",
+          "x": 0.08889336410312247,
+          "y": 0.0694061277142019,
+          "w": 0.1447572121947691,
+          "h": 0.01725229733642511,
+          "text": "도면 및 중량 LIST",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.11026002583833885,
+          "y": 0.09202307840978603,
+          "w": 0.3338759210201069,
+          "h": 0.02106172037763036,
+          "text": "DWG NO PART NO A SET",
+          "confidence": 0.8
+        },
+        {
+          "type": "paragraph",
+          "x": 0.3962910623974046,
+          "y": 0.10741646306391654,
+          "w": 0.058054780723217174,
+          "h": 0.013650083681201517,
+          "text": "제작수량",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.5174360087937704,
+          "y": 0.09202307840978603,
+          "w": 0.03659951179667497,
+          "h": 0.013650083681201517,
+          "text": "B SET",
+          "confidence": 0.8
+        },
+        {
+          "type": "paragraph",
+          "x": 0.5065510882357435,
+          "y": 0.09943471510621488,
+          "w": 0.29006349677963994,
+          "h": 0.02163183163890318,
+          "text": "제작수량 중량(kg) 비고",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.10118927152226899,
+          "y": 0.1268007352897466,
+          "w": 0.5492360071123611,
+          "h": 0.013792609231044936,
+          "text": "125.619.980 BRIDGE MOTOR SIDE 1EA 1EA 399",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.10118927152226899,
+          "y": 0.15345410960026296,
+          "w": 0.5492360071123611,
+          "h": 0.013792591107246633,
+          "text": "125.619.981 BRIDGE PUMP SIDE 1EA 1EA 385",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.10118927152226899,
+          "y": 0.18010747484888015,
+          "w": 0.5492360071123611,
+          "h": 0.013792591107246633,
+          "text": "125.619.982 BRIDGE COMP/MOTOR 2EA 2EA 564",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.10118927152226899,
+          "y": 0.20676082197369902,
+          "w": 0.6724142540238225,
+          "h": 0.013792609231044936,
+          "text": "125.622.368 BALCONY M2 1EA - 371 A SET만 제작",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.10118927152226899,
+          "y": 0.23341418722231622,
+          "w": 0.5492360071123611,
+          "h": 0.013792609231044936,
+          "text": "125.619.983 STIFFNER 1EA 1EA 155",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.10118927152226899,
+          "y": 0.26006757059473173,
+          "w": 0.5451721742559226,
+          "h": 0.013792591107246633,
+          "text": "125.623.891 BRIDGE OVER PIPE 2EA 2EA 76",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.10179399573885788,
+          "y": 0.28643584849606546,
+          "w": 0.6718095298072336,
+          "h": 0.013650065557403217,
+          "text": "125.619.994 LIFTING DEVICE M3 1EA - 70 A SET만 제작",
+          "confidence": 0.8
+        },
+        {
+          "type": "paragraph",
+          "x": 0.6414029289123753,
+          "y": 0.3119489549745404,
+          "w": 0.035418168016458945,
+          "h": 0.013650083681201517,
+          "text": "2,020",
+          "confidence": 0.8
+        },
+        {
+          "type": "paragraph",
+          "x": 0.6414029289123753,
+          "y": 0.33717699222953024,
+          "w": 0.035418168016458945,
+          "h": 0.013650083681201517,
+          "text": "1,579",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.3029631095736469,
+          "y": 0.31137881652757016,
+          "w": 0.07152676470307799,
+          "h": 0.013650083681201517,
+          "text": "A SET 중량",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.30356782738242616,
+          "y": 0.33660685378255994,
+          "w": 0.07056156915672097,
+          "h": 0.013650083681201517,
+          "text": "B SET 중량",
+          "confidence": 0.8
+        },
+        {
+          "type": "table",
+          "x": 0.08546663936878256,
+          "y": 0.09278785579082177,
+          "w": 0.7925821189779534,
+          "h": 0.26439565948195803,
+          "text": "table_1"
+        }
+      ]
+    },
+    {
+      "page_number": 3,
+      "image_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_vision/pages/9bab8f1c-c96c-401b-b7ba-2ea80b54132c/page-03.png",
+      "image_data_url": "/api/traceability/pdf_vision/jobs/9bab8f1c-c96c-401b-b7ba-2ea80b54132c/pages/3/file",
+      "classification_vision": "design",
+      "confidence_vision": 0.98,
+      "text_vision": "일반적인 선박/기계 부품 연결 세부 도면으로 설계 관련 도면임",
+      "text_pdf": "TYPICAL CONNCTION DETAIL",
+      "classification": "design",
+      "source": "vision",
+      "overlay_boxes": [
+        {
+          "type": "image",
+          "x": 0.0,
+          "y": 0.0,
+          "w": 1.0,
+          "h": 0.3007411618572631,
+          "text": "",
+          "confidence": 0.9
+        },
+        {
+          "type": "image",
+          "x": 0.0,
+          "y": 0.3007411256096664,
+          "w": 1.0,
+          "h": 0.30059860005982303,
+          "text": "",
+          "confidence": 0.9
+        },
+        {
+          "type": "image",
+          "x": 0.0,
+          "y": 0.6013397256694895,
+          "w": 1.0,
+          "h": 0.3007411618572631,
+          "text": "",
+          "confidence": 0.9
+        },
+        {
+          "type": "image",
+          "x": 0.0,
+          "y": 0.9020808150315593,
+          "w": 1.0,
+          "h": 0.097491463328524,
+          "text": "",
+          "confidence": 0.9
+        },
+        {
+          "type": "heading",
+          "x": 0.20459227466271085,
+          "y": 0.08795818230772208,
+          "w": 0.6112514293260123,
+          "h": 0.030877333928373878,
+          "text": "TYPICAL CONNCTION DETAIL",
+          "confidence": 0.8
+        }
+      ]
+    },
+    {
+      "page_number": 4,
+      "image_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_vision/pages/9bab8f1c-c96c-401b-b7ba-2ea80b54132c/page-04.png",
+      "image_data_url": "/api/traceability/pdf_vision/jobs/9bab8f1c-c96c-401b-b7ba-2ea80b54132c/pages/4/file",
+      "classification_vision": "",
+      "confidence_vision": 0.98,
+      "text_vision": "{\"classification\": \"specification\", \"confidence\": 0.98, \"text\": \"도면이 아닌 도면 규격서/페인팅 사양서로, 제품 도장 시스템 사양을 기술한 기술 규격서 페이지임.\"}",
+      "text_pdf": "Painting Spezifikation C5-M ISO 12944-5 \nFür CS, Eisen- und Ni-resist Guss, \n< +205°C (inkl. kryogenische Anwendung) \nPainting specification C5-M ISO 12944-5 for CS, cast-iron \nand Ni-resist cast < +205°C (incl. cryogenic application)  \n(TSP)  \nBCX_PAINT_\nSYST_18 \nRevision \n \n \nRev. \nDat. \nSig. \nErsatz für  \n \nSeite 3 von 5 \n \nErstellt / Prepared \n \n29.12.2021 \nRIEDENER_T \nReplacement for \n \n \nÜberprüft / Reviewed \n03.01.2022 \nBERNHARD_M \nRevision \n \nPage 3 of 5 \n \nFreigabe / Approval DVS \n03.01.2022 \nRIEDENER_T \nvom / date \n \n \n \n6. \nFarbaufbau/ painting system \nBurckhardt Compression Farbaufbau \nauf Kohlenstoffstahl, Eisen- und Ni-resist \nGuss für Betriebstemperaturen < +205°C \ninklusive kryogenischer Anwendungen. \n \nBurckhardt Compression painting system \nfor carbon steel, cast-iron and Ni-resist cast \nwith operating temperatures  \n< +205°C including cryogenic service. \n \n1. und 2. Schicht  \n1st and 2nd layer \n \n2-K Alkyliertes Amin Epoxy  \n \n2-Pack Alkylated Amine Epoxy  \nINTERBOND 2340UPC  \nTDO 2072271 \n \nFarbton: Produkt standard grau \nColour shade: Product standard grey \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \nHinweis:  \n2340 UPC ist nur in 3 Produkte Standard \nFarbtönen erhältlich: Grau, Pink, Olive. Wie \nbei allen Epoxiden kann es zu Verfärbung \nund zu Verkreidung kommen, was die \nFunktionalität jedoch nicht beeinträchtigt, \nvorausgesetzt die empfohlenen \nTemperaturlimiten werden nicht \nüberschritten. \n \nAnwendungsempfehlungen und Produkte- \ndetails entnehmen Sie bitte dem technischen \nMerkblatt \nRemark:  \n2340UPC is only available in 3 standard \ncolour shades Grey, Pink, Olive. In common \nwith all epoxies, discoloration and chalking \nmay occur. This will not have influence on \nthe functionality provided recommended \ntemperature limits are not exceeded. \n \n \n \nFor application recommendations and \nproduct details please refer to the product \ndata sheet \n \n2. Schicht 125 µm \n2nd layer 125 µm \n1. Schicht 125 µm \n1st  layer 125 µm \nCS / Cast iron / Cast Ni-resist \nINTERBOND 2340UPC \n \n   250 µm \nINTERBOND 2340UPC",
+      "classification": "design",
+      "source": "text",
+      "overlay_boxes": [
+        {
+          "type": "list",
+          "x": 0.3225996114509301,
+          "y": 0.032185000025735794,
+          "w": 0.45493702763549876,
+          "h": 0.022963085191210073,
+          "text": "Painting Spezifikation C5-M ISO 12944-5",
+          "confidence": 0.8
+        },
+        {
+          "type": "list",
+          "x": 0.3552543218625339,
+          "y": 0.05128422253648085,
+          "w": 0.38937565173831573,
+          "h": 0.022963085191210073,
+          "text": "Für CS, Eisen- und Ni-resist Guss,",
+          "confidence": 0.8
+        },
+        {
+          "type": "paragraph",
+          "x": 0.3124706073773061,
+          "y": 0.07038337255202745,
+          "w": 0.4735421284775055,
+          "h": 0.022963085191210073,
+          "text": "< +205°C (inkl. kryogenische Anwendung)",
+          "confidence": 0.8
+        },
+        {
+          "type": "list",
+          "x": 0.2757844363634276,
+          "y": 0.08989452637328198,
+          "w": 0.5511926574088684,
+          "h": 0.03682806828496732,
+          "text": "Painting specification C5-M ISO 12944-5 for CS, cast-iron  and Ni-resist cast < +205°C (incl. cryogenic application)",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.8360881275795919,
+          "y": 0.059004426520570474,
+          "w": 0.10441510385316458,
+          "h": 0.041437426276914116,
+          "text": "(TSP)   BCX_PAINT_ SYST_18",
+          "confidence": 0.8
+        },
+        {
+          "type": "paragraph",
+          "x": 0.9479237825392417,
+          "y": 0.08379073876739458,
+          "w": 0.016063712287092836,
+          "h": 0.03424898816639127,
+          "text": "Revision",
+          "confidence": 0.8
+        },
+        {
+          "type": "paragraph",
+          "x": 0.09171537627221933,
+          "y": 0.9066669266827785,
+          "w": 0.599114935394413,
+          "h": 0.014687817189148019,
+          "text": "Rev.  Dat.  Sig.  Ersatz für",
+          "confidence": 0.8
+        },
+        {
+          "type": "paragraph",
+          "x": 0.8133104661676367,
+          "y": 0.9206350115415981,
+          "w": 0.09249145172566414,
+          "h": 0.014687817189148019,
+          "text": "Seite 3 von 5",
+          "confidence": 0.8
+        },
+        {
+          "type": "paragraph",
+          "x": 0.09171537627221933,
+          "y": 0.9202073623658721,
+          "w": 0.1251797518752583,
+          "h": 0.014687817189148019,
+          "text": "Erstellt / Prepared",
+          "confidence": 0.8
+        },
+        {
+          "type": "list",
+          "x": 0.3346939419952771,
+          "y": 0.9202073623658721,
+          "w": 0.6184774777795105,
+          "h": 0.014818598527173049,
+          "text": "29.12.2021  RIEDENER_T  Replacement for",
+          "confidence": 0.8
+        },
+        {
+          "type": "list",
+          "x": 0.09171537627221933,
+          "y": 0.9347456219605935,
+          "w": 0.8614560435025682,
+          "h": 0.015246102712502095,
+          "text": "Überprüft / Reviewed  03.01.2022  BERNHARD_M  Revision    Page 3 of 5",
+          "confidence": 0.8
+        },
+        {
+          "type": "list",
+          "x": 0.09171537627221933,
+          "y": 0.950024927473991,
+          "w": 0.8614560435025682,
+          "h": 0.014818598527173049,
+          "text": "Freigabe / Approval DVS  03.01.2022  RIEDENER_T  vom / date",
+          "confidence": 0.8
+        },
+        {
+          "type": "image",
+          "x": 0.09163138911162436,
+          "y": 0.05891296023486124,
+          "w": 0.1669690191632467,
+          "h": 0.041452872285136375,
+          "text": "",
+          "confidence": 0.9
+        },
+        {
+          "type": "paragraph",
+          "x": 0.08042733400364148,
+          "y": 0.12852428157802037,
+          "w": 0.2930845803699777,
+          "h": 0.01805644251417118,
+          "text": "6.  Farbaufbau/ painting system",
+          "confidence": 0.8
+        },
+        {
+          "type": "list",
+          "x": 0.11675064998257588,
+          "y": 0.1506936485579219,
+          "w": 0.36157398564630144,
+          "h": 0.3186399400551703,
+          "text": "Burckhardt Compression Farbaufbau  auf Kohlenstoffstahl, Eisen- und Ni-resist  Guss für Betriebstemperaturen  < +205°C   inklusive kryogenischer Anwendungen.    Burckhardt Compression painting system  for carbon steel, cast-iron and Ni-resist cast  with operating temperatures   < +205°C including cryogenic service.    1. und 2. Schicht    1 st  and 2 nd  layer    2-K Alkyliertes Amin Epoxy     2-Pack Alkylated Amine Epoxy   INTERBOND 2340UPC   TDO 2072271    Farbton:  Produkt standard grau  Colour shade:  Product standard grey",
+          "confidence": 0.8
+        },
+        {
+          "type": "list",
+          "x": 0.11896794434289348,
+          "y": 0.6898066748794061,
+          "w": 0.37293289188138723,
+          "h": 0.19849265083550355,
+          "text": "Hinweis:    2340 UPC ist nur in 3 Produkte Standard  Farbtönen erhältlich: Grau, Pink, Olive. Wie  bei allen Epoxiden kann es zu Verfärbung  und zu Verkreidung kommen, was die  Funktionalität jedoch nicht beeinträchtigt,  vorausgesetzt die empfohlenen  Temperaturlimiten werden nicht  überschritten.    Anwendungsempfehlungen und Produkte-  details entnehmen Sie bitte dem technischen  Merkblatt",
+          "confidence": 0.8
+        },
+        {
+          "type": "paragraph",
+          "x": 0.5475878287706141,
+          "y": 0.6899753712062265,
+          "w": 0.3654222085248884,
+          "h": 0.19812727503525623,
+          "text": "Remark:    2340UPC is only available in 3 standard  colour shades Grey, Pink, Olive. In common  with all epoxies, discoloration and chalking  may occur. This will not have influence on  the functionality provided recommended  temperature limits are not exceeded .        For application recommendations and  product details please refer to the product  data sheet",
+          "confidence": 0.8
+        },
+        {
+          "type": "list",
+          "x": 0.6320466041531013,
+          "y": 0.5326244342021617,
+          "w": 0.11688690564618248,
+          "h": 0.02442892451125731,
+          "text": "2. Schicht 125 µm  2 nd  layer 125 µm",
+          "confidence": 0.8
+        },
+        {
+          "type": "list",
+          "x": 0.6322482194747585,
+          "y": 0.5648365519630721,
+          "w": 0.11688685438370558,
+          "h": 0.02428636270348224,
+          "text": "1. Schicht 125 µm  1 st   layer 125 µm",
+          "confidence": 0.8
+        },
+        {
+          "type": "image",
+          "x": 0.3023583917648676,
+          "y": 0.5273659949817374,
+          "w": 0.010078613058828921,
+          "h": 0.00712656798958563,
+          "text": "",
+          "confidence": 0.9
+        },
+        {
+          "type": "image",
+          "x": 0.23180810035306518,
+          "y": 0.6057582791147785,
+          "w": 0.010078613058828921,
+          "h": 0.00712656798958563,
+          "text": "",
+          "confidence": 0.9
+        },
+        {
+          "type": "image",
+          "x": 0.28582947249988544,
+          "y": 0.6282781875649421,
+          "w": 0.2709131169708223,
+          "h": 0.015820989636303913,
+          "text": "",
+          "confidence": 0.9
+        },
+        {
+          "type": "list",
+          "x": 0.3050124296127745,
+          "y": 0.6269631246648456,
+          "w": 0.23734944595002339,
+          "h": 0.016290106065550012,
+          "text": "CS / Cast iron / Cast Ni-resist",
+          "confidence": 0.8
+        },
+        {
+          "type": "image",
+          "x": 0.3023583917648676,
+          "y": 0.5629988349296655,
+          "w": 0.010078613058828921,
+          "h": 0.00712656798958563,
+          "text": "",
+          "confidence": 0.9
+        },
+        {
+          "type": "image",
+          "x": 0.3200967466474084,
+          "y": 0.5879418228932152,
+          "w": 0.2104414386178488,
+          "h": 0.01567846407612808,
+          "text": "",
+          "confidence": 0.9
+        },
+        {
+          "type": "heading",
+          "x": 0.33227507076016,
+          "y": 0.586199147064992,
+          "w": 0.1820346958797169,
+          "h": 0.03140223765129476,
+          "text": "INTERBOND 2340UPC",
+          "confidence": 0.8
+        },
+        {
+          "type": "image",
+          "x": 0.24813545555886712,
+          "y": 0.5531642450491397,
+          "w": 0.04051601629449596,
+          "h": 0.05929302537469687,
+          "text": "",
+          "confidence": 0.9
+        },
+        {
+          "type": "paragraph",
+          "x": 0.2585117241898299,
+          "y": 0.5695492110818771,
+          "w": 0.0185968475832254,
+          "h": 0.04299113883939682,
+          "text": "250 µm",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.33207350670097974,
+          "y": 0.5492835408278821,
+          "w": 0.1820346958797169,
+          "h": 0.03140223765129476,
+          "text": "INTERBOND 2340UPC",
+          "confidence": 0.8
+        },
+        {
+          "type": "table",
+          "x": 0.08566821100004583,
+          "y": 0.03406499499021925,
+          "w": 0.8810723356053007,
+          "h": 0.09084473768591127,
+          "text": "table_1"
+        },
+        {
+          "type": "table",
+          "x": 0.6193727666861156,
+          "y": 0.5293733478797364,
+          "w": 0.14445802079882722,
+          "h": 0.06467360450548965,
+          "text": "table_2"
+        },
+        {
+          "type": "table",
+          "x": 0.23869095318782377,
+          "y": 0.5394099311317362,
+          "w": 0.35184858130582547,
+          "h": 0.120023282557938,
+          "text": "table_3"
+        },
+        {
+          "type": "table",
+          "x": 0.08566821100004583,
+          "y": 0.907753706425039,
+          "w": 0.8810723356053007,
+          "h": 0.0568985188288518,
+          "text": "table_4"
+        }
+      ]
+    },
+    {
+      "page_number": 5,
+      "image_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_vision/pages/9bab8f1c-c96c-401b-b7ba-2ea80b54132c/page-05.png",
+      "image_data_url": "/api/traceability/pdf_vision/jobs/9bab8f1c-c96c-401b-b7ba-2ea80b54132c/pages/5/file",
+      "classification_vision": "",
+      "confidence_vision": 0.98,
+      "text_vision": "{\"classification\": \"specification\", \"confidence\": 0.98, \"text\": \"도면이 아닌 도장 사양서(페인팅 사양)으로, 코팅 시스템과 각 층의 두께, 재료, 색상(RAL1018) 등이 명시된 기술 사양서입니다.\"}",
+      "text_pdf": "Painting Spezifikation  \nFür C-Stahl, Grau-, Sphäroguss < +120°C \nPainting specification for carbon steel, grey-, nodular cast \nC5-M (ISO 12944-5)  \n(TSP)  \nBCX_PAINT_\nSYST_01 \nRevision \n \n \nRev. \nDat. \nSig. \nErsatz für  \n \nSeite 3 von 5 \n \nErstellt / Prepared \n \n28.12.2021 \nRIEDENER_T \nReplacement for \n \n \nÜberprüft / Reviewed \n03.01.2022 \nBERNHARD_M \nRevision \n \nPage 3 of 5 \n \nFreigabe / Approval DVS \n03.01.2022 \nRIEDENER_T \nvom / date \n \n \n \n6. \nFarbaufbau/ Coating system \nBurckhardt Compression Farbaufbau \nauf Kohlenstoffstahl, Grau- und Sphäroguss \nfür Betriebstemperaturen < +120C° \n \nBurckhardt Compression painting system \nfor carbon steel, cast-iron and nodular cast \nfor service temperatures < +120C° \n \n \nGrundierung / Primer \n2-K Epoxy – Zinkstaubgrundierung \n \n2-Pack Epoxy – zinc rich primer  \nINTERZINC 52 \nTDO 2039235 \n \nZwischenbeschichtung / Interlayer \n2-K Epoxy / Polyamid Glimmerfarbe \n \n2-Pack Epoxy / Polyamide Mio paint \nINTERGARD 475 HS \nTDO 2039236 \n \nDecklack / Top coat \n2-K Polyurethan - Acrylat  \n \n2-Pack Acrylic - Polyurethane \nINTERTHANE 990 \nTDO 2039237 \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \nProduktspezifische Details entnehmen Sie  \nbitte den technischen Merkblättern (TDO) \n \nFor product details please refer to \nmanufacturer data sheets (TDO) \n \nGrundierung 80 µm \nPrimer 80 µm \nCS \n240 µm \nINTERZINC 52 \nDecklack 60 µm \nTop coat 60 µm \nINTERGARD 475 HS \nZwischenschicht 100 µm \nInterlayer 100 µm \nINTERTHANE 990 \nFINAL COLOR : RAL1018(YELLOW)",
+      "classification": "design",
+      "source": "text",
+      "overlay_boxes": [
+        {
+          "type": "paragraph",
+          "x": 0.416532282083467,
+          "y": 0.039026516894969755,
+          "w": 0.257345784783923,
+          "h": 0.022963085191210073,
+          "text": "Painting Spezifikation",
+          "confidence": 0.8
+        },
+        {
+          "type": "list",
+          "x": 0.3098501720830087,
+          "y": 0.06168895090530917,
+          "w": 0.463060387300316,
+          "h": 0.022963085191210073,
+          "text": "Für C-Stahl, Grau-, Sphäroguss < +120°C",
+          "confidence": 0.8
+        },
+        {
+          "type": "list",
+          "x": 0.2596586708480444,
+          "y": 0.0812001047265637,
+          "w": 0.5624806804540174,
+          "h": 0.01969783348824349,
+          "text": "Painting specification for carbon steel, grey-, nodular cast",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.44696968531913406,
+          "y": 0.09506509235127085,
+          "w": 0.19485841457666986,
+          "h": 0.02296308066026017,
+          "text": "C5-M (ISO 12944-5 )",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.8300410007542761,
+          "y": 0.056438821447008514,
+          "w": 0.10441510385316458,
+          "h": 0.041294900716738275,
+          "text": "(TSP)   BCX_PAINT_ SYST_01",
+          "confidence": 0.8
+        },
+        {
+          "type": "paragraph",
+          "x": 0.9493348334784574,
+          "y": 0.07851707555529329,
+          "w": 0.016063712287092836,
+          "h": 0.03424898816639127,
+          "text": "Revision",
+          "confidence": 0.8
+        },
+        {
+          "type": "paragraph",
+          "x": 0.09171537627221933,
+          "y": 0.9066669266827785,
+          "w": 0.599114935394413,
+          "h": 0.014687817189148019,
+          "text": "Rev.  Dat.  Sig.  Ersatz für",
+          "confidence": 0.8
+        },
+        {
+          "type": "paragraph",
+          "x": 0.8133104661676367,
+          "y": 0.9206350115415981,
+          "w": 0.09249145172566414,
+          "h": 0.014687817189148019,
+          "text": "Seite 3 von 5",
+          "confidence": 0.8
+        },
+        {
+          "type": "paragraph",
+          "x": 0.09171537627221933,
+          "y": 0.9202073623658721,
+          "w": 0.1251797518752583,
+          "h": 0.014687817189148019,
+          "text": "Erstellt / Prepared",
+          "confidence": 0.8
+        },
+        {
+          "type": "list",
+          "x": 0.3346939419952771,
+          "y": 0.9202073623658721,
+          "w": 0.6184774777795105,
+          "h": 0.014818598527173049,
+          "text": "28.12.2021  RIEDENER_T  Replacement for",
+          "confidence": 0.8
+        },
+        {
+          "type": "list",
+          "x": 0.09171537627221933,
+          "y": 0.9347456219605935,
+          "w": 0.8614560435025682,
+          "h": 0.015246102712502095,
+          "text": "Überprüft / Reviewed  03.01.2022  BERNHARD_M  Revision    Page 3 of 5",
+          "confidence": 0.8
+        },
+        {
+          "type": "list",
+          "x": 0.09171537627221933,
+          "y": 0.950024927473991,
+          "w": 0.8614560435025682,
+          "h": 0.014818598527173049,
+          "text": "Freigabe / Approval DVS  03.01.2022  RIEDENER_T  vom / date",
+          "confidence": 0.8
+        },
+        {
+          "type": "image",
+          "x": 0.0859201788896404,
+          "y": 0.05627609238121136,
+          "w": 0.1669690255710563,
+          "h": 0.041452872285136375,
+          "text": "",
+          "confidence": 0.9
+        },
+        {
+          "type": "paragraph",
+          "x": 0.08284619883094896,
+          "y": 0.1277723160700759,
+          "w": 0.29006099773389094,
+          "h": 0.01812200535928004,
+          "text": "6.  Farbaufbau/  Coating system",
+          "confidence": 0.8
+        },
+        {
+          "type": "list",
+          "x": 0.11916952121769298,
+          "y": 0.15012354631721855,
+          "w": 0.36480398305344536,
+          "h": 0.43868651532037406,
+          "text": "Burckhardt Compression Farbaufbau  auf Kohlenstoffstahl, Grau- und Sphäroguss  für Betriebstemperaturen < +120C°    Burckhardt Compression painting system  for carbon steel, cast-iron and nodular cast  for service temperatures < +120C°      Grundierung /  Primer   2-K Epoxy – Zinkstaubgrundierung    2-Pack Epoxy – zinc rich primer   INTERZINC 52  TDO 2039235    Zwischenbeschichtung /  Interlayer   2-K Epoxy / Polyamid Glimmerfarbe    2-Pack Epoxy / Polyamide Mio paint  INTERGARD 475 HS  TDO 2039236    Decklack /  Top coat   2-K Polyurethan - Acrylat     2-Pack Acrylic - Polyurethane   INTERTHANE 990  TDO 2039237",
+          "confidence": 0.8
+        },
+        {
+          "type": "paragraph",
+          "x": 0.12138681557801057,
+          "y": 0.6003097212363883,
+          "w": 0.35653956186781194,
+          "h": 0.30195768933734096,
+          "text": "Produktspezifische Details entnehmen Sie   bitte den technischen Merkblättern (TDO)    For product details please refer to  manufacturer data sheets (TDO)",
+          "confidence": 0.8
+        },
+        {
+          "type": "paragraph",
+          "x": 0.5463783931530555,
+          "y": 0.6878240036966752,
+          "w": 0.12902119529127493,
+          "h": 0.026869040396281952,
+          "text": "Grundierung   80 µm   Primer 80 µm",
+          "confidence": 0.8
+        },
+        {
+          "type": "image",
+          "x": 0.17133642200009166,
+          "y": 0.7055302309689774,
+          "w": 0.010078613058828921,
+          "h": 0.00712656798958563,
+          "text": "",
+          "confidence": 0.9
+        },
+        {
+          "type": "image",
+          "x": 0.17133642200009166,
+          "y": 0.6271379830835354,
+          "w": 0.010078613058828921,
+          "h": 0.00712656798958563,
+          "text": "",
+          "confidence": 0.9
+        },
+        {
+          "type": "image",
+          "x": 0.12094335670594705,
+          "y": 0.7411630709169055,
+          "w": 0.010078613058828921,
+          "h": 0.00712656798958563,
+          "text": "",
+          "confidence": 0.9
+        },
+        {
+          "type": "heading",
+          "x": 0.2925149453188285,
+          "y": 0.7615482857531638,
+          "w": 0.028033449381328544,
+          "h": 0.016290106065550012,
+          "text": "CS",
+          "confidence": 0.8
+        },
+        {
+          "type": "paragraph",
+          "x": 0.13777665974315653,
+          "y": 0.6725994320581162,
+          "w": 0.0185968475832254,
+          "h": 0.03500938124115695,
+          "text": "240 µm",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.2479674684220579,
+          "y": 0.7258798506627909,
+          "w": 0.11758194793926381,
+          "h": 0.016290106065550012,
+          "text": "INTERZINC 52",
+          "confidence": 0.8
+        },
+        {
+          "type": "image",
+          "x": 0.17133642200009166,
+          "y": 0.655644255041878,
+          "w": 0.010078613058828921,
+          "h": 0.00712656798958563,
+          "text": "",
+          "confidence": 0.9
+        },
+        {
+          "type": "paragraph",
+          "x": 0.545168957535497,
+          "y": 0.600897004839127,
+          "w": 0.10413746627826113,
+          "h": 0.024428888263658077,
+          "text": "Decklack 60 µm  Top coat 60 µm",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.2235772432741836,
+          "y": 0.685103113908008,
+          "w": 0.16585889818687696,
+          "h": 0.018017086683306247,
+          "text": "INTERGARD 475 HS",
+          "confidence": 0.8
+        },
+        {
+          "type": "paragraph",
+          "x": 0.5475878287706141,
+          "y": 0.6465070327229552,
+          "w": 0.16158558121857675,
+          "h": 0.02428639895108147,
+          "text": "Zwischenschicht 100 µm  Interlayer 100 µm",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.23325270258341355,
+          "y": 0.6442093699029079,
+          "w": 0.14560047993981376,
+          "h": 0.016290106065550012,
+          "text": "INTERTHANE 990",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.5581127842158322,
+          "y": 0.5699758453248245,
+          "w": 0.3317073388284658,
+          "h": 0.01425313597917126,
+          "text": "FINAL COLOR : RAL1018(YELLOW)",
+          "confidence": 0.8
+        },
+        {
+          "type": "table",
+          "x": 0.08566821100004583,
+          "y": 0.03406499499021925,
+          "w": 0.881273900667468,
+          "h": 0.08582763382124292,
+          "text": "table_1"
+        },
+        {
+          "type": "table",
+          "x": 0.1245548597186941,
+          "y": 0.63998107668191,
+          "w": 0.3840791459835388,
+          "h": 0.14900126544511505,
+          "text": "table_2"
+        },
+        {
+          "type": "table",
+          "x": 0.08566821100004583,
+          "y": 0.907753706425039,
+          "w": 0.881273900667468,
+          "h": 0.0568985188288518,
+          "text": "table_3"
+        }
+      ]
+    },
+    {
+      "page_number": 6,
+      "image_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_vision/pages/9bab8f1c-c96c-401b-b7ba-2ea80b54132c/page-06.png",
+      "image_data_url": "/api/traceability/pdf_vision/jobs/9bab8f1c-c96c-401b-b7ba-2ea80b54132c/pages/6/file",
+      "classification_vision": "design",
+      "confidence_vision": 0.98,
+      "text_vision": "제품 설계 도면으로 시스템 구성도 및 부품 리스트가 포함된 설계 관련 도면",
+      "text_pdf": "",
+      "classification": "design",
+      "source": "vision",
+      "overlay_boxes": [
+        {
+          "type": "table",
+          "x": 0.16354026845637584,
+          "y": 0.05665505063132886,
+          "w": 0.23291623644811568,
+          "h": 0.18698124949442207,
+          "text": "table_1"
+        },
+        {
+          "type": "table",
+          "x": 0.5869064597315437,
+          "y": 0.1977444668901368,
+          "w": 0.03413975747406911,
+          "h": 0.07948356161342618,
+          "text": "table_2"
+        },
+        {
+          "type": "table",
+          "x": 0.4563033124052821,
+          "y": 0.2386905018971534,
+          "w": 0.0679845270671705,
+          "h": 0.055236739007959675,
+          "text": "table_3"
+        },
+        {
+          "type": "table",
+          "x": 0.11393456375838926,
+          "y": 0.45717755344418043,
+          "w": 0.222831543624161,
+          "h": 0.07441166864608084,
+          "text": "table_4"
+        },
+        {
+          "type": "table",
+          "x": 0.10204874602613917,
+          "y": 0.6836757719714964,
+          "w": 0.2557314553161427,
+          "h": 0.2683761876484566,
+          "text": "table_5"
+        },
+        {
+          "type": "table",
+          "x": 0.7680956375838925,
+          "y": 0.8620546318289787,
+          "w": 0.1060155381263344,
+          "h": 0.11232513894333891,
+          "text": "table_6"
+        }
+      ]
+    },
+    {
+      "page_number": 7,
+      "image_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_vision/pages/9bab8f1c-c96c-401b-b7ba-2ea80b54132c/page-07.png",
+      "image_data_url": "/api/traceability/pdf_vision/jobs/9bab8f1c-c96c-401b-b7ba-2ea80b54132c/pages/7/file",
+      "classification_vision": "design",
+      "confidence_vision": 0.98,
+      "text_vision": "시스템 도면 및 부품 목록, 일반 배치도 등 설계 관련 도면",
+      "text_pdf": "",
+      "classification": "design",
+      "source": "vision",
+      "overlay_boxes": [
+        {
+          "type": "table",
+          "x": 0.5699029822472397,
+          "y": 0.06285035629453678,
+          "w": 0.028637422251218226,
+          "h": 0.0544878478720999,
+          "text": "table_1"
+        },
+        {
+          "type": "table",
+          "x": 0.06201953214924509,
+          "y": 0.11733820416663668,
+          "w": 0.1721943684742002,
+          "h": 0.07388507374310217,
+          "text": "table_2"
+        },
+        {
+          "type": "table",
+          "x": 0.3229946437790397,
+          "y": 0.11733820416663668,
+          "w": 0.10300721068934629,
+          "h": 0.07388507374310217,
+          "text": "table_3"
+        },
+        {
+          "type": "table",
+          "x": 0.06201953214924509,
+          "y": 0.22463657957244668,
+          "w": 0.18277562236067404,
+          "h": 0.2195647268408549,
+          "text": "table_4"
+        },
+        {
+          "type": "table",
+          "x": 0.4837906556530718,
+          "y": 0.23867782336428403,
+          "w": 0.0072831698502839595,
+          "h": 0.006737853595335904,
+          "text": "table_5"
+        },
+        {
+          "type": "table",
+          "x": 0.06201953214924509,
+          "y": 0.5082772677665792,
+          "w": 0.1721943684742002,
+          "h": 0.14441920688267995,
+          "text": "table_6"
+        },
+        {
+          "type": "table",
+          "x": 0.5699029822472397,
+          "y": 0.6650593824228028,
+          "w": 0.08447483828041662,
+          "h": 0.054726840855106935,
+          "text": "table_7"
+        },
+        {
+          "type": "table",
+          "x": 0.7083245445829337,
+          "y": 0.6650593824228028,
+          "w": 0.00860341263183142,
+          "h": 0.10197560752786398,
+          "text": "table_8"
+        },
+        {
+          "type": "table",
+          "x": 0.817105286984486,
+          "y": 0.848981500473077,
+          "w": 0.12684199064099783,
+          "h": 0.1253675768154305,
+          "text": "table_9"
+        }
+      ]
+    },
+    {
+      "page_number": 8,
+      "image_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_vision/pages/9bab8f1c-c96c-401b-b7ba-2ea80b54132c/page-08.png",
+      "image_data_url": "/api/traceability/pdf_vision/jobs/9bab8f1c-c96c-401b-b7ba-2ea80b54132c/pages/8/file",
+      "classification_vision": "design",
+      "confidence_vision": 0.98,
+      "text_vision": "시스템 구성도 및 부품 배치도(일반 배치도)로 설계 관련 도면임.",
+      "text_pdf": "",
+      "classification": "design",
+      "source": "vision",
+      "overlay_boxes": [
+        {
+          "type": "table",
+          "x": 0.2530872483221477,
+          "y": 0.004863420427553409,
+          "w": 0.0031819271332694165,
+          "h": 0.0050771971496437205,
+          "text": "table_1"
+        },
+        {
+          "type": "table",
+          "x": 0.17788590604026844,
+          "y": 0.06684460557569696,
+          "w": 0.14987888003355695,
+          "h": 0.0040522071072838116,
+          "text": "table_2"
+        },
+        {
+          "type": "table",
+          "x": 0.1757969798657718,
+          "y": 0.15774686121479467,
+          "w": 0.16816291300980915,
+          "h": 0.07512998877606956,
+          "text": "table_3"
+        },
+        {
+          "type": "table",
+          "x": 0.46554425335570465,
+          "y": 0.21070205514819748,
+          "w": 0.13801765056517135,
+          "h": 0.10840504914893037,
+          "text": "table_4"
+        },
+        {
+          "type": "table",
+          "x": 0.16197357382550334,
+          "y": 0.39516016287750244,
+          "w": 0.23448293107898815,
+          "h": 0.2442460128944688,
+          "text": "table_5"
+        },
+        {
+          "type": "table",
+          "x": 0.10189177852348993,
+          "y": 0.7525475059382418,
+          "w": 0.2560372722914669,
+          "h": 0.13852731591448902,
+          "text": "table_6"
+        },
+        {
+          "type": "table",
+          "x": 0.7680956375838925,
+          "y": 0.8577378690193408,
+          "w": 0.1030469083803843,
+          "h": 0.11668712098559818,
+          "text": "table_7"
+        },
+        {
+          "type": "table",
+          "x": 0.2530872483221477,
+          "y": 0.9901509012155931,
+          "w": 0.0031819271332694165,
+          "h": 0.005271253826514207,
+          "text": "table_8"
+        }
+      ]
+    },
+    {
+      "page_number": 9,
+      "image_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_vision/pages/9bab8f1c-c96c-401b-b7ba-2ea80b54132c/page-09.png",
+      "image_data_url": "/api/traceability/pdf_vision/jobs/9bab8f1c-c96c-401b-b7ba-2ea80b54132c/pages/9/file",
+      "classification_vision": "design",
+      "confidence_vision": 0.98,
+      "text_vision": "시스템 구성도 및 부품 배치도 등 설계 관련 도면",
+      "text_pdf": "",
+      "classification": "design",
+      "source": "vision",
+      "overlay_boxes": [
+        {
+          "type": "table",
+          "x": 0.7075700229334598,
+          "y": 0.08517706758799397,
+          "w": 0.10272141138355369,
+          "h": 0.15931887231147027,
+          "text": "table_1"
+        },
+        {
+          "type": "table",
+          "x": 0.05978986679422472,
+          "y": 0.11661062097047817,
+          "w": 0.1755540929373188,
+          "h": 0.047789965867582454,
+          "text": "table_2"
+        },
+        {
+          "type": "table",
+          "x": 0.3466503405053297,
+          "y": 0.11661062097047817,
+          "w": 0.0838957766590324,
+          "h": 0.020900919387160495,
+          "text": "table_3"
+        },
+        {
+          "type": "table",
+          "x": 0.482239932885906,
+          "y": 0.2496912114014252,
+          "w": 0.004530201342281956,
+          "h": 0.006894299287410935,
+          "text": "table_4"
+        },
+        {
+          "type": "table",
+          "x": 0.05978986679422472,
+          "y": 0.2845199399924991,
+          "w": 0.16040467912370934,
+          "h": 0.06683355508724309,
+          "text": "table_5"
+        },
+        {
+          "type": "table",
+          "x": 0.05978986679422472,
+          "y": 0.3651961535514518,
+          "w": 0.1755540929373188,
+          "h": 0.023526276037962087,
+          "text": "table_6"
+        },
+        {
+          "type": "table",
+          "x": 0.05978986679422472,
+          "y": 0.4631003023105164,
+          "w": 0.1755540929373188,
+          "h": 0.17012416324767815,
+          "text": "table_7"
+        },
+        {
+          "type": "table",
+          "x": 0.4903423867449665,
+          "y": 0.5630095011876485,
+          "w": 0.009882445469798518,
+          "h": 0.007453681710213789,
+          "text": "table_8"
+        },
+        {
+          "type": "table",
+          "x": 0.5678607382550336,
+          "y": 0.6026365795724465,
+          "w": 0.0851322542439794,
+          "h": 0.05476959619952492,
+          "text": "table_9"
+        },
+        {
+          "type": "table",
+          "x": 0.7075700229334598,
+          "y": 0.6026365795724465,
+          "w": 0.050806273588809875,
+          "h": 0.10154394299287411,
+          "text": "table_10"
+        },
+        {
+          "type": "table",
+          "x": 0.8102914343170136,
+          "y": 0.8270789011669932,
+          "w": 0.16829599539457749,
+          "h": 0.14722511377662234,
+          "text": "table_11"
+        }
+      ]
+    },
+    {
+      "page_number": 10,
+      "image_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_vision/pages/9bab8f1c-c96c-401b-b7ba-2ea80b54132c/page-10.png",
+      "image_data_url": "/api/traceability/pdf_vision/jobs/9bab8f1c-c96c-401b-b7ba-2ea80b54132c/pages/10/file",
+      "classification_vision": "design",
+      "confidence_vision": 0.98,
+      "text_vision": "제품 설계 도면으로 보이며, 강구조 브리지 컴포넌트/모터 관련 도면으로 BOM 및 상세 치수 정보가 포함되어 있습니다.",
+      "text_pdf": "",
+      "classification": "design",
+      "source": "vision",
+      "overlay_boxes": [
+        {
+          "type": "table",
+          "x": 0.8687572614426363,
+          "y": 0.016995249406175708,
+          "w": 0.11935118080391999,
+          "h": 0.3088004750593824,
+          "text": "table_1"
+        },
+        {
+          "type": "table",
+          "x": 0.11591635367280341,
+          "y": 0.17073034500599696,
+          "w": 0.1905546163158001,
+          "h": 0.05191811105101018,
+          "text": "table_2"
+        },
+        {
+          "type": "table",
+          "x": 0.11591635367280341,
+          "y": 0.40852731591448904,
+          "w": 0.2418824331108828,
+          "h": 0.14007308605883462,
+          "text": "table_3"
+        },
+        {
+          "type": "table",
+          "x": 0.3440687919463086,
+          "y": 0.49626707244655555,
+          "w": 0.0029971549460169997,
+          "h": 0.009101098574822098,
+          "text": "table_4"
+        },
+        {
+          "type": "table",
+          "x": 0.6828548657718121,
+          "y": 0.67291567695962,
+          "w": 0.02982130872483214,
+          "h": 0.005558194774346734,
+          "text": "table_5"
+        },
+        {
+          "type": "table",
+          "x": 0.11591635367280341,
+          "y": 0.7758855106888367,
+          "w": 0.1905546163158001,
+          "h": 0.07631288911113751,
+          "text": "table_6"
+        },
+        {
+          "type": "table",
+          "x": 0.12470738255033553,
+          "y": 0.781455463182898,
+          "w": 0.17244636973764493,
+          "h": 0.057684976247030714,
+          "text": "table_7"
+        },
+        {
+          "type": "table",
+          "x": 0.7680956375838925,
+          "y": 0.8284471496437056,
+          "w": 0.22001280466266368,
+          "h": 0.14595233839909588,
+          "text": "table_8"
+        }
+      ]
+    },
+    {
+      "page_number": 11,
+      "image_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_vision/pages/9bab8f1c-c96c-401b-b7ba-2ea80b54132c/page-11.png",
+      "image_data_url": "/api/traceability/pdf_vision/jobs/9bab8f1c-c96c-401b-b7ba-2ea80b54132c/pages/11/file",
+      "classification_vision": "design",
+      "confidence_vision": 0.98,
+      "text_vision": "시스템 구성도 및 부품 리스트가 포함된 설계 도면으로, 강구조 브리지 컴포넌트와 모터 관련 사양서 및 CAD 도면 정보가 명시되어 있음.",
+      "text_pdf": "",
+      "classification": "design",
+      "source": "vision",
+      "overlay_boxes": [
+        {
+          "type": "table",
+          "x": 0.051960283638998794,
+          "y": 0.11558846284357,
+          "w": 0.19142677040550823,
+          "h": 0.08882246352222536,
+          "text": "table_1"
+        },
+        {
+          "type": "table",
+          "x": 0.3505761574337391,
+          "y": 0.11558846284357,
+          "w": 0.10384078887498563,
+          "h": 0.08882246352222536,
+          "text": "table_2"
+        },
+        {
+          "type": "table",
+          "x": 0.3618875838926174,
+          "y": 0.2585095011876484,
+          "w": 0.007512583892617484,
+          "h": 0.005558194774346802,
+          "text": "table_3"
+        },
+        {
+          "type": "table",
+          "x": 0.051960283638998794,
+          "y": 0.29939429928741107,
+          "w": 0.19142677040550823,
+          "h": 0.13032520609193787,
+          "text": "table_4"
+        },
+        {
+          "type": "table",
+          "x": 0.051960283638998794,
+          "y": 0.533105700712589,
+          "w": 0.19142677040550823,
+          "h": 0.0856321528827468,
+          "text": "table_5"
+        },
+        {
+          "type": "table",
+          "x": 0.5905200797524627,
+          "y": 0.5761549881235154,
+          "w": 0.057744181992503814,
+          "h": 0.1249435866983372,
+          "text": "table_6"
+        },
+        {
+          "type": "table",
+          "x": 0.812042681565313,
+          "y": 0.8273800475059381,
+          "w": 0.17606973454206953,
+          "h": 0.14690125551408234,
+          "text": "table_7"
+        }
+      ]
+    },
+    {
+      "page_number": 12,
+      "image_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_vision/pages/9bab8f1c-c96c-401b-b7ba-2ea80b54132c/page-12.png",
+      "image_data_url": "/api/traceability/pdf_vision/jobs/9bab8f1c-c96c-401b-b7ba-2ea80b54132c/pages/12/file",
+      "classification_vision": "design",
+      "confidence_vision": 0.98,
+      "text_vision": "제품 설계 도면으로 시스템 구성도 및 부품 리스트가 포함된 설계 관련 도면",
+      "text_pdf": "A SET만 제작",
+      "classification": "design",
+      "source": "vision",
+      "overlay_boxes": [
+        {
+          "type": "heading",
+          "x": 0.6580945213369075,
+          "y": 0.048616690193955515,
+          "w": 0.09289934811176069,
+          "h": 0.021377672209026127,
+          "text": "A SET만 제작",
+          "confidence": 0.8
+        },
+        {
+          "type": "table",
+          "x": 0.2519735738255034,
+          "y": 0.004863420427553409,
+          "w": 0.005081032641854842,
+          "h": 0.0050771971496437205,
+          "text": "table_1"
+        },
+        {
+          "type": "table",
+          "x": 0.869245919512562,
+          "y": 0.016995249406175708,
+          "w": 0.11886290119692998,
+          "h": 0.34820665083135394,
+          "text": "table_2"
+        },
+        {
+          "type": "table",
+          "x": 0.11042365771812081,
+          "y": 0.1572957668815745,
+          "w": 0.09589370311883136,
+          "h": 0.09701755637474171,
+          "text": "table_3"
+        },
+        {
+          "type": "table",
+          "x": 0.31722048505186085,
+          "y": 0.1572957668815745,
+          "w": 0.02104035645562459,
+          "h": 0.09701755637474171,
+          "text": "table_4"
+        },
+        {
+          "type": "table",
+          "x": 0.10804530201342281,
+          "y": 0.2888123515439429,
+          "w": 0.23021553949406265,
+          "h": 0.027645964486819646,
+          "text": "table_5"
+        },
+        {
+          "type": "table",
+          "x": 0.11042365771812081,
+          "y": 0.393633469647623,
+          "w": 0.28603404883128913,
+          "h": 0.2212575461411154,
+          "text": "table_6"
+        },
+        {
+          "type": "table",
+          "x": 0.39109228187919476,
+          "y": 0.4785066611587318,
+          "w": 0.003186241610738209,
+          "h": 0.009652483734379855,
+          "text": "table_7"
+        },
+        {
+          "type": "table",
+          "x": 0.09800335570469797,
+          "y": 0.7778518887441573,
+          "w": 0.07399328859060403,
+          "h": 0.0894731615025081,
+          "text": "table_8"
+        },
+        {
+          "type": "table",
+          "x": 0.1789052013422819,
+          "y": 0.7778518887441573,
+          "w": 0.06432076941514864,
+          "h": 0.0894731615025081,
+          "text": "table_9"
+        },
+        {
+          "type": "table",
+          "x": 0.2519735738255034,
+          "y": 0.7778518887441573,
+          "w": 0.07886954697986572,
+          "h": 0.0894731615025081,
+          "text": "table_10"
+        },
+        {
+          "type": "table",
+          "x": 0.7680956375838925,
+          "y": 0.8282244655581947,
+          "w": 0.2200131831255994,
+          "h": 0.14611433400328896,
+          "text": "table_11"
+        },
+        {
+          "type": "table",
+          "x": 0.2519735738255034,
+          "y": 0.9901509012155931,
+          "w": 0.005081032641854842,
+          "h": 0.005271253826514207,
+          "text": "table_12"
+        }
+      ]
+    },
+    {
+      "page_number": 13,
+      "image_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_vision/pages/9bab8f1c-c96c-401b-b7ba-2ea80b54132c/page-13.png",
+      "image_data_url": "/api/traceability/pdf_vision/jobs/9bab8f1c-c96c-401b-b7ba-2ea80b54132c/pages/13/file",
+      "classification_vision": "design",
+      "confidence_vision": 0.98,
+      "text_vision": "제품 설계 도면으로 시스템 구성도 및 부품 리스트가 포함된 설계 관련 도면",
+      "text_pdf": "A SET만 제작",
+      "classification": "design",
+      "source": "vision",
+      "overlay_boxes": [
+        {
+          "type": "heading",
+          "x": 0.8393859351241348,
+          "y": 0.027514691024381588,
+          "w": 0.09289924570378041,
+          "h": 0.021377672209026127,
+          "text": "A SET만 제작",
+          "confidence": 0.8
+        },
+        {
+          "type": "table",
+          "x": 0.053670318377392556,
+          "y": 0.08409278200591414,
+          "w": 0.1747551039785436,
+          "h": 0.05500048991143394,
+          "text": "table_1"
+        },
+        {
+          "type": "table",
+          "x": 0.6311197753643213,
+          "y": 0.08409278200591414,
+          "w": 0.13063358034037675,
+          "h": 0.09597273021537159,
+          "text": "table_2"
+        },
+        {
+          "type": "table",
+          "x": 0.369816977126421,
+          "y": 0.11602368378571636,
+          "w": 0.06786758663196811,
+          "h": 0.023069588131631732,
+          "text": "table_3"
+        },
+        {
+          "type": "table",
+          "x": 0.3244945469798658,
+          "y": 0.2261356888361047,
+          "w": 0.008399748322147642,
+          "h": 0.005812054631828756,
+          "text": "table_4"
+        },
+        {
+          "type": "table",
+          "x": 0.11759384267207733,
+          "y": 0.24007125890736336,
+          "w": 0.1375145724027807,
+          "h": 0.11285236925802193,
+          "text": "table_5"
+        },
+        {
+          "type": "table",
+          "x": 0.7202831375838916,
+          "y": 0.5458432304038005,
+          "w": 0.04532088926174595,
+          "h": 0.07596199524940615,
+          "text": "table_6"
+        },
+        {
+          "type": "table",
+          "x": 0.767614303691275,
+          "y": 0.8273800475059381,
+          "w": 0.22049811241610748,
+          "h": 0.14684282705149512,
+          "text": "table_7"
+        }
+      ]
+    },
+    {
+      "page_number": 14,
+      "image_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_vision/pages/9bab8f1c-c96c-401b-b7ba-2ea80b54132c/page-14.png",
+      "image_data_url": "/api/traceability/pdf_vision/jobs/9bab8f1c-c96c-401b-b7ba-2ea80b54132c/pages/14/file",
+      "classification_vision": "design",
+      "confidence_vision": 0.98,
+      "text_vision": "제품 설계 도면으로 시스템 구성, 부품 리스트, 치수 정보가 포함된 설계 관련 도면",
+      "text_pdf": "U1\"\nU1\"",
+      "classification": "design",
+      "source": "vision",
+      "overlay_boxes": [
+        {
+          "type": "heading",
+          "x": 0.11898823645222499,
+          "y": 0.8506801294539778,
+          "w": 0.011636602623728846,
+          "h": 0.013843859873530647,
+          "text": "U1\"",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.25788567694802184,
+          "y": 0.955340099574937,
+          "w": 0.011636584501651573,
+          "h": 0.013843859873530647,
+          "text": "U1\"",
+          "confidence": 0.8
+        },
+        {
+          "type": "image",
+          "x": 0.15494754818442882,
+          "y": 0.752983445584724,
+          "w": 0.24431124435751003,
+          "h": 0.1951273446519469,
+          "text": "",
+          "confidence": 0.9
+        },
+        {
+          "type": "table",
+          "x": 0.7994416287131385,
+          "y": 0.024030226700251796,
+          "w": 0.18371751617997292,
+          "h": 0.3594788499956571,
+          "text": "table_1"
+        },
+        {
+          "type": "table",
+          "x": 0.09098079968329396,
+          "y": 0.39029147175242906,
+          "w": 0.2611871069182383,
+          "h": 0.20048938467074473,
+          "text": "table_2"
+        },
+        {
+          "type": "table",
+          "x": 0.7994416287131385,
+          "y": 0.7559093198992445,
+          "w": 0.18371751617997292,
+          "h": 0.20789840470193102,
+          "text": "table_3"
+        }
+      ]
+    },
+    {
+      "page_number": 15,
+      "image_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_vision/pages/9bab8f1c-c96c-401b-b7ba-2ea80b54132c/page-15.png",
+      "image_data_url": "/api/traceability/pdf_vision/jobs/9bab8f1c-c96c-401b-b7ba-2ea80b54132c/pages/15/file",
+      "classification_vision": "design",
+      "confidence_vision": 0.98,
+      "text_vision": "강구조 브리지(STEP) 오버 퍼ipe 관련 설계 도면으로, 시스템 도면 및 부품 리스트 포함",
+      "text_pdf": "",
+      "classification": "design",
+      "source": "vision",
+      "overlay_boxes": [
+        {
+          "type": "table",
+          "x": 0.8647683352090236,
+          "y": 0.016995249406175708,
+          "w": 0.12333827294791994,
+          "h": 0.1876959619952495,
+          "text": "table_1"
+        },
+        {
+          "type": "table",
+          "x": 0.1510746644295302,
+          "y": 0.10653776722090265,
+          "w": 0.12021644295302016,
+          "h": 0.1641951815405498,
+          "text": "table_2"
+        },
+        {
+          "type": "table",
+          "x": 0.5237270399152243,
+          "y": 0.10653776722090265,
+          "w": 0.03621663218448795,
+          "h": 0.1641951815405498,
+          "text": "table_3"
+        },
+        {
+          "type": "table",
+          "x": 0.13213087248322147,
+          "y": 0.46528503562945367,
+          "w": 0.15810402684563757,
+          "h": 0.07473277909738718,
+          "text": "table_4"
+        },
+        {
+          "type": "table",
+          "x": 0.6526661073825502,
+          "y": 0.6213115032236173,
+          "w": 0.019162751677852433,
+          "h": 0.005855955208686836,
+          "text": "table_5"
+        },
+        {
+          "type": "table",
+          "x": 0.7680956375838925,
+          "y": 0.8273800475059381,
+          "w": 0.22001097057305102,
+          "h": 0.14699119742909061,
+          "text": "table_6"
+        }
+      ]
+    },
+    {
+      "page_number": 16,
+      "image_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_vision/pages/9bab8f1c-c96c-401b-b7ba-2ea80b54132c/page-16.png",
+      "image_data_url": "/api/traceability/pdf_vision/jobs/9bab8f1c-c96c-401b-b7ba-2ea80b54132c/pages/16/file",
+      "classification_vision": "design",
+      "confidence_vision": 0.98,
+      "text_vision": "시스템 구성 및 부품 배치도면으로 설계 관련 도면임",
+      "text_pdf": "",
+      "classification": "design",
+      "source": "vision",
+      "overlay_boxes": [
+        {
+          "type": "table",
+          "x": 0.2530872483221477,
+          "y": 0.004863420427553409,
+          "w": 0.002982382550335576,
+          "h": 0.0050771971496437205,
+          "text": "table_1"
+        },
+        {
+          "type": "table",
+          "x": 0.32627831375838917,
+          "y": 0.08478028503562948,
+          "w": 0.10876804795125387,
+          "h": 0.20221496437054637,
+          "text": "table_2"
+        },
+        {
+          "type": "table",
+          "x": 0.582806208053691,
+          "y": 0.13339667458432297,
+          "w": 0.025131141572749458,
+          "h": 0.03145571767899563,
+          "text": "table_3"
+        },
+        {
+          "type": "table",
+          "x": 0.3210025167785234,
+          "y": 0.15598574821852731,
+          "w": 0.002982382550335624,
+          "h": 0.014608076009501167,
+          "text": "table_4"
+        },
+        {
+          "type": "table",
+          "x": 0.19526571373257584,
+          "y": 0.19238647477993598,
+          "w": 0.009852742643262845,
+          "h": 0.08477504541008778,
+          "text": "table_5"
+        },
+        {
+          "type": "table",
+          "x": 0.56748322147651,
+          "y": 0.35668646080760086,
+          "w": 0.0025369127516778533,
+          "h": 0.009345096708517152,
+          "text": "table_6"
+        },
+        {
+          "type": "table",
+          "x": 0.582806208053691,
+          "y": 0.4059619952494063,
+          "w": 0.1584102348993291,
+          "h": 0.09032066508313527,
+          "text": "table_7"
+        },
+        {
+          "type": "table",
+          "x": 0.14624824410800688,
+          "y": 0.4298591788259247,
+          "w": 0.05887021226783182,
+          "h": 0.07256956226671188,
+          "text": "table_8"
+        },
+        {
+          "type": "table",
+          "x": 0.19526571373257584,
+          "y": 0.6797030878859857,
+          "w": 0.009852742643262845,
+          "h": 0.07279097387173405,
+          "text": "table_9"
+        },
+        {
+          "type": "table",
+          "x": 0.7680956375838925,
+          "y": 0.8273800475059381,
+          "w": 0.22001677852348991,
+          "h": 0.1468724191485477,
+          "text": "table_10"
+        },
+        {
+          "type": "table",
+          "x": 0.2530872483221477,
+          "y": 0.9901509012155931,
+          "w": 0.002982382550335576,
+          "h": 0.005271253826514207,
+          "text": "table_11"
+        }
+      ]
+    },
+    {
+      "page_number": 17,
+      "image_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_vision/pages/9bab8f1c-c96c-401b-b7ba-2ea80b54132c/page-17.png",
+      "image_data_url": "/api/traceability/pdf_vision/jobs/9bab8f1c-c96c-401b-b7ba-2ea80b54132c/pages/17/file",
+      "classification_vision": "design",
+      "confidence_vision": 0.98,
+      "text_vision": "부품 리스트, 도면, 치수, 중량 등 설계 관련 정보가 포함된 도면",
+      "text_pdf": "SS400\nSS400\nSS400\nSS400\nA SET만 제작\n61\n61\n61",
+      "classification": "design",
+      "source": "vision",
+      "overlay_boxes": [
+        {
+          "type": "heading",
+          "x": 0.8236091958088999,
+          "y": 0.08784653337736474,
+          "w": 0.021293730747105107,
+          "h": 0.010075566750629723,
+          "text": "SS400",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.8231639001261877,
+          "y": 0.11618405845763802,
+          "w": 0.021293730747105107,
+          "h": 0.010075566750629723,
+          "text": "SS400",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.8236091958088999,
+          "y": 0.1457810357876128,
+          "w": 0.021293730747105107,
+          "h": 0.010075566750629723,
+          "text": "SS400",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.8240545639799213,
+          "y": 0.1744334287347161,
+          "w": 0.021293730747105107,
+          "h": 0.010075566750629723,
+          "text": "SS400",
+          "confidence": 0.8
+        },
+        {
+          "type": "image",
+          "x": 0.4730074558575193,
+          "y": 0.5941853943639799,
+          "w": 0.1876484560570071,
+          "h": 0.2871536523929471,
+          "text": "",
+          "confidence": 0.9
+        },
+        {
+          "type": "image",
+          "x": 0.47063422486221423,
+          "y": 0.3421432533552424,
+          "w": 0.3117577559591189,
+          "h": 0.24433249370277077,
+          "text": "",
+          "confidence": 0.9
+        },
+        {
+          "type": "heading",
+          "x": 0.4851485227462515,
+          "y": 0.05594378774852737,
+          "w": 0.13151539419722388,
+          "h": 0.030226700251889168,
+          "text": "A SET만 제작",
+          "confidence": 0.8
+        },
+        {
+          "type": "paragraph",
+          "x": 0.6719121140142518,
+          "y": 0.4638960907981738,
+          "w": 0.00818211788802702,
+          "h": 0.010075566750629723,
+          "text": "61",
+          "confidence": 0.8
+        },
+        {
+          "type": "paragraph",
+          "x": 0.6101543942992874,
+          "y": 0.6863981898745802,
+          "w": 0.008182045399717933,
+          "h": 0.010075566750629723,
+          "text": "61",
+          "confidence": 0.8
+        },
+        {
+          "type": "paragraph",
+          "x": 0.19937315009835213,
+          "y": 0.41477767726536263,
+          "w": 0.008182081643872477,
+          "h": 0.010075566750629723,
+          "text": "61",
+          "confidence": 0.8
+        },
+        {
+          "type": "table",
+          "x": 0.01688836104513064,
+          "y": 0.024030226700251796,
+          "w": 0.9662707838479807,
+          "h": 0.9398479159735752,
+          "text": "table_1"
+        }
+      ]
+    }
+  ],
+  "updated_at": "2026-03-25T06:50:24.559160Z"
+}

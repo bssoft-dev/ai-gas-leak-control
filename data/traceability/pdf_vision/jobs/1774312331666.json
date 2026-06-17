@@ -1,0 +1,428 @@
+{
+  "job_id": "1774312331666",
+  "filename": "L1_D2603 5LP250V OIL-BIN DWG.pdf",
+  "pdf_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_uploads/1774312331666.pdf",
+  "created_at": "2026-03-24T00:32:14.714159Z",
+  "pages": [
+    {
+      "page_number": 1,
+      "image_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_vision/pages/1774312331666/page-1.png",
+      "image_data_url": "/api/traceability/pdf_vision/jobs/1774312331666/pages/1/file",
+      "classification_vision": "",
+      "confidence_vision": null,
+      "text_vision": null,
+      "text_pdf": "REV\nADD\nCAN\nSUM\nD2581/2\n김갑진\n-\n임우택\nD2602\n진호련 김갑진 인진태\nD2603\n진호련 김갑진 인진태\n* 총중량\n총중량\n총중량\n총중량(KG/SHIP) :\n6 kg\nNOTE\n1. 의문사항은 임의 제작치 마시고 설계부로 문의 후 작업 바랍니다.\n2. 본 도면의 자재는 SUS316L입니다.\n3. \n3. \n3. \n3. 호선당\n호선당\n호선당\n호선당    2SET \n2SET \n2SET \n2SET 제작바랍니다\n제작바랍니다\n제작바랍니다\n제작바랍니다.(A/B)\n.(A/B)\n.(A/B)\n.(A/B)\nTHIS DRAWING OR DOCUMENT IS THE PROPERTY OF SUNBO INDUSTRIES CO., LTD.\nAND IT MUST NOT BE PARTIALLY OR WHOLLY COPIED OR USED FOR ANY OTHER PURPOSE\nWITHOUT PRIOR WRITTEN PERMISSION OF SUNBO INDUSTRIES CO., LTD.\nMACH. OUTFITTING DESIGN DEP'T\nSHIP\n구매부\n▼\nTYPE\n생산부\n▼\nSHIP NO.  \nSHIP NO.  \nSHIP NO.  \nSHIP NO.  \nSHIP\nQC\n▼\nNAME\nNAME OF DRAWING\nAPPROVED\n인진태\nCHECKED\n김갑진\nDRAWN\n진호련\nTOTAL\n3\nQF041-21\n-1-\nA4 (210mm x 297mm)\nP L A N   H I S T O R Y\nDATE\nREV.\nNO\nPROJ.\n NO.\nDESCRIPTION\nWEIGHT(Kg)\nTOTAL\nPAGES\nDWN\nCHK\nAPP\n2025.06.18\n0\nD2581/2 5LP250V 호선용으로 출도함(2SET)\n2025.09.26\nD2602 5LP250V 호선용으로 출도함\n2026.02.26\nD2603 5LP250V 호선용으로 출도함\nCAUTION\n도면배포처\nSEC NO.\n174K LNG\n174K LNG\n174K LNG\n174K LNG\n        DESIGN 5 TEAM\nTEL. NO.\n051-260-5638\nD2581/2/2602/2603 5LP250V\nD2581/2/2602/2603 5LP250V\nD2581/2/2602/2603 5LP250V\nD2581/2/2602/2603 5LP250V\nDATE\n2025.09.26\nOIL BIN DWG FOR\nHP COMPRESSOR\nPACKAGE (5LP250V)\n  DRAWING NO.\nSCALE\nSB - 0\nNONE\nCLASS\nUNIT\nCONSOLIDATED\n0\nmm",
+      "classification": "design",
+      "source": "text",
+      "overlay_boxes": [
+        {
+          "type": "heading",
+          "x": 0.5766047629989496,
+          "y": 0.12641250719084027,
+          "w": 0.1579396993172269,
+          "h": 0.1428865265110043,
+          "text": "REV ADD CAN SUM",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.21055453003955488,
+          "y": 0.13533095226151926,
+          "w": 0.7527136922884388,
+          "h": 0.15406307302008332,
+          "text": "D2581/2 김갑진 - 임우택",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.2172099906857274,
+          "y": 0.15542600726854772,
+          "w": 0.7460581290621717,
+          "h": 0.15406300959281288,
+          "text": "D2602 진호련 김갑진 인진태",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.2172099906857274,
+          "y": 0.17552099884830574,
+          "w": 0.7460581290621717,
+          "h": 0.15406300959281288,
+          "text": "D2603 진호련 김갑진 인진태",
+          "confidence": 0.8
+        },
+        {
+          "type": "paragraph",
+          "x": 0.13088986693310137,
+          "y": 0.2952403161418127,
+          "w": 0.35740061527540706,
+          "h": 0.018545155287355255,
+          "text": "*  총중량 총중량 총중량 총중량 (KG/SHIP) : 6 kg",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.11515877347032563,
+          "y": 0.3155825290997068,
+          "w": 0.06012253961643251,
+          "h": 0.019293343369581353,
+          "text": "NOTE",
+          "confidence": 0.8
+        },
+        {
+          "type": "list",
+          "x": 0.13008313860212053,
+          "y": 0.33997850576658994,
+          "w": 0.4876997875566242,
+          "h": 0.15392852565738196,
+          "text": "1.  의문사항은   임의   제작치   마시고   설계부로   문의   후   작업   바랍니다 .",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.1300847414160977,
+          "y": 0.36007349734634797,
+          "w": 0.270891564633666,
+          "h": 0.15392852565738196,
+          "text": "2.  본   도면의   자재는  SUS316L 입니다 .",
+          "confidence": 0.8
+        },
+        {
+          "type": "paragraph",
+          "x": 0.1300836386800814,
+          "y": 0.3822454602021786,
+          "w": 0.26108675403755255,
+          "h": 0.1521359985061609,
+          "text": "3.  3.  3.  3.  호선당 호선당 호선당 호선당     2SET  2SET  2SET  2SET  제작바랍니다 제작바랍니다 제작바랍니다 제작바랍니다 .(A/B) .(A/B) .(A/B) .(A/B)",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.15892277565323004,
+          "y": 0.5809839751544871,
+          "w": 0.6625563164719013,
+          "h": 0.012737500695887766,
+          "text": "THIS DRAWING OR DOCUMENT IS THE PROPERTY OF SUNBO INDUSTRIES CO., LTD.",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.15893117439847032,
+          "y": 0.6010789304900905,
+          "w": 0.7236682667451746,
+          "h": 0.012737500695887766,
+          "text": "AND IT MUST NOT BE PARTIALLY OR WHOLLY COPIED OR USED FOR ANY OTHER PURPOSE",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.1589227628307182,
+          "y": 0.6211739945581577,
+          "w": 0.5822932523839613,
+          "h": 0.012737500695887766,
+          "text": "WITHOUT PRIOR WRITTEN PERMISSION OF SUNBO INDUSTRIES CO., LTD.",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.2748906496192227,
+          "y": 0.6725405151657141,
+          "w": 0.3263532366071429,
+          "h": 0.14288649026684977,
+          "text": "MACH. OUTFITTING DESIGN DEP'T SHIP",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.07522684946781447,
+          "y": 0.6926355067454721,
+          "w": 0.5260038039263557,
+          "h": 0.14288649026684977,
+          "text": "구매부 ▼ TYPE",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.0752268751128381,
+          "y": 0.7127305708135392,
+          "w": 0.5260036757012375,
+          "h": 0.1431709343917013,
+          "text": "생산부 ▼ SHIP NO.   SHIP NO.   SHIP NO.   SHIP NO.   SHIP",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.07522677253274357,
+          "y": 0.7328254899049881,
+          "w": 0.526003778281332,
+          "h": 0.14288649026684977,
+          "text": "QC ▼ NAME",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.5689408502658876,
+          "y": 0.7529205539730552,
+          "w": 0.1210289193802521,
+          "h": 0.14288649026684977,
+          "text": "NAME OF DRAWING",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.2748905726841518,
+          "y": 0.7735855936154618,
+          "w": 0.21644587156151524,
+          "h": 0.14288649026684977,
+          "text": "APPROVED 인진태",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.2748905726841518,
+          "y": 0.8160558415138807,
+          "w": 0.21644587156151524,
+          "h": 0.14288649026684977,
+          "text": "CHECKED 김갑진",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.2748905726841518,
+          "y": 0.8568159452243542,
+          "w": 0.2164451022108062,
+          "h": 0.14288649026684977,
+          "text": "DRAWN 진호련",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.07966374629685859,
+          "y": 0.9361983274337515,
+          "w": 0.06899645508838301,
+          "h": 0.14288649026684977,
+          "text": "TOTAL 3",
+          "confidence": 0.8
+        },
+        {
+          "type": "list",
+          "x": 0.07482265825031184,
+          "y": 0.9501655922932749,
+          "w": 0.890626827207934,
+          "h": 0.14265800711661222,
+          "text": "QF041-21 -1- A4 (210mm x 297mm)",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.3702855727251838,
+          "y": 0.05937786510041661,
+          "w": 0.30172108882615545,
+          "h": 0.022927544745583433,
+          "text": "P L A N   H I S T O R Y",
+          "confidence": 0.8
+        },
+        {
+          "type": "paragraph",
+          "x": 0.09640248402827928,
+          "y": 0.0945708485510457,
+          "w": 0.6083887757373457,
+          "h": 0.027361228743528244,
+          "text": "DATE REV. NO PROJ.  NO. DESCRIPTION WEIGHT(Kg)",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.7504172445345325,
+          "y": 0.09364828984131439,
+          "w": 0.034575646664915964,
+          "h": 0.03532950611975301,
+          "text": "TOTAL PAGES",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.8006718996192227,
+          "y": 0.10468963659291029,
+          "w": 0.15431892972032563,
+          "h": 0.012737527879003674,
+          "text": "DWN CHK APP",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.07805090511546416,
+          "y": 0.1347609041988708,
+          "w": 0.479785085726185,
+          "h": 0.15287687433020802,
+          "text": "2025.06.18 0 D2581/2 5LP250V 호선용으로 출도함(2SET)",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.07804954592921153,
+          "y": 0.15485588671759018,
+          "w": 0.42169082385151324,
+          "h": 0.15287688339124667,
+          "text": "2025.09.26 D2602 5LP250V 호선용으로 출도함",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.07804954592921153,
+          "y": 0.17495095078565728,
+          "w": 0.42169082385151324,
+          "h": 0.15287688339124667,
+          "text": "2026.02.26 D2603 5LP250V 호선용으로 출도함",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.47818465032497376,
+          "y": 0.559856858785815,
+          "w": 0.0803422174533876,
+          "h": 0.014011301507292904,
+          "text": "CAUTION",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.07764618817497702,
+          "y": 0.6719704671030656,
+          "w": 0.7511862041569558,
+          "h": 0.16298148184660777,
+          "text": "도면배포처 SEC NO. 174K LNG 174K LNG 174K LNG 174K LNG         DESIGN 5 TEAM",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.1855460671817555,
+          "y": 0.7121604502625817,
+          "w": 0.06455869273979123,
+          "h": 0.14288649026684977,
+          "text": "TEL. NO.",
+          "confidence": 0.8
+        },
+        {
+          "type": "list",
+          "x": 0.16941161596474527,
+          "y": 0.7322554418423397,
+          "w": 0.3539771584903493,
+          "h": 0.1431709343917013,
+          "text": "051-260-5638 D2581/2/2602/2603 5LP250V D2581/2/2602/2603 5LP250V D2581/2/2602/2603 5LP250V D2581/2/2602/2603 5LP250V",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.18917626132484244,
+          "y": 0.8085052417746066,
+          "w": 0.0631468957211791,
+          "h": 0.19419009102211995,
+          "text": "D ATE 2 025.09.26",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.6211762756860557,
+          "y": 0.7592872746483447,
+          "w": 0.29161289760044645,
+          "h": 0.06125588315116538,
+          "text": "OIL BIN DWG FOR HP COMPRESSOR PACKAGE (5LP250V)",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.5689409015559349,
+          "y": 0.8361509055819477,
+          "w": 0.3606278106945903,
+          "h": 0.14288649026684977,
+          "text": "DRAWING NO. SCALE",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.610083777163209,
+          "y": 0.8662221731879083,
+          "w": 0.3154505625492384,
+          "h": 0.14288649026684977,
+          "text": "SB - 0 NONE",
+          "confidence": 0.8
+        },
+        {
+          "type": "heading",
+          "x": 0.5903190548680409,
+          "y": 0.8964359528095309,
+          "w": 0.3160540412454044,
+          "h": 0.14288649026684977,
+          "text": "CLASS UNIT CONSOLIDATED",
+          "confidence": 0.8
+        },
+        {
+          "type": "paragraph",
+          "x": 0.606453518907563,
+          "y": 0.9128209927302925,
+          "w": 0.10468329421612395,
+          "h": 0.15571757336976694,
+          "text": "0 mm",
+          "confidence": 0.8
+        },
+        {
+          "type": "image",
+          "x": 0.24584873744419644,
+          "y": 0.8927313652854068,
+          "w": 0.31119328346573005,
+          "h": 0.023087888885280582,
+          "text": "",
+          "confidence": 0.9
+        },
+        {
+          "type": "image",
+          "x": 0.16759582006630777,
+          "y": 0.8817575776378785,
+          "w": 0.07179832137933298,
+          "h": 0.07368168411798545,
+          "text": "",
+          "confidence": 0.9
+        },
+        {
+          "type": "table",
+          "x": 0.07240216033613445,
+          "y": 0.05116227387173402,
+          "w": 0.8954629915966387,
+          "h": 0.8893117339667457,
+          "text": "table_1"
+        },
+        {
+          "type": "table",
+          "x": 0.1682008739495798,
+          "y": 0.8820987691021377,
+          "w": 0.07038655462184876,
+          "h": 0.08873182472209024,
+          "text": "table_2"
+        }
+      ]
+    },
+    {
+      "page_number": 2,
+      "image_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_vision/pages/1774312331666/page-2.png",
+      "image_data_url": "/api/traceability/pdf_vision/jobs/1774312331666/pages/2/file",
+      "classification_vision": "",
+      "confidence_vision": null,
+      "text_vision": null,
+      "text_pdf": "",
+      "classification": "design",
+      "source": "text",
+      "overlay_boxes": [
+        {
+          "type": "table",
+          "x": 0.008385756676557863,
+          "y": 0.012005033557046935,
+          "w": 0.9832166172106823,
+          "h": 0.9699664429530198,
+          "text": "table_1"
+        }
+      ]
+    }
+  ],
+  "updated_at": "2026-03-24T00:32:17.909341Z"
+}

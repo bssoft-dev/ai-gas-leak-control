@@ -1,0 +1,95 @@
+# 인증(Supabase) + 결제(포트원/목업) 데모 서비스
+# 모듈: supabase_auth, payment_hub (코어 수정 없음)
+
+service:
+  id: "com.SagoHub.auth-payment"
+  version: "1.0.0"
+  name: "인증·결제"
+  description: "Supabase 회원가입·간편로그인, 카드·계좌이체·간편결제 준비"
+  author: "SagoHub Team"
+  icon: "icon.png"
+  category: "integration"
+  domain: ""
+
+  ui_server:
+    host: "0.0.0.0"
+    port: 8080
+    external_port: 26021
+    vite_port: 6021
+    event_bus_url: "http://0.0.0.0:26010"
+
+interface:
+  - type: "react-ui"
+    id: "main_dashboard"
+    label: "인증·결제"
+    description: "회원가입, 소셜 로그인, 결제 준비"
+    component: "AuthPaymentWidget"
+    binding: "./services/auth-payment/frontend"
+
+    props: {}
+
+    events:
+      onAuthSignUp: "AUTH_SIGN_UP"
+      onAuthSignIn: "AUTH_SIGN_IN"
+      onAuthOAuthUrl: "AUTH_OAUTH_URL"
+      onPaymentPrepare: "PAYMENT_PREPARE"
+      onPaymentConfirm: "PAYMENT_CONFIRM"
+      subscribe:
+        - "AUTH_SIGN_UP_RESULT"
+        - "AUTH_SIGN_IN_RESULT"
+        - "AUTH_OAUTH_URL_RESULT"
+        - "PAYMENT_PREPARE_RESULT"
+        - "PAYMENT_CONFIRM_RESULT"
+
+config:
+  payment_provider:
+    type: "string"
+    default: "mock"
+    label: "결제 모드 (mock | kpn | portone)"
+    description: "kpn=한국결제네트웍스(포트원 V2). portone=V1 하위 호환"
+
+pipelines:
+  - id: "flow_auth_signup"
+    name: "회원가입"
+    trigger:
+      event: "AUTH_SIGN_UP"
+    broadcast:
+      - module: "supabase_auth.SupabaseAuthModule"
+        id: "action_auth_signup"
+        args: {}
+
+  - id: "flow_auth_signin"
+    name: "로그인"
+    trigger:
+      event: "AUTH_SIGN_IN"
+    broadcast:
+      - module: "supabase_auth.SupabaseAuthModule"
+        id: "action_auth_signin"
+        args: {}
+
+  - id: "flow_auth_oauth"
+    name: "OAuth URL"
+    trigger:
+      event: "AUTH_OAUTH_URL"
+    broadcast:
+      - module: "supabase_auth.SupabaseAuthModule"
+        id: "action_auth_oauth"
+        args: {}
+
+  - id: "flow_payment_prepare"
+    name: "결제 준비"
+    trigger:
+      event: "PAYMENT_PREPARE"
+    broadcast:
+      - module: "payment_hub.PaymentHubModule"
+        id: "action_payment_prepare"
+        args: {}
+
+  - id: "flow_payment_confirm"
+    name: "결제 확인"
+    trigger:
+      event: "PAYMENT_CONFIRM"
+    broadcast:
+      - module: "payment_hub.PaymentHubModule"
+        id: "action_payment_confirm"
+        args: {}

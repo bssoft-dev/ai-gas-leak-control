@@ -1,0 +1,1272 @@
+/* Design tokens: src/styles/tokens.css */
+
+* {
+  box-sizing: border-box;
+}
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+body {
+  font-family: var(--font-ui);
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+.app-sayu-root {
+  height: 100%;
+  min-height: 0;
+}
+
+.app-shell {
+  min-height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 20px;
+  background: var(--bg);
+  color: var(--text);
+}
+.app-shell--loading {
+  background: linear-gradient(165deg, var(--bg-subtle, #fafafa) 0%, var(--bg) 45%);
+}
+.app-shell--error .app-shell__inner {
+  max-width: 420px;
+  text-align: center;
+}
+.app-shell__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  max-width: 360px;
+  text-align: center;
+}
+.app-shell__logo {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--text);
+  opacity: 0.9;
+  margin-bottom: 4px;
+}
+.app-shell__spinner {
+  width: 28px;
+  height: 28px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: app-shell-spin 0.75s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .app-shell__spinner {
+    animation: none;
+    border-top-color: var(--border);
+  }
+}
+@keyframes app-shell-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.app-shell__title {
+  margin: 4px 0 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.4;
+}
+.app-shell__sub {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+.app-shell__error-msg {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-secondary, var(--text-muted));
+  line-height: 1.5;
+  word-break: break-word;
+}
+.app-shell--error .sayu-btn {
+  margin-top: 8px;
+}
+
+.app-sayu {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  min-height: 0;
+}
+
+.sayu-error,
+.sayu-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  color: var(--text-muted);
+}
+
+.sayu-status-bar {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 6px 12px;
+  font-size: 11px;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-panel);
+}
+.sayu-status-bar.sayu-topbar {
+  display: grid;
+  grid-template-columns: minmax(0, auto) minmax(0, 1fr) minmax(0, auto);
+  align-items: center;
+  gap: 10px 16px;
+  min-height: var(--sayu-topbar-h, 44px);
+  padding: 8px 16px;
+  font-size: 12px;
+}
+.sayu-topbar__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.sayu-topbar__title {
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+.sayu-topbar__context {
+  min-width: 0;
+  text-align: center;
+  font-size: 11px;
+  color: var(--text-secondary, var(--text-muted));
+}
+.sayu-topbar__label {
+  display: block;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin-bottom: 2px;
+}
+.sayu-topbar__path {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 11px;
+  color: var(--text-secondary, var(--text-muted));
+}
+.sayu-topbar__stats {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+.sayu-topbar__badge {
+  margin-left: 4px;
+  padding: 2px 6px;
+  font-size: 10px;
+  font-weight: 500;
+  border-radius: 4px;
+  background: var(--accent-muted);
+  color: var(--accent);
+}
+.sayu-topbar__badge--warn {
+  background: #fef3c7;
+  color: var(--warning, #b45309);
+}
+.sayu-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #22c55e;
+}
+.sayu-status-dot.pulse {
+  animation: sayu-pulse 1.2s var(--sayu-ease, ease-in-out) infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .sayu-status-dot.pulse {
+    animation: none;
+    opacity: 1;
+  }
+}
+@keyframes sayu-pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.sayu-main {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+  position: relative;
+}
+.sayu-panel-grip {
+  flex: 0 0 5px;
+  width: 5px;
+  min-width: 5px;
+  align-self: stretch;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: col-resize;
+  z-index: 3;
+  flex-shrink: 0;
+  touch-action: none;
+  position: relative;
+}
+.sayu-panel-grip::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+  transform: translateX(-50%);
+  background: var(--border);
+  opacity: 0.5;
+  pointer-events: none;
+}
+.sayu-panel-grip:hover::after,
+.sayu-panel-grip:focus-visible::after {
+  opacity: 1;
+  background: var(--accent);
+  width: 2px;
+}
+.sayu-panel-grip:focus-visible {
+  outline: none;
+}
+.sayu-main--resizing .sayu-left,
+.sayu-main--resizing .sayu-right {
+  transition: none !important;
+}
+
+/* Left */
+.sayu-left {
+  flex-shrink: 0;
+  width: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-panel);
+  border-right: 1px solid transparent;
+  transition: width 0.2s ease, border-color 0.2s;
+}
+.sayu-left.open {
+  width: min(380px, 38vw);
+  border-right-color: var(--border);
+}
+.sayu-left-inner {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  padding: 10px 12px 12px;
+  overflow: hidden;
+}
+.sayu-left-inner--resizing,
+.sayu-left-inner--resizing * {
+  user-select: none !important;
+}
+.sayu-left-stack {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0;
+  min-height: 0;
+  overflow: hidden;
+}
+.sayu-left-lower {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0;
+  min-height: 0;
+  overflow: hidden;
+}
+.sayu-left-acc {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+.sayu-left-acc--preview {
+  flex: 1 1 0;
+  min-height: 0;
+  overflow: hidden;
+}
+.sayu-left-acc-hd {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  margin: 0;
+  padding: 6px 4px 8px 2px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  text-align: left;
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: inherit;
+  flex-shrink: 0;
+}
+.sayu-left-acc-hd:hover {
+  color: var(--text);
+  background: #fafafa;
+}
+.sayu-left-acc-chev {
+  display: inline-block;
+  width: 14px;
+  font-size: 9px;
+  line-height: 1;
+  color: var(--text-muted);
+}
+.sayu-left-acc-body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+.sayu-h-grip {
+  flex-shrink: 0;
+  height: 4px;
+  margin: 1px 0 2px;
+  border: none;
+  border-radius: 2px;
+  background: transparent;
+  cursor: row-resize;
+  touch-action: none;
+  position: relative;
+}
+.sayu-h-grip::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  margin-top: -0.5px;
+  background: var(--border);
+  opacity: 0.6;
+  pointer-events: none;
+}
+.sayu-h-grip:hover::after,
+.sayu-h-grip:hover {
+  background: var(--bg);
+}
+.sayu-h-grip--disabled {
+  pointer-events: none;
+  cursor: default;
+  opacity: 0.3;
+}
+.sayu-left-tree-body-inner {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+.sayu-left-tree-scroll {
+  flex: 1 1 0;
+  min-height: 0;
+  overflow: auto;
+  margin: 0;
+  max-height: none;
+  margin-bottom: 0;
+}
+.sayu-file-list {
+  flex: 0 0 auto;
+  max-height: 30%;
+  overflow: auto;
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+.sayu-left-tree-body-inner .sayu-file-list.sayu-file-list-tree {
+  flex: 1 1 0;
+  min-height: 0;
+  max-height: none;
+  margin-bottom: 0;
+  margin-top: 0;
+}
+.sayu-file-list-tree {
+  flex: 1 1 50%;
+  min-height: 0;
+  max-height: none;
+  margin-bottom: 8px;
+}
+.sayu-tree-filter {
+  width: 100%;
+  margin: 0 0 8px;
+  padding: 6px 8px;
+  font-size: 12px;
+  font-family: inherit;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--text);
+}
+.sayu-tree-filter:focus {
+  outline: 2px solid var(--accent-muted);
+  border-color: transparent;
+}
+.sayu-vault-tree {
+  font-size: 12px;
+}
+.sayu-vault-tree ul.sayu-tree-level {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.sayu-tree-node {
+  margin: 0;
+}
+.sayu-tree-row {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  min-height: 26px;
+  color: var(--text);
+  user-select: none;
+}
+.sayu-tree-chevron {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  min-width: 20px;
+  height: 26px;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 10px;
+  line-height: 1;
+  cursor: pointer;
+  font-family: inherit;
+}
+.sayu-tree-chevron:hover {
+  background: #f4f4f5;
+  color: var(--text);
+}
+.sayu-tree-folder-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+.sayu-tree-file-btn {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  text-align: left;
+  padding: 5px 8px 5px 0;
+  margin: 0 0 1px;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  font: inherit;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sayu-tree-file-btn:hover,
+.sayu-tree-file-btn.active {
+  background: var(--accent-muted);
+  color: var(--accent);
+}
+.sayu-tree-empty {
+  margin: 8px 0 0;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+.sayu-file-list button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 6px 8px;
+  margin-bottom: 2px;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  font: inherit;
+}
+.sayu-file-list button:hover,
+.sayu-file-list button.active {
+  background: var(--accent-muted);
+  color: var(--accent);
+}
+.sayu-left-search-hits {
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  margin: 0 0 4px;
+  padding: 0 0 2px 2px;
+  font-size: 12px;
+  line-height: 1.45;
+  border: none;
+}
+.sayu-left-search-hits .sayu-snippet {
+  text-align: left;
+  width: 100%;
+  border: none;
+  font: inherit;
+  display: block;
+  box-sizing: border-box;
+  margin-top: 6px;
+}
+.sayu-left-search-hits .sayu-snippet:first-of-type {
+  margin-top: 0;
+}
+.sayu-left-preview {
+  position: relative;
+  font-size: 13px;
+  line-height: 1.6;
+  padding: 0 0 2px 2px;
+}
+.sayu-left-preview-title {
+  margin: 0 0 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+  word-break: break-all;
+}
+.sayu-left-preview-apply {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 8px;
+}
+.sayu-left-preview-apply .sayu-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.sayu-left-empty {
+  margin: 4px 0 0;
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--text-muted);
+}
+.sayu-tiptap-wrap--preview {
+  min-height: 0;
+  margin-top: 4px;
+  padding: 16px 14px 20px;
+  background: #fff;
+  border-radius: 2px;
+}
+.sayu-tiptap-wrap--preview .ProseMirror {
+  min-height: 0;
+}
+
+/* Center editor */
+.sayu-center {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 20px 32px;
+  overflow: hidden;
+}
+.sayu-doc-workspace {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  max-width: var(--editor-max);
+}
+.sayu-editor-surface {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  background: var(--bg-elevated, #fff);
+  border-radius: var(--sayu-radius-md, 10px);
+  box-shadow: var(--sayu-shadow-panel, 0 0 0 1px var(--border), var(--sayu-shadow-sm, 0 1px 2px rgba(16, 24, 40, 0.06)));
+  overflow: hidden;
+}
+.sayu-editor-surface--continuous {
+  background: var(--bg-elevated, #fff);
+}
+.sayu-editor-surface--paged {
+  background: var(--sayu-paged-canvas, #d4d4d8);
+  box-shadow: var(--sayu-shadow-panel, 0 0 0 1px var(--border), var(--sayu-shadow-sm, 0 1px 2px rgba(16, 24, 40, 0.06)));
+}
+.sayu-editor-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  overflow-x: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+  -webkit-overflow-scrolling: touch;
+}
+.sayu-editor-scroll:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--accent-muted);
+}
+.sayu-editor-scroll::-webkit-scrollbar {
+  width: 11px;
+  height: 11px;
+}
+.sayu-editor-scroll::-webkit-scrollbar-track {
+  background: var(--bg-subtle, #f4f4f5);
+  border-radius: 6px;
+}
+.sayu-editor-scroll::-webkit-scrollbar-thumb {
+  background: #c4c4c8;
+  border-radius: 6px;
+  border: 2px solid var(--bg-subtle, #f4f4f5);
+}
+.sayu-editor-scroll::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a6;
+}
+.sayu-editor-scroll {
+  scrollbar-width: auto;
+  scrollbar-color: #c4c4c8 var(--bg-subtle, #f4f4f5);
+}
+.sayu-editor-surface--paged .sayu-editor-scroll {
+  background: var(--sayu-paged-canvas, #d4d4d8);
+}
+.sayu-center-inner {
+  width: 100%;
+  max-width: var(--editor-max);
+}
+.sayu-editor-hint-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+  flex-shrink: 0;
+}
+.sayu-editor-hint__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.sayu-viewmode {
+  display: inline-flex;
+  border-radius: 7px;
+  padding: 2px;
+  background: var(--bg-subtle, #f4f4f5);
+  box-shadow: inset 0 0 0 1px var(--border);
+}
+.sayu-viewmode__btn {
+  border: none;
+  background: transparent;
+  color: var(--text-secondary, var(--text-muted));
+  font: inherit;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.sayu-viewmode__btn:hover {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.6);
+}
+.sayu-viewmode__btn--active {
+  background: #fff;
+  color: var(--text);
+  box-shadow: 0 0 0 1px var(--border);
+}
+.sayu-viewmode__btn:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring, 0 0 0 2px var(--bg), 0 0 0 4px var(--accent-muted));
+}
+.sayu-editor-hint-row .sayu-editor-hint {
+  margin: 0;
+  flex: 1;
+  min-width: 0;
+}
+.sayu-editor-hint {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+.sayu-btn.sayu-btn-compact {
+  padding: 4px 10px;
+  font-size: 11px;
+  flex-shrink: 0;
+}
+.sayu-tiptap-wrap {
+  background: #fff;
+  border-radius: 2px;
+  box-sizing: border-box;
+}
+.sayu-tiptap-wrap--continuous {
+  width: 100%;
+  max-width: none;
+  min-height: min(60vh, 640px);
+  padding: 24px 28px 40px;
+}
+.sayu-tiptap-wrap--paged {
+  max-width: var(--sayu-page-width, 210mm);
+  width: 100%;
+  min-height: var(--sayu-page-height, 297mm);
+  margin: 16px auto 32px;
+  padding: 18mm 16mm 22mm;
+  background: #fff;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.06), 0 2px 12px rgba(0, 0, 0, 0.06);
+  border-radius: 2px;
+}
+.sayu-tiptap-wrap .ProseMirror {
+  --default-cell-min-width: 72px;
+  outline: none;
+  min-height: 12em;
+  line-height: 1.65;
+  font-size: 16px;
+}
+.sayu-tiptap-wrap .ProseMirror .tableWrapper {
+  margin: 0.6em 0;
+}
+.sayu-tiptap-wrap .ProseMirror .column-resize-handle {
+  background-color: var(--accent-muted);
+}
+.sayu-tiptap-wrap .ProseMirror .selectedCell::after {
+  background: rgba(79, 70, 229, 0.12);
+}
+.sayu-tiptap-wrap--paged .ProseMirror {
+  min-height: calc(var(--sayu-page-height, 297mm) - 36mm);
+}
+.sayu-tiptap-wrap .ProseMirror p {
+  margin: 0.35em 0;
+}
+.sayu-tiptap-wrap .ProseMirror h1,
+.sayu-tiptap-wrap .ProseMirror h2,
+.sayu-tiptap-wrap .ProseMirror h3,
+.sayu-tiptap-wrap .ProseMirror h4,
+.sayu-tiptap-wrap .ProseMirror h5,
+.sayu-tiptap-wrap .ProseMirror h6 {
+  margin: 0.6em 0 0.35em;
+  font-weight: 600;
+  line-height: 1.25;
+}
+.sayu-tiptap-wrap .ProseMirror h1 {
+  font-size: 1.75em;
+}
+.sayu-tiptap-wrap .ProseMirror h2 {
+  font-size: 1.45em;
+}
+.sayu-tiptap-wrap .ProseMirror h3 {
+  font-size: 1.2em;
+}
+.sayu-tiptap-wrap .ProseMirror ul,
+.sayu-tiptap-wrap .ProseMirror ol {
+  margin: 0.35em 0;
+  padding-left: 1.4em;
+}
+.sayu-tiptap-wrap .ProseMirror li {
+  margin: 0.2em 0;
+}
+.sayu-tiptap-wrap .ProseMirror li p {
+  margin: 0.2em 0;
+}
+.sayu-tiptap-wrap .ProseMirror blockquote {
+  margin: 0.5em 0;
+  padding: 0.15em 0 0.15em 0.9em;
+  border-left: 3px solid var(--border);
+  color: #3f3f46;
+}
+.sayu-tiptap-wrap .ProseMirror pre {
+  margin: 0.6em 0;
+  padding: 10px 12px;
+  overflow: auto;
+  font-size: 0.9em;
+  line-height: 1.5;
+  background: #f4f4f5;
+  border-radius: 6px;
+}
+.sayu-tiptap-wrap .ProseMirror pre code,
+.sayu-tiptap-wrap .ProseMirror code {
+  font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, monospace;
+  font-size: 0.92em;
+}
+.sayu-tiptap-wrap .ProseMirror :not(pre) > code {
+  padding: 0.1em 0.35em;
+  background: #f4f4f5;
+  border-radius: 4px;
+}
+.sayu-tiptap-wrap .ProseMirror a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.sayu-tiptap-wrap .ProseMirror hr {
+  margin: 1em 0;
+  border: none;
+  border-top: 1px solid var(--border);
+}
+.sayu-tiptap-wrap .ProseMirror table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 0.6em 0;
+  font-size: 0.95em;
+}
+.sayu-tiptap-wrap .ProseMirror th,
+.sayu-tiptap-wrap .ProseMirror td {
+  border: 1px solid var(--border);
+  padding: 6px 10px;
+  text-align: left;
+}
+.sayu-tiptap-wrap .ProseMirror th {
+  background: #fafafa;
+  font-weight: 600;
+}
+.sayu-tiptap-wrap .ProseMirror img {
+  max-width: 100%;
+  height: auto;
+}
+.sayu-tiptap-wrap .ProseMirror p.is-editor-empty:first-child::before {
+  color: #b0b0b0;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+/* Right chat */
+.sayu-right {
+  flex-shrink: 0;
+  width: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-panel);
+  border-left: 1px solid transparent;
+  transition: width 0.2s ease, border-color 0.2s;
+}
+.sayu-right.open {
+  width: min(400px, 40vw);
+  border-left-color: var(--border);
+}
+.sayu-right-inner {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  height: 100%;
+  padding: 10px 12px 12px;
+}
+.sayu-chat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.sayu-chat-header h2 {
+  margin: 0;
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  flex: 1;
+  min-width: 0;
+}
+.sayu-chat-list-toggle {
+  flex-shrink: 0;
+  padding: 2px 8px;
+  font-size: 11px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: #fff;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-family: inherit;
+}
+.sayu-chat-list-toggle:hover {
+  border-color: #d4d4d8;
+  color: var(--text);
+}
+.sayu-chat-messages--collapsed {
+  display: block;
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  font-size: 12px;
+  line-height: 1.4;
+  padding: 6px 8px;
+  margin-bottom: 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #fafafa;
+  color: var(--text);
+  cursor: pointer;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.sayu-chat-messages--collapsed:hover {
+  background: #f4f4f5;
+}
+.sayu-chat-collapsed-n {
+  display: inline-block;
+  margin-right: 6px;
+  color: var(--accent);
+  font-weight: 500;
+  font-size: 11px;
+}
+.sayu-chat-collapsed-preview {
+  color: var(--text-muted);
+}
+.sayu-msg-wrap {
+  position: relative;
+  max-width: 100%;
+  margin-bottom: 6px;
+}
+.sayu-msg-tools {
+  display: flex;
+  justify-content: flex-end;
+  gap: 4px;
+  margin-bottom: 4px;
+  min-height: 18px;
+}
+.sayu-msg-tool {
+  padding: 0 6px;
+  font-size: 10px;
+  line-height: 1.4;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  font-family: inherit;
+}
+.sayu-msg-tool:hover:not(:disabled) {
+  color: var(--accent);
+}
+.sayu-msg-tool:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.sayu-chat-messages {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 13px;
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+.sayu-chat-pending {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 2px 4px;
+  font-size: 12px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+.sayu-chat-pending-l {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.sayu-chat-collapsed-row {
+  display: flex;
+  align-items: stretch;
+  gap: 6px;
+  margin-bottom: 10px;
+  min-width: 0;
+}
+.sayu-chat-collapsed-row > .sayu-chat-messages--collapsed {
+  flex: 1;
+  min-width: 0;
+  margin-bottom: 0;
+}
+.sayu-chat-collapsed-cancel {
+  flex-shrink: 0;
+  align-self: center;
+  white-space: nowrap;
+}
+.sayu-chat-spinner {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: sayu-chat-spin 0.65s linear infinite;
+}
+.sayu-chat-messages--collapsed .sayu-chat-spinner {
+  display: inline-block;
+  vertical-align: middle;
+  width: 14px;
+  height: 14px;
+  margin-right: 6px;
+}
+.sayu-chat-messages--collapsed.sayu-chat-messages--busy {
+  color: var(--text-muted);
+}
+@keyframes sayu-chat-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.sayu-msg {
+  padding: 10px 12px;
+  border-radius: 8px;
+  max-width: 100%;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.sayu-msg.user {
+  align-self: flex-end;
+  background: var(--accent-muted);
+  color: #312e81;
+}
+.sayu-msg.assistant {
+  align-self: flex-start;
+  background: #f4f4f5;
+  color: var(--text);
+}
+.sayu-citation {
+  display: block;
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--accent);
+}
+.sayu-snippet {
+  margin-top: 6px;
+  padding: 8px;
+  background: #fafafa;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+.sayu-snippet:hover {
+  background: var(--accent-muted);
+}
+.sayu-chat-input-row {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.sayu-model-select-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.sayu-model-select-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.sayu-llm-select {
+  width: 100%;
+  max-width: 100%;
+  font-size: 12px;
+  font-family: inherit;
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--text);
+}
+.sayu-llm-select:focus {
+  outline: 2px solid var(--accent-muted);
+  border-color: transparent;
+}
+.sayu-llm-select:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.sayu-chat-input {
+  width: 100%;
+  min-height: 64px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font: inherit;
+  font-size: 13px;
+  resize: vertical;
+  background: #fff;
+}
+.sayu-chat-input:focus {
+  outline: 2px solid var(--accent-muted);
+  border-color: transparent;
+}
+.sayu-chat-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  justify-content: flex-end;
+}
+.sayu-btn {
+  border: none;
+  background: var(--text);
+  color: #fff;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  font-family: inherit;
+}
+.sayu-btn.secondary {
+  background: #e4e4e7;
+  color: var(--text);
+}
+.sayu-btn.ghost {
+  background: transparent;
+  color: var(--accent);
+}
+.sayu-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.sayu-btn:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring, 0 0 0 2px var(--bg), 0 0 0 4px var(--accent-muted));
+}
+
+.sayu-inline-pop {
+  position: fixed;
+  z-index: var(--z-overlay, 50);
+  min-width: 240px;
+  max-width: 90vw;
+  background: var(--bg-elevated, #fff);
+  border: 1px solid var(--border);
+  border-radius: var(--sayu-radius-md, 8px);
+  padding: 10px 10px 8px;
+  box-shadow: var(--sayu-shadow-md, 0 4px 24px rgba(0, 0, 0, 0.08));
+}
+.sayu-inline-pop__title {
+  margin: 0 0 6px;
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+.sayu-inline-pop textarea {
+  width: 100%;
+  min-height: 48px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 8px;
+  font: inherit;
+  font-size: 12px;
+}
+.sayu-inline-pop__actions {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.sayu-app-footer {
+  flex-shrink: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  padding: 8px 16px calc(10px + env(safe-area-inset-bottom, 0));
+  font-size: 11px;
+  color: var(--text-muted);
+  background: var(--bg-panel);
+  border-top: 1px solid var(--border);
+}
+.sayu-kbd-hints {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 0;
+  line-height: 1.4;
+}
+.sayu-kbd-sep {
+  margin: 0 6px;
+  opacity: 0.5;
+  user-select: none;
+}
+.sayu-kbd {
+  display: inline-block;
+  margin: 0 1px;
+  padding: 1px 5px;
+  font-size: 10px;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  line-height: 1.3;
+  vertical-align: middle;
+  color: var(--text-secondary, var(--text));
+  background: var(--bg-subtle, #f4f4f5);
+  border: 1px solid var(--border);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+}
+.sayu-app-footer__note {
+  font-size: 10px;
+  opacity: 0.75;
+  white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+  .sayu-left.open {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 20;
+    width: min(90vw, 300px);
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.06);
+  }
+  .sayu-right.open {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 20;
+    width: min(90vw, 360px);
+    box-shadow: -4px 0 24px rgba(0, 0, 0, 0.06);
+  }
+}

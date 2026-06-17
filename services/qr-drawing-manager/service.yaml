@@ -1,0 +1,147 @@
+# SagoHub Service: QR 기반 도면 관리 (제작/설치 그룹)
+service:
+  id: "com.SagoHub.qr-drawing-manager"
+  version: "1.0.0"
+  name: "QR기반 도면 관리 시스템"
+  description: "PDF 페이지별 QR, 제작·설치 도면 그룹화, 인쇄·인식·뷰어"
+  author: "SagoHub Team"
+  category: "manufacturing"
+  domain: "drawing-qr.local"
+
+  ui_server:
+    host: "0.0.0.0"
+    port: 8080
+    external_port: 26028
+    event_bus_url: "http://event-bus:8000"
+
+interface:
+  - type: "react-ui"
+    id: "main_dashboard"
+    label: "도면 QR 관리"
+    description: "PDF 업로드, QR 인쇄, 스캔, 제작·설치 그룹화"
+    component: "QrDrawingManagerWidget"
+    binding: "./services/qr-drawing-manager/frontend"
+    props: {}
+    events:
+      onUploadPdf: "DRAWING_QR_PDF_UPLOAD"
+      onResolvePage: "DRAWING_QR_RESOLVE_PAGE"
+      onGroupCreate: "DRAWING_QR_GROUP_CREATE"
+      onGroupAddPage: "DRAWING_QR_GROUP_ADD_PAGE"
+      onRelatedAdd: "DRAWING_QR_RELATED_ADD"
+      onGroupUpdate: "DRAWING_QR_GROUP_UPDATE"
+      onSetPageKind: "DRAWING_QR_PAGE_SET_KIND"
+      onQrString: "DRAWING_QR_QR_STRING"
+      subscribe:
+        - "DRAWING_QR_PDF_UPLOAD_DONE"
+        - "DRAWING_QR_PAGE_RESOLVED"
+        - "DRAWING_QR_GROUP_SAVED"
+        - "DRAWING_QR_PAGE_UPDATED"
+        - "DRAWING_QR_QR_STRING_READY"
+        - "DRAWING_QR_ERROR"
+
+config: {}
+
+pipelines:
+  - id: "flow_drawing_qr_upload"
+    name: "도면 PDF 업로드·페이지 분할"
+    trigger:
+      event: "DRAWING_QR_PDF_UPLOAD"
+      debounce: 0
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    broadcast:
+      - module: "drawing_qr_manager.DrawingQrManagerModule"
+        id: "action_upload"
+        args: {}
+
+  - id: "flow_drawing_qr_resolve"
+    name: "QR/페이지 조회"
+    trigger:
+      event: "DRAWING_QR_RESOLVE_PAGE"
+      debounce: 0
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    broadcast:
+      - module: "drawing_qr_manager.DrawingQrManagerModule"
+        id: "action_resolve"
+        args: {}
+
+  - id: "flow_drawing_qr_group_create"
+    name: "도면 그룹 생성"
+    trigger:
+      event: "DRAWING_QR_GROUP_CREATE"
+      debounce: 0
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    broadcast:
+      - module: "drawing_qr_manager.DrawingQrManagerModule"
+        id: "action_group_create"
+        args: {}
+
+  - id: "flow_drawing_qr_group_add"
+    name: "그룹에 도면 페이지 추가"
+    trigger:
+      event: "DRAWING_QR_GROUP_ADD_PAGE"
+      debounce: 0
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    broadcast:
+      - module: "drawing_qr_manager.DrawingQrManagerModule"
+        id: "action_group_add"
+        args: {}
+
+  - id: "flow_drawing_qr_related_add"
+    name: "관련 도면 연결(분류 기준·그룹 자동생성)"
+    trigger:
+      event: "DRAWING_QR_RELATED_ADD"
+      debounce: 0
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    broadcast:
+      - module: "drawing_qr_manager.DrawingQrManagerModule"
+        id: "action_related_add"
+        args: {}
+
+  - id: "flow_drawing_qr_group_update"
+    name: "그룹 이름·사양 수정"
+    trigger:
+      event: "DRAWING_QR_GROUP_UPDATE"
+      debounce: 0
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    broadcast:
+      - module: "drawing_qr_manager.DrawingQrManagerModule"
+        id: "action_group_update"
+        args: {}
+
+  - id: "flow_drawing_qr_page_set_kind"
+    name: "도면 분류(제작/설치) 변경"
+    trigger:
+      event: "DRAWING_QR_PAGE_SET_KIND"
+      debounce: 0
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    broadcast:
+      - module: "drawing_qr_manager.DrawingQrManagerModule"
+        id: "action_page_set_kind"
+        args: {}
+
+  - id: "flow_drawing_qr_string"
+    name: "페이지 QR 문자열 조회"
+    trigger:
+      event: "DRAWING_QR_QR_STRING"
+      debounce: 0
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    broadcast:
+      - module: "drawing_qr_manager.DrawingQrManagerModule"
+        id: "action_qr_string"
+        args: {}

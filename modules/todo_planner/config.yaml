@@ -1,0 +1,21 @@
+# TodoPlanner 모듈 설정 (그때그때 로드)
+# - todo_extract_prompt: LLM에 보낼 할 일 추출용 프롬프트 (아래 "내용:" 뒤에 본문이 붙음)
+# - content_length_limit: 첨부하는 분석/문서 내용의 최대 문자 수 (토큰 제한 고려)
+# - context_content_limits: OutputReportBuilder 등에서 챕터 컨텍스트 구성 시 소스별 최대 문자 수 (자)
+
+context_content_limits:
+  output_index: 30000
+  analysis_result: 50000
+  interest: 20000
+  todo_result: 40000
+  existing_report: 30000
+
+todo_extract_prompt: |
+  다음 분석/문서 내용에서 "할 일(to-do)" 항목만 추출하세요.
+  - 완료된 일: - [x] 로 시작하는 한 줄
+  - 미완료 일: - [ ] 로 시작하는 한 줄
+  - 다른 설명이나 헤더 없이, 위 형식의 줄만 출력하세요. 한 줄에 한 항목.
+
+  내용:
+
+content_length_limit: 12000

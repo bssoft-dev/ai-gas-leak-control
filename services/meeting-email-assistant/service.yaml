@@ -1,0 +1,169 @@
+# SagoHub Service: Meeting Email Assistant (Event-Driven v2.0)
+# 회의록 기반 메일 발송 서비스
+
+service:
+  id: "com.SagoHub.meeting-email-assistant"
+  version: "2.0.0"
+  name: "Smart Meeting Email Assistant"
+  description: "회의록을 감지하여 이메일 초안을 작성하고, 사용자 승인 후 자동 발송합니다."
+  author: "SagoHub Team"
+  icon: "icon.png"
+  category: "productivity"
+  
+  # UI 서버 설정
+  ui_server:
+    host: "0.0.0.0"
+    port: 8080
+    external_port: 26012  # 외부 포트 (호스트에서 접근)
+    event_bus_url: "http://event-bus:8000"  # Docker 내부 네트워크용
+
+# -----------------------------------------------------------
+# Interface Definition: Server-Driven UI
+# -----------------------------------------------------------
+interface:
+  - type: "react-ui"
+    id: "main_dashboard"
+    label: "Meeting Email Assistant Dashboard"
+    description: "회의록을 감지하여 이메일 초안을 작성하고, 사용자 승인 후 자동 발송합니다."
+    component: "MeetingEmailWidget"
+    binding: "./services/meeting-email-assistant/frontend"
+    
+    props:
+      target_folder: "${config.target_folder}"
+      llm_model: "${config.llm_model}"
+      auto_send: "${config.auto_send}"
+
+    events:
+      onSave: "CONFIG_UPDATED"
+      onApprove: "E_UserApproved"
+      onReject: "DRAFT_REJECTED"
+      subscribe: ["E_DraftReady", "E_UserApproved"]
+
+config:
+  target_folder:
+    type: "path"
+    label: "감시할 회의록 폴더"
+    default: "./obsidian"
+    required: true
+  
+  llm_model:
+    type: "select"
+    label: "LLM 모델"
+    options: ["openai/gpt-oss-120b", "gpt-4o-mini", "claude-3-opus"]
+    default: "openai/gpt-oss-120b"
+  
+  auto_send:
+    type: "boolean"
+    label: "자동 발송 (승인 없이)"
+    description: "초안 작성 후 자동으로 발송합니까? (비권장)"
+    default: false
+
+# -----------------------------------------------------------
+# Pipeline 2.0: Event Mesh Definition
+# 구조: Trigger -> Broadcast(Modules) -> Aggregation(충돌 해결)
+# - Trigger: 파이프라인을 시작하는 이벤트
+# - Broadcast: 트리거 이벤트를 여러 모듈에게 동시에 전달 (병렬 처리)
+# - Aggregation: 여러 모듈이 각각 응답 이벤트를 발행할 때, 그 이벤트들 간의 충돌을 해결하는 전략
+# -----------------------------------------------------------
+pipelines:
+
+  # [Pipeline 1] 회의록 감지 → 파일 읽기 → LLM 초안 작성 → 초안 파일 생성
+  # 설명: 회의록 파일이 생성되면 읽고, LLM으로 초안을 작성한 후 초안 파일을 생성합니다.
+  
+  # Step 1: 회의록 파일 읽기
+  - id: "flow_read_meeting_notes"
+    name: "Read Meeting Notes"
+    
+    trigger:
+      event: "FILE_CREATED"
+      filter: "${config.target_folder}/*.{txt,md}"
+      exclude: "**/*_메일초안.md"
+      debounce: 2000
+      aggregation:
+        strategy: "LATEST"
+        target: "event_bus" # 읽기 완료 이벤트를 버스로 전달
+    
+    broadcast:
+      - module: "fs.read"
+        id: "read_meeting_file"
+        args:
+          path: "${event.path}"
+
+  # Step 2: LLM 초안 작성 및 초안 파일 생성 (병렬 처리)
+  - id: "flow_draft_email"
+    name: "Draft Email from Meeting Notes"
+    
+    trigger:
+      event: "fs.read.success"
+      filter: "payload.origin_event == 'FILE_CREATED'"
+      aggregation:
+        strategy: "PRIORITY"
+        target: "event_bus"
+        options:
+          timeout_ms: 3000 # LLM 응답 대기 시간
+    
+    broadcast:
+      - module: "ai.llm.draft_email"
+        id: "llm_draft"
+        priority: 10
+        args:
+          model: "${config.llm_model}"
+          content: "${event.content}"
+          file_name: "${event.filename}"
+      
+      - module: "nudge.create_draft"
+        id: "create_draft_file"
+        priority: 5
+        args:
+          source_path: "${event.path}"
+          draft_body: "${event.draft_body}"
+          to: "${event.to}"
+          subject: "${event.subject}"
+
+  # [Pipeline 2] 사용자 승인 → 메일 발송
+  - id: "flow_send_approved_email"
+    name: "Send Approved Email"
+    
+    trigger:
+      event: "FILE_MODIFIED"
+      filter: "${config.target_folder}/*_메일초안.md"
+      debounce: 1000
+      aggregation:
+        strategy: "LATEST"
+        target: "event_bus"
+    
+    broadcast:
+      - module: "fs.read"
+        id: "read_draft_file"
+        args:
+          path: "${event.path}"
+
+  # Step 3: 승인 확인 및 메일 발송
+  - id: "flow_check_and_send"
+    name: "Check Approval and Send Email"
+    
+    trigger:
+      event: "fs.read.success"
+      filter: "payload.origin_event == 'FILE_MODIFIED' and payload.path match '*_메일초안.md'"
+      aggregation:
+        strategy: "PRIORITY"
+        target: "event_bus"
+        options:
+          timeout_ms: 2000
+    
+    broadcast:
+      - module: "nudge.check_approval"
+        id: "check_approval"
+        priority: 10
+        args:
+          content: "${event.content}"
+      
+      - module: "mail.send"
+        id: "send_email"
+        priority: 5
+        condition: "${event.approved} == true or ${config.auto_send} == true"
+        args:
+          to: "${event.to}"
+          subject: "${event.subject}"
+          body: "${event.body}"
+          draft_path: "${event.path}"

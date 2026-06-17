@@ -1,0 +1,27 @@
+# SagoHub 단일 서비스 (이미지에 소스 COPY, 호스트 소스 마운트 없음)
+# 빌드: docker compose -f docker-compose.yml build
+# 실행: docker compose -f docker-compose.yml up -d
+# 이벤트 버스는 별도 기동 후 EVENT_BUS_URL 로 연결
+# thinkingos-supplement 와 기본 포트가 같으면 SERVICE_UI_PORT 로 구분
+
+services:
+  app:
+    build:
+      context: ../..
+      dockerfile: services/Dockerfile.service
+      args:
+        SERVICE_NAME: thinking-monitor
+    image: sagohub-service-thinking-monitor:latest
+    container_name: sagohub-service-thinking-monitor
+    ports:
+      - "${SERVICE_UI_PORT:-26013}:8080"
+    environment:
+      SELECTED_SERVICE: thinking-monitor
+      SERVICES_DIR: /app/services
+      PIPELINES_DIR: /app/services
+      EVENT_BUS_URL: ${EVENT_BUS_URL:-http://host.docker.internal:26010}
+      EVENT_BUS_HOST: "0.0.0.0"
+      EVENT_BUS_PORT: "26010"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped

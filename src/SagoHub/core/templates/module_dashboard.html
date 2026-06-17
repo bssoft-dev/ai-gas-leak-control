@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{module_name} - Module Dashboard</title>
+    <style>
+        * {{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }}
+        body {{
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }}
+        .container {{
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }}
+        header {{
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }}
+        header h1 {{
+            font-size: 2em;
+            margin-bottom: 10px;
+        }}
+        header p {{
+            opacity: 0.9;
+        }}
+        .stats {{
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }}
+        .stat-card {{
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }}
+        .stat-card h3 {{
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }}
+        .stat-card .value {{
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }}
+        .section {{
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }}
+        .section h2 {{
+            margin-bottom: 20px;
+            color: #333;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }}
+        .info-grid {{
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }}
+        .info-item {{
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }}
+        .info-item label {{
+            font-weight: 600;
+            color: #666;
+            display: block;
+            margin-bottom: 5px;
+        }}
+        .info-item .value {{
+            color: #333;
+        }}
+        .capabilities {{
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }}
+        .capability-badge {{
+            background: #667eea;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85em;
+        }}
+        .filters {{
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }}
+        .filter-group {{
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }}
+        .filter-group label {{
+            font-size: 0.85em;
+            color: #666;
+            font-weight: 600;
+        }}
+        .filter-group input,
+        .filter-group select {{
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }}
+        .filter-group input:focus,
+        .filter-group select:focus {{
+            outline: none;
+            border-color: #667eea;
+        }}
+        .event-table-container {{
+            overflow-x: auto;
+        }}
+        table {{
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }}
+        th {{
+            background: #f8f9fa;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            color: #333;
+            border-bottom: 2px solid #ddd;
+            cursor: pointer;
+            user-select: none;
+            position: relative;
+        }}
+        th:hover {{
+            background: #e9ecef;
+        }}
+        th.sortable::after {{
+            content: ' ↕';
+            opacity: 0.5;
+            font-size: 0.8em;
+        }}
+        th.sort-asc::after {{
+            content: ' ↑';
+            opacity: 1;
+        }}
+        th.sort-desc::after {{
+            content: ' ↓';
+            opacity: 1;
+        }}
+        td {{
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+        }}
+        tr:hover {{
+            background: #f8f9fa;
+        }}
+        .badge {{
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }}
+        .badge-success {{
+            background: #d4edda;
+            color: #155724;
+        }}
+        .badge-warning {{
+            background: #fff3cd;
+            color: #856404;
+        }}
+        .badge-danger {{
+            background: #f8d7da;
+            color: #721c24;
+        }}
+        .btn {{
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85em;
+            transition: all 0.3s;
+        }}
+        .btn-primary {{
+            background: #667eea;
+            color: white;
+        }}
+        .btn-primary:hover {{
+            background: #5568d3;
+        }}
+        .pagination {{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+        }}
+        .pagination button {{
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }}
+        .pagination button:hover:not(:disabled) {{
+            background: #f8f9fa;
+        }}
+        .pagination button:disabled {{
+            opacity: 0.5;
+            cursor: not-allowed;
+        }}
+        .pagination .page-info {{
+            padding: 8px 12px;
+            color: #666;
+        }}
+        .no-events {{
+            text-align: center;
+            padding: 40px;
+            color: #858585;
+        }}
+        .loading {{
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }}
+        .subscribed-events-table {{
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }}
+        .subscribed-events-table th {{
+            background: #f8f9fa;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            color: #333;
+            border-bottom: 2px solid #ddd;
+        }}
+        .subscribed-events-table td {{
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+        }}
+        .subscribed-events-table tr:hover {{
+            background: #f8f9fa;
+        }}
+        code {{
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+        }}
+        /* 모달 스타일 */
+        .modal {{
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            overflow: auto;
+        }}
+        .modal-content {{
+            background-color: white;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 800px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }}
+        .modal-header {{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eee;
+        }}
+        .modal-header h3 {{
+            margin: 0;
+            color: #333;
+        }}
+        .close {{
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            background: none;
+        }}
+        .close:hover {{
+            color: #000;
+        }}
+        .modal-body {{
+            max-height: 60vh;
+            overflow-y: auto;
+        }}
+        .json-viewer {{
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📦 {module_name}</h1>
+            <p>{description}</p>
+        </header>
+
+        <div class="stats">
+            <div class="stat-card">
+                <h3>총 이벤트</h3>
+                <div class="value">{total_events}</div>
+            </div>
+            <div class="stat-card">
+                <h3>처리됨</h3>
+                <div class="value">{processed_events}</div>
+            </div>
+            <div class="stat-card">
+                <h3>무시됨</h3>
+                <div class="value">{ignored_events}</div>
+            </div>
+            <div class="stat-card">
+                <h3>오류</h3>
+                <div class="value">{errors}</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>모듈 정보</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <label>모듈 ID</label>
+                    <div class="value"><code>{module_id}</code></div>
+                </div>
+                <div class="info-item">
+                    <label>이름</label>
+                    <div class="value">{display_name}</div>
+                </div>
+                <div class="info-item">
+                    <label>포트</label>
+                    <div class="value">{port}</div>
+                </div>
+                <div class="info-item">
+                    <label>마지막 이벤트</label>
+                    <div class="value">{last_event_time}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>처리 가능한 이벤트</h2>
+            <div class="capabilities">
+                {capabilities_html}
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>구독 중인 이벤트</h2>
+            <div id="subscribed-events">
+                <div class="loading">구독 정보를 불러오는 중...</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>이벤트 로그</h2>
+            <div class="filters">
+                <div class="filter-group">
+                    <label>검색</label>
+                    <input type="text" id="search-input" placeholder="이벤트 타입, ID 검색..." style="min-width: 200px;">
+                </div>
+                <div class="filter-group">
+                    <label>상태 필터</label>
+                    <select id="status-filter">
+                        <option value="">전체</option>
+                        <option value="processed">처리됨</option>
+                        <option value="ignored">무시됨</option>
+                        <option value="error">오류</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>이벤트 타입</label>
+                    <select id="event-type-filter">
+                        <option value="">전체</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>페이지당 항목</label>
+                    <select id="page-size">
+                        <option value="10">10</option>
+                        <option value="25" selected>25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                </div>
+            </div>
+            <div class="event-table-container">
+                <table id="event-table">
+                    <thead>
+                        <tr>
+                            <th class="sortable" data-sort="timestamp">시간</th>
+                            <th class="sortable" data-sort="event_type">이벤트 타입</th>
+                            <th class="sortable" data-sort="event_id">이벤트 ID</th>
+                            <th class="sortable" data-sort="status">상태</th>
+                            <th>세부 정보</th>
+                            <th class="sortable" data-sort="new_events_count">새 이벤트</th>
+                            <th>작업</th>
+                        </tr>
+                    </thead>
+                    <tbody id="event-table-body">
+                        <tr>
+                            <td colspan="7" class="no-events">로딩 중...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="pagination" id="pagination"></div>
+        </div>
+    </div>
+
+    <!-- Payload 모달 -->
+    <div id="payload-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Payload 상세 정보</h3>
+                <button class="close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="json-viewer" id="payload-content"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 새 이벤트 모달 -->
+    <div id="new-events-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>새 이벤트 목록</h3>
+                <button class="close" onclick="closeNewEventsModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="new-events-content"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 이벤트 데이터
+        const allEvents = {events_json};
+        
+        // 현재 상태
+        let filteredEvents = [...allEvents];
+        let currentPage = 1;
+        let pageSize = 25;
+        let sortColumn = 'timestamp';
+        let sortDirection = 'desc';
+        
+        // 초기화
+        function init() {{
+            // 이벤트 타입 필터 옵션 생성
+            const eventTypes = [...new Set(allEvents.map(e => e.event_type))].sort();
+            const eventTypeFilter = document.getElementById('event-type-filter');
+            eventTypes.forEach(type => {{
+                const option = document.createElement('option');
+                option.value = type;
+                option.textContent = type;
+                eventTypeFilter.appendChild(option);
+            }});
+            
+            // 이벤트 리스너 등록
+            document.getElementById('search-input').addEventListener('input', applyFilters);
+            document.getElementById('status-filter').addEventListener('change', applyFilters);
+            document.getElementById('event-type-filter').addEventListener('change', applyFilters);
+            document.getElementById('page-size').addEventListener('change', (e) => {{
+                pageSize = parseInt(e.target.value);
+                currentPage = 1;
+                applyFilters();
+            }});
+            
+            // 테이블 헤더 클릭 이벤트
+            document.querySelectorAll('th.sortable').forEach(th => {{
+                th.addEventListener('click', () => {{
+                    const column = th.dataset.sort;
+                    if (sortColumn === column) {{
+                        sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+                    }} else {{
+                        sortColumn = column;
+                        sortDirection = 'asc';
+                    }}
+                    updateSortIndicators();
+                    applyFilters();
+                }});
+            }});
+            
+            // 모달 외부 클릭 시 닫기
+            document.getElementById('payload-modal').addEventListener('click', (e) => {{
+                if (e.target.id === 'payload-modal') {{
+                    closeModal();
+                }}
+            }});
+            
+            // 초기 렌더링
+            applyFilters();
+        }}
+        
+        // 필터 적용
+        function applyFilters() {{
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const statusFilter = document.getElementById('status-filter').value;
+            const eventTypeFilter = document.getElementById('event-type-filter').value;
+            
+            filteredEvents = allEvents.filter(event => {{
+                const matchesSearch = !searchTerm || 
+                    event.event_type?.toLowerCase().includes(searchTerm) ||
+                    event.event_id?.toLowerCase().includes(searchTerm);
+                const matchesStatus = !statusFilter || event.status === statusFilter;
+                const matchesEventType = !eventTypeFilter || event.event_type === eventTypeFilter;
+                
+                return matchesSearch && matchesStatus && matchesEventType;
+            }});
+            
+            // 정렬
+            filteredEvents.sort((a, b) => {{
+                let aVal = a[sortColumn] || '';
+                let bVal = b[sortColumn] || '';
+                
+                if (sortColumn === 'timestamp') {{
+                    aVal = new Date(aVal);
+                    bVal = new Date(bVal);
+                }} else if (sortColumn === 'new_events_count') {{
+                    // 숫자로 정렬
+                    aVal = Number(aVal) || 0;
+                    bVal = Number(bVal) || 0;
+                }} else {{
+                    aVal = String(aVal).toLowerCase();
+                    bVal = String(bVal).toLowerCase();
+                }}
+                
+                if (aVal < bVal) return sortDirection === 'asc' ? -1 : 1;
+                if (aVal > bVal) return sortDirection === 'asc' ? 1 : -1;
+                return 0;
+            }});
+            
+            currentPage = 1;
+            renderTable();
+        }}
+        
+        // 테이블 렌더링
+        function renderTable() {{
+            const tbody = document.getElementById('event-table-body');
+            const startIndex = (currentPage - 1) * pageSize;
+            const endIndex = startIndex + pageSize;
+            const pageEvents = filteredEvents.slice(startIndex, endIndex);
+            
+            if (pageEvents.length === 0) {{
+                tbody.innerHTML = '<tr><td colspan="7" class="no-events">표시할 이벤트가 없습니다.</td></tr>';
+                document.getElementById('pagination').innerHTML = '';
+                return;
+            }}
+            
+            tbody.innerHTML = pageEvents.map((event, index) => {{
+                const statusClass = event.status === 'processed' ? 'success' : 
+                                   event.status === 'ignored' ? 'warning' : 'danger';
+                const statusText = {{'processed': '처리됨', 'ignored': '무시됨', 'error': '오류'}}[event.status] || '알 수 없음';
+                const timestamp = event.timestamp ? new Date(event.timestamp).toLocaleString('ko-KR') : 'N/A';
+                const eventId = event.event_id || 'N/A';
+                const shortEventId = eventId.length > 12 ? eventId.substring(0, 12) + '...' : eventId;
+                
+                let details = '';
+                if (event.new_events_count !== undefined && event.new_events_count !== null) {{
+                    details += `새 이벤트: ${{event.new_events_count}}개`;
+                }}
+                if (event.error) {{
+                    details += (details ? '<br>' : '') + `오류: ${{event.error}}`;
+                }}
+                if (event.can_handle_score !== undefined) {{
+                    details += (details ? '<br>' : '') + `점수: ${{event.can_handle_score}}`;
+                }}
+                if (!details) details = '-';
+                
+                const hasPayload = event.payload && Object.keys(event.payload).length > 0;
+                const hasNewEvents = event.new_events && event.new_events.length > 0;
+                const newEventsCount = event.new_events_count || 0;
+                
+                // 새 이벤트 표시
+                let newEventsDisplay = '-';
+                if (hasNewEvents) {{
+                    newEventsDisplay = `<span class="badge badge-success" style="margin-right: 5px;">${{newEventsCount}}개</span><button class="btn btn-primary" onclick="showNewEvents(${{startIndex + index}})">보기</button>`;
+                }} else if (newEventsCount > 0) {{
+                    newEventsDisplay = `<span class="badge badge-info">${{newEventsCount}}개</span>`;
+                }}
+                
+                return `
+                    <tr>
+                        <td>${{timestamp}}</td>
+                        <td><code>${{event.event_type || 'N/A'}}</code></td>
+                        <td><code>${{shortEventId}}</code></td>
+                        <td><span class="badge badge-${{statusClass}}">${{statusText}}</span></td>
+                        <td style="font-size: 0.85em; color: #666;">${{details}}</td>
+                        <td>${{newEventsDisplay}}</td>
+                        <td>
+                            ${{hasPayload ? `<button class="btn btn-primary" onclick="showPayload(${{startIndex + index}})">Payload 보기</button>` : '-'}}
+                        </td>
+                    </tr>
+                `;
+            }}).join('');
+            
+            renderPagination();
+        }}
+        
+        // 페이지네이션 렌더링
+        function renderPagination() {{
+            const totalPages = Math.ceil(filteredEvents.length / pageSize);
+            const pagination = document.getElementById('pagination');
+            
+            if (totalPages <= 1) {{
+                pagination.innerHTML = '';
+                return;
+            }}
+            
+            let html = `
+                <button onclick="goToPage(1)" ${{currentPage === 1 ? 'disabled' : ''}}>처음</button>
+                <button onclick="goToPage(${{currentPage - 1}})" ${{currentPage === 1 ? 'disabled' : ''}}>이전</button>
+                <span class="page-info">페이지 ${{currentPage}} / ${{totalPages}} (총 ${{filteredEvents.length}}개)</span>
+                <button onclick="goToPage(${{currentPage + 1}})" ${{currentPage === totalPages ? 'disabled' : ''}}>다음</button>
+                <button onclick="goToPage(${{totalPages}})" ${{currentPage === totalPages ? 'disabled' : ''}}>마지막</button>
+            `;
+            
+            pagination.innerHTML = html;
+        }}
+        
+        // 페이지 이동
+        function goToPage(page) {{
+            const totalPages = Math.ceil(filteredEvents.length / pageSize);
+            if (page >= 1 && page <= totalPages) {{
+                currentPage = page;
+                renderTable();
+                window.scrollTo({{ top: 0, behavior: 'smooth' }});
+            }}
+        }}
+        
+        // 정렬 표시 업데이트
+        function updateSortIndicators() {{
+            document.querySelectorAll('th.sortable').forEach(th => {{
+                th.classList.remove('sort-asc', 'sort-desc');
+                if (th.dataset.sort === sortColumn) {{
+                    th.classList.add(sortDirection === 'asc' ? 'sort-asc' : 'sort-desc');
+                }}
+            }});
+        }}
+        
+        // Payload 모달 표시
+        function showPayload(index) {{
+            const event = filteredEvents[(currentPage - 1) * pageSize + index];
+            if (!event || !event.payload) return;
+            
+            const modal = document.getElementById('payload-modal');
+            const content = document.getElementById('payload-content');
+            content.textContent = JSON.stringify(event.payload, null, 2);
+            modal.style.display = 'block';
+        }}
+        
+        // 모달 닫기
+        function closeModal() {{
+            document.getElementById('payload-modal').style.display = 'none';
+        }}
+        
+        // 새 이벤트 모달 표시
+        function showNewEvents(index) {{
+            const event = filteredEvents[(currentPage - 1) * pageSize + index];
+            if (!event || !event.new_events || event.new_events.length === 0) return;
+            
+            const modal = document.getElementById('new-events-modal');
+            const content = document.getElementById('new-events-content');
+            
+            let html = `<div style="margin-bottom: 20px;"><strong>총 ${{event.new_events.length}}개의 새 이벤트가 생성되었습니다.</strong></div>`;
+            
+            event.new_events.forEach((newEvent, idx) => {{
+                html += `
+                    <div style="margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 4px; border-left: 3px solid #667eea;">
+                        <div style="margin-bottom: 10px;">
+                            <strong style="color: #667eea;">이벤트 #${{idx + 1}}</strong>
+                        </div>
+                        <div style="margin-bottom: 5px;">
+                            <strong>타입:</strong> <code>${{newEvent.type || 'N/A'}}</code>
+                        </div>
+                        <div style="margin-bottom: 5px;">
+                            <strong>ID:</strong> <code style="font-size: 0.85em;">${{newEvent.event_id || 'N/A'}}</code>
+                        </div>
+                        <div style="margin-bottom: 5px;">
+                            <strong>소스 모듈:</strong> ${{newEvent.source_module || 'N/A'}}
+                        </div>
+                        <div style="margin-bottom: 5px;">
+                            <strong>타임스탬프:</strong> ${{newEvent.timestamp ? new Date(newEvent.timestamp).toLocaleString('ko-KR') : 'N/A'}}
+                        </div>
+                        <div style="margin-top: 10px;">
+                            <strong>Payload:</strong>
+                            <div class="json-viewer" style="margin-top: 5px; font-size: 0.85em;">${{JSON.stringify(newEvent.payload || {{}}, null, 2)}}</div>
+                        </div>
+                    </div>
+                `;
+            }});
+            
+            content.innerHTML = html;
+            modal.style.display = 'block';
+        }}
+        
+        // 새 이벤트 모달 닫기
+        function closeNewEventsModal() {{
+            document.getElementById('new-events-modal').style.display = 'none';
+        }}
+        
+        // ESC 키로 모달 닫기
+        document.addEventListener('keydown', (e) => {{
+            if (e.key === 'Escape') {{
+                closeModal();
+                closeNewEventsModal();
+            }}
+        }});
+        
+        // 모달 외부 클릭 시 닫기 (새 이벤트 모달)
+        document.getElementById('new-events-modal').addEventListener('click', (e) => {{
+            if (e.target.id === 'new-events-modal') {{
+                closeNewEventsModal();
+            }}
+        }});
+        
+        // 구독 중인 이벤트 로드
+        async function loadSubscribedEvents() {{
+            const subscribedEventsDiv = document.getElementById('subscribed-events');
+            const moduleId = '{module_id}';
+            
+            try {{
+                // event_bus_server의 /api/status에서 구독자 정보 가져오기
+                // 기본적으로 localhost:8000이지만, 실제 event_bus_server URL을 확인해야 함
+                const eventBusUrl = window.location.origin.includes('localhost') 
+                    ? 'http://localhost:8000' 
+                    : window.location.origin;
+                
+                const response = await fetch(`${{eventBusUrl}}/api/status`);
+                const data = await response.json();
+                
+                // capabilities에서 구독 중인 이벤트 타입 가져오기
+                const capabilities = {capabilities_json};
+                const subscribedEventTypes = capabilities || [];
+                
+                if (subscribedEventTypes.length === 0) {{
+                    subscribedEventsDiv.innerHTML = '<p style="color: #999; padding: 20px;">구독 중인 이벤트가 없습니다.</p>';
+                    return;
+                }}
+                
+                // event_bus_server에서 실제 구독 정보 확인
+                let actualSubscriptions = [];
+                if (data.subscribers && data.subscribers.details) {{
+                    // 이 모듈이 구독 중인 이벤트 타입 찾기 (모듈 ID 매칭)
+                    actualSubscriptions = data.subscribers.details.filter(sub => 
+                        sub.subscriber_type === 'module' && 
+                        (sub.subscriber_id === moduleId || 
+                         sub.subscriber_id.includes(moduleId) ||
+                         sub.subscriber_id.endsWith(moduleId))
+                    );
+                }}
+                
+                // capabilities 기반으로 구독 중인 이벤트 표시
+                let html = '<table class="subscribed-events-table">';
+                html += '<thead><tr><th>이벤트 타입</th><th>구독 상태</th><th>설명</th></tr></thead>';
+                html += '<tbody>';
+                
+                subscribedEventTypes.forEach(eventType => {{
+                    // 실제 구독 정보에서 확인
+                    const isActuallySubscribed = actualSubscriptions.some(sub => sub.event_type === eventType);
+                    const statusBadge = isActuallySubscribed 
+                        ? '<span class="badge badge-success">구독 중</span>'
+                        : '<span class="badge badge-warning">등록됨 (구독 확인 중)</span>';
+                    
+                    html += `
+                        <tr>
+                            <td><code>${{eventType}}</code></td>
+                            <td>${{statusBadge}}</td>
+                            <td style="font-size: 0.85em; color: #666;">이 모듈이 처리 가능한 이벤트 타입입니다.</td>
+                        </tr>
+                    `;
+                }});
+                
+                html += '</tbody></table>';
+                subscribedEventsDiv.innerHTML = html;
+            }} catch (error) {{
+                console.error('구독 정보 로드 실패:', error);
+                // capabilities 기반으로 표시
+                const capabilities = {capabilities_json};
+                if (capabilities && capabilities.length > 0) {{
+                    let html = '<table class="subscribed-events-table">';
+                    html += '<thead><tr><th>이벤트 타입</th><th>구독 상태</th></tr></thead>';
+                    html += '<tbody>';
+                    
+                    capabilities.forEach(eventType => {{
+                        html += `
+                            <tr>
+                                <td><code>${{eventType}}</code></td>
+                                <td><span class="badge badge-success">구독 중</span></td>
+                            </tr>
+                        `;
+                    }});
+                    
+                    html += '</tbody></table>';
+                    subscribedEventsDiv.innerHTML = html;
+                }} else {{
+                    subscribedEventsDiv.innerHTML = '<p style="color: #e74c3c; padding: 20px;">구독 정보를 불러오는 중 오류가 발생했습니다.</p>';
+                }}
+            }}
+        }}
+        
+        // 초기화 실행
+        init();
+        
+        // 구독 중인 이벤트 로드
+        loadSubscribedEvents();
+    </script>
+</body>
+</html>

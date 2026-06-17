@@ -1,0 +1,53 @@
+/**
+ * Sa-Yu Document Writer — design tokens
+ */
+:root {
+  /* Brand & surfaces (기존 변수와 호환) */
+  --bg: #f4f4f5;
+  --bg-panel: #ffffff;
+  --bg-elevated: #ffffff;
+  --bg-subtle: #fafafa;
+  --text: #18181b;
+  --text-secondary: #52525b;
+  --text-muted: #71717a;
+  --accent: #4f46e5;
+  --accent-hover: #4338ca;
+  --accent-muted: #e0e7ff;
+  --border: #e4e4e7;
+  --border-strong: #d4d4d8;
+  --danger: #dc2626;
+  --success: #16a34a;
+  --warning: #d97706;
+
+  --editor-max: 900px;
+  /* A4 @ 96dpi 근사 (인쇄·페이지 모드) */
+  --sayu-page-width: 210mm;
+  --sayu-page-height: 297mm;
+  --sayu-page-break-gap: 20px;
+  --font-ui: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --font-mono: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, monospace;
+
+  /* Layout */
+  --sayu-topbar-h: 44px;
+  --sayu-footer-h: 36px;
+  --sayu-radius-sm: 6px;
+  --sayu-radius-md: 10px;
+  --sayu-radius-lg: 14px;
+  --sayu-shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.06);
+  --sayu-shadow-md: 0 4px 12px rgba(16, 24, 40, 0.08);
+  --sayu-shadow-panel: 0 0 0 1px var(--border), var(--sayu-shadow-sm);
+  --focus-ring: 0 0 0 2px var(--bg), 0 0 0 4px var(--accent-muted);
+  --z-grip: 3;
+  --z-floating: 40;
+  --z-overlay: 50;
+
+  /* Motion */
+  --sayu-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --sayu-dur: 0.2s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --sayu-dur: 0.01ms;
+  }
+}

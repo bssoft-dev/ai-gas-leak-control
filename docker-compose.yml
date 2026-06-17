@@ -1,0 +1,63 @@
+# SagoHub 코어 — Docker Compose
+#
+# 준비: cp env.example .env 후 필요한 값 수정
+#
+# 빌드 및 기동:
+#   docker compose build
+#   docker compose up -d
+#
+# 로그:
+#   docker compose logs -f sagohub
+#
+# 중지:
+#   docker compose down
+
+services:
+  document-writer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: document-writer:latest
+    container_name: document-writer
+    ports:
+      - "${SERVICE_VITE_PORT:-8080}:${SERVICE_VITE_PORT:-8080}"
+      - "${SERVICE_UI_PORT:-80}:${SERVICE_UI_PORT:-80}"
+    environment:
+      EVENT_BUS_HOST: "0.0.0.0"
+      EVENT_BUS_PORT: "${EVENT_BUS_PORT:-26010}"
+      SERVICE_VITE_PORT: "${SERVICE_VITE_PORT:-8080}"
+      SERVICE_UI_PORT: "${SERVICE_UI_PORT:-80}"
+      SERVICES_DIR: /app/services
+      PIPELINES_DIR: /app/services
+      LOCAL_MOUNT_POINT: /app/obsidian
+      OUTBOX_DIR: /app/obsidian
+      POLL_INTERVAL: "${POLL_INTERVAL:-5}"
+      LLM_API_BASE: "${LLM_API_BASE:-}"
+      LLM_MODEL: "${LLM_MODEL:-}"
+      LLM_API_KEY: "${LLM_API_KEY:-}"
+    volumes:
+      # npm run dev / node_modules 갱신을 위해 rw (단일 컨테이너)
+      - ./services/document-writer:/app/services/document-writer:rw
+      # frontend/vite.config.js → ../../vite-resolve-ui-port.mjs
+      - ./services/vite-resolve-ui-port.mjs:/app/services/vite-resolve-ui-port.mjs:ro
+      - ./obsidian:/app/obsidian:rw
+      - ./logs:/app/logs:rw
+      - ./src/SagoHub:/app/src/SagoHub:rw
+      - ./modules/doc_context_llm:/app/modules/doc_context_llm:rw
+      - ./modules/doc_chat_llm:/app/modules/doc_chat_llm:rw
+      - ./modules/doc_autocomplete_llm:/app/modules/doc_autocomplete_llm:rw
+    working_dir: /app/src/SagoHub/runner
+    command: ["/usr/local/bin/docker-entrypoint-document-writer.sh"]
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:26010/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 25s
+    networks:
+      - sagohub-net
+
+networks:
+  sagohub-net:
+    driver: bridge

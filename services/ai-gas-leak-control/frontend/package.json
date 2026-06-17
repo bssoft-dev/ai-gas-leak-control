@@ -1,0 +1,37 @@
+{
+  "name": "ai-gas-leak-control-ui",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "AI 가스 누출 자동제어 관제 대시보드",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "generate-api": "openapi --input http://aglc.bs-soft.co.kr/openapi.json --output ./src/api --client axios"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^7.13.2",
+    "recharts": "^3.8.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.2.2",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^4.2.0",
+    "autoprefixer": "^10.4.27",
+    "axios": "^1.13.6",
+    "msw": "^2.12.14",
+    "openapi-typescript-codegen": "^0.30.0",
+    "postcss": "^8.5.8",
+    "tailwindcss": "^4.2.2",
+    "typescript": "^5.9.3",
+    "vite": "^5.0.0"
+  },
+  "msw": {
+    "workerDirectory": [
+      "public"
+    ]
+  }
+}

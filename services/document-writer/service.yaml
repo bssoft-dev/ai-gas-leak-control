@@ -1,0 +1,100 @@
+# SagoHub Service: Sa-Yu (Local Edition) — 옵시디언 볼트 연동
+# 로컬 API: services/document-writer/local_api, 실행: run-local-api.sh
+service:
+  id: "com.SagoHub.document-writer"
+  version: "1.1.0"
+  name: "Sa-Yu (Local)"
+  description: "로컬 Obsidian 볼트·3분할 UI(Tiptap·채팅), 하이브리드 검색, CHAT_MESSAGE 파이프라인"
+  author: "SagoHub Team"
+  category: "productivity"
+  domain: "doc.bs-soft.co.kr"
+
+  ui_server:
+    host: "0.0.0.0"
+    port: 8080
+    external_port: 26016
+    event_bus_url: "http://event-bus:8000"
+
+interface:
+  - type: "react-ui"
+    id: "main_dashboard"
+    label: "Sa-Yu (Local)"
+    description: "좌·중·우 3분할(자료·Tiptap·채팅), 로컬 /api/sayu 검색·의도"
+    component: "SayuWidget"
+    binding: "./services/document-writer/frontend"
+    props: {}
+    events:
+      onDocAction: "DOC_ACTION"
+      onChatMessage: "CHAT_MESSAGE"
+      onAutocomplete: "AUTOCOMPLETE_REQUEST"
+      onLocalApiRequest: "SAY_LOCAL_API_REQUEST"
+    subscribe:
+      - "CHAT_RESPONSE"
+      - "DOC_CTX_END"
+      - "AUTOCOMPLETE_RESPONSE"
+      - "SAY_LOCAL_API_RESPONSE"
+
+config:
+  default_model:
+    type: "string"
+    label: "기본 모델"
+    default: "openai/gpt-oss-120b"
+    description: "에디터·채팅 등에 쓰일 기본 텍스트 모델 ID (LLM API /api/models 기준)"
+  obsidian_vault_path:
+    type: "string"
+    label: "Obsidian 볼트(문서) 경로"
+    default: "~/obsidian"
+    description: "로컬 API(OBSIDIAN_VAULT_PATH)와 동기. 실제 읽기는 .env 권장"
+
+pipelines:
+  - id: "flow_doc_chat"
+    name: "문서 채팅 (CHAT_MESSAGE → CHAT_RESPONSE)"
+    trigger:
+      event: "CHAT_MESSAGE"
+      debounce: 0
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    broadcast:
+      - module: "doc_chat_llm.DocChatLLMModule"
+        id: "action_doc_chat"
+        args: {}
+
+  - id: "flow_doc_autocomplete"
+    name: "문서 자동완성 (AUTOCOMPLETE_REQUEST → AUTOCOMPLETE_RESPONSE)"
+    trigger:
+      event: "AUTOCOMPLETE_REQUEST"
+      debounce: 200
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    broadcast:
+      - module: "doc_autocomplete_llm.DocAutocompleteLLMModule"
+        id: "action_doc_autocomplete"
+        args: {}
+
+  - id: "flow_doc_context"
+    name: "컨텍스트 탭·DOC_ACTION (DOC_CTX_END)"
+    trigger:
+      event: "DOC_ACTION"
+      debounce: 0
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    broadcast:
+      - module: "doc_context_llm.DocContextLLMModule"
+        id: "action_doc_context"
+        args: {}
+
+  - id: "flow_say_local_api"
+    name: "로컬 API 허브 연동 (SAY_LOCAL_API_REQUEST → SAY_LOCAL_API_RESPONSE)"
+    trigger:
+      event: "SAY_LOCAL_API_REQUEST"
+      debounce: 0
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    broadcast:
+      - module: "say_local_api.SayLocalAPIModule"
+        id: "action_say_local_api"
+        args: {}

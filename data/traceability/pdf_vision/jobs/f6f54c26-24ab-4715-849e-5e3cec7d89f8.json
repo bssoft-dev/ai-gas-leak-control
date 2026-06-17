@@ -1,0 +1,195 @@
+{
+  "job_id": "f6f54c26-24ab-4715-849e-5e3cec7d89f8",
+  "filename": "L2_D2603 5LP250V 사외제작 철의장품 DWG.pdf",
+  "pdf_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_uploads/f6f54c26-24ab-4715-849e-5e3cec7d89f8.pdf",
+  "created_at": "2026-03-25T04:56:15.205925Z",
+  "pages": [
+    {
+      "page_number": 1,
+      "image_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_vision/pages/f6f54c26-24ab-4715-849e-5e3cec7d89f8/page-01.png",
+      "image_data_url": "/api/traceability/pdf_vision/jobs/f6f54c26-24ab-4715-849e-5e3cec7d89f8/pages/1/file",
+      "classification_vision": "",
+      "confidence_vision": null,
+      "text_vision": null,
+      "text_pdf": "",
+      "classification": "unknown",
+      "source": "vision-pending-text"
+    },
+    {
+      "page_number": 2,
+      "image_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_vision/pages/f6f54c26-24ab-4715-849e-5e3cec7d89f8/page-02.png",
+      "image_data_url": "/api/traceability/pdf_vision/jobs/f6f54c26-24ab-4715-849e-5e3cec7d89f8/pages/2/file",
+      "classification_vision": "",
+      "confidence_vision": null,
+      "text_vision": null,
+      "text_pdf": "",
+      "classification": "unknown",
+      "source": "vision-pending-text"
+    },
+    {
+      "page_number": 3,
+      "image_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_vision/pages/f6f54c26-24ab-4715-849e-5e3cec7d89f8/page-03.png",
+      "image_data_url": "/api/traceability/pdf_vision/jobs/f6f54c26-24ab-4715-849e-5e3cec7d89f8/pages/3/file",
+      "classification_vision": "",
+      "confidence_vision": null,
+      "text_vision": null,
+      "text_pdf": "",
+      "classification": "unknown",
+      "source": "vision-pending-text"
+    },
+    {
+      "page_number": 4,
+      "image_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_vision/pages/f6f54c26-24ab-4715-849e-5e3cec7d89f8/page-04.png",
+      "image_data_url": "/api/traceability/pdf_vision/jobs/f6f54c26-24ab-4715-849e-5e3cec7d89f8/pages/4/file",
+      "classification_vision": "",
+      "confidence_vision": null,
+      "text_vision": null,
+      "text_pdf": "",
+      "classification": "unknown",
+      "source": "vision-pending-text"
+    },
+    {
+      "page_number": 5,
+      "image_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_vision/pages/f6f54c26-24ab-4715-849e-5e3cec7d89f8/page-05.png",
+      "image_data_url": "/api/traceability/pdf_vision/jobs/f6f54c26-24ab-4715-849e-5e3cec7d89f8/pages/5/file",
+      "classification_vision": "",
+      "confidence_vision": null,
+      "text_vision": null,
+      "text_pdf": "",
+      "classification": "unknown",
+      "source": "vision-pending-text"
+    },
+    {
+      "page_number": 6,
+      "image_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_vision/pages/f6f54c26-24ab-4715-849e-5e3cec7d89f8/page-06.png",
+      "image_data_url": "/api/traceability/pdf_vision/jobs/f6f54c26-24ab-4715-849e-5e3cec7d89f8/pages/6/file",
+      "classification_vision": "",
+      "confidence_vision": null,
+      "text_vision": null,
+      "text_pdf": "",
+      "classification": "unknown",
+      "source": "vision-pending-text"
+    },
+    {
+      "page_number": 7,
+      "image_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_vision/pages/f6f54c26-24ab-4715-849e-5e3cec7d89f8/page-07.png",
+      "image_data_url": "/api/traceability/pdf_vision/jobs/f6f54c26-24ab-4715-849e-5e3cec7d89f8/pages/7/file",
+      "classification_vision": "",
+      "confidence_vision": null,
+      "text_vision": null,
+      "text_pdf": "",
+      "classification": "unknown",
+      "source": "vision-pending-text"
+    },
+    {
+      "page_number": 8,
+      "image_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_vision/pages/f6f54c26-24ab-4715-849e-5e3cec7d89f8/page-08.png",
+      "image_data_url": "/api/traceability/pdf_vision/jobs/f6f54c26-24ab-4715-849e-5e3cec7d89f8/pages/8/file",
+      "classification_vision": "",
+      "confidence_vision": null,
+      "text_vision": null,
+      "text_pdf": "",
+      "classification": "unknown",
+      "source": "vision-pending-text"
+    },
+    {
+      "page_number": 9,
+      "image_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_vision/pages/f6f54c26-24ab-4715-849e-5e3cec7d89f8/page-09.png",
+      "image_data_url": "/api/traceability/pdf_vision/jobs/f6f54c26-24ab-4715-849e-5e3cec7d89f8/pages/9/file",
+      "classification_vision": "",
+      "confidence_vision": null,
+      "text_vision": null,
+      "text_pdf": "",
+      "classification": "unknown",
+      "source": "vision-pending-text"
+    },
+    {
+      "page_number": 10,
+      "image_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_vision/pages/f6f54c26-24ab-4715-849e-5e3cec7d89f8/page-10.png",
+      "image_data_url": "/api/traceability/pdf_vision/jobs/f6f54c26-24ab-4715-849e-5e3cec7d89f8/pages/10/file",
+      "classification_vision": "",
+      "confidence_vision": null,
+      "text_vision": null,
+      "text_pdf": "",
+      "classification": "unknown",
+      "source": "vision-pending-text"
+    },
+    {
+      "page_number": 11,
+      "image_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_vision/pages/f6f54c26-24ab-4715-849e-5e3cec7d89f8/page-11.png",
+      "image_data_url": "/api/traceability/pdf_vision/jobs/f6f54c26-24ab-4715-849e-5e3cec7d89f8/pages/11/file",
+      "classification_vision": "",
+      "confidence_vision": null,
+      "text_vision": null,
+      "text_pdf": "",
+      "classification": "unknown",
+      "source": "vision-pending-text"
+    },
+    {
+      "page_number": 12,
+      "image_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_vision/pages/f6f54c26-24ab-4715-849e-5e3cec7d89f8/page-12.png",
+      "image_data_url": "/api/traceability/pdf_vision/jobs/f6f54c26-24ab-4715-849e-5e3cec7d89f8/pages/12/file",
+      "classification_vision": "",
+      "confidence_vision": null,
+      "text_vision": null,
+      "text_pdf": "",
+      "classification": "unknown",
+      "source": "vision-pending-text"
+    },
+    {
+      "page_number": 13,
+      "image_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_vision/pages/f6f54c26-24ab-4715-849e-5e3cec7d89f8/page-13.png",
+      "image_data_url": "/api/traceability/pdf_vision/jobs/f6f54c26-24ab-4715-849e-5e3cec7d89f8/pages/13/file",
+      "classification_vision": "",
+      "confidence_vision": null,
+      "text_vision": null,
+      "text_pdf": "",
+      "classification": "unknown",
+      "source": "vision-pending-text"
+    },
+    {
+      "page_number": 14,
+      "image_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_vision/pages/f6f54c26-24ab-4715-849e-5e3cec7d89f8/page-14.png",
+      "image_data_url": "/api/traceability/pdf_vision/jobs/f6f54c26-24ab-4715-849e-5e3cec7d89f8/pages/14/file",
+      "classification_vision": "",
+      "confidence_vision": null,
+      "text_vision": null,
+      "text_pdf": "",
+      "classification": "unknown",
+      "source": "vision-pending-text"
+    },
+    {
+      "page_number": 15,
+      "image_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_vision/pages/f6f54c26-24ab-4715-849e-5e3cec7d89f8/page-15.png",
+      "image_data_url": "/api/traceability/pdf_vision/jobs/f6f54c26-24ab-4715-849e-5e3cec7d89f8/pages/15/file",
+      "classification_vision": "",
+      "confidence_vision": null,
+      "text_vision": null,
+      "text_pdf": "",
+      "classification": "unknown",
+      "source": "vision-pending-text"
+    },
+    {
+      "page_number": 16,
+      "image_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_vision/pages/f6f54c26-24ab-4715-849e-5e3cec7d89f8/page-16.png",
+      "image_data_url": "/api/traceability/pdf_vision/jobs/f6f54c26-24ab-4715-849e-5e3cec7d89f8/pages/16/file",
+      "classification_vision": "",
+      "confidence_vision": null,
+      "text_vision": null,
+      "text_pdf": "",
+      "classification": "unknown",
+      "source": "vision-pending-text"
+    },
+    {
+      "page_number": 17,
+      "image_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_vision/pages/f6f54c26-24ab-4715-849e-5e3cec7d89f8/page-17.png",
+      "image_data_url": "/api/traceability/pdf_vision/jobs/f6f54c26-24ab-4715-849e-5e3cec7d89f8/pages/17/file",
+      "classification_vision": "",
+      "confidence_vision": null,
+      "text_vision": null,
+      "text_pdf": "",
+      "classification": "unknown",
+      "source": "vision-pending-text"
+    }
+  ]
+}

@@ -1,0 +1,73 @@
+# 단일 SagoHub 서비스 이미지 (저장소 루트를 빌드 컨텍스트로 사용)
+# 사용: docker compose -f services/<서비스폴더>/docker-compose.yml build
+#
+# 빌드 인자 SERVICE_NAME = services/ 아래 폴더명 (예: document-writer, dangbae)
+# 소스는 모두 COPY 로 이미지에 포함 (호스트 바인드 마운트 없음)
+
+ARG SERVICE_NAME=file-monitor
+
+# ----- 프론트엔드 정적 빌드 (frontend/package.json 이 있을 때만) -----
+FROM node:20-bookworm-slim AS frontend
+ARG SERVICE_NAME
+WORKDIR /build
+# vite.config.js 가 ../../vite-resolve-ui-port.mjs 를 참조 (services/ 루트 기준)
+COPY services/vite-resolve-ui-port.mjs /build/vite-resolve-ui-port.mjs
+COPY services/${SERVICE_NAME} /build/service
+RUN set -eux; \
+    mkdir -p /out/frontend-dist; \
+    if [ -f /build/service/frontend/package.json ]; then \
+      cd /build/service/frontend && \
+      if [ -f package-lock.json ]; then npm ci; else npm install; fi && \
+      npm run build && \
+      rm -rf /out/frontend-dist && cp -r dist /out/frontend-dist; \
+    fi
+
+# ----- service.yaml 에 정의된 모듈 패키지만 modules/ 에서 선별 -----
+FROM python:3.12-slim AS modules-filter
+ARG SERVICE_NAME
+WORKDIR /ctx
+RUN pip install --no-cache-dir pyyaml
+COPY services/docker-select-modules.py /ctx/select_modules.py
+COPY services/${SERVICE_NAME}/service.yaml /ctx/service.yaml
+COPY modules /ctx/modules-src
+RUN python /ctx/select_modules.py /ctx/service.yaml /ctx/modules-src /out/modules
+
+# ----- Python 런타임 -----
+FROM python:3.12-slim
+ARG SERVICE_NAME
+ENV SERVICE_NAME=${SERVICE_NAME}
+WORKDIR /app
+
+# Vite dev (npm run dev) — 루트 Dockerfile 과 동일하게 Node 20
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    ca-certificates \
+    gnupg \
+    && mkdir -p /etc/apt/keyrings \
+    && curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg \
+    && echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" > /etc/apt/sources.list.d/nodesource.list \
+    && apt-get update && apt-get install -y --no-install-recommends nodejs \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
+
+COPY src/SagoHub ./src/SagoHub
+COPY --from=modules-filter /out/modules ./modules
+COPY services/vite-resolve-ui-port.mjs ./services/vite-resolve-ui-port.mjs
+COPY services/${SERVICE_NAME} ./services/${SERVICE_NAME}
+
+COPY --from=frontend /out/frontend-dist ./services/${SERVICE_NAME}/frontend/dist
+
+COPY scripts/docker-entrypoint-sagohub-service.sh /usr/local/bin/docker-entrypoint-sagohub-service.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint-sagohub-service.sh
+
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONPATH=/app/src
+ENV SERVICES_DIR=/app/services
+ENV PIPELINES_DIR=/app/services
+
+WORKDIR /app/src/SagoHub/runner
+
+CMD ["/usr/local/bin/docker-entrypoint-sagohub-service.sh"]

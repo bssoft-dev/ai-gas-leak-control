@@ -1,0 +1,20 @@
+{
+  "name": "dangbae-ui",
+  "version": "3.0.0",
+  "type": "module",
+  "description": "당배(당신의 배송) 서비스 UI - 카카오 지도 + 지도 모듈 연동",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.2.0",
+    "vite": "^5.0.0",
+    "vite-plugin-pwa": "^1.2.0"
+  }
+}

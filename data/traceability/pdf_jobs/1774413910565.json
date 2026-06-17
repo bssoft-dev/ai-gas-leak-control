@@ -1,0 +1,201 @@
+{
+  "job_id": "1774413910565",
+  "created_at": "2026-03-25T04:45:30.851299Z",
+  "source_pdf": {
+    "file_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_uploads/1774413910565.pdf",
+    "filename": "L2_D2603 5LP250V 사외제작 철의장품 DWG.pdf"
+  },
+  "proposal": {
+    "records": [],
+    "design_drawings": [
+      {
+        "drawing_id": "501ab19c-0be6-4ce2-a037-6942d8e01820",
+        "dwg_no": "APPROVED",
+        "filename": "L2_D2603 5LP250V 사외제작 철의장품 DWG.pdf",
+        "file_type": "pdf",
+        "file_path": "",
+        "source": {
+          "page_number": 1,
+          "kind": "design"
+        }
+      },
+      {
+        "drawing_id": "d6a4e6f7-4f89-464b-a5f5-81ea8753fedf",
+        "dwg_no": "PART NO",
+        "filename": "L2_D2603 5LP250V 사외제작 철의장품 DWG.pdf",
+        "file_type": "pdf",
+        "file_path": "",
+        "source": {
+          "page_number": 2,
+          "kind": "design"
+        }
+      },
+      {
+        "drawing_id": "497b42fd-dbfa-4771-98a0-718f2fd55c8a",
+        "dwg_no": "DWG-3",
+        "filename": "L2_D2603 5LP250V 사외제작 철의장품 DWG.pdf",
+        "file_type": "pdf",
+        "file_path": "",
+        "source": {
+          "page_number": 3,
+          "kind": "design"
+        }
+      },
+      {
+        "drawing_id": "70380842-4cb5-495e-962f-c03f700f24f3",
+        "dwg_no": "DWG-4",
+        "filename": "L2_D2603 5LP250V 사외제작 철의장품 DWG.pdf",
+        "file_type": "pdf",
+        "file_path": "",
+        "source": {
+          "page_number": 4,
+          "kind": "design"
+        }
+      },
+      {
+        "drawing_id": "2a044f02-cf07-4d01-b28f-0885419c2445",
+        "dwg_no": "DWG-5",
+        "filename": "L2_D2603 5LP250V 사외제작 철의장품 DWG.pdf",
+        "file_type": "pdf",
+        "file_path": "",
+        "source": {
+          "page_number": 5,
+          "kind": "design"
+        }
+      },
+      {
+        "drawing_id": "23c4a9c5-2044-4fc3-b31d-9d22a6bac697",
+        "dwg_no": "DWG-6",
+        "filename": "L2_D2603 5LP250V 사외제작 철의장품 DWG.pdf",
+        "file_type": "pdf",
+        "file_path": "",
+        "source": {
+          "page_number": 6,
+          "kind": "design"
+        }
+      },
+      {
+        "drawing_id": "7f1dd40e-b32b-4408-a10e-49cb7eff7f7d",
+        "dwg_no": "DWG-7",
+        "filename": "L2_D2603 5LP250V 사외제작 철의장품 DWG.pdf",
+        "file_type": "pdf",
+        "file_path": "",
+        "source": {
+          "page_number": 7,
+          "kind": "design"
+        }
+      },
+      {
+        "drawing_id": "54b2efbe-a8d7-40d6-a897-1b3f388ae281",
+        "dwg_no": "DWG-8",
+        "filename": "L2_D2603 5LP250V 사외제작 철의장품 DWG.pdf",
+        "file_type": "pdf",
+        "file_path": "",
+        "source": {
+          "page_number": 8,
+          "kind": "design"
+        }
+      },
+      {
+        "drawing_id": "1a8f8ad5-eff9-4335-bd0e-e352a8bb1d15",
+        "dwg_no": "DWG-9",
+        "filename": "L2_D2603 5LP250V 사외제작 철의장품 DWG.pdf",
+        "file_type": "pdf",
+        "file_path": "",
+        "source": {
+          "page_number": 9,
+          "kind": "design"
+        }
+      },
+      {
+        "drawing_id": "b6013b14-4b66-4ff9-814c-9d80698c7870",
+        "dwg_no": "DWG-10",
+        "filename": "L2_D2603 5LP250V 사외제작 철의장품 DWG.pdf",
+        "file_type": "pdf",
+        "file_path": "",
+        "source": {
+          "page_number": 10,
+          "kind": "design"
+        }
+      },
+      {
+        "drawing_id": "2488fcd8-1dcb-4bd5-8715-d961fabf2381",
+        "dwg_no": "DWG-11",
+        "filename": "L2_D2603 5LP250V 사외제작 철의장품 DWG.pdf",
+        "file_type": "pdf",
+        "file_path": "",
+        "source": {
+          "page_number": 11,
+          "kind": "design"
+        }
+      },
+      {
+        "drawing_id": "fd72f49d-c4ac-469c-8ca8-64de1c2f9816",
+        "dwg_no": "DWG-12",
+        "filename": "L2_D2603 5LP250V 사외제작 철의장품 DWG.pdf",
+        "file_type": "pdf",
+        "file_path": "",
+        "source": {
+          "page_number": 12,
+          "kind": "design"
+        }
+      },
+      {
+        "drawing_id": "c93cab4a-7843-4984-95f6-994f8f9c973f",
+        "dwg_no": "DWG-13",
+        "filename": "L2_D2603 5LP250V 사외제작 철의장품 DWG.pdf",
+        "file_type": "pdf",
+        "file_path": "",
+        "source": {
+          "page_number": 13,
+          "kind": "design"
+        }
+      },
+      {
+        "drawing_id": "c4b66a41-17ff-43d3-ac88-e1617cc5606c",
+        "dwg_no": "DWG-14",
+        "filename": "L2_D2603 5LP250V 사외제작 철의장품 DWG.pdf",
+        "file_type": "pdf",
+        "file_path": "",
+        "source": {
+          "page_number": 14,
+          "kind": "design"
+        }
+      },
+      {
+        "drawing_id": "0a2f22a2-e0cf-443b-84f8-63b99d273432",
+        "dwg_no": "DWG-15",
+        "filename": "L2_D2603 5LP250V 사외제작 철의장품 DWG.pdf",
+        "file_type": "pdf",
+        "file_path": "",
+        "source": {
+          "page_number": 15,
+          "kind": "design"
+        }
+      },
+      {
+        "drawing_id": "c805d86a-d3ac-40d8-bbb2-6d9b854a19ab",
+        "dwg_no": "DWG-16",
+        "filename": "L2_D2603 5LP250V 사외제작 철의장품 DWG.pdf",
+        "file_type": "pdf",
+        "file_path": "",
+        "source": {
+          "page_number": 16,
+          "kind": "design"
+        }
+      },
+      {
+        "drawing_id": "eae4acdf-511f-4cf2-87c1-5c4ddfab40bc",
+        "dwg_no": "DWG-17",
+        "filename": "L2_D2603 5LP250V 사외제작 철의장품 DWG.pdf",
+        "file_type": "pdf",
+        "file_path": "",
+        "source": {
+          "page_number": 17,
+          "kind": "design"
+        }
+      }
+    ],
+    "installation_drawings": []
+  }
+}

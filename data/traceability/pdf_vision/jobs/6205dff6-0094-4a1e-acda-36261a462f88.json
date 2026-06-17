@@ -1,0 +1,261 @@
+{
+  "job_id": "6205dff6-0094-4a1e-acda-36261a462f88",
+  "filename": "L1_D2603 5LP250V OIL-PAN DWG.pdf",
+  "pdf_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_uploads/6205dff6-0094-4a1e-acda-36261a462f88.pdf",
+  "created_at": "2026-03-25T05:09:17.241277Z",
+  "pages": [
+    {
+      "page_number": 1,
+      "image_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_vision/pages/6205dff6-0094-4a1e-acda-36261a462f88/page-1.png",
+      "image_data_url": "/api/traceability/pdf_vision/jobs/6205dff6-0094-4a1e-acda-36261a462f88/pages/1/file",
+      "classification_vision": "",
+      "confidence_vision": null,
+      "text_vision": null,
+      "text_pdf": "REV\nADD\nCAN\nSUM\nD2581/2\n김갑진\n-\n임우택\nD2602\n진호련 김갑진 인진태\nD2603\n진호련 김갑진 인진태\n* 총중량\n총중량\n총중량\n총중량(KG/SHIP) :\n49 kg\nNOTE\n1. 의문사항은 임의 제작치 마시고 설계부로 문의 후 작업 바랍니다.\n2. \n2. \n2. \n2. 호선당\n호선당\n호선당\n호선당    2SET \n2SET \n2SET \n2SET 제작바랍니다\n제작바랍니다\n제작바랍니다\n제작바랍니다.(A/B)\n.(A/B)\n.(A/B)\n.(A/B)\n3. PAINT : BCX_18\nTHIS DRAWING OR DOCUMENT IS THE PROPERTY OF SUNBO INDUSTRIES CO., LTD.\nAND IT MUST NOT BE PARTIALLY OR WHOLLY COPIED OR USED FOR ANY OTHER PURPOSE\nWITHOUT PRIOR WRITTEN PERMISSION OF SUNBO INDUSTRIES CO., LTD.\nMACH. OUTFITTING DESIGN DEP'T\nSHIP\n구매부\n▼\nTYPE\n생산부\n▼\nSHIP NO.  \nSHIP NO.  \nSHIP NO.  \nSHIP NO.  \nSHIP\nQC\n▼\nNAME\nNAME OF DRAWING\nAPPROVED\n인진태\nCHECKED\n김갑진\nDRAWN\n진호련\nTOTAL\n3\nQF041-21\n-1-\nA4 (210mm x 297mm)\nP L A N   H I S T O R Y\nDATE\nREV.\nNO\nPROJ.\n NO.\nDESCRIPTION\nWEIGHT(Kg)\nTOTAL\nPAGES\nDWN\nCHK\nAPP\n2025.06.18\n0\nD2581/2 5LP250V 호선용으로 출도함(2SET)\n2025.09.26\nD2602 5LP250V 호선용으로 출도함\n2026.02.26\nD2603 5LP250V 호선용으로 출도함\nCAUTION\n도면배포처\nSEC NO.\n174K LNG\n174K LNG\n174K LNG\n174K LNG\n        DESIGN 5 TEAM\nTEL. NO.\n051-260-5638\nD2581/2/2602/2603 5LP250V\nD2581/2/2602/2603 5LP250V\nD2581/2/2602/2603 5LP250V\nD2581/2/2602/2603 5LP250V\nDATE\n2025.09.26\nOIL PAN DWG FOR\nHP COMPRESSOR\nPACKAGE (5LP250V)\n  DRAWING NO.\nSCALE\nSB - 0\nNONE\nCLASS\nUNIT\nCONSOLIDATED\n0\nmm",
+      "classification": "design",
+      "source": "text",
+      "overlay_boxes": [
+        {
+          "type": "table",
+          "x": 0.07240216033613445,
+          "y": 0.05116227387173402,
+          "w": 0.8954629915966387,
+          "h": 0.8893117339667457,
+          "text": "table_1"
+        },
+        {
+          "type": "table",
+          "x": 0.1682008739495798,
+          "y": 0.8820987691021377,
+          "w": 0.07038655462184876,
+          "h": 0.08873182472209024,
+          "text": "table_2"
+        }
+      ]
+    },
+    {
+      "page_number": 2,
+      "image_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_vision/pages/6205dff6-0094-4a1e-acda-36261a462f88/page-2.png",
+      "image_data_url": "/api/traceability/pdf_vision/jobs/6205dff6-0094-4a1e-acda-36261a462f88/pages/2/file",
+      "classification_vision": "",
+      "confidence_vision": null,
+      "text_vision": null,
+      "text_pdf": "1                          2            Ill             3                          4             Il            5                          6              |           7                          8\n\nDrawing      1-125.619.986                                                                                                                                                                                                                                                              Execution Code Number | pos.No.              Des                Source of\nCode                          ignation                       Supp Ly\n|   |   |    oe                                     Mod.\nAL | GN | NG  OF   THE  (0) | [  PAN                                                                                                                                         Material and Remarks           ppnow  Herken\nNumber OFF                                                      mass kg/pe\n] 001 |PLATE 860 x 430 x 3      / / | /\n3                           O60                           3                      133                    500                    133                                                                                    65400                    /| /   /\\/\nP| ATE\n002                       001                          0                                                                                                                                                            2  002   A   860 x SO x 3               /   / | /\n55400                      /   /   / | /\n©          |                                                                     2 003 |PLATE 430 x 50 x 3       / / | /\n003                                                          ~— 1003                                                                                                                                                                  55400                      1 / |/|/\n1 | 004 |8955 (08414) 50x50               y 11148\n535400                      /   /   / | /\nAPPROX WEIGHT                        % 12 Kg\nO                                                                                                                                                        NOTE:\n(Y)\n자                                                                                                                                                      J) ALL LISTE MATERIAL ARE WITHOUT ALLOWANCE.\n©\nLf)\n[\n002                                    \\ 더   —     a                      H200 BEAM\n\\                              CON MODULE 1)\n4-23파이\n6\n011\n050. |.\nPLUGGED WITH 1/2” NPT\nC\nD\nGe,,, Burckhardt\nQF Compression\nFOR APPROVAL\nDocumentation shall be deemed to be approved unless\ncommented and/or rejected within 14 days\n은\n의                           ^ ^                                                       (>\n2 C)                      we,                     ©)                      —,\nVan               ~\n1200                                                         |            (             ©             2\nCON  MO IL                                                                                             2       Name         Date       Name         Date       Name         Date       Name         Date\nSep.parts List           Design group\n\nReplaced by                                                                     Orig. scale\n\nsipasov-sk STEEL STRUCTURE [> “oJ\nSLP2SOV-SA   OIL PAN FOR FILTERDS.............>\n\nL-0184          LABY-Gle - NON-LUBE COMP.          aves\neee SSS NSE ee                                                                                                                                        91         AYE - 10          =\n\nnot be copied, reproduced or in any way communica-                                                                                                                                                                                                         Part -Ne\n\nted or made accessible to third parties without our                                                                                                                                                                             _          .                   -   .          0,\n\nwritten consent.                                                                                                                                                                                                                                                               CAD  Draw ㅣ Ng                   Bar    Code\n\n000                                                                                                                       6 Burckhardt    E| 1-125.619.986\nMachining regulations see Drawing Standards.                                                                                                                                                                                                                                                               FZ Compression                                     .          .\n\n1                                2               ll                3                                4                Il               5                                6                  1             7",
+      "classification": "design",
+      "source": "text",
+      "overlay_boxes": [
+        {
+          "type": "table",
+          "x": 0.8615503925357523,
+          "y": 0.016995249406175708,
+          "w": 0.12656202357163024,
+          "h": 0.11774556996615748,
+          "text": "table_1"
+        },
+        {
+          "type": "table",
+          "x": 0.05438608742971164,
+          "y": 0.0685297781125079,
+          "w": 0.2207917239960533,
+          "h": 0.18442715400400658,
+          "text": "table_2"
+        },
+        {
+          "type": "table",
+          "x": 0.34236241610738244,
+          "y": 0.0752053933212241,
+          "w": 0.21840833166382786,
+          "h": 0.16304876344837219,
+          "text": "table_3"
+        },
+        {
+          "type": "table",
+          "x": 0.05438608742971164,
+          "y": 0.34343230403800484,
+          "w": 0.2207917239960533,
+          "h": 0.017176959619952317,
+          "text": "table_4"
+        },
+        {
+          "type": "table",
+          "x": 0.20095218120805367,
+          "y": 0.37099614014251775,
+          "w": 0.007905201342281905,
+          "h": 0.007271080760095157,
+          "text": "table_5"
+        },
+        {
+          "type": "table",
+          "x": 0.7680956375838925,
+          "y": 0.8277587376993552,
+          "w": 0.22001677852348991,
+          "h": 0.14672657544003487,
+          "text": "table_6"
+        }
+      ]
+    },
+    {
+      "page_number": 3,
+      "image_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_vision/pages/6205dff6-0094-4a1e-acda-36261a462f88/page-3.png",
+      "image_data_url": "/api/traceability/pdf_vision/jobs/6205dff6-0094-4a1e-acda-36261a462f88/pages/3/file",
+      "classification_vision": "",
+      "confidence_vision": null,
+      "text_vision": null,
+      "text_pdf": "|                              2             Il               3                              4               Il             5                              6                ‘|            ?                              8\nDrawing     1-125.619.987\n\nExecution Code Number | Pos.No.                  Designation                  vouree of\n|       |       |         oe    Code                                                                       UPR LY     Mod.\nMaterial and Remarks               ppnow   Herken\nNumber OFF                                                      mass kg/pe\n] 001 |}PLATE 750 x 750 x 3      / / | /\n55400                      /   /   / | /\n290                                                                                                                                                                                                                                              55400                             21 / |/ 7\n_                                             003 |}PLATE 600 x SO x 3           /  / | /\nFOOT FOR 01600 CON 011 144)                                                   06400                     71 /   1 /\n004 |}PLATE 550 x SO x 3               /   / | /  A\n33400                      /   /   / | /\n005 }PLATE 250 x SO x 3       / / | /\n35400                      /   /   / | /\n006 | 3055 CDRAIN) @50x50               /   / | /\n55400                      /   /   / | /\nAPPROX WEIGHT                        % 16 Kg\nNOTE:\n1) ALL LISTE MATERTAL ARE WITHOUT ALLOWANCE.\nB\n118 |.       370       |     268\nC\nPLUGGED WITH 1/27 NPT\n~\nD                                                                                       D\nOy\nGG  Burckhardt\n.                                           ZF Compression\nLik                                                        FOR APPROVAL\n©)                                y)                                                                                                              Documentation shall be deemed to be approved unless\nLy                      =                                                                                                                               commented and/or rejected within 14 days\n©)\n1                  a                                      ee\n2 C)                      \\                       ©)                     ww,\nVan               ~\naf)               a,               ( )                _\n글       Name         Date       Name         Date       Name         Date       Name         Date\nSep.parts List           Design group\n\nReplaced by                                                       Orig. scale\nDrawn:     14-04-2022  E\n\nSTEEL STRUCTURE             TONELLI 가\nOIL PAN FOR EXCHANGER   Verified:  0B-06-2022\n\nSABOGAL_A\n\nSLP250V-SA\n\nLABY-Gle - NON-LUBE COMP.\n\nL-0184\nASME            ITEM NO.: C-001\n\nCAD-Draw i Ng Bar - Code\na                                                                                                                                                                                                                                                         Gy Burckhardt     1-125.619.987\n1                                  2               All                3                                 4                 I               5                                  6                  1             7\n\nStandards\nThis drawing is entrusted to the recipient person-\n\nconform:\n\nally, but the copyright remains with us. I]t must                                                                                                                                           FOO |  FOR  OITLCOOLER  CON  OILTANK)\n\nnot be copied, reproduced or in any way communica-\nted or made accessible to third parties without our\n\nwritten consent.\n\n|",
+      "classification": "design",
+      "source": "text",
+      "overlay_boxes": [
+        {
+          "type": "table",
+          "x": 0.8624560496399236,
+          "y": 0.016995249406175708,
+          "w": 0.12565636646745887,
+          "h": 0.1615580072509064,
+          "text": "table_1"
+        },
+        {
+          "type": "table",
+          "x": 0.14353187919463087,
+          "y": 0.08762470308788599,
+          "w": 0.15975838926174518,
+          "h": 0.31057719714964366,
+          "text": "table_2"
+        },
+        {
+          "type": "table",
+          "x": 0.38778523489932887,
+          "y": 0.1315475059382423,
+          "w": 0.19591233221476398,
+          "h": 0.2814450712589078,
+          "text": "table_3"
+        },
+        {
+          "type": "table",
+          "x": 0.2562760602598886,
+          "y": 0.51958432304038,
+          "w": 0.032312033594151225,
+          "h": 0.04617577197149623,
+          "text": "table_4"
+        },
+        {
+          "type": "table",
+          "x": 0.7680956375838925,
+          "y": 0.827583135391924,
+          "w": 0.22001677852348991,
+          "h": 0.14689213992658182,
+          "text": "table_5"
+        }
+      ]
+    },
+    {
+      "page_number": 4,
+      "image_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_vision/pages/6205dff6-0094-4a1e-acda-36261a462f88/page-4.png",
+      "image_data_url": "/api/traceability/pdf_vision/jobs/6205dff6-0094-4a1e-acda-36261a462f88/pages/4/file",
+      "classification_vision": "",
+      "confidence_vision": null,
+      "text_vision": null,
+      "text_pdf": "1                              2             Ill               3                              4               Il             5                              6                |            7                              8\n\nDrawing      1-125.619.988                                                                                                                                                                                                                                                               Execution Code Number | pos.No.              Desianation               Source of\n|       |       |         ~~ | 0\"                                 4                                    Supply | Mod,\nOIL PAN                                                      ALIGNING OF THE OIL PAN                                 000       Materiol ond Renorks    woes tavee|\n2 | 001 |L7Sx75x9 x 250                  ~ |/|/\n55400             KS 03503| / | /|/\nSUPPORT |    1:                                                       (| SUPPORT          2 | 002 |ㄴ50506 x 550            ~ |\nLEFT ~~!                                                                                         RIGHT                         55400                 KS 03503| 7 | /|/\n|                                                                                                                  1 | 003 |PLATE 1300 x 225 x 3              VAY\nA                    65400               J) / siz\n3                                                                             :                                                     2 | 004 |PLATE 1300 x 50 x 3               00000\nㅣ       on                                                             02                                         다                                         S                                                 59400                                  71 / _|7/|1/\n1                                         a                                                  ~                                i                                2 | 00S |PLATE 225 x SO x 3                   / |/|/\nㅣ                  eo                                                                     59400               000\n005                oo                                                                                   1 | 006 |BOSS (DRAIN) ¢50xS0            Y | /\\/\nOIL TANK                                                        !                                         65400                             /| / {717\n때                                                                                                        4 | 007 | HEXAGON HEAD SCREW M12x45        VAY\na D      a!                        8.8         650 4017 (DIN 933) | 7 |/]/\n1200                                              +                         4 | 008 | HEXAGON HEAD SCREW M8x25           y |/|/\n8.8          SO 4017 (DIN 9333) | / | /|/\n|                                                                                                      4 | 009 | HEXAGON NUT M12              /  /|/\n1      i                                                                ——                                8          SO 4032 (DIN 934) | / |/|/\n이                                                     00                  ㅠㅠ                                       4 | 010 | HEXAGON NUT M8                  J | /|/\n대                                  4- 10} 0| HOLE  ae                                             8           So 4032 (IN 934) | 7 |/|/\n때                                                                                                               4 | 011 | WASHER (M12)                   / |/|/\n|            O                                                                              (시                              /            50 7089-12-200 HV] 7) | /|/\n~                                                                I                8 | 012 | WASHER 008:              ^ |/ 7\n!                                                                                                  ;                               /             150 7089-8-200 HV] / | /|/\n7                                                                                -                               APPROX WEIGHT                        ~ 21 Kg\n23. [50                                                   1160                                                   50 [| 23                                                                                              6\nNOTE:\n1) ALL LISTE MATERIAL ARE WITHOUT ALLOWANCE.\n|\n|\n|\n|\n|\n007?|009|011                       OIL TANK                                      |\n| PLUGGED WITH 1/2” NPT                                                                                                                 ;    !\nof\n(\\]\n008/010[012\nSUPPORT RIGHT                                  SUPPORT LEFT\nC\n\nPC                              phe          :       「                        |       :          시그                              ae                                                                                                                                                                                                                                                               D\n：               550               」               |               550               _\nGe,,, Burckhardt\nQF Compression\nFOR APPROVAL\nDocumentation shall be deemed to be approved unless\ncommented and/or rejected within 14 days\n은\n이                                     ~                                   C)                                   ^\n이                          |                          니 .                         SY\naa Vaan                                    a                                   CO                                       >)\naf)                                   J                                       )                                     _/\n글         Name            Date          Name            Date          Name            Date          Name            Date\nSep.parts List              Design group\nReplaced by                                                                     Orig. scale\nDrawn:        14-04-2022   E\n\nSTEEL STRUCTURE\n\nTONELLI_M\n\nOIL PAN FOR TANK   Verified: OB-06-2022\n\nL-0184          LABY-Gle - NON-LUBE COMP.          —_\n0000      po                                                                                                                                                                                        ASME            ITEM NO.: C-001            conform:\nally, but the copyright remains with us.     니\n\nnot be copied, reproduced or in any w                                                                                                                                                                                                                                                               Part-No\nCAD-Draw I Ng            ：    Bar - Code\n\n000                                                                                                                                                                                                                                   Gey 바다     1-125.619.988\n\nwritten consent.\nMachining regulations see Drawing Standards.\n\n1                                2               All                3                                4                I               5                                6                  1             7\n\n|",
+      "classification": "design",
+      "source": "text",
+      "overlay_boxes": [
+        {
+          "type": "table",
+          "x": 0.8678556031135133,
+          "y": 0.016995249406175708,
+          "w": 0.12025261836299686,
+          "h": 0.284351717745206,
+          "text": "table_1"
+        },
+        {
+          "type": "table",
+          "x": 0.056401006711409414,
+          "y": 0.11836264645440228,
+          "w": 0.31699464685203,
+          "h": 0.1011471786373705,
+          "text": "table_2"
+        },
+        {
+          "type": "table",
+          "x": 0.407102478058854,
+          "y": 0.1872662877502545,
+          "w": 0.3271063096928239,
+          "h": 0.12282041058703762,
+          "text": "table_3"
+        },
+        {
+          "type": "table",
+          "x": 0.42388055788590595,
+          "y": 0.41168964718150747,
+          "w": 0.310328229865772,
+          "h": 0.015590443157653552,
+          "text": "table_4"
+        },
+        {
+          "type": "table",
+          "x": 0.4529823825503356,
+          "y": 0.45124703087885987,
+          "w": 0.028653523489932862,
+          "h": 0.005201900237529686,
+          "text": "table_5"
+        },
+        {
+          "type": "table",
+          "x": 0.30729865771812076,
+          "y": 0.525356294536817,
+          "w": 0.06609699584531865,
+          "h": 0.02473396674584346,
+          "text": "table_6"
+        },
+        {
+          "type": "table",
+          "x": 0.056401006711409414,
+          "y": 0.5682185273159145,
+          "w": 0.11531879194630869,
+          "h": 0.016888361045130605,
+          "text": "table_7"
+        },
+        {
+          "type": "table",
+          "x": 0.2300587248322148,
+          "y": 0.5682185273159145,
+          "w": 0.0359105575632421,
+          "h": 0.002030878859857458,
+          "text": "table_8"
+        },
+        {
+          "type": "table",
+          "x": 0.16599412751677853,
+          "y": 0.6647387173396668,
+          "w": 0.016315500774393286,
+          "h": 0.027458432304038414,
+          "text": "table_9"
+        },
+        {
+          "type": "table",
+          "x": 0.21802086372920926,
+          "y": 0.6647387173396668,
+          "w": 0.04794841866624762,
+          "h": 0.03453830166270873,
+          "text": "table_10"
+        },
+        {
+          "type": "table",
+          "x": 0.2904260171979866,
+          "y": 0.6772802850356295,
+          "w": 0.0652880570223056,
+          "h": 0.004964370546318095,
+          "text": "table_11"
+        },
+        {
+          "type": "table",
+          "x": 0.8678556031135133,
+          "y": 0.8267979170473231,
+          "w": 0.12025261836299686,
+          "h": 0.1476873960920669,
+          "text": "table_12"
+        }
+      ]
+    }
+  ],
+  "updated_at": "2026-03-25T05:10:10.579170Z"
+}

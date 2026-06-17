@@ -1,0 +1,540 @@
+# SagoHub Service: Sago-Note (Phase 1: Foundation)
+# 옵시디언 보관소의 메모를 자동으로 분석하고 연결하는 서비스
+
+service:
+  id: "com.SagoHub.sago-note"
+  version: "1.0.0"
+  name: "Sago-Note"
+  description: "옵시디언 메모 자동 분석 및 연결 서비스"
+  author: "SagoHub Team"
+  icon: "icon.png"
+  category: "productivity"
+  
+  # UI 서버 설정
+  ui_server:
+    host: "0.0.0.0"
+    port: 8080
+    external_port: 26012
+
+interface:
+  - type: "react-ui"
+    id: "main_dashboard"
+    label: "Sago-Note Dashboard"
+    description: "옵시디언 메모 자동 분석 및 연결 서비스 대시보드"
+    binding: "./services/sago-note/frontend"
+    
+    # 동적 바인딩: config 값을 props로 주입
+    props:
+      vault_root: "${config.vault_root}"
+      watch_pattern: "${config.watch_pattern}"
+      hide_thinking_process: "${config.hide_thinking_process}"
+      include_pdf: "${config.include_pdf}"
+    
+    # 이벤트 매핑: UI가 시스템과 소통하는 인터페이스
+    events:
+      # UI에서 "설정 저장" 버튼을 누르면 이 이벤트가 나간다
+      onSave: "PATH_SET"
+      # UI에서 "양식 생성" 버튼을 누르면 양식 생성 요청
+      onIndexGenerate: "EVT_OUTPUT_INDEX_REQUEST"
+      # UI에서 "리포트 생성" 버튼을 누르면 output_index → output_report 생성 요청
+      onReportGenerate: "EVT_OUTPUT_REPORT_REQUEST"
+      # UI가 이 이벤트를 수신하면 화면을 갱신한다
+      subscribe: ["EVT_FILE_CHANGE", "EVT_FILE_SCANNED", "EVT_PDF_ANALYZED", "EVT_PDF_MD_WRITTEN", "EVT_SUMMARY_DONE", "EVT_ANALYSIS_DONE", "EVT_LINK_FOUND", "EVT_WRITE_REQUEST", "EVT_WRITE_COMPLETE", "EVT_TODO_UPDATED", "EVT_USER_INTEREST_UPDATED", "EVT_OUTPUT_INDEX_REQUEST", "founds_created", "founds_updated", "founds_deleted", "analysis_created", "analysis_updated", "analysis_deleted"]
+
+config:
+  vault_root:
+    type: "path"
+    label: "옵시디언 보관소 루트 폴더"
+    default: "/home/bssoft/obsidian/SagoNote"
+    required: true
+    description: "감시할 옵시디언 보관소의 루트 폴더 경로"
+  
+  watch_pattern:
+    type: "string"
+    label: "감시할 파일 패턴"
+    default: "**/*.md"
+    description: "Glob 패턴으로 감시할 파일 지정 (예: **/*.md)"
+  
+  hide_thinking_process:
+    type: "boolean"
+    label: "사고 과정 폴더 숨기기"
+    default: false
+    description: "true로 설정하면 sago 폴더와 하위 폴더들이 숨김 처리됩니다 (.sago, .founds 등)"
+  
+  include_pdf:
+    type: "boolean"
+    label: "PDF 파일 포함"
+    default: true
+    description: "감시/스캔 시 PDF 파일을 포함하여 분석합니다. 해제하면 .md 파일만 처리합니다."
+  
+  pdf_analysis_api_url:
+    type: "string"
+    label: "PDF 분석 API URL"
+    default: "https://pdf.bs-soft.co.kr"
+    required: false
+    description: "PDF Analysis API 서버 주소 (예: http://localhost:8000). 환경변수 PDF_ANALYSIS_API_URL으로도 설정 가능."
+
+pipelines:
+  # PATH_SET 이벤트 → 초기 폴더 스캔 및 파일 감시 시작
+  - id: "flow_initial_scan"
+    name: "Initial Folder Scan Pipeline"
+    
+    trigger:
+      event: "PATH_SET"
+      debounce: 500
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    
+    broadcast:
+      # 파일 감시 모듈: 파일 변화 감지 시작
+      - module: "sago_watcher.SagoWatcherModule"
+        id: "action_watch"
+        args:
+          watch_dir: "${event.watch_dir}"
+          path: "${event.path}"
+          include_pdf: "${event.include_pdf}"
+      
+      # 초기 폴더 스캔 모듈: 폴더 내 모든 파일 스캔
+      - module: "sago_scanner.SagoScannerModule"
+        id: "action_scan"
+        args:
+          watch_dir: "${event.watch_dir}"
+          path: "${event.path}"
+          include_pdf: "${event.include_pdf}"
+  
+  # 스캔된 파일 → 요약 요청 (sago_summarizer가 LLM_PROMPT 발행)
+  - id: "flow_file_summarize"
+    name: "File Summarize Pipeline"
+    
+    trigger:
+      event: "EVT_FILE_SCANNED"
+      debounce: 1000
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    
+    broadcast:
+      - module: "sago_summarizer.SagoSummarizerModule"
+        id: "action_summarize"
+        args:
+          file_path: "${event.file_path}"
+          content: "${event.content}"
+          watch_dir: "${event.watch_dir}"
+          vault_root: "${config.vault_root}"
+          hide_thinking_process: "${config.hide_thinking_process}"
+
+  # PDF 발견 → PdfReader (PDF Analysis API로 분석)
+  - id: "flow_pdf_analyze"
+    name: "PDF Analyze Pipeline"
+    
+    trigger:
+      event: "EVT_PDF_FOUND"
+      debounce: 500
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    
+    broadcast:
+      - module: "pdf_reader.PdfReaderModule"
+        id: "action_analyze_pdf"
+        args:
+          file_path: "${event.file_path}"
+          relative_path: "${event.relative_path}"
+          watch_dir: "${event.watch_dir}"
+          filename: "${event.filename}"
+          stem: "${event.stem}"
+          sago_folder: "${event.sago_folder}"
+  
+  # PDF 분석 완료 → 동일 파일명 .md 생성
+  - id: "flow_pdf_to_md"
+    name: "PDF Analyzed → Write same-name .md"
+    
+    trigger:
+      event: "EVT_PDF_ANALYZED"
+      debounce: 300
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    
+    broadcast:
+      - module: "pdf_to_md_writer.PdfToMdWriterModule"
+        id: "action_pdf_to_md"
+        args:
+          file_path: "${event.file_path}"
+          analysis: "${event.analysis}"
+          relative_path: "${event.relative_path}"
+          watch_dir: "${event.watch_dir}"
+          success: "${event.success}"
+  
+  # LLM_PROMPT → llm_prompt 모듈
+  - id: "flow_llm_prompt"
+    name: "LLM Prompt Pipeline"
+    
+    trigger:
+      event: "LLM_PROMPT"
+      debounce: 0
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    
+    broadcast:
+      - module: "llm_prompt.LLMPromptModule"
+        id: "action_llm"
+        args:
+          context: "${event.context}"
+          prompt: "${event.prompt}"
+          model: "${event.model}"
+          file_path: "${event.file_path}"
+          watch_dir: "${event.watch_dir}"
+          hide_thinking_process: "${event.hide_thinking_process}"
+          relative_path: "${event.relative_path}"
+  
+  # LLM_PROMPT_RESPONSE → sago_summarizer / sago_analyzer / user_interest / todo_planner / todo_executor / todo_result_integrator / output_index_builder / output_report_builder
+  - id: "flow_summary_save"
+    name: "Summary Save Pipeline"
+    
+    trigger:
+      event: "LLM_PROMPT_RESPONSE"
+      debounce: 500
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    
+    broadcast:
+      - module: "sago_summarizer.SagoSummarizerModule"
+        id: "action_save_summary"
+      - module: "sago_analyzer.SagoAnalyzerModule"
+        id: "action_analysis_result_response"
+      - module: "user_interest.UserInterestModule"
+        id: "action_user_interest_response"
+      - module: "todo_planner.TodoPlannerModule"
+        id: "action_todo_extract_response"
+      - module: "todo_executor.TodoExecutorModule"
+        id: "action_todo_execute_response"
+      - module: "todo_result_integrator.TodoResultIntegratorModule"
+        id: "action_todo_result_integrator_response"
+      - module: "output_index_builder.OutputIndexBuilderModule"
+        id: "action_output_index_response"
+      - module: "output_report_builder.OutputReportBuilderModule"
+        id: "action_output_report_chapter_response"
+  
+  # sago 내 파일 저장 요청 → sago_writer가 일원화 저장 (요약, analysis_result 등)
+  - id: "flow_write_request"
+    name: "Write Request Pipeline"
+    
+    trigger:
+      event: "EVT_WRITE_REQUEST"
+      debounce: 200
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    
+    broadcast:
+      - module: "sago_writer.SagoWriterModule"
+        id: "action_write_file"
+  
+  # 파일 변경 감지 → 요약 모듈 (변경된 파일도 요약)
+  - id: "flow_file_change_summarize"
+    name: "File Change Summarize Pipeline"
+    
+    trigger:
+      event: "EVT_FILE_CHANGE"
+      filter: "${config.vault_root}/${config.watch_pattern}"
+      debounce: 2000
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    
+    broadcast:
+      # 파일 요약 모듈: 변경된 파일도 요약
+      - module: "sago_summarizer.SagoSummarizerModule"
+        id: "action_summarize_changed"
+        args:
+          file_path: "${event.file_path}"
+          content: "${event.content}"
+          watch_dir: "${event.watch_dir}"
+          vault_root: "${config.vault_root}"
+          hide_thinking_process: "${config.hide_thinking_process}"
+      
+      # Analyzer와 Linker도 실행
+      - module: "sago_analyzer.SagoAnalyzerModule"
+        id: "action_analyze"
+        args:
+          file_path: "${event.file_path}"
+          content: "${event.content}"
+          watch_dir: "${event.watch_dir}"
+          vault_root: "${config.vault_root}"
+          hide_thinking_process: "${config.hide_thinking_process}"
+      
+      - module: "sago_linker.SagoLinkerModule"
+        id: "action_link"
+        args:
+          file_path: "${event.file_path}"
+          content: "${event.content}"
+          watch_dir: "${event.watch_dir}"
+          vault_root: "${config.vault_root}"
+  
+  # found 이벤트(created/updated/deleted) → Analyzer가 analysis_result.md 갱신
+  - id: "flow_founds_analyze"
+    name: "Founds Event → Analysis Result Update"
+    
+    trigger:
+      event: "founds_created"
+      debounce: 1500
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    
+    broadcast:
+      - module: "sago_analyzer.SagoAnalyzerModule"
+        id: "action_analyze_founds"
+        args:
+          file_path: "${event.file_path}"
+          content: "${event.content}"
+          watch_dir: "${event.watch_dir}"
+          vault_root: "${config.vault_root}"
+          relative_path: "${event.relative_path}"
+          sago_folder: "${event.sago_folder}"
+      - module: "user_interest.UserInterestModule"
+        id: "action_user_interest_founds"
+        args:
+          file_path: "${event.file_path}"
+          content: "${event.content}"
+          watch_dir: "${event.watch_dir}"
+          vault_root: "${config.vault_root}"
+          relative_path: "${event.relative_path}"
+          sago_folder: "${event.sago_folder}"
+  
+  - id: "flow_founds_updated_analyze"
+    name: "Founds Updated → Analysis Result Update"
+    
+    trigger:
+      event: "founds_updated"
+      debounce: 1500
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    
+    broadcast:
+      - module: "sago_analyzer.SagoAnalyzerModule"
+        id: "action_analyze_founds_updated"
+        args:
+          file_path: "${event.file_path}"
+          content: "${event.content}"
+          watch_dir: "${event.watch_dir}"
+          vault_root: "${config.vault_root}"
+          relative_path: "${event.relative_path}"
+          sago_folder: "${event.sago_folder}"
+      - module: "user_interest.UserInterestModule"
+        id: "action_user_interest_founds_updated"
+        args:
+          file_path: "${event.file_path}"
+          content: "${event.content}"
+          watch_dir: "${event.watch_dir}"
+          vault_root: "${config.vault_root}"
+          relative_path: "${event.relative_path}"
+          sago_folder: "${event.sago_folder}"
+  
+  - id: "flow_founds_deleted_analyze"
+    name: "Founds Deleted → Analysis Result Update"
+    
+    trigger:
+      event: "founds_deleted"
+      debounce: 500
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    
+    broadcast:
+      - module: "sago_analyzer.SagoAnalyzerModule"
+        id: "action_analyze_founds_deleted"
+        args:
+          file_path: "${event.file_path}"
+          watch_dir: "${event.watch_dir}"
+          vault_root: "${config.vault_root}"
+          relative_path: "${event.relative_path}"
+          sago_folder: "${event.sago_folder}"
+      - module: "user_interest.UserInterestModule"
+        id: "action_user_interest_founds_deleted"
+        args:
+          file_path: "${event.file_path}"
+          watch_dir: "${event.watch_dir}"
+          vault_root: "${config.vault_root}"
+          relative_path: "${event.relative_path}"
+          sago_folder: "${event.sago_folder}"
+  
+  # analysis 폴더 이벤트 → Todo 목록 추출·통합 (todo_planner)
+  - id: "flow_analysis_todo"
+    name: "Analysis Created/Updated/Deleted → Todo Planner"
+    
+    trigger:
+      event: "analysis_created"
+      debounce: 500
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    
+    broadcast:
+      - module: "todo_planner.TodoPlannerModule"
+        id: "action_todo_plan"
+  
+  - id: "flow_analysis_updated_todo"
+    name: "Analysis Updated → Todo Planner"
+    
+    trigger:
+      event: "analysis_updated"
+      debounce: 500
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    
+    broadcast:
+      - module: "todo_planner.TodoPlannerModule"
+        id: "action_todo_plan_updated"
+  
+  - id: "flow_analysis_deleted_todo"
+    name: "Analysis Deleted → Todo Planner"
+    
+    trigger:
+      event: "analysis_deleted"
+      debounce: 300
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    
+    broadcast:
+      - module: "todo_planner.TodoPlannerModule"
+        id: "action_todo_plan_deleted"
+
+  # TODO 목록 갱신 → 각 할 일 순차 수행 후 todo_result에 .md 저장
+  - id: "flow_todo_execute"
+    name: "Todo Updated → Todo Executor"
+    
+    trigger:
+      event: "EVT_TODO_UPDATED"
+      debounce: 500
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    
+    broadcast:
+      - module: "todo_executor.TodoExecutorModule"
+        id: "action_todo_execute"
+
+  # todo_result 파일 저장 완료 → 취합 적합 여부 판단 후 analysis_result 통합 / output_report 생성
+  - id: "flow_todo_result_integrate"
+    name: "Todo Result Written → Todo Result Integrator / Output Report Builder"
+    
+    trigger:
+      event: "EVT_WRITE_COMPLETE"
+      debounce: 300
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    
+    broadcast:
+      - module: "todo_result_integrator.TodoResultIntegratorModule"
+        id: "action_todo_result_integrate"
+      
+  # output_index 생성 요청 → output_index_builder (파일 스캔·양식 탐색/생성 → output_index.md 저장)
+  - id: "flow_output_index_request"
+    name: "Output Index Request → Output Index Builder"
+    
+    trigger:
+      event: "EVT_OUTPUT_INDEX_REQUEST"
+      debounce: 300
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    
+    broadcast:
+      - module: "output_index_builder.OutputIndexBuilderModule"
+        id: "action_output_index_build"
+
+  # 리포트 생성 요청 → Output Report Builder (output_index 기반 output_report.md 생성)
+  - id: "flow_output_report_request"
+    name: "Output Report Request → Output Report Builder"
+    
+    trigger:
+      event: "EVT_OUTPUT_REPORT_REQUEST"
+      debounce: 300
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    
+    broadcast:
+      - module: "output_report_builder.OutputReportBuilderModule"
+        id: "action_output_report_build"
+
+  # 웹 검색 요청 → WebSearch 모듈 (RAG용)
+  - id: "flow_web_search"
+    name: "Web Search Request → WebSearch Module"
+    
+    trigger:
+      event: "EVT_WEB_SEARCH_REQUEST"
+      debounce: 0
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    
+    broadcast:
+      - module: "web_search.WebSearchModule"
+        id: "action_web_search"
+
+  # 웹 검색 결과 → Todo Executor (검색 결과를 컨텍스트로 LLM 수행)
+  - id: "flow_web_search_response"
+    name: "Web Search Response → Todo Executor"
+    
+    trigger:
+      event: "EVT_WEB_SEARCH_RESPONSE"
+      debounce: 0
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    
+    broadcast:
+      - module: "todo_executor.TodoExecutorModule"
+        id: "action_todo_execute_with_rag"
+
+  # 분석 완료 → Writer가 결과 수집
+  - id: "flow_write_report"
+    name: "Write Report Pipeline"
+    
+    trigger:
+      event: "EVT_ANALYSIS_DONE"
+      debounce: 500
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    
+    broadcast:
+      # M4. Sago-Writer: 분석 결과 기록 (분석 결과 수신)
+      - module: "sago_writer.SagoWriterModule"
+        id: "action_write_analysis"
+        args:
+          file_path: "${event.file_path}"
+          watch_dir: "${event.watch_dir}"
+          vault_root: "${config.vault_root}"
+          hide_thinking_process: "${config.hide_thinking_process}"
+  
+  # 연결 완료 → Writer가 결과 수집
+  - id: "flow_write_links"
+    name: "Write Links Pipeline"
+    
+    trigger:
+      event: "EVT_LINK_FOUND"
+      debounce: 500
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    
+    broadcast:
+      # M4. Sago-Writer: 연결 정보 기록 (연결 정보 수신)
+      - module: "sago_writer.SagoWriterModule"
+        id: "action_write_links"
+        args:
+          file_path: "${event.file_path}"
+          watch_dir: "${event.watch_dir}"
+          vault_root: "${config.vault_root}"
+          hide_thinking_process: "${config.hide_thinking_process}"

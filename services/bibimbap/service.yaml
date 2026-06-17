@@ -1,0 +1,44 @@
+service:
+  id: "com.SagoHub.bibimbap"
+  version: "1.0.0"
+  name: "비빔밥 (Bbb)"
+  description: "비빔밥의 풍부한 재료들처럼 각자의 개성이 넘쳐나는 3인의 점심 메뉴 토론 멀티 에이전트 시뮬레이터"
+  author: "SagoHub Team"
+  category: "productivity"
+
+  # UI 서버 설정
+  ui_server:
+    host: "0.0.0.0"
+    port: 8080
+    external_port: 26030
+
+interface:
+  - type: "react-ui"
+    id: "main_dashboard"
+    label: "비빔밥 시뮬레이터 대시보드"
+    description: "3인 AI 에이전트들의 유쾌한 밥상머리 메뉴 논쟁 관제탑"
+    binding: "./services/bibimbap/frontend"
+    
+    props: {}
+    events:
+      onLlmRequest: "BIBIMBAP_LLM_REQUEST"
+      subscribe:
+        - "LLM_PROMPT_RESPONSE"
+
+pipelines:
+  - id: "flow_bibimbap_llm"
+    name: "비빔밥 LLM 질의 파이프라인"
+    
+    trigger:
+      event: "BIBIMBAP_LLM_REQUEST"
+      aggregation:
+        strategy: "INDEPENDENT"
+        target: "event_bus"
+    
+    broadcast:
+      - module: "llm_prompt.LLMPromptModule"
+        id: "action_bibimbap_llm"
+        args:
+          context: "${event.context}"
+          prompt: "${event.prompt}"
+          model: "${event.model}"

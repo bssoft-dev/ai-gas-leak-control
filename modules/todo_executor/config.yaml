@@ -1,0 +1,12 @@
+# TodoExecutor 모듈 설정
+# - todo_execute_prompt: 각 할 일에 대해 LLM에 보낼 "수행 결과 생성" 프롬프트 (뒤에 할 일 내용이 붙음)
+# - context_length_limit: analysis_result + interests + 웹검색 컨텍스트 합산 최대 문자 수
+
+todo_execute_prompt: |
+  다음 할 일을 수행한 결과를 마크다운으로 정리해 주세요.
+  - 아래 [현재 분석 결과], [사용자 관심사], [웹 검색 참고 자료]를 컨텍스트로 참고하여, 할 일과 관련된 실행 계획·단계·완료 시 기록할 내용을 작성해 주세요.
+  - 컨텍스트와 무관한 일반론이 아니라, 해당 분석·관심사·검색 자료를 반영한 실용적인 결과를 한글로 작성해 주세요.
+
+  할 일:
+
+context_length_limit: 14000

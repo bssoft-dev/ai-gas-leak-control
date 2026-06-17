@@ -1,0 +1,200 @@
+# Foldering Engine Docker Compose
+# SagoHub Platform Layer
+#
+# 사용법:
+#   USE_DOCKER=true python main.py
+#   또는
+#   docker-compose up
+#
+# 주의: UI 서버는 docker-compose.yml에 포함되지 않습니다.
+#       필요할 때 start_ui_servers.py를 실행하세요.
+
+version: '3.8'
+
+services:
+  # SagoHub 서버
+  event-bus:
+    build:
+      context: ../../..  # project root (requirements.txt, src/)
+      dockerfile: src/SagoHub/runner/Dockerfile.event-bus
+    container_name: SagoHub-event-bus
+    ports:
+      - "${EVENT_BUS_HOST_PORT:-8000}:26010"
+    environment:
+      - EVENT_BUS_HOST=${EVENT_BUS_HOST:-0.0.0.0}
+      - EVENT_BUS_PORT=26010
+    restart: unless-stopped
+    networks:
+      - foldering-network
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:26010/health').raise_for_status()"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  # Foldering Engine (모듈 오케스트레이션만 수행, 파이프라인은 별도 컨테이너로 실행)
+  # 주의: 서비스는 docker-compose.yml에 포함되지 않습니다.
+  #       필요할 때 start_pipelines.py를 실행하세요.
+  foldering-engine:
+    build:
+      context: ../../..  # project root
+      dockerfile: src/SagoHub/runner/Dockerfile
+    container_name: foldering-engine
+    depends_on:
+      event-bus:
+        condition: service_healthy
+    volumes:
+      # 파이프라인 디렉토리 마운트 (읽기 전용)
+      - ${PIPELINES_DIR:-${SERVICES_DIR:-../services}}:/services:ro
+      # 감시할 폴더 마운트
+      - ${LOCAL_MOUNT_POINT:-./obsidian}:/watch:rw
+    environment:
+      - PIPELINES_DIR=/services
+      - SERVICES_DIR=/services  # 하위 호환성
+      - LOCAL_MOUNT_POINT=/watch
+      - POLL_INTERVAL=${POLL_INTERVAL:-5}
+      - EVENT_BUS_URL=http://event-bus:26010
+      - LLM_API_BASE=${LLM_API_BASE:-https://llm-api.bs-soft.co.kr}
+      - LLM_MODEL=${LLM_MODEL:-openai/gpt-oss-120b}
+      - LLM_API_KEY=${LLM_API_KEY:-}
+      - SMTP_HOST=${SMTP_HOST:-localhost}
+      - SMTP_PORT=${SMTP_PORT:-25}
+      - SMTP_USER=${SMTP_USER:-}
+      - SMTP_PASSWORD=${SMTP_PASSWORD:-}
+      - SMTP_FROM=${SMTP_FROM:-noreply@local}
+      - SENT_FOLDER=${SENT_FOLDER:-}
+      - USE_DOCKER=true  # Docker 모드로 실행
+    restart: unless-stopped
+    networks:
+      - foldering-network
+    command: python main.py
+
+  # FileWatcher 모듈 (별도 컨테이너)
+  module-filewatcher:
+    build:
+      context: ../../..  # project root
+      dockerfile: src/SagoHub/runner/Dockerfile
+    container_name: SagoHub-module-filewatcher
+    depends_on:
+      event-bus:
+        condition: service_healthy
+    volumes:
+      - ${LOCAL_MOUNT_POINT:-./obsidian}:/watch:rw
+    environment:
+      - EVENT_BUS_URL=http://event-bus:26010
+      - LOCAL_MOUNT_POINT=/watch
+      - POLL_INTERVAL=${POLL_INTERVAL:-5}
+    restart: unless-stopped
+    networks:
+      - foldering-network
+    command: python module_runner.py FileWatcherModule
+
+  # LLM Drafter 모듈 (별도 컨테이너)
+  module-llm-drafter:
+    build:
+      context: ../../..  # project root
+      dockerfile: src/SagoHub/runner/Dockerfile
+    container_name: SagoHub-module-llm-drafter
+    depends_on:
+      event-bus:
+        condition: service_healthy
+    environment:
+      - EVENT_BUS_URL=http://event-bus:26010
+      - LLM_API_BASE=${LLM_API_BASE:-https://llm-api.bs-soft.co.kr}
+      - LLM_MODEL=${LLM_MODEL:-openai/gpt-oss-120b}
+      - LLM_API_KEY=${LLM_API_KEY:-}
+      - POLL_INTERVAL=1
+    restart: unless-stopped
+    networks:
+      - foldering-network
+    command: python module_runner.py LLMDrafterModule
+
+  # Nudge UI 모듈 (별도 컨테이너)
+  module-nudge-ui:
+    build:
+      context: ../../..  # project root
+      dockerfile: src/SagoHub/runner/Dockerfile
+    container_name: SagoHub-module-nudge-ui
+    depends_on:
+      event-bus:
+        condition: service_healthy
+    volumes:
+      - ${LOCAL_MOUNT_POINT:-./obsidian}:/watch:rw
+    environment:
+      - EVENT_BUS_URL=http://event-bus:26010
+      - LOCAL_MOUNT_POINT=/watch
+      - POLL_INTERVAL=1
+    restart: unless-stopped
+    networks:
+      - foldering-network
+    command: python module_runner.py NudgeUIModule
+
+  # Mailer 모듈 (별도 컨테이너)
+  module-mailer:
+    build:
+      context: ../../..  # project root
+      dockerfile: src/SagoHub/runner/Dockerfile
+    container_name: SagoHub-module-mailer
+    depends_on:
+      event-bus:
+        condition: service_healthy
+    volumes:
+      - ${LOCAL_MOUNT_POINT:-./obsidian}:/watch:rw
+    environment:
+      - EVENT_BUS_URL=http://event-bus:26010
+      - SMTP_HOST=${SMTP_HOST:-localhost}
+      - SMTP_PORT=${SMTP_PORT:-25}
+      - SMTP_USER=${SMTP_USER:-}
+      - SMTP_PASSWORD=${SMTP_PASSWORD:-}
+      - SMTP_FROM=${SMTP_FROM:-noreply@local}
+      - SENT_FOLDER=${SENT_FOLDER:-}
+      - POLL_INTERVAL=1
+    restart: unless-stopped
+    networks:
+      - foldering-network
+    command: python module_runner.py MailerModule
+
+  # Monitor Log 모듈 (별도 컨테이너)
+  module-monitor-log:
+    build:
+      context: ../../..  # project root
+      dockerfile: src/SagoHub/runner/Dockerfile
+    container_name: SagoHub-module-monitor-log
+    depends_on:
+      event-bus:
+        condition: service_healthy
+    volumes:
+      - ./logs:/app/logs:rw
+    environment:
+      - EVENT_BUS_URL=http://event-bus:26010
+      - POLL_INTERVAL=1
+    restart: unless-stopped
+    networks:
+      - foldering-network
+    command: python module_runner.py MonitorLogModule
+
+  # Monitor Console 모듈 (별도 컨테이너)
+  module-monitor-console:
+    build:
+      context: ../../..  # project root
+      dockerfile: src/SagoHub/runner/Dockerfile
+    container_name: SagoHub-module-monitor-console
+    depends_on:
+      event-bus:
+        condition: service_healthy
+    environment:
+      - EVENT_BUS_URL=http://event-bus:26010
+      - POLL_INTERVAL=1
+    restart: unless-stopped
+    networks:
+      - foldering-network
+    command: python module_runner.py MonitorConsoleModule
+
+# UI 서버는 docker-compose.yml에 포함되지 않습니다.
+# 필요할 때 start_ui_servers.py 또는 start_ui_servers.sh를 실행하세요.
+# 각 서비스의 service.yaml에서 ui_server 설정을 읽어서 동적으로 생성됩니다.
+
+networks:
+  foldering-network:
+    driver: bridge

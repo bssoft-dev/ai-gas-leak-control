@@ -1,90 +1,20 @@
 [
   {
-    "id": "S1",
-    "zone_id": "zone1",
-    "label": "유량-1",
-    "value": 11.96,
-    "unit": "L/min",
-    "status": "normal"
+    "id": "S1_Pressure",
+    "sensor_type": "pressure",
+    "value": 0.417,
+    "unit": "MPa"
   },
   {
-    "id": "S2",
-    "zone_id": "zone1",
-    "label": "압력-1",
-    "value": 0.394,
-    "unit": "MPa",
-    "status": "normal"
+    "id": "S2_O2",
+    "sensor_type": "oxygen",
+    "value": 12.3,
+    "unit": "%"
   },
   {
-    "id": "S3",
-    "zone_id": "zone2",
-    "label": "유량-2",
-    "value": 11.8,
-    "unit": "L/min",
-    "status": "normal"
-  },
-  {
-    "id": "S4",
-    "zone_id": "zone2",
-    "label": "압력-2",
-    "value": 0.385,
-    "unit": "MPa",
-    "status": "normal"
-  },
-  {
-    "id": "S5",
-    "zone_id": "zone3",
-    "label": "유량-3",
-    "value": 11.75,
-    "unit": "L/min",
-    "status": "normal"
-  },
-  {
-    "id": "S6",
-    "zone_id": "zone3",
-    "label": "압력-3",
-    "value": 0.39,
-    "unit": "MPa",
-    "status": "normal"
-  },
-  {
-    "id": "S1773289494634",
-    "zone_id": "zone1",
-    "label": "S1773289494634",
-    "value": 11.92,
-    "unit": "MPa",
-    "status": "normal"
-  },
-  {
-    "id": "S1773289497249",
-    "zone_id": "zone1",
-    "label": "S1773289497249",
-    "value": 11.99,
-    "unit": "MPa",
-    "status": "normal"
-  },
-  {
-    "id": "S1773289499163",
-    "zone_id": "zone1",
-    "label": "S1773289499163",
-    "value": 11.9,
-    "unit": "MPa",
-    "status": "normal"
-  },
-  {
-    "id": "S1773289744252",
-    "zone_id": "zone1",
-    "label": "S1773289744252",
-    "value": 11.71,
-    "unit": "MPa",
-    "status": "normal"
-  },
-  {
-    "id": "S1773289757396",
-    "zone_id": "zone1",
-    "label": "S1773289757396",
-    "value": 11.8,
-    "unit": "MPa",
-    "status": "normal"
+    "id": "S3_LPG",
+    "sensor_type": "lpg",
+    "value": 12.29,
+    "unit": "%LEL"
   }
 ]

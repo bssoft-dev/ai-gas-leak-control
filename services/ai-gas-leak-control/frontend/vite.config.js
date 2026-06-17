@@ -1,0 +1,22 @@
+import { defineConfig } from 'vite'
+import tailwindcss from '@tailwindcss/vite'
+import react from '@vitejs/plugin-react'
+
+export default defineConfig({
+  plugins: [tailwindcss(), react()],
+  server: {
+    host: '0.0.0.0',
+    port: 6025,
+    proxy: {
+      '/api': {
+        target: 'http://0.0.0.0:26025',
+        changeOrigin: true
+      }
+    },
+    allowedHosts: ['aglc.bs-soft.co.kr', 'dev.aglc.bs-soft.co.kr'],
+  },
+  build: {
+    outDir: 'dist',
+    assetsDir: 'assets'
+  }
+})

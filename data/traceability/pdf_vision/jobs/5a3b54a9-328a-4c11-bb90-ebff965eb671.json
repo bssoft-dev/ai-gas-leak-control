@@ -1,0 +1,30 @@
+{
+  "job_id": "5a3b54a9-328a-4c11-bb90-ebff965eb671",
+  "filename": "L1_D2603 5LP250V OIL-BIN DWG 260316.pdf",
+  "pdf_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_uploads/5a3b54a9-328a-4c11-bb90-ebff965eb671.pdf",
+  "created_at": "2026-03-25T06:28:09.769053Z",
+  "pages": [
+    {
+      "page_number": 1,
+      "image_path": "/home/bssoft/SagoHub-2601/data/traceability/pdf_vision/pages/5a3b54a9-328a-4c11-bb90-ebff965eb671/page-1.png",
+      "image_data_url": "/api/traceability/pdf_vision/jobs/5a3b54a9-328a-4c11-bb90-ebff965eb671/pages/1/file",
+      "classification_vision": "design",
+      "confidence_vision": 0.98,
+      "text_vision": "{\"classification\": \"design\", \"confidence\": 0.98, \"text\": \"도면 제목에 'DWG'와 부품 리스트, 재료 정보가 포함되어 있으며, 설계 관련 도면으로 판단됨\"}",
+      "text_pdf": "SUS316L \nPLATE 9T로 절곡 \n2EA\nSUS316L \nPLATE 3T로 절곡 \n4EA\n2포인트로 절곡.",
+      "classification": "design",
+      "source": "vision",
+      "overlay_boxes": [
+        {
+          "type": "table",
+          "x": 0.008385756676557863,
+          "y": 0.012005033557046935,
+          "w": 0.9832166172106823,
+          "h": 0.9699664429530198,
+          "text": "table_1"
+        }
+      ]
+    }
+  ],
+  "updated_at": "2026-03-25T06:28:12.703294Z"
+}

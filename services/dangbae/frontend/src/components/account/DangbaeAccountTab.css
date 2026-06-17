@@ -1,0 +1,1816 @@
+/* 계정 탭: 인증 열 + 결제 열 */
+.dangbae-account {
+  padding: 24px 20px 32px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.dangbae-account-hero h2 {
+  margin: 0 0 8px;
+  font-size: 1.35rem;
+  color: #1f2937;
+}
+
+.dangbae-account-hero p {
+  margin: 0 0 12px;
+  font-size: 14px;
+  line-height: 1.55;
+  color: #6b7280;
+}
+
+.dangbae-account-hero-split {
+  color: #1A56DB;
+  font-weight: 700;
+}
+
+.dangbae-account-hero code {
+  font-size: 12px;
+  background: #f3f4f6;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.dangbae-account-token-hint {
+  font-size: 13px;
+  color: #1A56DB;
+  font-weight: 500;
+  margin: 0;
+}
+
+.dangbae-account-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-items: start;
+  margin-top: 8px;
+}
+
+.dangbae-account-section-title {
+  margin: 0 0 12px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #1f2937;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #fff5f0;
+}
+
+.dangbae-auth-panel .dangbae-account-subtabs {
+  margin-bottom: 12px;
+}
+
+.dangbae-account-subtabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.dangbae-account-subtabs button {
+  padding: 10px 18px;
+  border: 1px solid #e5e7eb;
+  border-radius: 999px;
+  background: #fff;
+  font-size: 14px;
+  color: #6b7280;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.dangbae-account-subtabs button:hover {
+  border-color: #1A56DB;
+  color: #1A56DB;
+}
+
+.dangbae-account-subtabs button.active {
+  background: #fff5f0;
+  border-color: #1A56DB;
+  color: #1A56DB;
+  font-weight: 600;
+}
+
+.dangbae-account-panel {
+  background: #fafafa;
+  border: 1px solid #eef0f3;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.dangbae-account-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.dangbae-account-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.dangbae-account-form input[type='email'],
+.dangbae-account-form input[type='password'],
+.dangbae-account-form input[type='number'],
+.dangbae-account-form input[type='text'] {
+  padding: 10px 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 15px;
+}
+
+.dangbae-account-form input:focus {
+  outline: none;
+  border-color: #1A56DB;
+  box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.15);
+}
+
+.dangbae-account-submit {
+  margin-top: 4px;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #1A56DB, #ff8f52);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.dangbae-account-submit:hover {
+  filter: brightness(1.05);
+}
+
+.dangbae-account-secondary {
+  padding: 12px 20px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  background: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  color: #374151;
+}
+
+.dangbae-account-secondary:hover {
+  border-color: #1A56DB;
+  color: #1A56DB;
+}
+
+.dangbae-account-oauth {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.dangbae-account-oauth > p {
+  margin: 0 0 10px;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.dangbae-account-oauth-btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.dangbae-account-oauth-btns button {
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: none;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  color: #fff;
+}
+
+.dangbae-account-oauth-btns .oauth-kakao {
+  background: #fee500;
+  color: #191919;
+}
+
+.dangbae-account-oauth-btns .oauth-naver {
+  background: #03c75a;
+}
+
+.dangbae-account-oauth-btns .oauth-google {
+  background: #4285f4;
+}
+
+.dangbae-oauth-inline-loading {
+  margin: 12px 0 0;
+  font-size: 13px;
+  color: #1A56DB;
+}
+
+.dangbae-oauth-inline-error {
+  margin: 10px 0 0;
+  font-size: 13px;
+  color: #dc2626;
+}
+
+.dangbae-account-payment label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.dangbae-account-payment input[type='number'],
+.dangbae-account-payment input[type='text'] {
+  padding: 10px 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 15px;
+}
+
+.dangbae-account-payment input:focus {
+  outline: none;
+  border-color: #1A56DB;
+  box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.15);
+}
+
+.dangbae-payment-buyer-hint {
+  margin: -6px 0 12px;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.dangbae-account-fare-hint {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  padding: 12px 14px;
+  background: #fff;
+  border-radius: 8px;
+  border: 1px dashed #1A56DB;
+  font-size: 14px;
+  color: #374151;
+}
+
+.dangbae-account-linkbtn {
+  padding: 6px 12px;
+  border: 1px solid #1A56DB;
+  border-radius: 8px;
+  background: #fff;
+  color: #1A56DB;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.dangbae-account-pay-methods {
+  margin-bottom: 16px;
+}
+
+.dangbae-account-pay-methods > span {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.dangbae-account-pay-methods label {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  margin-right: 14px;
+  margin-bottom: 8px;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.dangbae-account-pay-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.dangbae-account-prepare-id {
+  margin-top: 12px;
+  font-size: 12px;
+  color: #6b7280;
+  word-break: break-all;
+}
+
+.dangbae-account-prepare-id code {
+  font-size: 11px;
+  background: #f3f4f6;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+/* 토스트 팝업 — accountMsg 알림 */
+.dangbae-account-toast {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  min-width: 280px;
+  max-width: min(480px, calc(100vw - 32px));
+  padding: 14px 16px 14px 18px;
+  background: #1f2937;
+  color: #f3f4f6;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.28), 0 2px 8px rgba(0, 0, 0, 0.18);
+  font-size: 14px;
+  line-height: 1.55;
+  word-break: break-word;
+  cursor: pointer;
+  animation: dangbae-toast-in 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes dangbae-toast-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-12px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+}
+
+.dangbae-account-toast-msg {
+  flex: 1;
+  white-space: pre-wrap;
+}
+
+.dangbae-account-toast-close {
+  flex-shrink: 0;
+  background: transparent;
+  border: none;
+  color: #9ca3af;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 2px;
+  margin-top: 1px;
+  transition: color 0.15s;
+}
+
+.dangbae-account-toast-close:hover {
+  color: #f3f4f6;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.dangbae-account--standalone {
+  max-width: 440px;
+  margin: 0 auto;
+  padding-top: 8px;
+}
+
+.dangbae-login-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.dangbae-login-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 800;
+  font-size: 20px;
+  color: #1A56DB;
+  text-decoration: none;
+}
+
+.dangbae-login-brand-mark {
+  width: 28px;
+  height: 28px;
+  border-radius: 9px;
+  background: linear-gradient(135deg, #1A56DB, #4DA9E8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 16px;
+}
+
+.dangbae-login-back {
+  font-size: 14px;
+  color: #6b7280;
+  text-decoration: none;
+}
+
+.dangbae-login-back:hover {
+  color: #1A56DB;
+}
+
+.dangbae-login-page-title {
+  margin: 0 0 12px;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #111827;
+}
+
+.dangbae-account-only-auth {
+  max-width: 520px;
+}
+
+.dangbae-account-hero-lead {
+  margin: 0 0 12px;
+  font-size: 14px;
+  line-height: 1.55;
+  color: #6b7280;
+}
+
+.dangbae-account-hero-lead strong {
+  color: #1A56DB;
+  font-weight: 700;
+}
+
+.dangbae-account-section--auth-full {
+  margin-top: 0;
+}
+
+/* 결제 전용 페이지 (#/payment) */
+.dangbae-payment-page {
+  max-width: 640px;
+}
+
+.checkout-payment-root.dangbae-payment-page {
+  max-width: 1180px;
+}
+
+.checkout-payment-root {
+  padding-bottom: 24px;
+}
+
+.checkout-payment-toolbar {
+  margin-bottom: 12px;
+}
+
+.checkout-payment-toolbar__nav {
+  margin-bottom: 0;
+}
+
+.checkout-hold-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 55%, #3b82f6 100%);
+  color: #f8fafc;
+  font-size: 14px;
+  line-height: 1.45;
+  margin-bottom: 20px;
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.28);
+}
+
+.checkout-hold-banner__icon {
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.checkout-hold-banner__text {
+  flex: 1;
+  min-width: 200px;
+}
+
+.checkout-hold-banner__timer {
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+  font-size: 18px;
+  letter-spacing: 0.04em;
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: rgba(15, 23, 42, 0.25);
+}
+
+.checkout-payment-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 920px) {
+  .checkout-payment-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .checkout-payment-sidebar {
+    order: -1;
+  }
+}
+
+.checkout-payment-main__intro {
+  margin-bottom: 16px;
+}
+
+.checkout-detail-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  box-shadow: 0 4px 18px rgba(15, 23, 42, 0.05);
+  margin-bottom: 14px;
+  overflow: hidden;
+}
+
+.checkout-detail-row {
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  padding: 14px 16px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.checkout-detail-row__label {
+  font-size: 12px;
+  color: #64748b;
+  font-weight: 700;
+}
+
+.checkout-detail-row__value {
+  min-width: 0;
+  font-size: 15px;
+  color: #0f172a;
+  word-break: break-word;
+}
+
+.checkout-detail-route {
+  padding: 12px 16px 14px;
+}
+
+.checkout-detail-route__title {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: #64748b;
+  margin-bottom: 8px;
+}
+
+.checkout-detail-route__line {
+  margin: 0 0 8px;
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+}
+
+.checkout-detail-route__line:last-child {
+  margin-bottom: 0;
+}
+
+.checkout-detail-route__point {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 22px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #1d4ed8;
+  background: #eff6ff;
+}
+
+.checkout-detail-route__text {
+  font-size: 14px;
+  line-height: 1.45;
+  color: #334155;
+  word-break: break-word;
+}
+
+.checkout-payment-panel-card {
+  background: #fff;
+  border-radius: 14px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 24px rgba(15, 23, 42, 0.06);
+  padding: 4px 4px 8px;
+}
+
+.checkout-payment-panel-card .dangbae-payment-panel {
+  border-radius: 12px;
+  padding: 18px 18px 16px;
+}
+
+.dangbae-payment-panel--checkout::before {
+  display: none;
+}
+
+.checkout-pay-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.checkout-pay-heading__title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 800;
+  color: #0f172a;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.checkout-pay-heading__shield {
+  font-size: 20px;
+}
+
+.checkout-pay-heading__badge {
+  font-size: 12px;
+  font-weight: 600;
+  color: #2563eb;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.checkout-payment-sidebar {
+  position: sticky;
+  top: 12px;
+}
+
+.checkout-summary-card {
+  background: #fff;
+  border-radius: 14px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 24px rgba(15, 23, 42, 0.06);
+  overflow: hidden;
+}
+
+.checkout-summary-card__head {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  background: linear-gradient(135deg, #e0f2fe 0%, #eff6ff 100%);
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.checkout-summary-card__head-icon {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.checkout-summary-card__head-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.checkout-summary-card__kicker {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #64748b;
+}
+
+.checkout-summary-card__order-id {
+  font-size: 15px;
+  font-weight: 800;
+  color: #0f172a;
+  word-break: break-all;
+}
+
+.checkout-summary-card__order-id.muted {
+  font-weight: 600;
+  color: #94a3b8;
+}
+
+.checkout-summary-rows {
+  margin: 0;
+  padding: 14px 16px 16px;
+}
+
+.checkout-summary-row {
+  display: grid;
+  grid-template-columns: 88px minmax(0, 1fr);
+  gap: 8px;
+  padding: 8px 0;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 13px;
+}
+
+.checkout-summary-row:last-of-type {
+  border-bottom: none;
+}
+
+.checkout-summary-row dt {
+  margin: 0;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.checkout-summary-row dd {
+  margin: 0;
+  color: #334155;
+  word-break: break-word;
+}
+
+.checkout-summary-row__ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.checkout-summary-row--amount dd {
+  font-size: 22px;
+  font-weight: 800;
+  color: #0f172a;
+  font-variant-numeric: tabular-nums;
+}
+
+.checkout-summary-won {
+  font-size: 15px;
+  font-weight: 700;
+  margin-left: 2px;
+  color: #475569;
+}
+
+.checkout-summary-secure {
+  margin: 0;
+  padding: 12px 16px 16px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #64748b;
+  border-top: 1px solid #f1f5f9;
+  background: #fafafa;
+}
+
+.checkout-summary-pay {
+  padding: 12px 16px 16px;
+  border-top: 1px solid #f1f5f9;
+  background: #fff;
+}
+
+.checkout-summary-pay__btn {
+  width: 100%;
+}
+
+.checkout-summary-pay__hint {
+  margin: 8px 0 0;
+  font-size: 12px;
+  color: #64748b;
+}
+
+.checkout-payment-log {
+  margin-top: 20px;
+}
+
+.checkout-payment-method-radios {
+  gap: 10px;
+}
+
+.checkout-method-opt {
+  align-items: flex-start;
+  padding: 14px 14px;
+  border-radius: 12px;
+}
+
+.dangbae-payment-panel--checkout .checkout-method-opt.is-selected {
+  border-color: #2563eb;
+  background: #eff6ff;
+  box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.22);
+}
+
+.dangbae-payment-panel--checkout .checkout-method-opt input {
+  accent-color: #2563eb;
+  margin-top: 4px;
+}
+
+.checkout-method-opt__body {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+}
+
+.checkout-method-opt__icon {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.checkout-method-opt__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.checkout-method-opt__label {
+  font-weight: 700;
+  font-size: 14px;
+  color: #0f172a;
+}
+
+.checkout-method-opt__sub {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.checkout-price-details {
+  margin-top: 8px;
+  margin-bottom: 4px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #fafafa;
+  overflow: hidden;
+}
+
+.checkout-price-details__toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 14px 14px;
+  border: none;
+  background: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  color: #0f172a;
+  cursor: pointer;
+  text-align: left;
+}
+
+.checkout-price-details__toggle:hover {
+  background: #f8fafc;
+}
+
+.checkout-price-details__toggle-sum {
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+  color: #2563eb;
+}
+
+.checkout-price-details__chevron {
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+.checkout-price-details__panel {
+  border-top: 1px solid #e5e7eb;
+  background: #fff;
+  padding-bottom: 6px;
+}
+
+.checkout-price-lines {
+  list-style: none;
+  margin: 0;
+  padding: 12px 14px;
+  font-size: 13px;
+  color: #334155;
+}
+
+.checkout-price-lines li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 6px 0;
+}
+
+.checkout-price-details__inner {
+  padding: 0 14px 12px;
+}
+
+.checkout-payment-root.dangbae-account {
+  background-color: #f3f4f6;
+}
+
+.dangbae-payment-intro {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.55;
+  color: #6b7280;
+}
+
+.dangbae-payment-order-id {
+  color: #1A56DB;
+  font-weight: 700;
+}
+
+.dangbae-payment-page-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.dangbae-payment-nav-btn {
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  color: #374151;
+}
+
+.dangbae-payment-nav-btn:hover {
+  border-color: #1A56DB;
+  color: #1A56DB;
+}
+
+.dangbae-payment-nav-btn--primary {
+  border-color: #1A56DB;
+  color: #1A56DB;
+  font-weight: 600;
+}
+
+.dangbae-payment-page-panel-wrap {
+  margin-top: 4px;
+}
+
+.dangbae-payment-panel {
+  position: relative;
+  overflow: hidden;
+}
+
+.dangbae-payment-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #0f172a, #1A56DB, #4DA9E8);
+  opacity: 0.9;
+}
+
+.dangbae-payment-steps {
+  display: flex;
+  gap: 12px;
+  list-style: none;
+  margin: 0 0 16px;
+  padding: 0;
+  flex-wrap: wrap;
+}
+
+.dangbae-payment-steps__item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.dangbae-payment-steps__item--active {
+  border-color: rgba(255, 107, 53, 0.45);
+  color: #374151;
+  background: #fff8f5;
+}
+
+.dangbae-payment-steps__item--done .dangbae-payment-steps__num {
+  background: #22c55e;
+  border-color: #16a34a;
+  color: #fff;
+}
+
+.dangbae-payment-steps__num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 800;
+  background: #fff;
+  border: 1px solid #d1d5db;
+  color: #374151;
+}
+
+.dangbae-payment-steps__label {
+  font-weight: 500;
+}
+
+.dangbae-payment-portone-note {
+  margin: 0 0 16px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #6b7280;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+.dangbae-payment-portone-note code {
+  font-size: 11px;
+  word-break: break-all;
+  background: #e2e8f0;
+  padding: 1px 4px;
+  border-radius: 4px;
+}
+
+.dangbae-payment-amount-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  margin-bottom: 16px;
+  padding: 16px 18px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  color: #f8fafc;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.25);
+}
+
+.dangbae-payment-amount-card__label {
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+.dangbae-payment-amount-card__value {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+.dangbae-payment-amount-card__won {
+  font-size: 16px;
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+.dangbae-payment-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.dangbae-payment-methods-fieldset {
+  margin: 0 0 16px;
+  padding: 0;
+  border: none;
+  min-width: 0;
+}
+
+.dangbae-payment-methods-fieldset legend {
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 6px;
+  padding: 0;
+}
+
+.dangbae-payment-methods-hint {
+  margin: 0 0 10px;
+  font-size: 12px;
+  color: #6b7280;
+  line-height: 1.45;
+}
+
+.dangbae-payment-method-radios {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dangbae-payment-method-opt {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  color: #374151;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.dangbae-payment-method-opt:hover {
+  border-color: #cbd5e1;
+  background: #f9fafb;
+}
+
+.dangbae-payment-method-opt.is-selected {
+  border-color: #1A56DB;
+  background: #fff8f5;
+  box-shadow: 0 0 0 1px rgba(255, 107, 53, 0.2);
+}
+
+.dangbae-payment-method-opt input {
+  margin: 0;
+  accent-color: #1A56DB;
+}
+
+.dangbae-easy-pay-submethods {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.dangbae-easy-pay-submethod {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  border-radius: 999px;
+  border: 1px solid #dbe2ea;
+  background: #fff;
+  color: #334155;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.dangbae-easy-pay-submethod input {
+  margin: 0;
+  accent-color: #2563eb;
+}
+
+.dangbae-easy-pay-submethod.is-selected {
+  border-color: #2563eb;
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+.dangbae-payment-actions {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.dangbae-payment-btn-prepare {
+  order: 1;
+}
+
+.dangbae-payment-btn-portone {
+  order: 2;
+  padding: 12px 18px;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(135deg, #1A56DB, #ea580c);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(234, 88, 12, 0.25);
+  transition: transform 0.1s, box-shadow 0.15s, opacity 0.15s;
+}
+
+.dangbae-payment-btn-portone:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(234, 88, 12, 0.3);
+}
+
+.dangbae-payment-btn-portone:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.dangbae-payment-warn {
+  margin: 0 0 8px;
+  font-size: 12px;
+  color: #b45309;
+  line-height: 1.5;
+  padding: 8px 10px;
+  background: #eff6ff;
+  border-radius: 8px;
+  border: 1px solid #fde68a;
+}
+
+.dangbae-payment-warn code {
+  font-size: 11px;
+  background: #fef3c7;
+  padding: 1px 4px;
+  border-radius: 4px;
+}
+
+/* 간편 로그인 모달 */
+.dangbae-oauth-open-btn {
+  width: 100%;
+  max-width: 320px;
+  padding: 12px 18px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  background: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1A56DB;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.dangbae-oauth-open-btn:hover {
+  border-color: #1A56DB;
+  background: #fff8f5;
+}
+
+.dangbae-oauth-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(17, 24, 39, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.dangbae-oauth-modal {
+  width: 100%;
+  max-width: 400px;
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px 22px 20px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
+}
+
+.dangbae-oauth-modal-title {
+  margin: 0 0 10px;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #111827;
+}
+
+.dangbae-oauth-modal-desc {
+  margin: 0 0 10px;
+  font-size: 14px;
+  line-height: 1.55;
+  color: #4b5563;
+}
+
+.dangbae-oauth-modal-note {
+  margin: 0 0 14px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #6b7280;
+  background: #f9fafb;
+  padding: 10px 12px;
+  border-radius: 8px;
+}
+
+.dangbae-oauth-modal-note code {
+  font-size: 11px;
+  word-break: break-all;
+}
+
+.dangbae-oauth-modal-err {
+  margin: 0 0 12px;
+  font-size: 13px;
+  color: #dc2626;
+}
+
+.dangbae-oauth-modal-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.dangbae-oauth-modal-btns button {
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: none;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #fff;
+}
+
+.dangbae-oauth-modal-btns button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.dangbae-oauth-modal-btns .oauth-kakao {
+  background: #fee500;
+  color: #191919;
+}
+
+.dangbae-oauth-modal-btns .oauth-naver {
+  background: #03c75a;
+}
+
+.dangbae-oauth-modal-btns .oauth-google {
+  background: #4285f4;
+}
+
+.dangbae-oauth-modal-loading {
+  margin: 0 0 10px;
+  font-size: 13px;
+  color: #1A56DB;
+}
+
+.dangbae-oauth-modal-close {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  background: #fff;
+  font-size: 14px;
+  color: #6b7280;
+  cursor: pointer;
+}
+
+.dangbae-oauth-modal-close:hover:not(:disabled) {
+  border-color: #d1d5db;
+  color: #374151;
+}
+
+@media (max-width: 900px) {
+  .dangbae-account-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ===================================================
+   새 결제 패널 v2 (dpp2) — 계좌이체 · 만나서 결제
+   =================================================== */
+
+.dangbae-payment-panel--v2 {
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 20px rgba(26, 86, 219, 0.07);
+  padding: 0;
+  overflow: hidden;
+}
+
+/* 헤더 */
+.dpp2-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 20px 14px;
+  background: linear-gradient(135deg, #1A56DB 0%, #4DA9E8 100%);
+  color: #fff;
+}
+.dpp2-header__shield { font-size: 20px; }
+.dpp2-header__title {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 800;
+  flex: 1;
+  color: #fff;
+}
+.dpp2-header__badge {
+  font-size: 11px;
+  font-weight: 700;
+  background: rgba(255,255,255,0.22);
+  border: 1px solid rgba(255,255,255,0.35);
+  border-radius: 999px;
+  padding: 3px 10px;
+  letter-spacing: 0.04em;
+}
+
+/* 금액 카드 */
+.dpp2-amount-card {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 20px;
+  background: #f8faff;
+  border-bottom: 1px solid #e2e8f0;
+}
+.dpp2-amount-card__left {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.dpp2-amount-card__label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #64748b;
+}
+.dpp2-amount-card__fare-hint {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #475569;
+}
+.dpp2-amount-card__right {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  flex-shrink: 0;
+}
+.dpp2-amount-card__value {
+  font-size: 28px;
+  font-weight: 800;
+  color: #1A56DB;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+.dpp2-amount-card__won {
+  font-size: 16px;
+  font-weight: 700;
+  color: #64748b;
+}
+
+/* 주문명 */
+.dpp2-order-name {
+  margin: 0;
+  padding: 10px 20px;
+  font-size: 13px;
+  color: #475569;
+  background: #f1f5f9;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+/* 수단 선택 */
+.dpp2-method-select {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 16px 20px 8px;
+}
+.dpp2-method-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: border-color 0.18s, background 0.18s, box-shadow 0.18s;
+  margin-bottom: 10px;
+  background: #fff;
+  position: relative;
+}
+.dpp2-method-card:hover {
+  border-color: #93c5fd;
+  background: #f0f6ff;
+}
+.dpp2-method-card--active {
+  border-color: #1A56DB;
+  background: #eff6ff;
+  box-shadow: 0 0 0 1px rgba(26, 86, 219, 0.2);
+}
+.dpp2-method-radio {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.dpp2-method-icon { font-size: 24px; line-height: 1; flex-shrink: 0; }
+.dpp2-method-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+.dpp2-method-label {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f172a;
+}
+.dpp2-method-subtitle {
+  font-size: 12px;
+  color: #64748b;
+}
+.dpp2-method-check {
+  font-size: 18px;
+  color: #1A56DB;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+/* 계좌이체 패널 */
+.dpp2-bank-panel,
+.dpp2-meet-panel {
+  padding: 4px 20px 20px;
+}
+.dpp2-bank-desc,
+.dpp2-meet-desc {
+  margin: 0 0 14px;
+  font-size: 13px;
+  color: #475569;
+  line-height: 1.55;
+}
+.dpp2-bank-info {
+  background: #f8faff;
+  border: 1px solid #bfdbfe;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+.dpp2-bank-info__row {
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  gap: 8px;
+  padding: 11px 14px;
+  border-bottom: 1px solid #e0eaff;
+  font-size: 14px;
+}
+.dpp2-bank-info__row:last-child { border-bottom: none; }
+.dpp2-bank-info__key {
+  font-weight: 600;
+  color: #64748b;
+  font-size: 12px;
+}
+.dpp2-bank-info__val { color: #0f172a; font-weight: 500; }
+.dpp2-bank-info__val--account {
+  font-family: 'Courier New', monospace;
+  font-size: 16px;
+  font-weight: 700;
+  color: #1A56DB;
+  letter-spacing: 0.06em;
+}
+.dpp2-bank-info__row--amount .dpp2-bank-info__val--amount {
+  font-size: 18px;
+  font-weight: 800;
+  color: #1A56DB;
+  font-variant-numeric: tabular-nums;
+}
+.dpp2-btn-copy {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #bfdbfe;
+  border-radius: 10px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+  margin-bottom: 12px;
+}
+.dpp2-btn-copy:hover { background: #dbeafe; border-color: #93c5fd; }
+.dpp2-bank-notice,
+.dpp2-meet-notice {
+  padding: 10px 14px;
+  background: #fefce8;
+  border: 1px solid #fde68a;
+  border-radius: 10px;
+  font-size: 13px;
+  color: #78350f;
+  margin-bottom: 14px;
+}
+.dpp2-bank-notice p,
+.dpp2-meet-notice ul {
+  margin: 0;
+  padding-left: 1.2em;
+  line-height: 1.6;
+}
+.dpp2-meet-notice ul li { margin-bottom: 4px; }
+.dpp2-meet-notice ul li:last-child { margin-bottom: 0; }
+.dpp2-btn-confirm {
+  width: 100%;
+  padding: 15px 20px;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.1s;
+  box-shadow: 0 4px 14px rgba(26, 86, 219, 0.3);
+}
+.dpp2-btn-confirm:hover:not(:disabled) {
+  opacity: 0.93;
+  transform: translateY(-1px);
+}
+.dpp2-btn-confirm:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+}
+.dpp2-btn-confirm--bank {
+  background: linear-gradient(135deg, #1A56DB 0%, #4DA9E8 100%);
+  color: #fff;
+}
+.dpp2-btn-confirm--meet {
+  background: linear-gradient(135deg, #0d9488 0%, #0ea5e9 100%);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(13, 148, 136, 0.3);
+}
+
+/* 만나서 결제 */
+.dpp2-meet-amount {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 12px;
+  margin-bottom: 14px;
+}
+.dpp2-meet-amount__label { font-size: 13px; color: #166534; font-weight: 600; }
+.dpp2-meet-amount__value { font-size: 20px; font-weight: 800; color: #047857; font-variant-numeric: tabular-nums; }
+.dpp2-meet-submethod {
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-bottom: 14px;
+}
+.dpp2-meet-submethod__legend {
+  font-size: 12px;
+  font-weight: 700;
+  color: #64748b;
+  padding: 0 6px;
+  letter-spacing: 0.04em;
+}
+.dpp2-meet-submethod__options {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+.dpp2-meet-opt {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  color: #475569;
+  transition: border-color 0.18s, background 0.18s;
+  background: #fff;
+}
+.dpp2-meet-opt input { display: none; }
+.dpp2-meet-opt:hover { border-color: #93c5fd; background: #f0f6ff; }
+.dpp2-meet-opt--active {
+  border-color: #1A56DB;
+  background: #eff6ff;
+  color: #1A56DB;
+}
+.dpp2-meet-opt__icon { font-size: 18px; }
+
+/* 섹션 구분 border-bottom 제거 (마지막 패널) */
+.dpp2-bank-panel:last-child,
+.dpp2-meet-panel:last-child {
+  border-top: 1px solid #f1f5f9;
+  margin-top: 4px;
+  padding-top: 16px;
+}
+
+@media (max-width: 640px) {
+  .dpp2-amount-card__value { font-size: 22px; }
+  .dpp2-method-card { padding: 12px 12px; gap: 10px; }
+}
+
+/* ────────────────────────────────────────────
+   신청 완료 감사 모달
+──────────────────────────────────────────── */
+.dangbae-thank-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  animation: dangbae-overlay-in 0.22s ease;
+}
+
+@keyframes dangbae-overlay-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.dangbae-thank-modal {
+  background: #fff;
+  border-radius: 24px;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.22), 0 4px 16px rgba(37, 99, 235, 0.12);
+  padding: 44px 40px 36px;
+  max-width: 420px;
+  width: 100%;
+  text-align: center;
+  animation: dangbae-modal-in 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes dangbae-modal-in {
+  from { opacity: 0; transform: scale(0.88) translateY(20px); }
+  to   { opacity: 1; transform: scale(1)   translateY(0); }
+}
+
+.dangbae-thank-modal__icon {
+  font-size: 56px;
+  line-height: 1;
+  margin-bottom: 20px;
+  animation: dangbae-icon-bounce 0.6s 0.2s ease both;
+}
+
+@keyframes dangbae-icon-bounce {
+  0%   { transform: scale(0.5); opacity: 0; }
+  60%  { transform: scale(1.15); }
+  100% { transform: scale(1);   opacity: 1; }
+}
+
+.dangbae-thank-modal__title {
+  margin: 0 0 14px;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.25;
+}
+
+.dangbae-thank-modal__desc {
+  margin: 0 0 16px;
+  font-size: 14px;
+  line-height: 1.65;
+  color: #475569;
+}
+
+.dangbae-thank-modal__order {
+  margin: 0 0 20px;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.dangbae-thank-modal__order strong {
+  color: #1d4ed8;
+  font-weight: 700;
+}
+
+.dangbae-thank-modal__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 14px 28px;
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  width: 100%;
+  letter-spacing: 0.01em;
+  box-shadow: 0 4px 18px rgba(37, 99, 235, 0.35);
+  transition: filter 0.18s, transform 0.18s, box-shadow 0.18s;
+}
+
+.dangbae-thank-modal__btn:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.42);
+}
+
+.dangbae-thank-modal__btn:active {
+  transform: translateY(0);
+  filter: brightness(0.97);
+}
+
+@media (max-width: 480px) {
+  .dangbae-thank-modal {
+    padding: 32px 24px 28px;
+    border-radius: 18px;
+  }
+  .dangbae-thank-modal__title { font-size: 1.25rem; }
+  .dangbae-thank-modal__icon  { font-size: 44px; }
+}

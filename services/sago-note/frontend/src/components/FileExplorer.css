@@ -1,0 +1,282 @@
+.file-explorer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  background: white;
+}
+
+.explorer-header {
+  padding: 0.75rem;
+  border-bottom: 1px solid #e0e0e0;
+  background: #f8f9fa;
+}
+
+.path-form {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.path-input {
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-family: 'Courier New', monospace;
+}
+
+.path-input:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.btn-icon {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: white;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.2s;
+}
+
+.btn-icon:hover:not(:disabled) {
+  background: #f0f0f0;
+  border-color: #667eea;
+}
+
+.btn-icon:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pattern-section {
+  padding: 0.75rem;
+  border-bottom: 1px solid #e0e0e0;
+  background: #fafafa;
+}
+
+.pattern-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.pattern-preset-btn {
+  padding: 0.4rem 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: white;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+}
+
+.pattern-preset-btn:hover {
+  background: #f0f0f0;
+  border-color: #667eea;
+}
+
+.pattern-preset-btn.active {
+  background: #667eea;
+  color: white;
+  border-color: #667eea;
+}
+
+.pattern-input-section {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pattern-form {
+  display: flex;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.pattern-input {
+  flex: 1;
+  padding: 0.4rem 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-family: 'Courier New', monospace;
+}
+
+.pattern-input:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.pattern-display {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.pattern-label {
+  font-size: 0.85rem;
+  color: #666;
+  font-weight: 500;
+}
+
+.pattern-value {
+  flex: 1;
+  padding: 0.4rem 0.5rem;
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-family: 'Courier New', monospace;
+  color: #333;
+}
+
+.btn-small {
+  padding: 0.4rem 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: #667eea;
+  color: white;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+}
+
+.btn-small:hover {
+  background: #5568d3;
+}
+
+.btn-small.btn-secondary {
+  background: #757575;
+}
+
+.btn-small.btn-secondary:hover {
+  background: #616161;
+}
+
+.explorer-content {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 300px;
+  max-height: 500px;
+}
+
+.explorer-loading,
+.explorer-error,
+.explorer-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  color: #888;
+}
+
+.explorer-error {
+  color: #d32f2f;
+}
+
+.spinner-small {
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid #667eea;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
+  margin-right: 0.5rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.file-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.file-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border-bottom: 1px solid #f0f0f0;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.file-item:hover {
+  background-color: #f8f9fa;
+}
+
+.file-item.directory {
+  font-weight: 500;
+}
+
+.file-item.directory:hover {
+  background-color: #e8f4f8;
+}
+
+.file-icon {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.file-name {
+  flex: 1;
+  font-size: 0.9rem;
+  word-break: break-all;
+}
+
+.file-size {
+  font-size: 0.8rem;
+  color: #888;
+  flex-shrink: 0;
+}
+
+.explorer-footer {
+  padding: 0.75rem;
+  border-top: 1px solid #e0e0e0;
+  background: #f8f9fa;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.current-path-label {
+  font-size: 0.85rem;
+  color: #666;
+  font-weight: 500;
+}
+
+.current-path-value {
+  flex: 1;
+  font-size: 0.85rem;
+  font-family: 'Courier New', monospace;
+  color: #333;
+  word-break: break-all;
+}
+
+/* 스크롤바 스타일링 */
+.explorer-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.explorer-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.explorer-content::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.explorer-content::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}

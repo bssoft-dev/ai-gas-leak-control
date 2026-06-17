@@ -1,0 +1,61 @@
+{
+  "name": "QR기반 도면 관리 시스템",
+  "short_name": "도면관리",
+  "description": "QR 기반 제작/설치 도면 관리 오프라인 지원 앱",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#f3f4f6",
+  "theme_color": "#0f172a",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "QR 스캔",
+      "short_name": "스캔",
+      "description": "QR 스캔 화면으로 바로 이동",
+      "url": "/?action=scan",
+      "icons": [
+        {
+          "src": "/icons/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/desktop-wide.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "도면 상세 및 관련 도면 화면"
+    },
+    {
+      "src": "/screenshots/mobile-main.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "label": "모바일 프로젝트/도면 관리 화면"
+    }
+  ]
+}
