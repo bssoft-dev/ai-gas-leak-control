@@ -1,0 +1,29 @@
+[
+  {
+    "id": "dac6812b-65ae-4416-ab18-a39a3d34bbb3",
+    "name": "example.jpg",
+    "filename": "example.jpg",
+    "file_type": "image/jpeg",
+    "file_path": "uploads/example.jpg",
+    "created_at": "2026-03-12T04:24:47.405534Z",
+    "updated_at": "2026-05-15T21:24:14.856118Z"
+  },
+  {
+    "id": "6b02a384-e6c6-4772-8ffc-481579abf505",
+    "name": "3_A_covering.jpg",
+    "filename": "3_A_covering.jpg",
+    "file_type": "image",
+    "file_path": "uploads/6b02a384-e6c6-4772-8ffc-481579abf505.jpg",
+    "created_at": "2026-05-15T19:54:42.685057Z",
+    "updated_at": "2026-05-15T19:54:42.685057Z"
+  },
+  {
+    "id": "0a1951dc-4d2a-484b-892a-b154e29bffb8",
+    "name": "3_NAV_covering.jpg",
+    "filename": "3_NAV_covering.jpg",
+    "file_type": "image",
+    "file_path": "uploads/0a1951dc-4d2a-484b-892a-b154e29bffb8.jpg",
+    "created_at": "2026-05-15T19:54:50.693591Z",
+    "updated_at": "2026-05-15T19:54:50.693591Z"
+  }
+]

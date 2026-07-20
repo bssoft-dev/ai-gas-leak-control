@@ -1,0 +1,24 @@
+{
+  "base_informations": {
+    "description": "ai-gas-leak-prod",
+    "base_id": "8733121a-b675-5a14-a327-0b19b26dd2d2",
+    "service_id": "com.SagoHub.ai-gas-leak-control"
+  },
+  "dataset": {
+    "name_ko": "AI 가스 누출 자동제어 제조·안전 관제 데이터",
+    "name_en": "AI Gas Leak Detection and Control Telemetry",
+    "format": [
+      "json",
+      "csv",
+      "ndjson"
+    ],
+    "encoding": "UTF-8",
+    "generated_at": "2026-07-08T00:15:46.898480Z"
+  },
+  "minio": {
+    "suggested_bucket": "sagohub-data",
+    "suggested_prefix": "ai-gas-leak/ai-gas-leak-prod",
+    "upload_note": "mc cp -r minio_upload/latest/* myminio/sagohub-data/ai-gas-leak/"
+  },
+  "batch_id": "20260708_001546"
+}

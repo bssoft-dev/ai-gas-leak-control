@@ -1,0 +1,267 @@
+{
+  "manifest_version": "2.0",
+  "generated_at": "2026-07-08T00:43:13.005918Z",
+  "batch_id": "20260708_004312",
+  "encoding": "UTF-8",
+  "data_purpose": "sensor_collection_and_event_logs",
+  "dataset": {
+    "description": "ai-gas-leak-prod",
+    "base_id": "8733121a-b675-5a14-a327-0b19b26dd2d2",
+    "service_id": "com.SagoHub.ai-gas-leak-control"
+  },
+  "upload_categories": {
+    "collected": {
+      "folder": "원천데이터",
+      "path": "collected/"
+    },
+    "event_logs": {
+      "folder": "이벤트로그",
+      "path": "event_logs/"
+    }
+  },
+  "files": [
+    {
+      "path": "collected/assets/0a1951dc-4d2a-484b-892a-b154e29bffb8.jpg",
+      "category": "collected",
+      "format": "jpg",
+      "content_type": "application/octet-stream",
+      "encoding": "UTF-8",
+      "size_bytes": 659203
+    },
+    {
+      "path": "collected/assets/6b02a384-e6c6-4772-8ffc-481579abf505.jpg",
+      "category": "collected",
+      "format": "jpg",
+      "content_type": "application/octet-stream",
+      "encoding": "UTF-8",
+      "size_bytes": 620865
+    },
+    {
+      "path": "collected/assets/example.jpg",
+      "category": "collected",
+      "format": "jpg",
+      "content_type": "application/octet-stream",
+      "encoding": "UTF-8",
+      "size_bytes": 620865
+    },
+    {
+      "path": "collected/csv/daily_usage.csv",
+      "category": "collected",
+      "format": "csv",
+      "content_type": "text/csv; charset=utf-8",
+      "encoding": "UTF-8",
+      "size_bytes": 26,
+      "delimiter": ",",
+      "header": true
+    },
+    {
+      "path": "collected/csv/sensors_snapshot.csv",
+      "category": "collected",
+      "format": "csv",
+      "content_type": "text/csv; charset=utf-8",
+      "encoding": "UTF-8",
+      "size_bytes": 128,
+      "delimiter": ",",
+      "header": true
+    },
+    {
+      "path": "collected/csv/timeseries.csv",
+      "category": "collected",
+      "format": "csv",
+      "content_type": "text/csv; charset=utf-8",
+      "encoding": "UTF-8",
+      "size_bytes": 29497,
+      "delimiter": ",",
+      "header": true
+    },
+    {
+      "path": "collected/json/daily_usage.json",
+      "category": "collected",
+      "format": "json",
+      "content_type": "application/json",
+      "encoding": "UTF-8",
+      "size_bytes": 3
+    },
+    {
+      "path": "collected/json/data_mart.json",
+      "category": "collected",
+      "format": "json",
+      "content_type": "application/json",
+      "encoding": "UTF-8",
+      "size_bytes": 3
+    },
+    {
+      "path": "collected/json/drawings.json",
+      "category": "collected",
+      "format": "json",
+      "content_type": "application/json",
+      "encoding": "UTF-8",
+      "size_bytes": 930
+    },
+    {
+      "path": "collected/json/edge_registry.json",
+      "category": "collected",
+      "format": "json",
+      "content_type": "application/json",
+      "encoding": "UTF-8",
+      "size_bytes": 121
+    },
+    {
+      "path": "collected/json/sensors.json",
+      "category": "collected",
+      "format": "json",
+      "content_type": "application/json",
+      "encoding": "UTF-8",
+      "size_bytes": 291
+    },
+    {
+      "path": "collected/json/state.json",
+      "category": "collected",
+      "format": "json",
+      "content_type": "application/json",
+      "encoding": "UTF-8",
+      "size_bytes": 259
+    },
+    {
+      "path": "collected/json/timeseries.json",
+      "category": "collected",
+      "format": "json",
+      "content_type": "application/json",
+      "encoding": "UTF-8",
+      "size_bytes": 47828
+    },
+    {
+      "path": "collected/ndjson/raw_ticks.ndjson",
+      "category": "collected",
+      "format": "ndjson",
+      "content_type": "application/x-ndjson",
+      "encoding": "UTF-8",
+      "size_bytes": 0
+    },
+    {
+      "path": "collected/ndjson/timeseries.ndjson",
+      "category": "collected",
+      "format": "ndjson",
+      "content_type": "application/x-ndjson",
+      "encoding": "UTF-8",
+      "size_bytes": 73134
+    },
+    {
+      "path": "event_logs/csv/ai_history.csv",
+      "category": "event_logs",
+      "format": "csv",
+      "content_type": "text/csv; charset=utf-8",
+      "encoding": "UTF-8",
+      "size_bytes": 388,
+      "delimiter": ",",
+      "header": true
+    },
+    {
+      "path": "event_logs/csv/alarm_history.csv",
+      "category": "event_logs",
+      "format": "csv",
+      "content_type": "text/csv; charset=utf-8",
+      "encoding": "UTF-8",
+      "size_bytes": 36,
+      "delimiter": ",",
+      "header": true
+    },
+    {
+      "path": "event_logs/csv/control_history.csv",
+      "category": "event_logs",
+      "format": "csv",
+      "content_type": "text/csv; charset=utf-8",
+      "encoding": "UTF-8",
+      "size_bytes": 44,
+      "delimiter": ",",
+      "header": true
+    },
+    {
+      "path": "event_logs/csv/event_logs.csv",
+      "category": "event_logs",
+      "format": "csv",
+      "content_type": "text/csv; charset=utf-8",
+      "encoding": "UTF-8",
+      "size_bytes": 374,
+      "delimiter": ",",
+      "header": true
+    },
+    {
+      "path": "event_logs/json/ai_history.json",
+      "category": "event_logs",
+      "format": "json",
+      "content_type": "application/json",
+      "encoding": "UTF-8",
+      "size_bytes": 486
+    },
+    {
+      "path": "event_logs/json/alarm_history.json",
+      "category": "event_logs",
+      "format": "json",
+      "content_type": "application/json",
+      "encoding": "UTF-8",
+      "size_bytes": 3
+    },
+    {
+      "path": "event_logs/json/control_history.json",
+      "category": "event_logs",
+      "format": "json",
+      "content_type": "application/json",
+      "encoding": "UTF-8",
+      "size_bytes": 3
+    },
+    {
+      "path": "event_logs/ndjson/event_logs.ndjson",
+      "category": "event_logs",
+      "format": "ndjson",
+      "content_type": "application/x-ndjson",
+      "encoding": "UTF-8",
+      "size_bytes": 492
+    },
+    {
+      "path": "metadata/dataset_info.json",
+      "category": "metadata",
+      "format": "json",
+      "content_type": "application/json",
+      "encoding": "UTF-8",
+      "size_bytes": 878
+    },
+    {
+      "path": "schemas/event_logs.schema.json",
+      "category": "metadata",
+      "format": "json",
+      "content_type": "application/json",
+      "encoding": "UTF-8",
+      "size_bytes": 399
+    },
+    {
+      "path": "schemas/sensors_snapshot.schema.json",
+      "category": "metadata",
+      "format": "json",
+      "content_type": "application/json",
+      "encoding": "UTF-8",
+      "size_bytes": 477
+    },
+    {
+      "path": "schemas/timeseries.schema.json",
+      "category": "metadata",
+      "format": "json",
+      "content_type": "application/json",
+      "encoding": "UTF-8",
+      "size_bytes": 400
+    }
+  ],
+  "minio_upload": {
+    "recommended_command": "mc cp --recursive /home/bssoft/SagoHub-2601/data/ai_gas_leak/minio_upload/zip_packages/latest/ myminio/sagohub-data/"
+  },
+  "zip_packages": {
+    "dataset_id": 4,
+    "company_folder": "Example_bluesp",
+    "path": "zip_packages/Example_bluesp/4",
+    "latest_path": "zip_packages/latest",
+    "folders": [
+      "원천데이터",
+      "이벤트로그"
+    ]
+  }
+}

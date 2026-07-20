@@ -1,0 +1,30 @@
+{
+  "next_id": 7,
+  "history": [
+    {
+      "dataset_id": 1,
+      "assigned_at": "2026-07-08T00:29:35.620376Z"
+    },
+    {
+      "dataset_id": 2,
+      "assigned_at": "2026-07-08T00:35:49.136862Z"
+    },
+    {
+      "dataset_id": 3,
+      "assigned_at": "2026-07-08T00:41:50.993681Z",
+      "category": "collected"
+    },
+    {
+      "dataset_id": 4,
+      "assigned_at": "2026-07-08T00:43:13.006211Z"
+    },
+    {
+      "dataset_id": 5,
+      "assigned_at": "2026-07-08T00:48:08.113685Z"
+    },
+    {
+      "dataset_id": 6,
+      "assigned_at": "2026-07-08T00:54:33.775421Z"
+    }
+  ]
+}

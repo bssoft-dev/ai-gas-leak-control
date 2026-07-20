@@ -1,0 +1,73 @@
+{
+  "generated_at": "2026-07-08T00:41:51.040178Z",
+  "batch_id": "20260708_004150",
+  "collection_date": "2026-07-08",
+  "dataset_id": 3,
+  "company_folder": "Example_bluesp",
+  "data_category": "collected",
+  "structure": "Case1_원천데이터_only",
+  "manual_rules": {
+    "same_extension_per_zip": true,
+    "max_zip_bytes": 2147483648,
+    "split_naming": "{name}_part{N}.zip",
+    "no_training_validation_split": true,
+    "labeling_folder_omitted": true
+  },
+  "archives": [
+    {
+      "name": "원천데이터_csv.zip",
+      "folder": "원천데이터",
+      "extension_group": "csv",
+      "part": null,
+      "size_bytes": 5012,
+      "source_files": [
+        "daily_usage.csv",
+        "sensors.csv",
+        "telemetry_timeseries.csv"
+      ]
+    },
+    {
+      "name": "원천데이터_jpg.zip",
+      "folder": "원천데이터",
+      "extension_group": "jpg",
+      "part": null,
+      "size_bytes": 1277674,
+      "source_files": [
+        "0a1951dc-4d2a-484b-892a-b154e29bffb8.jpg",
+        "6b02a384-e6c6-4772-8ffc-481579abf505.jpg",
+        "example.jpg"
+      ]
+    },
+    {
+      "name": "원천데이터_json.zip",
+      "folder": "원천데이터",
+      "extension_group": "json",
+      "part": null,
+      "size_bytes": 7040,
+      "source_files": [
+        "collection_policy.json",
+        "daily_usage.json",
+        "data_mart.json",
+        "drawings.json",
+        "edge_registry.json",
+        "edge_status.json",
+        "equipment_state.json",
+        "sensor_positions.json",
+        "sensors.json",
+        "telemetry_timeseries.json"
+      ]
+    },
+    {
+      "name": "원천데이터_ndjson.zip",
+      "folder": "원천데이터",
+      "extension_group": "ndjson",
+      "part": null,
+      "size_bytes": 5263,
+      "source_files": [
+        "raw_sensor_ticks.ndjson",
+        "telemetry_timeseries.ndjson"
+      ]
+    }
+  ],
+  "upload_path": "Example_bluesp/3/"
+}

@@ -50,8 +50,12 @@ data/ai_gas_leak/
 ├── ai_history.json      # 시뮬레이터·비상·MES 로직이 append하는 이벤트 목록
 ├── drawings.json        # 도면 메타 (id, name, filename, file_type, file_path, created_at, updated_at)
 ├── uploads/             # 도면 이미지 (파일명 규칙: {uuid}{원본확장자})
-└── points/
-    └── {drawing_id}.json   # 현재 모듈: 센서 객체의 JSON 배열 (gas_leak_plant._save_points)
+├── points/
+│   └── {drawing_id}.json   # 현재 모듈: 센서 객체의 JSON 배열 (gas_leak_plant._save_points)
+└── minio_upload/        # ★ MinIO·데이터포털 업로드용 (자동 생성, docs/데이터업로드_MinIO_저장형식.md)
+    ├── latest/          # mc cp 업로드 대상
+    ├── batches/         # 배치별 스냅샷
+    └── batches_index.json
 ```
 
 **참고:** `control_history.json`, `daily_usage.json`, `state.json` 내 `policy`·`risk_level` 등은 **본 워크스페이스 `gas_leak_control.py` 시뮬레이터가 직접 쓰지 않는 필드**일 수 있습니다. 배포·확장 브랜치에서 사용 시 별도 기술.
@@ -85,6 +89,7 @@ data/ai_gas_leak/
 
 ## 관련 문서
 
+- **MinIO 업로드 저장 형식·자동 생성:** `docs/데이터업로드_MinIO_저장형식.md`
 - **필드 정의표(기상대 예시와 동일 8열):** `docs/데이터스키마_AI가스누출_데이터포털형.md`
 - **API·이벤트 상세:** `services/ai-gas-leak-control/README.md`
 

@@ -1,0 +1,50 @@
+{
+  "generated_at": "2026-07-08T00:48:08.117840Z",
+  "batch_id": "20260708_004808",
+  "dataset_id": 5,
+  "company_folder": "Example_bluesp",
+  "data_purpose": "sensor_collection_and_event_logs",
+  "folder_layout": {
+    "원천데이터": "센서·시계열·상태·도면 등 수집 데이터",
+    "이벤트로그": "AI 판단·제어·경보 이벤트 로그"
+  },
+  "manual_rules": {
+    "single_zip": true,
+    "max_zip_bytes": 2147483648,
+    "no_training_validation_split": true
+  },
+  "upload_path": "Example_bluesp/5/",
+  "file_count": 23,
+  "archive": {
+    "name": "upload_data.zip",
+    "size_bytes": 1296899,
+    "encoding": "UTF-8",
+    "entries": [
+      "zip_manifest.json",
+      "원천데이터/0a1951dc-4d2a-484b-892a-b154e29bffb8.jpg",
+      "원천데이터/6b02a384-e6c6-4772-8ffc-481579abf505.jpg",
+      "원천데이터/daily_usage.csv",
+      "원천데이터/daily_usage.json",
+      "원천데이터/data_mart.json",
+      "원천데이터/drawings.json",
+      "원천데이터/edge_registry.json",
+      "원천데이터/example.jpg",
+      "원천데이터/raw_ticks.ndjson",
+      "원천데이터/sensors.json",
+      "원천데이터/sensors_snapshot.csv",
+      "원천데이터/state.json",
+      "원천데이터/timeseries.csv",
+      "원천데이터/timeseries.json",
+      "원천데이터/timeseries.ndjson",
+      "이벤트로그/ai_history.csv",
+      "이벤트로그/ai_history.json",
+      "이벤트로그/alarm_history.csv",
+      "이벤트로그/alarm_history.json",
+      "이벤트로그/control_history.csv",
+      "이벤트로그/control_history.json",
+      "이벤트로그/event_logs.csv",
+      "이벤트로그/event_logs.ndjson"
+    ],
+    "exceeds_2gb": false
+  }
+}

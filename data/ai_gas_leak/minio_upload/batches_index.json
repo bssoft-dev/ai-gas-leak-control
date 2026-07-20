@@ -1,0 +1,66 @@
+{
+  "batches": [
+    {
+      "batch_id": "20260708_001546",
+      "generated_at": "2026-07-08T00:15:46.902801Z",
+      "path": "batches/20260708_001546"
+    },
+    {
+      "batch_id": "20260708_002935",
+      "generated_at": "2026-07-08T00:29:35.670276Z",
+      "path": "batches/20260708_002935",
+      "dataset_id": 1,
+      "zip_path": "zip_packages/Example_bssoft_SagoHub/1"
+    },
+    {
+      "batch_id": "20260708_003549",
+      "generated_at": "2026-07-08T00:35:49.192211Z",
+      "path": "batches/20260708_003549",
+      "dataset_id": 2,
+      "zip_path": "zip_packages/Example_bluesp/2"
+    },
+    {
+      "batch_id": "20260708_004150",
+      "generated_at": "2026-07-08T00:41:51.046132Z",
+      "collection_date": "2026-07-08",
+      "path": "batches/20260708_004150",
+      "dataset_id": 3,
+      "data_category": "collected",
+      "zip_path": "zip_packages/Example_bluesp/3"
+    },
+    {
+      "batch_id": "20260708_004312",
+      "generated_at": "2026-07-08T00:43:13.060649Z",
+      "path": "batches/20260708_004312",
+      "dataset_id": 4,
+      "zip_path": "zip_packages/Example_bluesp/4",
+      "categories": [
+        "원천데이터",
+        "이벤트로그"
+      ]
+    },
+    {
+      "batch_id": "20260708_004808",
+      "generated_at": "2026-07-08T00:48:08.177941Z",
+      "path": "batches/20260708_004808",
+      "dataset_id": 5,
+      "zip_path": "zip_packages/Example_bluesp/5",
+      "categories": [
+        "원천데이터",
+        "이벤트로그"
+      ]
+    },
+    {
+      "batch_id": "20260708_005433",
+      "generated_at": "2026-07-08T00:54:33.842195Z",
+      "path": "batches/20260708_005433",
+      "dataset_id": 6,
+      "zip_path": "zip_packages/Example_bluesp/6",
+      "categories": [
+        "원천데이터",
+        "이벤트로그"
+      ]
+    }
+  ],
+  "latest": "latest"
+}

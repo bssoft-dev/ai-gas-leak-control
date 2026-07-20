@@ -1,0 +1,26 @@
+{
+  "columns": [
+    {
+      "name": "timestamp",
+      "type": "TIMESTAMP",
+      "required": true
+    },
+    {
+      "name": "metric_type",
+      "type": "TEXT",
+      "required": true
+    },
+    {
+      "name": "sensor_id",
+      "type": "TEXT"
+    },
+    {
+      "name": "value",
+      "type": "REAL"
+    },
+    {
+      "name": "unit",
+      "type": "TEXT"
+    }
+  ]
+}

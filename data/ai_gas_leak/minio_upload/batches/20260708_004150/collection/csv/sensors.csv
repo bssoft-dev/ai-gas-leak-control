@@ -1,0 +1,4 @@
+id,zone_id,label,value,unit,status,sensor_type,collected_at
+S1_Pressure,,,0.386,MPa,,pressure,2026-07-08T00:41:50.981068Z
+S2_O2,,,11.99,%,,oxygen,2026-07-08T00:41:50.981068Z
+S3_LPG,,,12.04,%LEL,,lpg,2026-07-08T00:41:50.981068Z

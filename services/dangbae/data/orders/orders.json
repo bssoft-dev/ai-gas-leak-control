@@ -1173,5 +1173,51 @@
     "want_alttul": true,
     "want_express": false,
     "order_name": "업소용냉장고(운수동, 풍암동)"
+  },
+  "4907324c": {
+    "order_id": "4907324c",
+    "status": "pending",
+    "created_at": "2026-07-20T12:03:09.944941",
+    "origin_address": "전남광주통합특별시 서구 화정동 1023",
+    "origin_lat": 35.14008516822552,
+    "origin_lng": 126.88075692955708,
+    "origin_detail": "",
+    "dest_address": "전남광주통합특별시 서구 풍암동 423-2",
+    "dest_lat": 35.13393145603706,
+    "dest_lng": 126.8806441104071,
+    "dest_detail": "",
+    "item_title": "냉장고",
+    "item_titles": [
+      "냉장고"
+    ],
+    "item_size": "large",
+    "item_weight_kg": 90,
+    "item_items": [
+      {
+        "name": "냉장고",
+        "item_size": "large",
+        "item_weight_kg": 90,
+        "item_note": "가정용 냉장고로 추정되며, 무게가 대략 90kg 정도입니다. 20kg·0.1m³ 이하의 오토바이 배송이 불가능하므로 차를 이용한 차량 배송이 필요하고, 50kg 이상이므로 추가 인력이 필요합니다. 또한 전자제품이므로 운송 시 부드럽게 취급해 주시길 바랍니다."
+      }
+    ],
+    "item_images": [],
+    "floor_count": 14,
+    "floor_count_origin": 13,
+    "floor_count_dest": 1,
+    "has_elevator_origin": true,
+    "has_elevator_dest": true,
+    "direct_help_origin": false,
+    "direct_help_dest": false,
+    "has_elevator": true,
+    "recipient_helps": false,
+    "estimated_km": 1.48,
+    "estimated_fare": 50004,
+    "user_email": "",
+    "user_phone": "01088311587",
+    "order_access_pin": "042604",
+    "delivery_mode": "express",
+    "want_alttul": false,
+    "want_express": true,
+    "order_name": "냉장고(화정동, 풍암동)"
   }
 }

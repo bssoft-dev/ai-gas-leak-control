@@ -1,0 +1,169 @@
+{
+  "manifest_version": "2.0",
+  "generated_at": "2026-07-08T00:15:46.900422Z",
+  "batch_id": "20260708_001546",
+  "encoding": "UTF-8",
+  "dataset": {
+    "description": "ai-gas-leak-prod",
+    "base_id": "8733121a-b675-5a14-a327-0b19b26dd2d2",
+    "service_id": "com.SagoHub.ai-gas-leak-control"
+  },
+  "files": [
+    {
+      "path": "json/ai_history.json",
+      "format": "json",
+      "content_type": "application/json",
+      "encoding": "UTF-8",
+      "size_bytes": 486
+    },
+    {
+      "path": "json/alarm_history.json",
+      "format": "json",
+      "content_type": "application/json",
+      "encoding": "UTF-8",
+      "size_bytes": 3
+    },
+    {
+      "path": "json/control_history.json",
+      "format": "json",
+      "content_type": "application/json",
+      "encoding": "UTF-8",
+      "size_bytes": 3
+    },
+    {
+      "path": "json/daily_usage.json",
+      "format": "json",
+      "content_type": "application/json",
+      "encoding": "UTF-8",
+      "size_bytes": 3
+    },
+    {
+      "path": "json/data_mart.json",
+      "format": "json",
+      "content_type": "application/json",
+      "encoding": "UTF-8",
+      "size_bytes": 3
+    },
+    {
+      "path": "json/drawings.json",
+      "format": "json",
+      "content_type": "application/json",
+      "encoding": "UTF-8",
+      "size_bytes": 930
+    },
+    {
+      "path": "json/sensors.json",
+      "format": "json",
+      "content_type": "application/json",
+      "encoding": "UTF-8",
+      "size_bytes": 293
+    },
+    {
+      "path": "json/state.json",
+      "format": "json",
+      "content_type": "application/json",
+      "encoding": "UTF-8",
+      "size_bytes": 259
+    },
+    {
+      "path": "json/timeseries.json",
+      "format": "json",
+      "content_type": "application/json",
+      "encoding": "UTF-8",
+      "size_bytes": 47825
+    },
+    {
+      "path": "csv/ai_history.csv",
+      "format": "csv",
+      "content_type": "text/csv; charset=utf-8",
+      "encoding": "UTF-8",
+      "size_bytes": 388,
+      "delimiter": ",",
+      "header": true
+    },
+    {
+      "path": "csv/alarm_history.csv",
+      "format": "csv",
+      "content_type": "text/csv; charset=utf-8",
+      "encoding": "UTF-8",
+      "size_bytes": 36,
+      "delimiter": ",",
+      "header": true
+    },
+    {
+      "path": "csv/control_history.csv",
+      "format": "csv",
+      "content_type": "text/csv; charset=utf-8",
+      "encoding": "UTF-8",
+      "size_bytes": 44,
+      "delimiter": ",",
+      "header": true
+    },
+    {
+      "path": "csv/daily_usage.csv",
+      "format": "csv",
+      "content_type": "text/csv; charset=utf-8",
+      "encoding": "UTF-8",
+      "size_bytes": 26,
+      "delimiter": ",",
+      "header": true
+    },
+    {
+      "path": "csv/sensors_snapshot.csv",
+      "format": "csv",
+      "content_type": "text/csv; charset=utf-8",
+      "encoding": "UTF-8",
+      "size_bytes": 130,
+      "delimiter": ",",
+      "header": true
+    },
+    {
+      "path": "csv/timeseries.csv",
+      "format": "csv",
+      "content_type": "text/csv; charset=utf-8",
+      "encoding": "UTF-8",
+      "size_bytes": 29494,
+      "delimiter": ",",
+      "header": true
+    },
+    {
+      "path": "ndjson/raw_ticks.ndjson",
+      "format": "ndjson",
+      "content_type": "application/x-ndjson",
+      "encoding": "UTF-8",
+      "size_bytes": 0
+    },
+    {
+      "path": "ndjson/timeseries.ndjson",
+      "format": "ndjson",
+      "content_type": "application/x-ndjson",
+      "encoding": "UTF-8",
+      "size_bytes": 73131
+    },
+    {
+      "path": "metadata/dataset_info.json",
+      "format": "json",
+      "content_type": "application/json",
+      "encoding": "UTF-8",
+      "size_bytes": 714
+    },
+    {
+      "path": "schemas/sensors_snapshot.schema.json",
+      "format": "json",
+      "content_type": "application/json",
+      "encoding": "UTF-8",
+      "size_bytes": 450
+    },
+    {
+      "path": "schemas/timeseries.schema.json",
+      "format": "json",
+      "content_type": "application/json",
+      "encoding": "UTF-8",
+      "size_bytes": 373
+    }
+  ],
+  "minio_upload": {
+    "recommended_command": "mc cp --recursive /home/bssoft/SagoHub-2601/data/ai_gas_leak/minio_upload/batches/20260708_001546/ myminio/sagohub-data/ai-gas-leak/20260708_001546/",
+    "recommended_latest_command": "mc cp --recursive /home/bssoft/SagoHub-2601/data/ai_gas_leak/minio_upload/latest/ myminio/sagohub-data/ai-gas-leak/latest/"
+  }
+}

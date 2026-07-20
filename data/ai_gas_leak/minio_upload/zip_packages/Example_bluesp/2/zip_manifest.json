@@ -1,0 +1,100 @@
+{
+  "generated_at": "2026-07-08T00:35:49.186561Z",
+  "batch_id": "20260708_003549",
+  "dataset_id": 2,
+  "company_folder": "Example_bluesp",
+  "manual_rules": {
+    "same_extension_per_zip": true,
+    "max_zip_bytes": 2147483648,
+    "split_naming": "{name}_part{N}.zip",
+    "delete_uncompressed_after_zip": true
+  },
+  "archives": [
+    {
+      "name": "원천데이터_csv.zip",
+      "extension_group": "csv",
+      "part": null,
+      "size_bytes": 4276,
+      "source_files": [
+        "daily_usage.csv",
+        "sensors_snapshot.csv",
+        "timeseries.csv"
+      ]
+    },
+    {
+      "name": "원천데이터_jpg.zip",
+      "extension_group": "jpg",
+      "part": null,
+      "size_bytes": 1277674,
+      "source_files": [
+        "0a1951dc-4d2a-484b-892a-b154e29bffb8.jpg",
+        "6b02a384-e6c6-4772-8ffc-481579abf505.jpg",
+        "example.jpg"
+      ]
+    },
+    {
+      "name": "원천데이터_json.zip",
+      "extension_group": "json",
+      "part": null,
+      "size_bytes": 1139,
+      "source_files": [
+        "daily_usage.json",
+        "data_mart.json",
+        "drawings.json",
+        "sensors.json",
+        "state.json"
+      ]
+    },
+    {
+      "name": "원천데이터_ndjson.zip",
+      "extension_group": "ndjson",
+      "part": null,
+      "size_bytes": 4448,
+      "source_files": [
+        "raw_ticks.ndjson",
+        "timeseries.ndjson"
+      ]
+    },
+    {
+      "name": "원천데이터_csv.zip",
+      "extension_group": "csv",
+      "part": null,
+      "size_bytes": 1287,
+      "source_files": [
+        "timeseries.csv"
+      ]
+    },
+    {
+      "name": "원천데이터_ndjson.zip",
+      "extension_group": "ndjson",
+      "part": null,
+      "size_bytes": 1396,
+      "source_files": [
+        "timeseries.ndjson"
+      ]
+    },
+    {
+      "name": "라벨링데이터_csv.zip",
+      "extension_group": "csv",
+      "part": null,
+      "size_bytes": 610,
+      "source_files": [
+        "ai_history.csv",
+        "alarm_history.csv",
+        "control_history.csv"
+      ]
+    },
+    {
+      "name": "라벨링데이터_json.zip",
+      "extension_group": "json",
+      "part": null,
+      "size_bytes": 544,
+      "source_files": [
+        "ai_history.json",
+        "alarm_history.json",
+        "control_history.json"
+      ]
+    }
+  ],
+  "upload_path": "Example_bluesp/2/"
+}

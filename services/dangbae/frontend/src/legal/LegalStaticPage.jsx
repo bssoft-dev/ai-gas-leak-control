@@ -62,14 +62,26 @@ export default function LegalStaticPage({ route }) {
               <th scope="row">사업자등록번호</th>
               <td>{info.businessRegNo}</td>
             </tr>
-            {/* <tr>
+            <tr>
               <th scope="row">대표자명</th>
               <td>{info.representative}</td>
-            </tr> */}
-            {/* <tr>
+            </tr>
+            {info.jointPartner ? (
+              <tr>
+                <th scope="row">공동사업자</th>
+                <td>{info.jointPartner}</td>
+              </tr>
+            ) : null}
+            <tr>
               <th scope="row">사업장 주소</th>
               <td>{info.address}</td>
-            </tr> */}
+            </tr>
+            {info.openedAt ? (
+              <tr>
+                <th scope="row">개업연월일</th>
+                <td>{info.openedAt}</td>
+              </tr>
+            ) : null}
             <tr>
               <th scope="row">유선번호</th>
               <td>{info.phone}</td>

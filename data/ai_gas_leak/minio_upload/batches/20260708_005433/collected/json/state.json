@@ -1,0 +1,10 @@
+{
+  "base_informations": {
+    "description": "ai-gas-leak-prod",
+    "base_id": "8733121a-b675-5a14-a327-0b19b26dd2d2",
+    "service_id": "com.SagoHub.ai-gas-leak-control"
+  },
+  "valve_closed": false,
+  "alarm_beacon_on": false,
+  "alarm_siren_on": false
+}

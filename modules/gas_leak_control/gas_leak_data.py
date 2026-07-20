@@ -5,7 +5,7 @@ import json
 import os
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 
 def data_dir() -> Path:
@@ -40,6 +40,172 @@ def save_json(file_path: Path, data: Any) -> None:
 
 def utc_now() -> str:
     return datetime.utcnow().isoformat() + "Z"
+
+
+def timeseries_daily_dir() -> Path:
+    d = data_dir() / "timeseries" / "daily"
+    d.mkdir(parents=True, exist_ok=True)
+    return d
+
+
+def timeseries_daily_path(day: str) -> Path:
+    return timeseries_daily_dir() / f"{day}.json"
+
+
+def _empty_daily_timeseries(day: str) -> Dict[str, Any]:
+    return {"date": day, "pressure": [], "flow": [], "flow_diff": [], "sensors": {}}
+
+
+def _dedupe_points(points: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    seen: set[str] = set()
+    out: List[Dict[str, Any]] = []
+    for pt in points:
+        if not isinstance(pt, dict):
+            continue
+        key = str(pt.get("t", ""))
+        if not key or key in seen:
+            continue
+        seen.add(key)
+        out.append(pt)
+    out.sort(key=lambda p: p.get("t") or "")
+    return out
+
+
+def _merge_daily_doc(existing: Dict[str, Any], incoming: Dict[str, Any]) -> Dict[str, Any]:
+    day = incoming.get("date") or existing.get("date") or utc_now()[:10]
+    merged = _empty_daily_timeseries(day)
+    for key in ("pressure", "flow", "flow_diff"):
+        merged[key] = _dedupe_points((existing.get(key) or []) + (incoming.get(key) or []))
+    sensors: Dict[str, List[Dict[str, Any]]] = {}
+    for src in (existing, incoming):
+        smap = src.get("sensors") or {}
+        if not isinstance(smap, dict):
+            continue
+        for sid, series in smap.items():
+            sensors.setdefault(str(sid), [])
+            if isinstance(series, list):
+                sensors[str(sid)].extend(series)
+    merged["sensors"] = {sid: _dedupe_points(arr) for sid, arr in sensors.items()}
+    merged["updated_at"] = utc_now()
+    merged["point_count"] = sum(len(merged[k]) for k in ("pressure", "flow", "flow_diff"))
+    return merged
+
+
+def _update_daily_index(day: str) -> None:
+    idx_path = data_dir() / "timeseries" / "daily_index.json"
+    idx = load_json(idx_path, {"dates": []})
+    dates = idx.get("dates") if isinstance(idx.get("dates"), list) else []
+    if day not in dates:
+        dates.append(day)
+        dates.sort()
+    save_json(idx_path, {"dates": dates, "updated_at": utc_now()})
+
+
+def append_daily_timeseries(
+    pressure: float,
+    flow: float,
+    flow_diff: float,
+    sensor_values: Dict[str, float],
+    *,
+    timestamp: Optional[str] = None,
+) -> None:
+    """일별 시계열 파일에 누적 저장 (truncate 없음). timeseries.json 은 실시간 버퍼만 유지."""
+    now = timestamp or utc_now()
+    day = now[:10]
+    fp = timeseries_daily_path(day)
+    doc = load_json(fp, _empty_daily_timeseries(day))
+    incoming = _empty_daily_timeseries(day)
+    incoming["pressure"] = [{"t": now, "v": pressure}]
+    incoming["flow"] = [{"t": now, "v": flow}]
+    incoming["flow_diff"] = [{"t": now, "v": flow_diff}]
+    incoming["sensors"] = {sid: [{"t": now, "v": val}] for sid, val in sensor_values.items()}
+    save_json(fp, _merge_daily_doc(doc, incoming))
+    _update_daily_index(day)
+
+
+def migrate_buffer_timeseries_to_daily() -> int:
+    """
+    timeseries.json(및 timeseries copy.json)의 버퍼 데이터를 일별 파일로 병합.
+    실시간 차트용 버퍼는 유지하고, 과거 포인트는 일별 파일에 보존.
+    """
+    marker = data_dir() / "timeseries" / ".buffer_migrated_v1"
+    sources = [path("timeseries.json")]
+    copy_fp = data_dir() / "timeseries copy.json"
+    if copy_fp.exists():
+        sources.append(copy_fp)
+
+    by_day: Dict[str, Dict[str, Any]] = {}
+
+    def ingest_doc(ts: Dict[str, Any]) -> None:
+        if not isinstance(ts, dict):
+            return
+        for key in ("pressure", "flow", "flow_diff"):
+            for pt in ts.get(key) or []:
+                if not isinstance(pt, dict):
+                    continue
+                t = pt.get("t") or ""
+                if len(t) < 10:
+                    continue
+                day = t[:10]
+                bucket = by_day.setdefault(day, _empty_daily_timeseries(day))
+                bucket[key].append(pt)
+        smap = ts.get("sensors") or {}
+        if isinstance(smap, dict):
+            for sid, series in smap.items():
+                for pt in series or []:
+                    if not isinstance(pt, dict):
+                        continue
+                    t = pt.get("t") or ""
+                    if len(t) < 10:
+                        continue
+                    day = t[:10]
+                    bucket = by_day.setdefault(day, _empty_daily_timeseries(day))
+                    bucket["sensors"].setdefault(str(sid), []).append(pt)
+
+    for src in sources:
+        if src.exists():
+            ingest_doc(load_json(src, {}))
+
+    if not by_day:
+        return 0
+
+    for day, chunk in by_day.items():
+        fp = timeseries_daily_path(day)
+        existing = load_json(fp, _empty_daily_timeseries(day))
+        save_json(fp, _merge_daily_doc(existing, chunk))
+        _update_daily_index(day)
+
+    marker.write_text(utc_now(), encoding="utf-8")
+    return len(by_day)
+
+
+def list_daily_timeseries_dates() -> List[str]:
+    idx = load_json(data_dir() / "timeseries" / "daily_index.json", {"dates": []})
+    dates = idx.get("dates") if isinstance(idx.get("dates"), list) else []
+    if dates:
+        return dates
+    daily = timeseries_daily_dir()
+    return sorted(p.stem for p in daily.glob("*.json") if p.is_file())
+
+
+def load_daily_timeseries(day: str) -> Dict[str, Any]:
+    fp = timeseries_daily_path(day)
+    if not fp.exists():
+        return _empty_daily_timeseries(day)
+    doc = load_json(fp, _empty_daily_timeseries(day))
+    if isinstance(doc, dict):
+        return doc
+    return _empty_daily_timeseries(day)
+
+
+def load_all_daily_timeseries_merged() -> Dict[str, Any]:
+    """업로드·분석용: 모든 일별 파일 병합."""
+    merged = _empty_daily_timeseries("all")
+    for day in list_daily_timeseries_dates():
+        doc = load_daily_timeseries(day)
+        merged = _merge_daily_doc(merged, doc)
+    merged["date"] = "all"
+    return merged
 
 
 def default_policy() -> Dict[str, Any]:
@@ -137,7 +303,7 @@ def preprocess_sample(
 
 
 def build_data_mart_snapshot() -> None:
-    """정제 스냅샷(Mart): state + sensors 요약."""
+    """정제 스냅샷(Mart): state + sensors 요약 + MinIO 업로드 패키지."""
     state = load_json(path("state.json"), {})
     sensors = load_json(path("sensors.json"), [])
     save_json(
@@ -150,3 +316,9 @@ def build_data_mart_snapshot() -> None:
             "mes_equipment_running": state.get("mes_equipment_running", True),
         },
     )
+    try:
+        from minio_upload_export import export_minio_upload_package
+
+        export_minio_upload_package()
+    except Exception as exc:
+        print(f"[GasLeakData] MinIO upload export skipped: {exc}")

@@ -1,0 +1,27 @@
+{
+  "category": "event_logs",
+  "columns": [
+    {
+      "name": "at",
+      "type": "TIMESTAMP",
+      "required": true
+    },
+    {
+      "name": "log_category",
+      "type": "TEXT",
+      "required": true
+    },
+    {
+      "name": "type",
+      "type": "TEXT"
+    },
+    {
+      "name": "message",
+      "type": "TEXT"
+    },
+    {
+      "name": "detail_json",
+      "type": "TEXT"
+    }
+  ]
+}

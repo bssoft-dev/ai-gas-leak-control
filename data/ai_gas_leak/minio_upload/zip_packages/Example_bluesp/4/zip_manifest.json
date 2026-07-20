@@ -1,0 +1,107 @@
+{
+  "generated_at": "2026-07-08T00:43:13.053498Z",
+  "batch_id": "20260708_004312",
+  "dataset_id": 4,
+  "company_folder": "Example_bluesp",
+  "data_purpose": "sensor_collection_and_event_logs",
+  "folder_layout": {
+    "원천데이터": "센서·시계열·상태·도면 등 수집 데이터",
+    "이벤트로그": "AI 판단·제어·경보 이벤트 로그"
+  },
+  "manual_rules": {
+    "same_extension_per_zip": true,
+    "max_zip_bytes": 2147483648,
+    "split_naming": "{name}_part{N}.zip",
+    "delete_uncompressed_after_zip": true,
+    "no_training_validation_split": true
+  },
+  "archives": [
+    {
+      "folder": "원천데이터",
+      "name": "원천데이터_csv.zip",
+      "extension_group": "csv",
+      "part": null,
+      "size_bytes": 4961,
+      "source_files": [
+        "daily_usage.csv",
+        "sensors_snapshot.csv",
+        "timeseries.csv"
+      ]
+    },
+    {
+      "folder": "원천데이터",
+      "name": "원천데이터_jpg.zip",
+      "extension_group": "jpg",
+      "part": null,
+      "size_bytes": 1277674,
+      "source_files": [
+        "0a1951dc-4d2a-484b-892a-b154e29bffb8.jpg",
+        "6b02a384-e6c6-4772-8ffc-481579abf505.jpg",
+        "example.jpg"
+      ]
+    },
+    {
+      "folder": "원천데이터",
+      "name": "원천데이터_json.zip",
+      "extension_group": "json",
+      "part": null,
+      "size_bytes": 6263,
+      "source_files": [
+        "daily_usage.json",
+        "data_mart.json",
+        "drawings.json",
+        "edge_registry.json",
+        "sensors.json",
+        "state.json",
+        "timeseries.json"
+      ]
+    },
+    {
+      "folder": "원천데이터",
+      "name": "원천데이터_ndjson.zip",
+      "extension_group": "ndjson",
+      "part": null,
+      "size_bytes": 5222,
+      "source_files": [
+        "raw_ticks.ndjson",
+        "timeseries.ndjson"
+      ]
+    },
+    {
+      "folder": "이벤트로그",
+      "name": "이벤트로그_csv.zip",
+      "extension_group": "csv",
+      "part": null,
+      "size_bytes": 884,
+      "source_files": [
+        "ai_history.csv",
+        "alarm_history.csv",
+        "control_history.csv",
+        "event_logs.csv"
+      ]
+    },
+    {
+      "folder": "이벤트로그",
+      "name": "이벤트로그_json.zip",
+      "extension_group": "json",
+      "part": null,
+      "size_bytes": 544,
+      "source_files": [
+        "ai_history.json",
+        "alarm_history.json",
+        "control_history.json"
+      ]
+    },
+    {
+      "folder": "이벤트로그",
+      "name": "이벤트로그_ndjson.zip",
+      "extension_group": "ndjson",
+      "part": null,
+      "size_bytes": 312,
+      "source_files": [
+        "event_logs.ndjson"
+      ]
+    }
+  ],
+  "upload_path": "Example_bluesp/4/"
+}

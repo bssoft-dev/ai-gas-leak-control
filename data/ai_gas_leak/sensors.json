@@ -2,19 +2,19 @@
   {
     "id": "S1_Pressure",
     "sensor_type": "pressure",
-    "value": 0.417,
+    "value": 0.402,
     "unit": "MPa"
   },
   {
     "id": "S2_O2",
     "sensor_type": "oxygen",
-    "value": 12.3,
+    "value": 11.81,
     "unit": "%"
   },
   {
     "id": "S3_LPG",
     "sensor_type": "lpg",
-    "value": 12.29,
+    "value": 11.62,
     "unit": "%LEL"
   }
 ]

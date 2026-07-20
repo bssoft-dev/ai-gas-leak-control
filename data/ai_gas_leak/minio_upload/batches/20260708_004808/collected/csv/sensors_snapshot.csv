@@ -1,0 +1,4 @@
+id,zone_id,label,value,unit,status,sensor_type
+S1_Pressure,,,0.39,MPa,,pressure
+S2_O2,,,11.65,%,,oxygen
+S3_LPG,,,11.85,%LEL,,lpg

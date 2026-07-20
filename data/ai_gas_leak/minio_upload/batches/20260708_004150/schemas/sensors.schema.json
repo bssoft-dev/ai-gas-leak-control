@@ -1,0 +1,37 @@
+{
+  "columns": [
+    {
+      "name": "id",
+      "type": "TEXT",
+      "required": true
+    },
+    {
+      "name": "zone_id",
+      "type": "TEXT"
+    },
+    {
+      "name": "label",
+      "type": "TEXT"
+    },
+    {
+      "name": "value",
+      "type": "REAL"
+    },
+    {
+      "name": "unit",
+      "type": "TEXT"
+    },
+    {
+      "name": "status",
+      "type": "TEXT"
+    },
+    {
+      "name": "sensor_type",
+      "type": "TEXT"
+    },
+    {
+      "name": "collected_at",
+      "type": "TIMESTAMP"
+    }
+  ]
+}

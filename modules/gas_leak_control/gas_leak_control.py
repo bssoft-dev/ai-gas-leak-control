@@ -24,12 +24,14 @@ from gas_leak_data import (
     append_ai_history,
     append_alarm_history,
     append_control_history,
+    append_daily_timeseries,
     append_raw_tick,
     build_data_mart_snapshot,
     bump_daily_usage,
     data_dir,
     default_policy,
     load_json,
+    migrate_buffer_timeseries_to_daily,
     path,
     preprocess_sample,
     save_json,
@@ -80,6 +82,7 @@ def _default_state() -> Dict[str, Any]:
 
 
 def _append_timeseries(ts_path: Path, pressure: float, flow: float, flow_diff: float = 0.0) -> None:
+    """실시간 차트용 롤링 버퍼 (최근 MAX_SERIES_POINTS). 일별 보존은 append_daily_timeseries."""
     data = load_json(ts_path, {"pressure": [], "flow": [], "flow_diff": [], "sensors": {}})
     now = utc_now()
     data["pressure"] = (data.get("pressure") or []) + [{"t": now, "v": pressure}]
@@ -134,6 +137,10 @@ class GasLeakControlModule(Module):
         self.ai_model = GasLeakAIModel()
         self._load_config()
         self._edge_http_started = False
+        try:
+            migrate_buffer_timeseries_to_daily()
+        except Exception as exc:
+            print(f"[GasLeakControl] Daily timeseries migration skipped: {exc}")
 
     def _load_config(self) -> None:
         self.rule_threshold_percent = 3.0
@@ -519,6 +526,7 @@ class GasLeakControlModule(Module):
                     if sid:
                         sensor_series[sid] = val
                 _append_sensors_timeseries(_timeseries_path(), sensor_series)
+                append_daily_timeseries(pressure, flow, flow_diff, sensor_series)
                 save_json(_sensors_path(), sensors)
 
                 mse = self.ai_model.predict(list(self.sensor_window))
